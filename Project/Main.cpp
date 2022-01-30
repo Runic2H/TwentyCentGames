@@ -2,6 +2,7 @@
 // includes
 
 #include "AEEngine.h"
+#include "Maze.h"
 
 
 
@@ -21,7 +22,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	int gGameRunning = 1;
 
+	AEGfxVertexList* pMeshCellOutline = 0;
+	AEGfxVertexList* pMeshMazeWindow = 0;
+	AEGfxVertexList* pMeshSolidSquare_PATH = 0;
+	AEGfxVertexList* pMeshSolidSquare_WALL = 0;
+
+	MazeCells cells[noOfRows][noOfCols];
+	MAZE_initMazeCell(cells);
+	
+
+
 	// Variable declaration end
+	///////////////////////////
+
+
+	//////////////////////////
+	
+	//End of Mesh Line
 	///////////////////////////
 
 
@@ -29,8 +46,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Initialization
 
 	// Using custom window procedure
-	AESysInit(hInstance, nCmdShow, 800, 600, 1, 60, true, NULL);
+	AESysInit(hInstance, nCmdShow, 1920, 1080, 1, 60, true, NULL);
 
+	// Set Background
+	AEGfxSetBackgroundColor(0.25f, 0.25f, 1.12f); 
 
 	// Changing the window title
 	AESysSetWindowTitle("My New Demo!");
@@ -44,8 +63,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 	////////////////////////////////
-	// Creating the objects (Shapes)
+	// Init variables that will be used by the mesh drawing funcs
+	MazeDimensions MAZE_DIMESIONS_STRUCT = MAZE_InitMazeDimension(AEGetWindowHeight(), AEGetWindowWidth(), noOfRows, noOfCols);
 
+	MAZE_CreateMESH_MazeWindow(pMeshMazeWindow, MAZE_DIMESIONS_STRUCT, 0x8BC736);
+
+	MAZE_CreateMESH_CellOutline(pMeshCellOutline, MAZE_DIMESIONS_STRUCT, 0xFFFFFFFF);	
+	
+	MAZE_CreateSolidCell(pMeshSolidSquare_WALL, MAZE_DIMESIONS_STRUCT, 0x000000);
+
+	MAZE_CreateSolidCell(pMeshSolidSquare_PATH, MAZE_DIMESIONS_STRUCT, 0x808080);
+
+
+		
 	// Creating the objects (Shapes) end
 	////////////////////////////////////
 
@@ -76,12 +106,51 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		///////////////////
 		// Game loop update
 
+		/*
+		float MazeWindowStartX = AEGetWindowWidth() / 2 / -2;
+		float MazeWindowStartY = (AEGetWindowHeight() / 6 * 5 / -2);
+		*/
+		
 		// Game loop update end
 		///////////////////////
 
 
 		//////////////////
 		// Game loop draw
+		
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		for (int r = 0; r < noOfRows; r++)
+		{
+			for (int c = 0; c < noOfCols; c++)
+			{ 
+				AEGfxSetPosition(
+					(MAZE_DIMESIONS_STRUCT.MazeWindowStart_X + (r * MAZE_DIMESIONS_STRUCT.cellWidth)), 
+					(MAZE_DIMESIONS_STRUCT.MazeWindowStart_Y + (c * MAZE_DIMESIONS_STRUCT.cellHeight))
+						);
+				if(cells[c][r].is_wall == 1) // is wall
+				{ 
+					AEGfxMeshDraw(pMeshSolidSquare_WALL, AE_GFX_MDM_TRIANGLES);
+				}
+				else
+				{
+					AEGfxMeshDraw(pMeshSolidSquare_PATH, AE_GFX_MDM_TRIANGLES);
+				}
+				
+				AEGfxSetPosition(
+					MAZE_DIMESIONS_STRUCT.MazeWindowStart_X +(r* MAZE_DIMESIONS_STRUCT.cellWidth),
+					MAZE_DIMESIONS_STRUCT.MazeWindowStart_Y +(c* MAZE_DIMESIONS_STRUCT.cellHeight)
+								);
+				AEGfxMeshDraw(pMeshCellOutline, AE_GFX_MDM_LINES_STRIP);
+
+			}
+		}
+		
+		
+		AEGfxSetPosition(MAZE_DIMESIONS_STRUCT.MazeWindowStart_X, MAZE_DIMESIONS_STRUCT.MazeWindowStart_Y);
+		AEGfxMeshDraw(pMeshMazeWindow, AE_GFX_MDM_LINES_STRIP);
+
+		
 
 		// Game loop draw end
 		/////////////////////
@@ -97,5 +166,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 	// free the system
+	AEGfxMeshFree(pMeshCellOutline);
+	AEGfxMeshFree(pMeshMazeWindow);
+	AEGfxMeshFree(pMeshSolidSquare_PATH);
+	AEGfxMeshFree(pMeshSolidSquare_WALL);
 	AESysExit();
-}
+} 
