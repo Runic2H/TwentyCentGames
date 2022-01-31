@@ -2,24 +2,13 @@
 #include "Maze.h"
 
 
-	/*
-	const int noOfRows = 15, noOfCols = 15;
-
-	MazeCells cells[noOfRows][noOfCols];
+//TESTING
+////////////////////////
 
 
-	MazeCells* Maze_init(MazeCells cells,int noOfRows, int noOfCols)
-	{
-		for (int r = 0; r < noOfRows; r++)
-		{
-			for (int c = 0; c < noOfRows; c++)
-			{
-				cells[r][c].is_wall = maze_iswall_isnotwall[r][c];
-			}
-		}
-		return cells;
-	}
-	*/
+
+//END OF TESTING
+///////////////////////
 
 int maze_iswall_isnotwall[noOfRows][noOfCols] =
 {
@@ -103,4 +92,46 @@ void MAZE_initMazeCell(MazeCells cells[noOfRows][noOfCols])
 			MazeDimesionsStruct.cellWidth, MazeDimesionsStruct.cellHeight, colour_HEXA, 1.0f, 0.0f,
 			MazeDimesionsStruct.cellWidth, 0, colour_HEXA, 0.0f, 0.0f);
 		SolidCellMesh_Var = AEGfxMeshEnd();
+	}
+
+
+	void MAZE_DrawMazeCellsandCellOutline(AEGfxVertexList*& WALLCellMesh,
+							AEGfxVertexList*& PATHCellMesh,
+							AEGfxVertexList*& CellOutlineMesh,
+							MazeDimensions MazeDimesionsStruct,
+							MazeCells cells[noOfRows][noOfCols],
+							AEGfxRenderMode RenderMode)
+	{
+		AEGfxSetRenderMode(RenderMode);
+		for (int r = 0; r < MazeDimesionsStruct.noOfRows; r++)
+		{
+			for (int c = 0; c < MazeDimesionsStruct.noOfCols; c++)
+			{
+				AEGfxSetPosition(
+					(MazeDimesionsStruct.MazeWindowStart_X + (r * MazeDimesionsStruct.cellWidth)),
+					(MazeDimesionsStruct.MazeWindowStart_Y + (c * MazeDimesionsStruct.cellHeight))
+				);
+				if (cells[c][r].is_wall == 1) // is wall
+				{
+					AEGfxMeshDraw(WALLCellMesh, AE_GFX_MDM_TRIANGLES);
+				}
+				else
+				{
+					AEGfxMeshDraw(PATHCellMesh, AE_GFX_MDM_TRIANGLES);
+				}
+
+				AEGfxSetPosition(
+					MazeDimesionsStruct.MazeWindowStart_X + (r * MazeDimesionsStruct.cellWidth),
+					MazeDimesionsStruct.MazeWindowStart_Y + (c * MazeDimesionsStruct.cellHeight)
+				);
+				AEGfxMeshDraw(CellOutlineMesh, AE_GFX_MDM_LINES_STRIP);
+
+			}
+		}
+	}
+
+	void MAZE_DrawMazeOutline(AEGfxVertexList*& mazeOutlineMesh, MazeDimensions MazeDimesionsStruct, AEGfxMeshDrawMode RenderMode)
+	{
+		AEGfxSetPosition(MazeDimesionsStruct.MazeWindowStart_X, MazeDimesionsStruct.MazeWindowStart_Y);
+		AEGfxMeshDraw(mazeOutlineMesh, RenderMode);
 	}

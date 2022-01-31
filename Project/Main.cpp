@@ -30,6 +30,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	MazeCells cells[noOfRows][noOfCols];
 	MAZE_initMazeCell(cells);
 	
+	///TESTBENCH///
+	//Maze_Struct* Maze = new Maze;
+	///End of TESTBENCH///
 
 
 	// Variable declaration end
@@ -117,39 +120,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		//////////////////
 		// Game loop draw
-		
+		MAZE_DrawMazeCellsandCellOutline(	pMeshSolidSquare_WALL,
+										pMeshSolidSquare_PATH,
+										pMeshCellOutline,
+										MAZE_DIMESIONS_STRUCT,
+										cells,
+										AE_GFX_RM_COLOR	
+									);
 
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		for (int r = 0; r < noOfRows; r++)
-		{
-			for (int c = 0; c < noOfCols; c++)
-			{ 
-				AEGfxSetPosition(
-					(MAZE_DIMESIONS_STRUCT.MazeWindowStart_X + (r * MAZE_DIMESIONS_STRUCT.cellWidth)), 
-					(MAZE_DIMESIONS_STRUCT.MazeWindowStart_Y + (c * MAZE_DIMESIONS_STRUCT.cellHeight))
-						);
-				if(cells[c][r].is_wall == 1) // is wall
-				{ 
-					AEGfxMeshDraw(pMeshSolidSquare_WALL, AE_GFX_MDM_TRIANGLES);
-				}
-				else
-				{
-					AEGfxMeshDraw(pMeshSolidSquare_PATH, AE_GFX_MDM_TRIANGLES);
-				}
-				
-				AEGfxSetPosition(
-					MAZE_DIMESIONS_STRUCT.MazeWindowStart_X +(r* MAZE_DIMESIONS_STRUCT.cellWidth),
-					MAZE_DIMESIONS_STRUCT.MazeWindowStart_Y +(c* MAZE_DIMESIONS_STRUCT.cellHeight)
-								);
-				AEGfxMeshDraw(pMeshCellOutline, AE_GFX_MDM_LINES_STRIP);
 
-			}
-		}
+		MAZE_DrawMazeOutline(pMeshMazeWindow, MAZE_DIMESIONS_STRUCT, AE_GFX_MDM_LINES_STRIP); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
 		
-		
+		/*
 		AEGfxSetPosition(MAZE_DIMESIONS_STRUCT.MazeWindowStart_X, MAZE_DIMESIONS_STRUCT.MazeWindowStart_Y);
 		AEGfxMeshDraw(pMeshMazeWindow, AE_GFX_MDM_LINES_STRIP);
-
+		*/
 		
 
 		// Game loop draw end
