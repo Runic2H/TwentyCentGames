@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // includes
 
-#include "AEEngine.h"
+#include "pch.h"
 
 
 
@@ -27,10 +27,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	/////////////////
 	// Initialization
+	Character::renderGrid();
 
 	// Using custom window procedure
 	AESysInit(hInstance, nCmdShow, 800, 600, 1, 60, true, NULL);
 
+	AEGfxSetBackgroundColor(255.0f, 255.0f, 255.0f);
 
 	// Changing the window title
 	AESysSetWindowTitle("My New Demo!");
@@ -82,7 +84,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		//////////////////
 		// Game loop draw
-
+		AEGfxSetPosition(400.f, 400.f);
+		AEGfxMeshDraw(, AE_GFX_MDM_TRIANGLES);
 		// Game loop draw end
 		/////////////////////
 
