@@ -24,40 +24,26 @@ struct MazeDimensions
 
 };
 
-//TESTING
-////////////////////////
+
 struct Maze_Struct
 {
 	MazeCells grid[noOfRows][noOfCols];
 	MazeDimensions specifications;
 };
 
+Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows, int noOfCols);
 
-//END OF TESTING
-///////////////////////
+void MAZE_CreateMESH_MazeWindow2(AEGfxVertexList*& MazeWindow_Var, Maze_Struct* Maze, int colour_HEXA);
 
-void MAZE_initMazeCell(MazeCells cells[noOfRows][noOfCols]);
+void MAZE_CreateMESH_CellOutline2(AEGfxVertexList*& CellOutlineMesh_Var, Maze_Struct* Maze, int colour_HEX);
 
-//MazeCells* Maze_init(int noOfRows, int noOfCols);
+void MAZE_CreateSolidCell2(AEGfxVertexList*& SolidCellMesh_Var, Maze_Struct* Maze, int colour_HEXA);
 
-//Creating Meshes
-MazeDimensions MAZE_InitMazeDimension(	int Exe_WindowHeight, 
-										int Exe_WindowWidth, 
-										int noOfRows, 
-										int noOfCols
-										);
+void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList*& WALLCellMesh,
+	AEGfxVertexList*& PATHCellMesh,
+	AEGfxVertexList*& CellOutlineMesh,
+	Maze_Struct* Maze,
+	AEGfxRenderMode RenderMode);
 
-void MAZE_CreateMESH_MazeWindow(AEGfxVertexList*& MazeWindow_Var, MazeDimensions MAZE_DIMESIONS_STRUCT, int colour_HEXA);
+void MAZE_DrawMazeOutline2(AEGfxVertexList*& mazeOutlineMesh, Maze_Struct* Maze, AEGfxMeshDrawMode RenderMode);
 
-void MAZE_CreateMESH_CellOutline(AEGfxVertexList*& CellOutlineMesh_Var, MazeDimensions MAZE_DIMESIONS_STRUCT, int colour_HEX);
-
-void MAZE_CreateSolidCell(AEGfxVertexList*& SolidCellMesh_Var, MazeDimensions MAZE_DIMESIONS_STRUCT, int colour_HEXA);
-
-void MAZE_DrawMazeCellsandCellOutline(AEGfxVertexList*& WALLCellMesh,
-									AEGfxVertexList*& PATHCellMesh,
-									AEGfxVertexList*& CellOutlineMesh,
-									MazeDimensions MazeDimesionsStruct,
-									MazeCells cells[noOfRows][noOfCols],
-									AEGfxRenderMode RenderMode);
-
-void MAZE_DrawMazeOutline(AEGfxVertexList*& mazeOutlineMesh, MazeDimensions MazeDimesionsStruct, AEGfxMeshDrawMode RenderMode);
