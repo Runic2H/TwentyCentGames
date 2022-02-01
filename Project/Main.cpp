@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // includes
 
-#include "pch.h"
+#include "pch.hpp"
 
 
 
@@ -27,18 +27,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	/////////////////
 	// Initialization
-	Character::renderGrid();
 
 	// Using custom window procedure
 	AESysInit(hInstance, nCmdShow, 800, 600, 1, 60, true, NULL);
 
-	AEGfxSetBackgroundColor(255.0f, 255.0f, 255.0f);
+	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 	// Changing the window title
 	AESysSetWindowTitle("My New Demo!");
 
 	// reset the system modules
 	AESysReset();
+
+	//Create the Mesh
+	Character::CombatMesh();
 
 	// Initialization end
 	/////////////////////
@@ -84,8 +86,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		//////////////////
 		// Game loop draw
-		AEGfxSetPosition(400.f, 400.f);
-		AEGfxMeshDraw(, AE_GFX_MDM_TRIANGLES);
+		Character::RenderPlayerGrid(Character::Player1Grid);
+		Character::RenderPlayerGrid(Character::Player2Grid);
+		Character::RenderPlayerGrid(Character::Player3Grid);
+		Character::RenderPlayerGrid(Character::Player4Grid);
+		Character::RenderPlayerGrid(Character::Player5Grid);
+		Character::RenderPlayerGrid(Character::PlayerMesh);
+
 		// Game loop draw end
 		/////////////////////
 
@@ -100,5 +107,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 	// free the system
+	Character::FreePlayerMesh();
 	AESysExit();
 }

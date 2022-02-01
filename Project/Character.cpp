@@ -1,36 +1,121 @@
-#include "pch.h"
+#include "pch.hpp"
 
 namespace Character
 {
-	AEGfxVertexList* GridStart = 0;
-	//AEGfxVertexList* GridTop = 0;
-	//AEGfxVertexList* GridBottom = 0;
-	//AEGfxVertexList* GridBack = 0;
-	//AEGfxVertexList* GridFront = 0;
-
+	AEGfxVertexList* Player1Grid = 0;
+	AEGfxVertexList* Player2Grid = 0;
+	AEGfxVertexList* Player3Grid = 0;
+	AEGfxVertexList* Player4Grid = 0;
+	AEGfxVertexList* Player5Grid = 0;
+	AEGfxVertexList* PlayerMesh = 0;
+	
 	c_statsheet* c_initialize()
 	{
 		c_statsheet* c_stats = new c_statsheet;
+		c_stats->health = 100;
+		c_stats->positionID; //Used for the mesh position?
+		c_stats->damage = 10;
+		c_stats->playerCD = 5; //Cooldown for attack and movement
+		c_stats->is_dmgtaken = false;
+		c_stats->positionX;
+		c_stats->positionY;
 		return c_stats;
 	}
 
-	void renderGrid()
+	void CombatMesh()
 	{
+
 		AEGfxMeshStart();
 
-		// This shape has 2 triangles
-		AEGfxTriAdd(
-			-30.0f, -30.0f, 0x00FF00FF, 0.0f, 1.0f,
-			30.0f, -30.0f, 0x00FFFF00, 1.0f, 1.0f,
-			-30.0f, 30.0f, 0x0000FFFF, 0.0f, 0.0f);
+		AEGfxVertexAdd(-240.0f, -160.0f, 0xFF0000, 0.0f, 1.0f);
+		AEGfxVertexAdd(-140.0f, -160.0f, 0xFFFFFF, 1.0f, 1.0f);
+		AEGfxVertexAdd(-140.0f, -60.0f, 0xFF0000, 0.0f, 0.0f);				//PLAYERGRID 4 BOTTOM
+		AEGfxVertexAdd(-240.0f, -60.0f, 0xFFFFFF, 1.0f, 0.0f);
+		AEGfxVertexAdd(-240.0f, -160.0f, 0xFF0000, 0.0f, 1.0f);
 
-		AEGfxTriAdd(
-			30.0f, -30.0f, 0x00FFFFFF, 1.0f, 1.0f,
-			30.0f, 30.0f, 0x00FFFFFF, 1.0f, 0.0f,
-			-30.0f, 30.0f, 0x00FFFFFF, 0.0f, 0.0f);
+		Player4Grid = AEGfxMeshEnd();
+		AE_ASSERT_MESG(Player4Grid, "Failed to create playermesh1!!");
 
-		// Saving the mesh (list of triangles) in pMesh2
+		//
 
-		GridStart = AEGfxMeshEnd();
+		AEGfxMeshStart();
+
+		AEGfxVertexAdd(-350.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
+		AEGfxVertexAdd(-250.0f, -50.0f, 0xFFFFFF, 1.0f, 1.0f);
+		AEGfxVertexAdd(-250.0f, 50.0f, 0xFF0000, 0.0f, 0.0f);				//PLAYERGRID 3 BACK
+		AEGfxVertexAdd(-350.0f, 50.0f, 0xFFFFFF, 1.0f, 0.0f);
+		AEGfxVertexAdd(-350.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
+
+		Player3Grid = AEGfxMeshEnd();
+		AE_ASSERT_MESG(Player3Grid, "Failed to create playermesh2!!");
+
+		// 
+
+		AEGfxMeshStart();
+
+		AEGfxVertexAdd(-240.0f, 160.0f, 0xFF0000, 0.0f, 1.0f);
+		AEGfxVertexAdd(-140.0f, 160.0f, 0xFFFFFF, 1.0f, 1.0f);
+		AEGfxVertexAdd(-140.0f, 60.0f, 0xFF0000, 0.0f, 0.0f);				//PLAYERGRID 2 TOP
+		AEGfxVertexAdd(-240.0f, 60.0f, 0xFFFFFF, 1.0f, 0.0f);
+		AEGfxVertexAdd(-240.0f, 160.0f, 0xFF0000, 0.0f, 1.0f);
+
+		Player2Grid = AEGfxMeshEnd();
+		AE_ASSERT_MESG(Player2Grid, "Failed to create playermesh3!!");
+
+		//
+
+		AEGfxMeshStart();
+
+		AEGfxVertexAdd(-240.0f, -50.0f, 0x00FF00FF, 0.0f, 1.0f);
+		AEGfxVertexAdd(-140.0f, -50.0f, 0x00FFFF00, 1.0f, 1.0f);
+		AEGfxVertexAdd(-140.0f, 50.0f, 0x0000FFFF, 0.0f, 0.0f);				//PLAYERGRID 1 MIDDLE
+		AEGfxVertexAdd(-240.0f, 50.0f, 0x00FF00FF, 1.0f, 0.0f);
+		AEGfxVertexAdd(-240.0f, -50.0f, 0x00FFF0FF, 0.0f, 1.0f);
+
+		Player1Grid = AEGfxMeshEnd();
+		AE_ASSERT_MESG(Player1Grid, "Failed to create playermesh4!!");
+
+		AEGfxMeshStart();
+
+		AEGfxVertexAdd( 0.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
+		AEGfxVertexAdd( -100.0f, -50.0f, 0xFFFFFF, 1.0f, 1.0f);
+		AEGfxVertexAdd( -100.0f, 50.0f, 0xFF0000, 0.0f, 0.0f);				//PLAYERGRID 5 ATTACK
+		AEGfxVertexAdd( 0.0f, 50.0f, 0xFFFFFF, 1.0f, 0.0f);
+		AEGfxVertexAdd( 0.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
+
+		Player5Grid = AEGfxMeshEnd();
+		AE_ASSERT_MESG(Player5Grid, "Failed to create playermesh5!!");
+
+		AEGfxMeshStart();
+
+		AEGfxVertexAdd(-215.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
+		AEGfxVertexAdd(-165.0f, -25.0f, 0xFFFFFF, 1.0f, 1.0f);
+		AEGfxVertexAdd(-165.0f, 25.0f, 0xFFFFFF, 0.0f, 0.0f);				//CHARACTER MESH
+		AEGfxVertexAdd(-215.0f, 25.0f, 0xFFFFFF, 1.0f, 0.0f);
+		AEGfxVertexAdd(-215.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
+
+		PlayerMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(PlayerMesh, "Failed to create character!!");
+	}
+
+	void RenderPlayerGrid(AEGfxVertexList* PlayerMesh)
+	{
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		// Set position for object 1
+		AEGfxSetPosition(0.0f, 0.0f);
+		// No texture for object 1
+		AEGfxTextureSet(NULL, 0, 0);
+
+		AEGfxMeshDraw(PlayerMesh, AE_GFX_MDM_LINES_STRIP);
+	}
+
+	void FreePlayerMesh()
+	{
+		AEGfxMeshFree(Player1Grid);
+		AEGfxMeshFree(Player2Grid);
+		AEGfxMeshFree(Player3Grid);
+		AEGfxMeshFree(Player4Grid);
+		AEGfxMeshFree(Player5Grid);
+		AEGfxMeshFree(PlayerMesh);
 	}
 }
