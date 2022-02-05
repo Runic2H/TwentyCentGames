@@ -12,11 +12,11 @@ namespace Enemy
 		E_Stats->health = 100;
 		E_Stats->damage = 10;
 		E_Stats->EnemyState = IDLE;
-		E_Stats->EnemyCD = AERandFloat() * 8.0f;
+		E_Stats->EnemyCD = 5.0f;
 		E_Stats->positionX = 0.0f;
 		E_Stats->positionY = 0.0f;
 		E_Stats->is_attacking = false;
-		E_Stats->AttackCD = 0.4f;
+		E_Stats->AttackCD = 0.45f;
 		return E_Stats;
 	}
 
@@ -24,15 +24,15 @@ namespace Enemy
 	{
 		void EnemyAttackState(E_StatSheet* Enemy, Character::c_statsheet* Player)
 		{
+			Enemy->EnemyState = ATTACK;
+			Enemy->is_attacking = true;
+			Player->SAFEGRID = (rand() % 3) + 1;
 			if (Enemy->positionX != 150.0f)
 			{
 				Enemy->positionX += 10.0f;
 			}
-			Enemy->EnemyState = ATTACK;
-			Enemy->is_attacking = true;
 			if (Enemy->EnemyState == ATTACK && Enemy->is_attacking == true)
 			{
-				Player->SAFEGRID = (rand() % 3) + 1;
 				Enemy->AttackCD -= DT;
 				if (Enemy->AttackCD <= 0.0f)
 				{
@@ -41,8 +41,8 @@ namespace Enemy
 						Player->health -= Enemy->damage;
 						std::cout << Player->health << "Player" << "\n";
 					}
-					Enemy->AttackCD = 0.4f;
-					Enemy->EnemyCD = AERandFloat() * 8.0f;
+					Enemy->AttackCD = 0.45f;
+					Enemy->EnemyCD = AERandFloat() * 5.0f;
 				}
 			}
 		}
@@ -62,6 +62,18 @@ namespace Enemy
 					std::cout << Enemy->health << "\n";  
 				}
 			}
+		}
+	}
+
+	void UpdateEnemyState(E_StatSheet* Enemy, Character::c_statsheet* Player)
+	{
+		if (Enemy->EnemyCD <= 0.0f)
+		{
+			EnemyAttackState(Enemy, Player);
+		}
+		else
+		{
+			EnemyIdleState(Enemy, Player);
 		}
 	}
 
@@ -118,17 +130,6 @@ namespace Enemy
 		AEGfxMeshFree(EnemyGridAttack);
 	}
 
-	void UpdateEnemyState(E_StatSheet* Enemy, Character::c_statsheet* Player)
-	{
-		if (Enemy->EnemyCD <= 0.0f)
-		{
-			EnemyAttackState(Enemy, Player);
-		}
-		else
-		{
-			EnemyIdleState(Enemy, Player);
-		}
-	}
 
 	void RenderEnemy(AEGfxVertexList* EnemyMesh, E_StatSheet* Enemy)
 	{
