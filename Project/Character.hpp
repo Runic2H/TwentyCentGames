@@ -2,7 +2,7 @@
 #include "pch.hpp"
 
 namespace Character
-{	
+{
 
 	extern AEGfxVertexList* Player1Grid;
 	extern AEGfxVertexList* Player2Grid;
@@ -19,9 +19,12 @@ namespace Character
 		float positionY;
 		int health;
 		int damage;
-		bool is_dmgtaken;
 		int playerCD;
+		bool is_attacking;
+		bool is_dmgtaken;
 	};
+
+
 
 	struct c_movegrid
 	{
@@ -38,7 +41,13 @@ namespace Character
 
 	void FreePlayerMesh();
 
-	int PlayerMovement(int x, c_statsheet* player);
+	int PlayerMovement(int& x, c_statsheet* player);
 
-	void playerrender(c_statsheet* player, AEGfxVertexList* playermesh);
+	void playerrender(AEGfxTexture* playertexture, c_statsheet* player, AEGfxVertexList* playermesh);
+
+	int Playerdamage(c_statsheet* player, int SAFEGRID);
+
+	void PlayerAttack(c_statsheet* Player, bool enemy_isattacking, int& enemyhealth);
+
+	//void CameraShake(float camX, float camY);
 }

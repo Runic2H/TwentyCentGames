@@ -20,10 +20,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Variable declaration
 
 	int gGameRunning = 1;
-	int x{ 0 }, keypressed{ 0 }, flag{ 0 };
+	int y{ 0 }, keypressed{ 0 }, flag{ 0 }, counter{ 0 }, SAFEGRID{ 1 }, isdamage{ 0 }, enemyhealth{ 500 };
+	int const ATTACK{ 1 };
 	float movementdt, time{ 1.0 };
 	float savedtime = time;
+	int& x{ y }, enemy_health{ enemyhealth };
+	bool is_enemyattacking;
 
+	AEGfxTexture* playertexture;
 
 	// Variable declaration end
 	///////////////////////////
@@ -45,7 +49,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	//Create the Mesh
 	Character::CombatMesh();
-	Character::c_statsheet *Player = Character::c_initialize();
+	Character::c_statsheet* Player = Character::c_initialize();
 
 	// Initialization end
 	/////////////////////
@@ -62,9 +66,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	////////////////////////////
 	// Loading textures (images)
-
+	playertexture = AEGfxTextureLoad("ducky.jpg");
+	AE_ASSERT_MESG(playertexture, "cant create duck texture\n");
 	// Loading textures (images) end
 	//////////////////////////////////
+
+
 
 	//////////////////////////////////
 	// Creating Fonts	
@@ -85,62 +92,68 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		///////////////////
 		// Game loop update
 
-	//PLAYER MOVEMENT
-		AEInputCheckTriggered(AEVK_D) ? x = 1 : x = x;
-		AEInputCheckTriggered(AEVK_W) ? x = 2 : x = x;
-		AEInputCheckTriggered(AEVK_A) ? x = 3 : x = x;
-		AEInputCheckTriggered(AEVK_S) ? x = 4 : x = x;
+			//PlayerMOVEMENT START
+		if (keypressed == 0) {										//so i cant move whilst cooldown active
+			keypressed = Character::PlayerMovement(x, Player);		//character movement	
+			flag = keypressed;										//flag for player damage so it only counts once
+		}
+		//PlayerMOVEMENT END
 
 		movementdt = (f32)AEFrameRateControllerGetFrameTime();		//dt time for counter
 
-		keypressed = Character::PlayerMovement(x, Player);	
-			x = 0;
-			flag = keypressed;
 
 
 			//logic for player taking damage
-			//player wont take damange if he stays in the initial grid (for testing only)
-		if (flag == 1 && Player->positionID != 1) {								
-		Player->health -= 1;
-		std::cout << "the player's health is: " << Player->health << std::endl;
+			//player wont take damange if he stays in the initial grid (to replace with randomly generated grids)
+		if (flag == 1) {
+			isdamage = Character::Playerdamage(Player, SAFEGRID);				//should the player take damage?
+			flag = 0;
 		}
 
-		flag = 0;
-
-	//PLAYER MOVEMENT END
-
-		// Game loop update end
-		///////////////////////
 
 
-		//////////////////
-		// Game loop draw
+		//PlayerATTACK START
+		is_enemyattacking = false;								//PLACEHOLDER.
+		flag = (x == ATTACK) ? 1 : 0;
+
+		if (flag == 1 && Player->is_attacking == true) {
+			Character::PlayerAttack(Player, is_enemyattacking, enemyhealth);
+			x = 0;
+			flag = 0;
+		}
+		//PlayerATTACK END
+
+
+	///////////////////////
+	// Game loop update end
+
+
+	// Game loop draw
+	//////////////////
 		Character::RenderPlayerGrid(Character::Player1Grid);
 		Character::RenderPlayerGrid(Character::Player2Grid);
 		Character::RenderPlayerGrid(Character::Player3Grid);
 		Character::RenderPlayerGrid(Character::Player4Grid);
 		Character::RenderPlayerGrid(Character::Player5Grid);
-		Character::playerrender(Player,Character::PlayerMesh);
+		Character::playerrender(playertexture, Player, Character::PlayerMesh);
+		/////////////////////
+		// Game loop draw end
 
 
-		//this is for the delay before popping back to original position
+
 		if (keypressed == 1) {
+			//this is for the delay before popping back to original position
+			++counter;
 
-			if (time >= 0) {
-				//std::cout << time << "\n";
-				time -= movementdt;
-			}
-			else {
+			if (counter > 42) {
 				Player->positionX = 0.0f;
 				Player->positionY = 0.0f;
 				Player->positionID = 1;
-				time = savedtime;
 				keypressed = 0;
+				counter = 0;
 			}
 		}
 
-		// Game loop draw end
-		/////////////////////
 
 
 		// Informing the system about the loop's end
@@ -153,6 +166,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 	// free the system
+	delete Player;
 	Character::FreePlayerMesh();
+	AEGfxTextureUnload(playertexture);
 	AESysExit();
 }

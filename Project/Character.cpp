@@ -9,7 +9,7 @@ namespace Character
 	AEGfxVertexList* Player4Grid = 0;
 	AEGfxVertexList* Player5Grid = 0;
 	AEGfxVertexList* PlayerMesh = 0;
-	
+
 	c_statsheet* c_initialize()
 	{
 		c_statsheet* c_stats = new c_statsheet;
@@ -18,6 +18,7 @@ namespace Character
 		c_stats->damage = 10;
 		c_stats->playerCD = 5; //Cooldown for attack and movement
 		c_stats->is_dmgtaken = false;
+		c_stats->is_attacking = false;
 		c_stats->positionX = 0.0f;
 		c_stats->positionY = 0.0f;
 		return c_stats;
@@ -78,26 +79,51 @@ namespace Character
 
 		AEGfxMeshStart();
 
-		AEGfxVertexAdd( 0.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
-		AEGfxVertexAdd( -100.0f, -50.0f, 0xFFFFFF, 1.0f, 1.0f);
-		AEGfxVertexAdd( -100.0f, 50.0f, 0xFF0000, 0.0f, 0.0f);				//PLAYERGRID 5 ATTACK
-		AEGfxVertexAdd( 0.0f, 50.0f, 0xFFFFFF, 1.0f, 0.0f);
-		AEGfxVertexAdd( 0.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
+		AEGfxVertexAdd(0.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
+		AEGfxVertexAdd(-100.0f, -50.0f, 0xFFFFFF, 1.0f, 1.0f);
+		AEGfxVertexAdd(-100.0f, 50.0f, 0xFF0000, 0.0f, 0.0f);				//PLAYERGRID 5 ATTACK
+		AEGfxVertexAdd(0.0f, 50.0f, 0xFFFFFF, 1.0f, 0.0f);
+		AEGfxVertexAdd(0.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
 
 		Player5Grid = AEGfxMeshEnd();
 		AE_ASSERT_MESG(Player5Grid, "Failed to create playermesh5!!");
 
 		AEGfxMeshStart();
 
-		AEGfxVertexAdd(-215.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
-		AEGfxVertexAdd(-165.0f, -25.0f, 0xFFFFFF, 1.0f, 1.0f);
-		AEGfxVertexAdd(-165.0f, 25.0f, 0xFFFFFF, 0.0f, 0.0f);				//CHARACTER MESH
-		AEGfxVertexAdd(-215.0f, 25.0f, 0xFFFFFF, 1.0f, 0.0f);
-		AEGfxVertexAdd(-215.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
+		//AEGfxVertexAdd(-215.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
+		//AEGfxVertexAdd(-165.0f, -25.0f, 0xFFFFFF, 1.0f, 1.0f);
+		//AEGfxVertexAdd(-165.0f, 25.0f, 0xFFFFFF, 0.0f, 0.0f);				//CHARACTER MESH
+		//AEGfxVertexAdd(-215.0f, 25.0f, 0xFFFFFF, 1.0f, 0.0f);
+		//AEGfxVertexAdd(-215.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
+
+		//AEGfxTriAdd(
+		//	-215.0f, 25.0f, 0x00FF00FF, 0.0f, 1.0f,
+		//	-215.0f, -25.0f, 0x00FFFF00, 0.0f, 1.0f,
+		//	-165.0f, -25.0f, 0x0000FFFF, 1.0f, 0.0f);
+
+		//AEGfxTriAdd(
+		//	-215.0f, 25.0f, 0x00FF00FF, 1.0f, 1.0f,
+		//	-165.0f, 25.0f, 0x00FFFF00, 1.0f, 0.0f,
+		//	-165.0f, -25.0f, 0x00FFFFFF, 0.0f, 1.0f);
+
+
+		AEGfxTriAdd(
+			-215.0f, -25.0f, 0x00FF00FF, 0.0f, 1.0f,
+			-165.0f, -25.0f, 0x00FFFF00, 1.0f, 1.0f,
+			-215.0f, 25.0f, 0x0000FFFF, 0.0f, 0.0f);
+		//x,y,colour,u,v
+
+
+		AEGfxTriAdd(
+			-165.0f, -25.0f, 0x00FFFFFF, 1.0f, 1.0f,
+			-165.0f, 25.0f, 0x00FFFFFF, 1.0f, 0.0f,
+			-215.0f, 25.0f, 0x00FFFFFF, 0.0f, 0.0f);
+
 
 		PlayerMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(PlayerMesh, "Failed to create character!!");
 	}
+
 
 	void RenderPlayerGrid(AEGfxVertexList* PlayerMesh)
 	{
@@ -110,6 +136,7 @@ namespace Character
 		AEGfxMeshDraw(PlayerMesh, AE_GFX_MDM_LINES_STRIP);
 	}
 
+
 	void FreePlayerMesh()
 	{
 		AEGfxMeshFree(Player1Grid);
@@ -121,17 +148,25 @@ namespace Character
 	}
 
 
-	int PlayerMovement(int x, c_statsheet* player) {
+	int PlayerMovement(int& x, c_statsheet* player) {
 
-		int keypressed = 2;
+		int keypressed = 0;
+		x = 0;
 
-	switch (x) {
+		AEInputCheckTriggered(AEVK_D) ? x = 1 : x = x;
+		AEInputCheckTriggered(AEVK_W) ? x = 2 : x = x;
+		AEInputCheckTriggered(AEVK_A) ? x = 3 : x = x;
+		AEInputCheckTriggered(AEVK_S) ? x = 4 : x = x;
 
-		case 1:
+
+		switch (x) {
+
+		case 1:	//ATTACK GRID
 			player->positionID = 1;
-			player->positionX = 0.0f;
+			player->positionX = 145.0f;
 			player->positionY = 0.0f;
 			keypressed = 1;
+			player->is_attacking = true;
 			break;
 
 		case 2:
@@ -154,22 +189,65 @@ namespace Character
 			player->positionY = -110.0f;
 			keypressed = 1;
 			break;
-	}
+		}
 
 		return keypressed;
-}
+	}
 
 
 
+	void playerrender(AEGfxTexture* playertexture, c_statsheet* player, AEGfxVertexList* playermesh) {
 
-	void playerrender(c_statsheet* player, AEGfxVertexList* playermesh) {
-
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		// Set position for object 1
 		AEGfxSetPosition(player->positionX, player->positionY);
-		// No texture for object 1
-		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxTextureSet(playertexture, 1.0f, 1.0f);
 
-		AEGfxMeshDraw(playermesh, AE_GFX_MDM_LINES_STRIP);
+		AEGfxMeshDraw(playermesh, AE_GFX_MDM_TRIANGLES);
 	}
+
+
+
+	int Playerdamage(c_statsheet* Player, int SAFEGRID) {
+		if (Player->positionID != SAFEGRID) {
+			Player->health -= 1;
+			std::cout << "the player's health is: " << Player->health << std::endl;
+			return  1;
+		}
+		else {
+			return 0;
+		}
+	}
+
+
+	void PlayerAttack(c_statsheet* Player, bool enemy_isattacking, int& enemyhealth) {
+
+		if (Player->is_attacking == true && enemy_isattacking == false) {
+			enemyhealth -= Player->damage;
+			std::cout << "enemy health: " << enemyhealth << "\n";
+		}
+
+		Player->is_attacking = false;
+	}
+
+
+	//void CameraShake(float camX, float camY) {
+
+	//	//AEGfxGetCamPosition(&camX, &camY);
+
+	//	//for (int i = 0; i < 10; ++i) {
+
+	//		//if (i % 2 == 0) {
+	//			AEGfxSetCamPosition(camX + 2, camY + 2);
+	//		//}
+	//		//else {
+	//			AEGfxSetCamPosition(camX - 2, camY - 2);
+	//		//}
+	//	//}
+	//	
+	//	/*AEGfxSetCamPosition(camX - 2, camY - 2);
+	//	AEGfxSetCamPosition(camX + 2, camY + 2);*/
+	//}
+
 }
