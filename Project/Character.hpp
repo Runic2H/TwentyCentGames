@@ -3,7 +3,6 @@
 
 namespace Character
 {
-
 	extern AEGfxVertexList* Player1Grid;
 	extern AEGfxVertexList* Player2Grid;
 	extern AEGfxVertexList* Player3Grid;
@@ -31,16 +30,7 @@ namespace Character
 		bool is_attacking;
 	};
 
-
-	struct c_movegrid
-	{
-		bool is_attacking;
-		bool is_player;
-		bool enemy_attakcing;
-	};
-
 	c_statsheet* c_initialize();
-	e_statsheet* e_initialize();
 
 	void CombatMesh(int RGBcounter);
 
@@ -54,7 +44,7 @@ namespace Character
 
 	int Playerdamage(c_statsheet* player, int SAFEGRID);
 
-	void PlayerAttack(c_statsheet* Player, e_statsheet * Enemy);
+	void PlayerAttack(c_statsheet* Player, e_statsheet* Enemy);
 
 	void RGBloop(int& RGBcounter);
 

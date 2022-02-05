@@ -51,7 +51,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	//Create the Mesh
 	Character::c_statsheet* Player = Character::c_initialize();
-	Character::e_statsheet* Enemy = Character::e_initialize();
+	Enemy::E_StatSheet* Enemy = Enemy::EnemyInitialize();
+	Enemy::EnemyCombatMesh();
 
 	// Initialization end
 	/////////////////////
@@ -109,27 +110,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		movementdt = (f32)AEFrameRateControllerGetFrameTime();					//dt time for counter
 
 
-
-		//	//logic for player taking damage
-		//	//player wont take damange if he stays in the initial grid (to replace with randomly generated grids)
-		//if (flag == 1) {
-		//	isdamage = Character::Playerdamage(Player, SAFEGRID);				//should the player take damage?
-		//	flag = 0;
-		//}
-
-
-
-		//PlayerATTACK START
-		is_enemyattacking = false;								//PLACEHOLDER.
-		flag = (x == ATTACK) ? 1 : 0;
-
-		if (flag == 1 && Player->is_attacking == true) {
-			Character::PlayerAttack(Player, Enemy);
-			x = 0;
-			flag = 0;
-		}
-		//PlayerATTACK END
-
+		Enemy::UpdateEnemyState(Enemy, Player);
 
 	///////////////////////
 	// Game loop update end
@@ -138,9 +119,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Game loop draw
 	//////////////////
 
+		Character::RenderPlayerGrid(Character::Player1Grid);
+		Character::RenderPlayerGrid(Character::Player2Grid);
+		Character::RenderPlayerGrid(Character::Player3Grid);
+		Character::RenderPlayerGrid(Character::Player4Grid);
 		Character::RenderPlayerGrid(Character::Player5Grid);
-		Character::GridCheck(showgridcounter, choosegrid, Player, Enemy);
 		Character::playerrender(playertexture, Player, Character::PlayerMesh);
+		Enemy::RenderEnemyGrid(Enemy::EnemyGridIdle);
+		Enemy::RenderEnemyGrid(Enemy::EnemyGridAttack);
+		Enemy::RenderEnemy(Enemy::EnemyMesh, Enemy);
 		/////////////////////
 		// Game loop draw end
 
@@ -176,6 +163,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	delete Player;
 	delete Enemy;
 	Character::FreePlayerMesh();
+	Enemy::FreeEnemyMesh();
 	AEGfxTextureUnload(playertexture);
 	AESysExit();
 }

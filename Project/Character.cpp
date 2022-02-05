@@ -34,7 +34,6 @@ namespace Character
 		return e_stats;
 	}
 
-
 	void CombatMesh(int RGBcounter)
 	{
 
@@ -153,10 +152,12 @@ namespace Character
 		int keypressed = 0;
 		x = 0;
 
-		AEInputCheckTriggered(AEVK_W) ? x = 2 : x = x;
-		AEInputCheckTriggered(AEVK_A) ? x = 3 : x = x;
-		AEInputCheckTriggered(AEVK_S) ? x = 4 : x = x;
-		AEInputCheckTriggered(AEVK_D) ? x = 5 : x = x;
+		AEInputCheckTriggered(AEVK_W) ? x = 2 : x = x;	//ID Should be 1
+		AEInputCheckTriggered(AEVK_A) ? x = 3 : x = x;	//ID Should be 2
+		AEInputCheckTriggered(AEVK_S) ? x = 4 : x = x;	//ID Should be 3
+		AEInputCheckTriggered(AEVK_D) ? x = 5 : x = x;	//ID Should be 4
+
+		//ORIGIN ID should be 0 (My randomizer will be easier to ignore 0 then i can just randomize between 1-3)
 
 
 		switch (x) {
@@ -212,7 +213,7 @@ namespace Character
 	}
 
 
-
+	//NOT NEEDED
 	int Playerdamage(c_statsheet* Player, int SAFEGRID) {
 
 		if (Player->positionID != SAFEGRID) {
@@ -225,7 +226,7 @@ namespace Character
 		}
 	}
 
-
+	//NOT NEEDED
 	void PlayerAttack(c_statsheet* Player, e_statsheet* Enemy) {
 
 		if (Player->is_attacking == true && Enemy->is_attacking == false) {
@@ -247,7 +248,7 @@ namespace Character
 	}
 
 
-
+	//??? No Idea whats going on
 	void GridCheck(int& counter, int& x, c_statsheet* Player, e_statsheet* Enemy) {
 		
 		++counter;
