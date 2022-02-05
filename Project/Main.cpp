@@ -20,7 +20,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Variable declaration
 
 	int gGameRunning = 1;
-	int y{ 0 }, keypressed{ 0 }, flag{ 0 }, counter{ 0 }, SAFEGRID{ 1 }, isdamage{ 0 }, enemyhealth{ 500 };
+	int y{ 0 }, key{ 0 }, flag{ 0 }, counter{ 0 }, SAFEGRID{ 1 }, gridcounter{ 0 }, gr{ 0 }, isdamage{ 0 }, enemyhealth{ 500 };
+	int  RGB{ 16384000 };
+	int& RGBcounter{ RGB }, keypressed{ key }, showgridcounter{ gridcounter }, choosegrid{gr};
 	int const ATTACK{ 1 };
 	float movementdt, time{ 1.0 };
 	float savedtime = time;
@@ -48,8 +50,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysReset();
 
 	//Create the Mesh
-	Character::CombatMesh();
 	Character::c_statsheet* Player = Character::c_initialize();
+	Character::e_statsheet* Enemy = Character::e_initialize();
 
 	// Initialization end
 	/////////////////////
@@ -83,6 +85,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Game Loop
 	while (gGameRunning)
 	{
+
+		Character::RGBloop(RGBcounter);
+		Character::CombatMesh(RGBcounter);										//init character mesh
+
+
 		// Informing the system about the loop's start
 		AESysFrameStart();
 
@@ -93,22 +100,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// Game loop update
 
 			//PlayerMOVEMENT START
-		if (keypressed == 0) {										//so i cant move whilst cooldown active
-			keypressed = Character::PlayerMovement(x, Player);		//character movement	
-			flag = keypressed;										//flag for player damage so it only counts once
+		if (keypressed == 0) {													//so i cant move whilst cooldown active
+			keypressed = Character::PlayerMovement(x, Player);					//character movement	
+			flag = keypressed;													//flag for player damage so it only counts once
 		}
 		//PlayerMOVEMENT END
 
-		movementdt = (f32)AEFrameRateControllerGetFrameTime();		//dt time for counter
+		movementdt = (f32)AEFrameRateControllerGetFrameTime();					//dt time for counter
 
 
 
-			//logic for player taking damage
-			//player wont take damange if he stays in the initial grid (to replace with randomly generated grids)
-		if (flag == 1) {
-			isdamage = Character::Playerdamage(Player, SAFEGRID);				//should the player take damage?
-			flag = 0;
-		}
+		//	//logic for player taking damage
+		//	//player wont take damange if he stays in the initial grid (to replace with randomly generated grids)
+		//if (flag == 1) {
+		//	isdamage = Character::Playerdamage(Player, SAFEGRID);				//should the player take damage?
+		//	flag = 0;
+		//}
 
 
 
@@ -117,7 +124,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		flag = (x == ATTACK) ? 1 : 0;
 
 		if (flag == 1 && Player->is_attacking == true) {
-			Character::PlayerAttack(Player, is_enemyattacking, enemyhealth);
+			Character::PlayerAttack(Player, Enemy);
 			x = 0;
 			flag = 0;
 		}
@@ -130,15 +137,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Game loop draw
 	//////////////////
-		Character::RenderPlayerGrid(Character::Player1Grid);
-		Character::RenderPlayerGrid(Character::Player2Grid);
-		Character::RenderPlayerGrid(Character::Player3Grid);
-		Character::RenderPlayerGrid(Character::Player4Grid);
+
 		Character::RenderPlayerGrid(Character::Player5Grid);
+		Character::GridCheck(showgridcounter, choosegrid, Player, Enemy);
 		Character::playerrender(playertexture, Player, Character::PlayerMesh);
 		/////////////////////
 		// Game loop draw end
 
+
+		//std::cout << (int)((AERandFloat()*10)/2) << "\n";
 
 
 		if (keypressed == 1) {
@@ -167,6 +174,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// free the system
 	delete Player;
+	delete Enemy;
 	Character::FreePlayerMesh();
 	AEGfxTextureUnload(playertexture);
 	AESysExit();

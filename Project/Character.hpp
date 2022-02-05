@@ -14,9 +14,10 @@ namespace Character
 
 	struct c_statsheet
 	{
-		int positionID;
 		float positionX;
 		float positionY;
+		int positionID;
+		int SAFEGRID;
 		int health;
 		int damage;
 		int playerCD;
@@ -24,6 +25,11 @@ namespace Character
 		bool is_dmgtaken;
 	};
 
+	struct e_statsheet {
+		int health;
+		int damage;
+		bool is_attacking;
+	};
 
 
 	struct c_movegrid
@@ -34,8 +40,9 @@ namespace Character
 	};
 
 	c_statsheet* c_initialize();
+	e_statsheet* e_initialize();
 
-	void CombatMesh();
+	void CombatMesh(int RGBcounter);
 
 	void RenderPlayerGrid(AEGfxVertexList* PlayerMesh);
 
@@ -47,7 +54,11 @@ namespace Character
 
 	int Playerdamage(c_statsheet* player, int SAFEGRID);
 
-	void PlayerAttack(c_statsheet* Player, bool enemy_isattacking, int& enemyhealth);
+	void PlayerAttack(c_statsheet* Player, e_statsheet * Enemy);
+
+	void RGBloop(int& RGBcounter);
+
+	void GridCheck(int& counter, int& x, c_statsheet* Player, e_statsheet* Enemy);
 
 	//void CameraShake(float camX, float camY);
 }
