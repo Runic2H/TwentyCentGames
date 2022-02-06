@@ -8,6 +8,7 @@ extern int maze_iswall_isnotwall[noOfRows][noOfCols]; // remove later after fini
 struct MazeCells
 {
 	int is_wall;
+	//int is_PlayerPos;
 
 };
 
@@ -47,3 +48,8 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList*& WALLCellMesh,
 
 void MAZE_DrawMazeOutline2(AEGfxVertexList*& mazeOutlineMesh, Maze_Struct* Maze, AEGfxMeshDrawMode RenderMode);
 
+void MAZE_DrawingMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float MC_positionX, float MC_positionY);
+
+void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_height, float cell_width);
+
+int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Char_Pos_X, int& Char_Pos_Y);

@@ -1,10 +1,12 @@
 #include "AEEngine.h"
 #include "Maze.h"
 
+#include <iostream>
+
 
 int maze_iswall_isnotwall[noOfRows][noOfCols] =
 {
-
+		/*
 		1,1,1,1,1, 1,1,0,1,1, 1,1,1,1,1,
 		1,0,0,0,1, 0,0,0,0,0, 0,0,0,0,1,
 		1,0,1,0,1, 0,1,1,1,1, 1,0,1,1,1,
@@ -20,6 +22,24 @@ int maze_iswall_isnotwall[noOfRows][noOfCols] =
 		1,1,1,1,1, 0,1,0,1,0, 1,0,1,0,1,
 		1,0,0,0,0, 0,1,0,0,0, 1,0,0,0,1,
 		1,1,1,1,1, 1,1,0,1,1, 1,1,1,1,1
+		*/
+
+		1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1,
+		1,0,0,0,0, 0,0,0,0,0, 0,0,1,0,1,
+		1,0,1,1,1, 1,1,0,1,1, 1,0,1,0,1,
+		1,0,0,0,1, 0,0,0,1,0, 0,0,1,0,1,
+		1,1,1,1,1, 0,1,1,1,0, 1,1,1,0,1,
+		1,0,0,0,1, 0,1,0,0,0, 1,0,0,0,1,
+		1,0,1,0,1, 0,1,0,1,1, 1,0,1,1,1,
+		0,0,1,0,0, 0,1,0,1,0, 0,0,0,0,0,
+		1,0,1,1,1, 1,1,0,1,1, 1,1,1,0,1,
+		1,0,1,0,0, 0,1,0,0,0, 1,0,0,0,1,
+		1,0,1,1,1, 0,1,1,1,0, 1,0,1,1,1,
+		1,0,0,0,1, 0,0,0,0,0, 1,0,0,0,1,
+		1,0,1,0,1, 1,1,0,1,1, 1,1,1,0,1,
+		1,0,1,0,0, 0,1,0,0,0, 0,0,0,0,1,
+		1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1
+
 };
 
 
@@ -45,9 +65,12 @@ Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows,
 		{
 			
 			Maze->grid[r][c].is_wall = maze_iswall_isnotwall[r][c];
+			//Maze->grid[r][c].is_PlayerPos = 0;
 
 		}
 	}
+
+	//Maze->grid[0][7].is_PlayerPos = 1;
 
 
 	return Maze;
@@ -106,7 +129,7 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList*& WALLCellMesh,
 				(Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth)),
 				(Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight))
 			);
-			if (Maze->grid[c][r].is_wall == 1) // is wall
+			if (Maze->grid[r][c].is_wall == 1) // is wall
 			{
 				AEGfxMeshDraw(WALLCellMesh, AE_GFX_MDM_TRIANGLES);
 			}
@@ -129,4 +152,97 @@ void MAZE_DrawMazeOutline2(AEGfxVertexList*& mazeOutlineMesh, Maze_Struct* Maze,
 {
 	AEGfxSetPosition(Maze->specifications.MazeWindowStart_X, Maze->specifications.MazeWindowStart_Y);
 	AEGfxMeshDraw(mazeOutlineMesh, RenderMode);
+}
+
+
+void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_height, float cell_width)
+{
+	AEGfxMeshStart();
+
+	//pink: 0x00FF00FF
+	//white: 0x00FFFFFF
+	//light blue: 0x0000FFFF
+
+	AEGfxTriAdd( //This triangle is colorful, blends 3 colours wowza
+		-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink 
+		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
+		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
+
+
+	AEGfxTriAdd(
+		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
+		(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink
+		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
+
+	pMesh_MainCharacter = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pMesh_MainCharacter, "Failed to create main character!!");
+}
+
+void MAZE_DrawingMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float MC_positionX, float MC_positionY)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetPosition(MC_positionX, MC_positionY);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxMeshDraw(pMesh_MainCharacter, AE_GFX_MDM_TRIANGLES);
+}
+
+int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight,Maze_Struct* Maze,int &Char_Pos_X, int &Char_Pos_Y)
+{
+	switch (UpDownLeftRight)//1 is up, 2 is left, 3 is down, 3 is right
+	{
+	case 1: // move up aka y+1 
+		if (Maze->grid[Char_Pos_X][Char_Pos_Y+1].is_wall != 1 && (Char_Pos_Y +1)<Maze->specifications.noOfRows)
+		{
+			std::cout << "Can move up" << "\n";
+			Char_Pos_Y++;
+			return 1;
+		}
+		else
+		{
+			std::cout << "Cant move up to :" << Char_Pos_X<<"-"<< Char_Pos_Y+1
+				<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y + 1].is_wall << "\n";
+		}
+		break;
+	case 2: // move left aka x-1
+		if (Maze->grid[Char_Pos_X-1][Char_Pos_Y].is_wall != 1 && (Char_Pos_X - 1) >= 0)
+		{
+			std::cout << "Can move left" << "\n";
+			Char_Pos_X--;
+			return 1;
+		}
+		else
+		{
+			std::cout << "Cant move left to :" << Char_Pos_X -1 << "-" << Char_Pos_Y 
+				<< "because :" << Maze->grid[Char_Pos_X-1][Char_Pos_Y].is_wall << "\n";
+		}
+		break;
+	case 3: // move down aka y-1
+		if (Maze->grid[Char_Pos_X][Char_Pos_Y-1].is_wall != 1 && (Char_Pos_Y - 1) >= 0)
+		{
+			std::cout << "Can move down" << "\n";
+			Char_Pos_Y--;
+			return 1;
+		}
+		else
+		{
+			std::cout << "Cant move down to :" << Char_Pos_X << "-" << Char_Pos_Y-1 
+				<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y - 1].is_wall<< "\n";
+		}
+		break;
+	case 4: // move right aka x+1
+		if (Maze->grid[Char_Pos_X+1][Char_Pos_Y].is_wall != 1 && (Char_Pos_X + 1) < Maze->specifications.noOfCols)
+		{
+			std::cout << "Can move right" << "\n";
+			Char_Pos_X++;
+			return 1;
+		}
+		else
+		{
+			std::cout << "Cant move right to :" << Char_Pos_X+1 << "-" << Char_Pos_Y 
+				<< "because :"<< Maze->grid[Char_Pos_X + 1][Char_Pos_Y].is_wall <<"\n";
+		}
+		break;
+	}
+
 }

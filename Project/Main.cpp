@@ -32,10 +32,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	float MC_positionX;
 	float MC_positionY;
 	AEGfxVertexList* pMesh_MainCharacter = 0;
-	size_t starting_Xposition = 0;
-	size_t starting_Yposition = 0;
+	int starting_Xposition = 7;
+	int starting_Yposition = 0;
 
-	bool is_wall;
 
 
 	// Variable declaration end
@@ -86,11 +85,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//MAZE_CreateSolidCell(pMeshSolidSquare_PATH, MAZE_DIMESIONS_STRUCT, 0x808080);
 	MAZE_CreateSolidCell2(pMeshSolidSquare_PATH, Maze, 0x808080);
 
-	CreateMainCharacter(pMesh_MainCharacter, Maze->specifications.cellHeight, Maze->specifications.cellWidth);
+	MAZE_CreateMainCharacter(pMesh_MainCharacter, Maze->specifications.cellHeight, Maze->specifications.cellWidth);
 
 	//code needs to be after creating the maze
-	MC_positionX = Maze->specifications.MazeWindowStart_X + (Maze->specifications.cellWidth / 2) + (7 * Maze->specifications.cellWidth);
-	MC_positionY = Maze->specifications.MazeWindowStart_Y + (Maze->specifications.cellHeight / 2);
+	//MC_positionX = Maze->specifications.MazeWindowStart_X + (Maze->specifications.cellWidth / 2) + (7 * Maze->specifications.cellWidth);
+	MC_positionX = Maze->specifications.MazeWindowStart_X + (Maze->specifications.cellWidth / 2) + (starting_Xposition *Maze->specifications.cellWidth);
+	
+	MC_positionY = Maze->specifications.MazeWindowStart_Y + (Maze->specifications.cellHeight / 2)+ (starting_Yposition * Maze->specifications.cellHeight); ;
 	// Creating the objects (Shapes) end
 	////////////////////////////////////
 
@@ -145,30 +146,46 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// main character will move if these buttons are pressed
 		if (AEInputCheckTriggered(AEVK_UP))
 		{
-			if (Maze->grid[0][7].is_wall == false)
+			if (MAZE_CharMoveCHECK_NEXT_POS(1,Maze,starting_Xposition,starting_Yposition) == 1)
 			{
 				MC_positionY += Maze->specifications.cellHeight;
-				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY << "\n";
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
 			}
 		}
 
-		else if (AEInputCheckTriggered(AEVK_DOWN))
+		 if (AEInputCheckTriggered(AEVK_DOWN))
 		{
+			if (MAZE_CharMoveCHECK_NEXT_POS(3, Maze, starting_Xposition, starting_Yposition) == 1)
+			{
 				MC_positionY -= Maze->specifications.cellHeight;
-				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY << "\n";
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
+			}
 		}
 
 
-		if (AEInputCheckTriggered(AEVK_LEFT))
+		 if (AEInputCheckTriggered(AEVK_LEFT))
 		{
-			MC_positionX -= Maze->specifications.cellWidth;
-			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY << "\n";
+			if (MAZE_CharMoveCHECK_NEXT_POS(2, Maze, starting_Xposition, starting_Yposition) == 1)
+			{
+
+				MC_positionX -= Maze->specifications.cellWidth;
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
+
+			}
 		}
 
-		else if (AEInputCheckTriggered(AEVK_RIGHT))
+		 if (AEInputCheckTriggered(AEVK_RIGHT))
 		{
-			MC_positionX += Maze->specifications.cellWidth;
-			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY << "\n";	
+			if (MAZE_CharMoveCHECK_NEXT_POS(4, Maze, starting_Xposition, starting_Yposition) == 1)
+			{
+
+				MC_positionX += Maze->specifications.cellWidth;
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
+			}
 		}
 
 
@@ -191,7 +208,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze, AE_GFX_MDM_LINES_STRIP); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
 
 		//Draw mc
-		DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
+		MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
 
 
 		// Game loop draw end
