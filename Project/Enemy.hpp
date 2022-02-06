@@ -19,6 +19,8 @@ namespace Enemy
 		float positionY;
 		bool is_attacking;
 		float AttackCD;
+		int EnemyGrid;
+		float DamageCD;
 	};
 
 	E_StatSheet* EnemyInitialize();
@@ -31,5 +33,7 @@ namespace Enemy
 
 	void UpdateEnemyState(E_StatSheet* Enemy, Character::c_statsheet* Player);
 
-	void RenderEnemy(AEGfxVertexList* EnemyMesh, E_StatSheet* Enemy);
+	void RenderEnemy(AEGfxTexture* enemytexture, AEGfxVertexList* EnemyMesh, E_StatSheet* Enemy);
+
+	void RenderEnemyHealth(s8 font, Enemy::E_StatSheet* Enemy);
 }

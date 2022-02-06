@@ -28,8 +28,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	float savedtime = time;
 	int& x{ y }, enemy_health{ enemyhealth };
 	bool is_enemyattacking;
+	s8 fontId = 0;
 
 	AEGfxTexture* playertexture;
+	AEGfxTexture* enemytexture;
 
 	// Variable declaration end
 	///////////////////////////
@@ -71,6 +73,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Loading textures (images)
 	playertexture = AEGfxTextureLoad("ducky.jpg");
 	AE_ASSERT_MESG(playertexture, "cant create duck texture\n");
+
+	enemytexture = AEGfxTextureLoad("Turtle.png");
+	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
 	// Loading textures (images) end
 	//////////////////////////////////
 
@@ -79,6 +84,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//////////////////////////////////
 	// Creating Fonts	
 
+	fontId = AEGfxCreateFont("Roboto-Regular.ttf", 12);
 	// Creating Fonts end
 	//////////////////////////////////
 
@@ -100,14 +106,30 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		///////////////////
 		// Game loop update
 
-			//PlayerMOVEMENT START
-		if (keypressed == 0) {													//so i cant move whilst cooldown active
-			keypressed = Character::PlayerMovement(x, Player);					//character movement	
-			flag = keypressed;													//flag for player damage so it only counts once
+		if (Enemy->health <= 0 || Player->health <= 0)
+		{
+			std::cout << "Something Died.";
+			//TO BE REPLACE WITH GSM
+		}
+
+		//PlayerMOVEMENT START
+		
+		if (keypressed == 0) {												//so i cant move whilst cooldown active
+			keypressed = Character::PlayerMovement(x, Player);				//character movement	
+			flag = keypressed;												//flag for player damage so it only counts once
+		}
+
+		if (keypressed == 1) {
+			Player->movementdt -= DT;
+			if (Player->movementdt <= 0.0f) {
+				Player->positionX = 0.0f;
+				Player->positionY = 0.0f;
+				Player->positionID = 1;
+				Player->is_attacking = false;
+				keypressed = 0;
+			}
 		}
 		//PlayerMOVEMENT END
-
-		movementdt = (f32)AEFrameRateControllerGetFrameTime();					//dt time for counter
 
 
 		Enemy::UpdateEnemyState(Enemy, Player);
@@ -118,35 +140,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Game loop draw
 	//////////////////
-
-		Character::RenderPlayerGrid(Character::Player1Grid);
-		Character::RenderPlayerGrid(Character::Player2Grid);
-		Character::RenderPlayerGrid(Character::Player3Grid);
-		Character::RenderPlayerGrid(Character::Player4Grid);
-		Character::RenderPlayerGrid(Character::Player5Grid);
+		
+	
+		Character::RenderPlayerHealth(fontId, Player);
+		Enemy::RenderEnemyHealth(fontId, Enemy);
+		Character::GridCheck(Enemy->is_attacking, Enemy->AttackCD, Player->SAFEGRID);
 		Character::playerrender(playertexture, Player, Character::PlayerMesh);
-		Enemy::RenderEnemyGrid(Enemy::EnemyGridIdle);
-		Enemy::RenderEnemyGrid(Enemy::EnemyGridAttack);
-		Enemy::RenderEnemy(Enemy::EnemyMesh, Enemy);
+		if (Enemy->AttackCD <= 0.45f)
+		{
+			Enemy::RenderEnemyGrid(Enemy::EnemyGridAttack);
+		}
+		Enemy::RenderEnemy(enemytexture,Enemy::EnemyMesh, Enemy);
+
+
 		/////////////////////
 		// Game loop draw end
-
-
-		//std::cout << (int)((AERandFloat()*10)/2) << "\n";
-
-
-		if (keypressed == 1) {
-			//this is for the delay before popping back to original position
-			++counter;
-
-			if (counter > 42) {
-				Player->positionX = 0.0f;
-				Player->positionY = 0.0f;
-				Player->positionID = 1;
-				keypressed = 0;
-				counter = 0;
-			}
-		}
 
 
 
@@ -164,6 +172,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	delete Enemy;
 	Character::FreePlayerMesh();
 	Enemy::FreeEnemyMesh();
+	AEGfxDestroyFont(fontId);
 	AEGfxTextureUnload(playertexture);
+	AEGfxTextureUnload(enemytexture);
 	AESysExit();
 }

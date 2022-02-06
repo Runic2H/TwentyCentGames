@@ -22,12 +22,7 @@ namespace Character
 		int playerCD;
 		bool is_attacking;
 		bool is_dmgtaken;
-	};
-
-	struct e_statsheet {
-		int health;
-		int damage;
-		bool is_attacking;
+		float movementdt;
 	};
 
 	c_statsheet* c_initialize();
@@ -42,13 +37,11 @@ namespace Character
 
 	void playerrender(AEGfxTexture* playertexture, c_statsheet* player, AEGfxVertexList* playermesh);
 
-	int Playerdamage(c_statsheet* player, int SAFEGRID);
-
-	void PlayerAttack(c_statsheet* Player, e_statsheet* Enemy);
-
 	void RGBloop(int& RGBcounter);
 
-	void GridCheck(int& counter, int& x, c_statsheet* Player, e_statsheet* Enemy);
+	void GridCheck(bool EnemyAttackState, float timer, int& x);
+
+	void RenderPlayerHealth(s8 font, Character::c_statsheet* Player);
 
 	//void CameraShake(float camX, float camY);
 }

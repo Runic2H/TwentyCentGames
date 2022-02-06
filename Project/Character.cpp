@@ -3,11 +3,11 @@
 namespace Character
 {
 
-	AEGfxVertexList* Player1Grid = 0;
-	AEGfxVertexList* Player2Grid = 0;
-	AEGfxVertexList* Player3Grid = 0;
-	AEGfxVertexList* Player4Grid = 0;
-	AEGfxVertexList* Player5Grid = 0;
+	AEGfxVertexList* Player1Grid = 0; //ORIGN
+	AEGfxVertexList* Player2Grid = 0; //TOP
+	AEGfxVertexList* Player3Grid = 0; //BACK
+	AEGfxVertexList* Player4Grid = 0; //BOTTOM
+	AEGfxVertexList* Player5Grid = 0; //ATTACK
 	AEGfxVertexList* PlayerMesh = 0;
 
 	c_statsheet* c_initialize()
@@ -22,16 +22,8 @@ namespace Character
 		c_stats->is_attacking = false;						//for enemy damage checks
 		c_stats->positionX = 0.0f;
 		c_stats->positionY = 0.0f;
+		c_stats->movementdt = 0.0f;
 		return c_stats;
-	}
-
-	e_statsheet* e_initialize()
-	{
-		e_statsheet* e_stats = new e_statsheet;
-		e_stats->damage = 10;
-		e_stats->health = 200;
-		e_stats->is_attacking = false;
-		return e_stats;
 	}
 
 	void CombatMesh(int RGBcounter)
@@ -152,48 +144,54 @@ namespace Character
 		int keypressed = 0;
 		x = 0;
 
-		AEInputCheckTriggered(AEVK_W) ? x = 2 : x = x;	//ID Should be 1
-		AEInputCheckTriggered(AEVK_A) ? x = 3 : x = x;	//ID Should be 2
-		AEInputCheckTriggered(AEVK_S) ? x = 4 : x = x;	//ID Should be 3
-		AEInputCheckTriggered(AEVK_D) ? x = 5 : x = x;	//ID Should be 4
+		AEInputCheckTriggered(AEVK_W) ? x = TOP : x = x;	//ID Should be 1
+		AEInputCheckTriggered(AEVK_A) ? x = BACK : x = x;	//ID Should be 2
+		AEInputCheckTriggered(AEVK_S) ? x = DOWN : x = x;	//ID Should be 3
+		AEInputCheckTriggered(AEVK_D) ? x = ATTACK : x = x;	//ID Should be 4
 
-		//ORIGIN ID should be 0 (My randomizer will be easier to ignore 0 then i can just randomize between 1-3)
-
-
+	
 		switch (x) {
 
-		case 5:	//ATTACK GRID
-			player->positionID = 1;
+		case ATTACK:	//ATTACK GRID
+			player->positionID = ATTACK;
 			player->positionX = 145.0f;
 			player->positionY = 0.0f;
+			player->movementdt = 0.80f;
 			keypressed = 1;
 			player->is_attacking = true;
 			break;
 
-		case 2:
-			player->positionID = 2;
+		case TOP:
+			player->positionID = TOP;
 			player->positionX = 0.0f;
 			player->positionY = 110.0f;
+			player->movementdt = 0.5f;
+			player->is_attacking = false;
 			keypressed = 1;
 			break;
 
-		case 3:
-			player->positionID = 3;
+		case BACK:
+			player->positionID = BACK;
 			player->positionX = -110.0f;
-			player->positionY = 0.0f;
+			player->positionY = 0.8f;
+			player->movementdt = 0.5f;
+			player->is_attacking = false;
 			keypressed = 1;
 			break;
 
-		case 4:
-			player->positionID = 4;
+		case DOWN:
+			player->positionID = DOWN;
 			player->positionX = 0.0f;
 			player->positionY = -110.0f;
+			player->movementdt = 0.5f;
+			player->is_attacking = false;
 			keypressed = 1;
 			break;
 		}
 
 		if (player->positionX == 0.0f && player->positionY == 0.0f) {
-			player->positionID = 1;
+			player->positionID = ORIGIN;
+			player->is_attacking = false;
 		}
 
 		return keypressed;
@@ -212,33 +210,6 @@ namespace Character
 		AEGfxMeshDraw(playermesh, AE_GFX_MDM_TRIANGLES);
 	}
 
-
-	//NOT NEEDED
-	int Playerdamage(c_statsheet* Player, int SAFEGRID) {
-
-		if (Player->positionID != SAFEGRID) {
-			Player->health -= 1;
-			std::cout << "the player's health is: " << Player->health << std::endl;
-			return  1;
-		}
-		else {
-			return 0;
-		}
-	}
-
-	//NOT NEEDED
-	void PlayerAttack(c_statsheet* Player, e_statsheet* Enemy) {
-
-		if (Player->is_attacking == true && Enemy->is_attacking == false) {
-			Enemy->health -= Player->damage;
-			std::cout << "enemy health: " << Enemy->health << "\n";
-		}
-
-		Player->is_attacking = false;
-	}
-
-
-
 	void RGBloop(int& RGBcounter) {
 		if (RGBcounter <= 16777215)
 		{
@@ -247,73 +218,50 @@ namespace Character
 		}
 	}
 
+	void GridCheck(bool EnemyAttackState, float timer, int& x) {
 
-	//??? No Idea whats going on
-	void GridCheck(int& counter, int& x, c_statsheet* Player, e_statsheet* Enemy) {
-		
-		++counter;
-		std::cout << counter << "\n";
+		if (EnemyAttackState == true && timer <= 0.35f) {
 
-
-		if (counter > 100) {
-
-			switch (x)
+			switch (x) // Check for the Safety Grids
 			{
 
 			case 0:
 				break;
 
 			case 1:
-				//SAFEGRID 1
-				Character::RenderPlayerGrid(Character::Player2Grid);
+				//SAFEGRID (TOP SAFE)
+				Character::RenderPlayerGrid(Character::Player1Grid);
 				Character::RenderPlayerGrid(Character::Player3Grid);
 				Character::RenderPlayerGrid(Character::Player4Grid);
-				Player->SAFEGRID = 1;
 				break;
 			
 			case 2:
-				//SAFEGRID 2
+				//SAFEGRID (BACK SAFE)
 				Character::RenderPlayerGrid(Character::Player1Grid);
-				Character::RenderPlayerGrid(Character::Player3Grid);
+				Character::RenderPlayerGrid(Character::Player2Grid);
 				Character::RenderPlayerGrid(Character::Player4Grid);
-				Player->SAFEGRID = 2;
 				break;
 
 			case 3:
-				//SAFEGRID 3
-				Character::RenderPlayerGrid(Character::Player1Grid);
-				Character::RenderPlayerGrid(Character::Player2Grid);
-				Character::RenderPlayerGrid(Character::Player4Grid);
-				Player->SAFEGRID = 3;
-				break;
-
-			case 4:
-				//SAFEGRID 4
+				//SAFEGRID (BOTTOM SAFE)
 				Character::RenderPlayerGrid(Character::Player1Grid);
 				Character::RenderPlayerGrid(Character::Player2Grid);
 				Character::RenderPlayerGrid(Character::Player3Grid);
-				Player->SAFEGRID = 4;
 				break;
-			}
-
-			if (counter > 150) {
-				if (Player->SAFEGRID != Player->positionID) {
-					Player->health -= Enemy->damage;
-					std::cout << "OUCH!!" << Player->health << "\n";
-				}
-			}
-
-			if (counter >= 151) {
-				x = (int)((AERandFloat() * 10) / 2);
-				counter = 0;
-
 			}
 		}
 	}
 
+	void RenderPlayerHealth(s8 font, Character::c_statsheet* Player)
+	{
+		char strBuffer[100];
+		memset(strBuffer, 0, 100 * sizeof(char));
+		sprintf_s(strBuffer, "Player Health:  %d", Player->health);
 
-
-
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxPrint(font, strBuffer, -0.95, -0.95, 1.0f, 1.f, 1.f, 1.f);
+		AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	}
 
 
 	//void CameraShake(float camX, float camY) {

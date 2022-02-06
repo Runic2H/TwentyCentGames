@@ -11,12 +11,14 @@ namespace Enemy
 		E_StatSheet* E_Stats = new E_StatSheet;
 		E_Stats->health = 100;
 		E_Stats->damage = 10;
-		E_Stats->EnemyState = IDLE;
-		E_Stats->EnemyCD = 5.0f;
+		E_Stats->EnemyState = IDLE;				//Current Enemy State
+		E_Stats->EnemyCD = 5.0f;				//Cooldown till next enemy attack
 		E_Stats->positionX = 0.0f;
 		E_Stats->positionY = 0.0f;
-		E_Stats->is_attacking = false;
-		E_Stats->AttackCD = 0.45f;
+		E_Stats->is_attacking = false;			//Check for enemy attacking, used for check when player can attack
+		E_Stats->AttackCD = 0.55f;				//Delay timer before enemy attack during attack phase
+		E_Stats->EnemyGrid = (rand() % 3) + 1;	//Sets the safety grid for next attack
+		E_Stats->DamageCD = 0.0f;				//Damage Cooldown after enemy attack phase, for players to not deal phantom damage
 		return E_Stats;
 	}
 
@@ -24,47 +26,59 @@ namespace Enemy
 	{
 		void EnemyAttackState(E_StatSheet* Enemy, Character::c_statsheet* Player)
 		{
+			Player->SAFEGRID = Enemy->EnemyGrid;
 			Enemy->EnemyState = ATTACK;
 			Enemy->is_attacking = true;
-			Player->SAFEGRID = (rand() % 3) + 1;
+			//Movement to Attack Grid
 			if (Enemy->positionX != 150.0f)
 			{
 				Enemy->positionX += 10.0f;
 			}
 			if (Enemy->EnemyState == ATTACK && Enemy->is_attacking == true)
 			{
+				//Delay before enemy attack
 				Enemy->AttackCD -= DT;
 				if (Enemy->AttackCD <= 0.0f)
 				{
 					if (Player->positionID != Player->SAFEGRID)
 					{
 						Player->health -= Enemy->damage;
-						std::cout << Player->health << "Player" << "\n";
 					}
-					Enemy->AttackCD = 0.45f;
-					Enemy->EnemyCD = AERandFloat() * 5.0f;
+					//Resets Everything such as Enemy Cooldown while in idle
+					//Sets the AttackCD for the next attack phase
+					//Sets the next safe grid for next attack
+					Enemy->AttackCD = 0.55f;
+					Enemy->EnemyCD = AERandFloat() * 7.2f;
+					Enemy->EnemyGrid = (rand() % 3) + 1;
+					Enemy->DamageCD = 1.2f;
 				}
 			}
 		}
 
 		void EnemyIdleState(E_StatSheet* Enemy, Character::c_statsheet* Player)
 		{
+			//Idle state and reducing of enemyCD to next attack
+			//DamageCD is for frames where player cannot attack the enemy as enemy
+			//is returning to idle state
 			Enemy->EnemyState = IDLE;
 			Enemy->is_attacking = false;
 			Enemy->positionX = 0.0f;
+			Enemy->positionY = 0.0f;
 			Enemy->EnemyCD -= DT;
+			Enemy->DamageCD -= DT;
 			if (Enemy->EnemyState == IDLE && Enemy->is_attacking == false)
 			{
-				if (Player->is_attacking == true)
+				//Check for Player Damage
+				if (Player->is_attacking == true && Enemy->DamageCD <= 0.0f)
 				{
 					Enemy->health -= Player->damage;
 					Player->is_attacking = false;
-					std::cout << Enemy->health << "\n";  
 				}
 			}
 		}
 	}
 
+	//Main Update loop for Idle and Attack States of Enemy
 	void UpdateEnemyState(E_StatSheet* Enemy, Character::c_statsheet* Player)
 	{
 		if (Enemy->EnemyCD <= 0.0f)
@@ -103,11 +117,22 @@ namespace Enemy
 
 		AEGfxMeshStart();
 
-		AEGfxVertexAdd(75.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
-		AEGfxVertexAdd(125.0f, -25.0f, 0xFFFFFF, 1.0f, 1.0f);
-		AEGfxVertexAdd(125.0f, 25.0f, 0xFFFFFF, 0.0f, 0.0f);				//ENEMY MESH
-		AEGfxVertexAdd(75.0f, 25.0f, 0xFFFFFF, 1.0f, 0.0f);
-		AEGfxVertexAdd(75.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
+		//AEGfxVertexAdd(75.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
+		//AEGfxVertexAdd(125.0f, -25.0f, 0xFFFFFF, 1.0f, 1.0f);
+		//AEGfxVertexAdd(125.0f, 25.0f, 0xFFFFFF, 0.0f, 0.0f);				//ENEMY MESH
+		//AEGfxVertexAdd(75.0f, 25.0f, 0xFFFFFF, 1.0f, 0.0f);
+		//AEGfxVertexAdd(75.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
+
+		AEGfxTriAdd(
+			75.0f, -25.0f, 0x00FF00FF, 0.0f, 1.0f,
+			125.0f, -25.0f, 0x00FFFF00, 1.0f, 1.0f,
+			75.0f, 25.0f, 0x0000FFFF, 0.0f, 0.0f);
+		//x,y,colour,u,v
+
+		AEGfxTriAdd(
+			125.0f, -25.0f, 0x00FFFFFF, 1.0f, 1.0f,
+			125.0f, 25.0f, 0x00FFFFFF, 1.0f, 0.0f,
+			75.0f, 25.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
 		EnemyMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(EnemyMesh, "Failed to create character!!");
@@ -131,14 +156,26 @@ namespace Enemy
 	}
 
 
-	void RenderEnemy(AEGfxVertexList* EnemyMesh, E_StatSheet* Enemy)
+	void RenderEnemy(AEGfxTexture* enemytexture ,AEGfxVertexList* EnemyMesh, E_StatSheet* Enemy)
 	{
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		// Set position for object 1
 		AEGfxSetPosition(Enemy->positionX, Enemy->positionY);
-		// No texture for object 1
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxMeshDraw(EnemyMesh, AE_GFX_MDM_LINES_STRIP);
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		// No texture for object 1;
+		AEGfxTextureSet(enemytexture, 1.0f, 1.0f);
+		AEGfxMeshDraw(EnemyMesh, AE_GFX_MDM_TRIANGLES);
+	}
+
+	void RenderEnemyHealth(s8 font, Enemy::E_StatSheet* Enemy)
+	{
+		char strBuffer[100];
+		memset(strBuffer, 0, 100 * sizeof(char));
+		sprintf_s(strBuffer, "Enemy Health:  %d", Enemy->health);
+
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxPrint(font, strBuffer, 0.60, -0.95, 1.0f, 1.f, 1.f, 1.f);
+		AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	}
 
 }
