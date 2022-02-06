@@ -8,6 +8,7 @@
 void Maze_Load()
 {
 	std::cout << "Maze:Load" << std::endl;
+
 }
 
 
@@ -35,7 +36,7 @@ void Maze_Update()
 		next = COMBAT;
 	}
 
-	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
+	if (AEInputCheckCurr(AEVK_ESCAPE)) {
 		next = GS_QUIT;
 	}
 }

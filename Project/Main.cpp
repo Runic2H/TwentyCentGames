@@ -32,26 +32,21 @@
 		// Using custom window procedure
 		AESysInit(hInstance, nCmdShow, 800, 600, 1, 60, true, NULL);
 
-		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	
 		AESysSetWindowTitle("TwentyCentGames!");
 
-		// reset the system modules
-		AESysReset();
-
-
-		System_Initialise();
+		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 		GSM_Initialize(current);
+
+		//System_Initialise();
+
 
 		// Game Loop
 		while (current != GS_QUIT) {
 
-			// Informing the system about the loop's start
-			AESysFrameStart();
-
-			// Handling Input
-			AEInputUpdate();
+		// reset the system modules
+		AESysReset();
 
 			if (current == GS_RESTART) {
 				current = previous;
@@ -70,10 +65,22 @@
 			// Game loop update and draw
 
 			while (current == next) {
+
+				// Informing the system about the loop's start
+				AESysFrameStart();
+
+				// Handling Input
+				AEInputUpdate();
+				
 				Input_Handle();								//Handles the input from mouse and keyboard devices
 				fpUpdate();									//Within GSM_Update, updates the gamestate according to the current value
 				fpDraw();									//Within GSM_Update, draws the current gamestate according to the current value.
 
+
+				AESysFrameEnd();
+			// check if forcing the application to quit
+			if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
+				next = GS_QUIT;
 			}
 
 			// Game loop update end
@@ -94,11 +101,6 @@
 				current = next;
 			}
 
-			AESysFrameEnd();
-
-			// check if forcing the application to quit
-			if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
-				next = GS_QUIT;
 		}
 
 
