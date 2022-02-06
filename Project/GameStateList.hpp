@@ -1,0 +1,8 @@
+enum GS_STATES
+{
+	MAZE = 0,
+	COMBAT,
+
+	GS_QUIT,
+	GS_RESTART
+};
