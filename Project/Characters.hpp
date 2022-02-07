@@ -1,24 +1,10 @@
 #pragma once
+#include "pch.hpp"
 
 
-	extern AEGfxVertexList* EnemyGridIdle;
-	extern AEGfxVertexList* EnemyGridAttack;
-	extern AEGfxVertexList* EnemyMesh;
 
-	enum EnemyPos { IDLE, ATTACK };
-
-	struct E_StatSheet
-	{
-		int health;
-		int damage;
-		int EnemyState;
-		float EnemyCD;
-		float positionX;
-		float positionY;
-		bool is_attacking;
-		float AttackCD;
-	};
-
+namespace Character
+{
 	extern AEGfxVertexList* Player1Grid;
 	extern AEGfxVertexList* Player2Grid;
 	extern AEGfxVertexList* Player3Grid;
@@ -26,6 +12,8 @@
 	extern AEGfxVertexList* Player5Grid;
 	extern AEGfxVertexList* PlayerMesh;
 
+
+	enum PlayerPos { ORIGIN, TOP, BACK, DOWN, ATTACK }; //Please use this to decipher which grid player is on
 
 	struct c_statsheet
 	{
@@ -38,8 +26,8 @@
 		int playerCD;
 		bool is_attacking;
 		bool is_dmgtaken;
+		float movementdt;
 	};
-
 
 	c_statsheet* c_initialize();
 
@@ -51,27 +39,48 @@
 
 	int PlayerMovement(int& x, c_statsheet* player);
 
-	void playerrender(c_statsheet* player, AEGfxVertexList* playermesh);
-
-
-	//void PlayerAttack(c_statsheet* Player, Enemy::E_StatSheet* Enemy);
+	void playerrender(AEGfxTexture* playertexture, c_statsheet* player, AEGfxVertexList* playermesh);
 
 	void RGBloop(int& RGBcounter);
 
-	void GridCheck(int& counter, int& x, c_statsheet* Player, E_StatSheet* Enemy);
+	void GridCheck(bool EnemyAttackState, float timer, int& x);
 
+	void RenderPlayerHealth(s8 font, Character::c_statsheet* Player);
+
+	//void PlayerAttack(c_statsheet* Player, e_statsheet* Enemy);
 	//void CameraShake(float camX, float camY);
 	//int Playerdamage(c_statsheet* player, int SAFEGRID);
-
-
-	//struct e_statsheet {
-	//	int health;
-	//	int damage;
-	//	bool is_attacking;
-	//};
+}
 
 
 
+
+
+
+
+
+
+namespace Enemies
+{
+	extern AEGfxVertexList* EnemyGridIdle;
+	extern AEGfxVertexList* EnemyGridAttack;
+	extern AEGfxVertexList* EnemyMesh;
+
+	enum EnemyPos { IDLE, ATTACKING };
+
+	struct E_StatSheet
+	{
+		int health;
+		int damage;
+		int EnemyState;
+		float EnemyCD;
+		float positionX;
+		float positionY;
+		bool is_attacking;
+		float AttackCD;
+		int EnemyGrid;
+		float DamageCD;
+	};
 
 	E_StatSheet* EnemyInitialize();
 
@@ -81,6 +90,9 @@
 
 	void FreeEnemyMesh();
 
-	void UpdateEnemyState(E_StatSheet* Enemy, c_statsheet* Player);
+	void UpdateEnemyState(E_StatSheet* Enemy, Character::c_statsheet* Player);
 
-	void RenderEnemy(AEGfxVertexList* EnemyMesh, E_StatSheet* Enemy);
+	void RenderEnemy(AEGfxTexture* enemytexture, AEGfxVertexList* EnemyMesh, E_StatSheet* Enemy);
+
+	void RenderEnemyHealth(s8 font, E_StatSheet* Enemy);
+}

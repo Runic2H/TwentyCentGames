@@ -5,28 +5,32 @@ int  RGB{ 16384000 };
 int& RGBcounter{ RGB };
 
 int switchvalue{ 1 },
-	keyvalue{ 0 },
-	flag{ 0 }, 
-	counter{ 0 }, 
-	SAFEGRID{ 1 }, 
-	gridcounter{ 0 }, 
-	gr{ 0 };
+keyvalue{ 0 },
+flag{ 0 },
+counter{ 0 },
+SAFEGRID{ 1 },
+gridcounter{ 0 },
+gr{ 0 };
 
-int& keypressed{ keyvalue }, 
-	 showgridcounter{ gridcounter }, 
-	 choosegrid{ gr };
+int& keypressed{ keyvalue },
+showgridcounter{ gridcounter },
+choosegrid{ gr };
+//s8 fontId = 0;
 
-//int const ATTACK{ 5 };
+
+using namespace Enemies;
+using namespace Character;
 
 int& x{ switchvalue }, y{};
 
 float movementdt;// time{ 1.0 };
 
-//AEGfxTexture* playertexture;
+AEGfxTexture* playertexture;
+AEGfxTexture* enemytexture;
 
 
-	E_StatSheet* Enemy = EnemyInitialize();
-	c_statsheet* Player = c_initialize();
+E_StatSheet* Enemy = EnemyInitialize();
+c_statsheet* Player = c_initialize();
 
 
 /*
@@ -35,10 +39,15 @@ float movementdt;// time{ 1.0 };
 */
 void Combat_Load()
 {
-	//std::cout << "Combat:Load" << std::endl;
+	std::cout << "Combat:Load" << std::endl;
+	playertexture = AEGfxTextureLoad("ducky.jpg");
+	AE_ASSERT_MESG(playertexture, "cant create duck texture\n");
 
-	//playertexture = AEGfxTextureLoad("ducky.jpg");
-	//AE_ASSERT_MESG(playertexture, "cant create duck texture\n");
+	enemytexture = AEGfxTextureLoad("Turtle.png");
+	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
+
+	//fontId = AEGfxCreateFont("Roboto-Regular.ttf", 12);
+
 
 }
 
@@ -50,10 +59,10 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
-	//std::cout << "Combat:Initialize" << std::endl;
 
-	CombatMesh(RGBcounter);
-	EnemyCombatMesh();
+
+	std::cout << "Combat:Initialize" << std::endl;
+
 }
 
 
@@ -64,43 +73,46 @@ void Combat_Initialize()
 */
 void Combat_Update()
 {
+
 	//std::cout << "Combat:Update" << std::endl;
 
-	if (AEInputCheckTriggered(AEVK_1)) {
-		next = MAZE;
-	}
-
-	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
-		next = GS_QUIT;
-	}
-
-	RGBloop(RGBcounter);
+	Character::RGBloop(RGBcounter);
 	CombatMesh(RGBcounter);
-
-	if (keypressed == 0) {													//so i cant move whilst cooldown active
-		keypressed = PlayerMovement(x, Player);					//character movement	
-		flag = keypressed;													//flag for player damage so it only counts once
-	}
+	EnemyCombatMesh();
 
 	movementdt = (f32)AEFrameRateControllerGetFrameTime();					//dt time for counter
 
-	UpdateEnemyState(Enemy, Player);
+
+	//Character::CombatMesh(RGBcounter);
 
 
+	if (Enemy->health <= 0 || Player->health <= 0)
+	{
+		std::cout << "Something Died.";
+		next = GS_QUIT;
+	}
+
+
+	if (keypressed == 0) {													//so i cant move whilst cooldown active
+		keypressed = Character::PlayerMovement(x, Player);								//character movement	
+		flag = keypressed;													//flag for player damage so it only counts once
+	}
 
 	if (keypressed == 1) {
-		//this is for the delay before popping back to original position
-		++counter;
-
-		if (counter > 42) {
+		Player->movementdt -= DT;
+		if (Player->movementdt <= 0.0f) {
 			Player->positionX = 0.0f;
 			Player->positionY = 0.0f;
 			Player->positionID = 1;
+			Player->is_attacking = false;
 			keypressed = 0;
-			counter = 0;
 		}
 	}
 
+	UpdateEnemyState(Enemy, Player);
+	flag = (x == ATTACK) ? 1 : 0;
+	
+	std::cout << "Player Health: " << Player->health << "| Enemy Health: " << Enemy->health << "\n";
 }
 
 
@@ -112,15 +124,17 @@ void Combat_Draw()
 {
 	//std::cout << "Combat:Draw" << std::endl;
 
-	RenderPlayerGrid(Player1Grid);
-	RenderPlayerGrid(Player2Grid);
-	RenderPlayerGrid(Player3Grid);
-	RenderPlayerGrid(Player4Grid);
-	RenderPlayerGrid(Player5Grid);
-	playerrender(Player, PlayerMesh);
-	RenderEnemyGrid(EnemyGridIdle);
-	RenderEnemyGrid(EnemyGridAttack);
-	RenderEnemy(EnemyMesh, Enemy);
+	//Character::RenderPlayerHealth(fontId, Player);
+	//RenderEnemyHealth(fontId, Enemy);
+	GridCheck(Enemy->is_attacking, Enemy->AttackCD, Player->SAFEGRID);
+	playerrender(playertexture, Player, Character::PlayerMesh);
+	
+	if (Enemy->AttackCD <= 0.45f)
+	{
+		RenderEnemyGrid(EnemyGridAttack);
+	}
+	
+	RenderEnemy(enemytexture, EnemyMesh, Enemy);
 }
 
 
@@ -129,13 +143,15 @@ void Combat_Draw()
 */
 void Combat_Free()
 {
-	//std::cout << "Combat:Free" << std::endl;
+	std::cout << "Combat:Free" << std::endl;
 
 	delete Player;
 	delete Enemy;
 	FreePlayerMesh();
 	FreeEnemyMesh();
-	//AEGfxTextureUnload(playertexture);
+	//AEGfxDestroyFont(fontId);
+	AEGfxTextureUnload(playertexture);
+	AEGfxTextureUnload(enemytexture);
 	AESysExit();
 }
 
@@ -145,5 +161,5 @@ void Combat_Free()
 */
 void Combat_Unload()
 {
-	//std::cout << "Combat:Unload" << std::endl;
+	std::cout << "Combat:Unload" << std::endl;
 }

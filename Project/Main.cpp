@@ -54,7 +54,7 @@
 			}
 			else {
 				GSM_Update();
-				fpLoad;
+				fpLoad();
 			}
 
 
@@ -66,21 +66,19 @@
 
 			while (current == next) {
 
-				// Informing the system about the loop's start
-				AESysFrameStart();
-
-				// Handling Input
-				AEInputUpdate();
+				
+				AESysFrameStart();							// Informing the system about the loop's start
+				AEInputUpdate();							// Handling Input
 				
 				Input_Handle();								//Handles the input from mouse and keyboard devices
 				fpUpdate();									//Within GSM_Update, updates the gamestate according to the current value
 				fpDraw();									//Within GSM_Update, draws the current gamestate according to the current value.
-
-
+															// Press 2 to switch to combat gamestate, ESC to quit
 				AESysFrameEnd();
-			// check if forcing the application to quit
-			if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
+
+			if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())	// check if forcing the application to quit
 				next = GS_QUIT;
+
 			}
 
 			// Game loop update end
@@ -88,8 +86,10 @@
 
 			fpFree();										//Within GSM_Update, frees the current gamestate according to the current value.
 
-	// Informing the system about the loop's end
+			
 
+	// Informing the system about the loop's end
+			
 			if (next == GS_RESTART) {
 				previous = current;
 				current = next;
@@ -105,6 +105,6 @@
 
 
 		// free the system
-		System_Exit();
+		//System_Exit();
 		AESysExit();
 	}

@@ -26,6 +26,7 @@
 
 		switch (current)
 		{
+		break;
 		case MAZE:
 			fpLoad = Maze_Load;
 			fpInitialize = Maze_Initialize;
@@ -54,5 +55,14 @@
 			break;
 		}
 
-
 	}
+
+
+
+		//case MENU:
+		//	fpLoad = Menu_Load;
+		//	fpInitialize = Menu_Initialize;
+		//	fpUpdate = Menu_Update;
+		//	fpDraw = Menu_Draw;
+		//	fpFree = Menu_Free;
+		//	fpUnload = Menu_Unload;
