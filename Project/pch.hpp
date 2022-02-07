@@ -30,4 +30,4 @@
 
 #define DT (f32)AEFrameRateControllerGetFrameTime();
 
-
+extern s8 fontId;
