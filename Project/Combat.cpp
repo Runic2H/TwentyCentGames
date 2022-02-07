@@ -15,7 +15,6 @@ gr{ 0 };
 int& keypressed{ keyvalue },
 showgridcounter{ gridcounter },
 choosegrid{ gr };
-//s8 fontId = 0;
 
 
 using namespace Enemies;
@@ -28,10 +27,8 @@ float movementdt;
 AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
 
-
-E_StatSheet* Enemy = EnemyInitialize();
-c_statsheet* Player = c_initialize();
-
+E_StatSheet* Enemy;
+c_statsheet* Player;
 
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
@@ -46,7 +43,9 @@ void Combat_Load()
 	enemytexture = AEGfxTextureLoad("Turtle.png");
 	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
 
-	//fontId = AEGfxCreateFont("Roboto-Regular.ttf", 12);
+
+	Enemy = EnemyInitialize();			//change name to load
+	Player = c_initialize();
 
 
 }
@@ -60,7 +59,6 @@ void Combat_Load()
 void Combat_Initialize()
 {
 	std::cout << "Combat:Initialize" << std::endl;
-
 }
 
 
@@ -74,7 +72,7 @@ void Combat_Update()
 
 	//std::cout << "Combat:Update" << std::endl;
 
-	Character::RGBloop(RGBcounter);
+	RGBloop(RGBcounter);
 	CombatMesh(RGBcounter);
 	EnemyCombatMesh();
 
@@ -115,7 +113,8 @@ void Combat_Update()
 	UpdateEnemyState(Enemy, Player);
 	flag = (x == ATTACK) ? 1 : 0;
 	
-	std::cout << "Player Health: " << Player->health << "| Enemy Health: " << Enemy->health << "\n";
+	//std::cout << "Player Health: " << Player->health << "| Enemy Health: " << Enemy->health << "\n";
+
 }
 
 
@@ -127,8 +126,8 @@ void Combat_Draw()
 {
 	//std::cout << "Combat:Draw" << std::endl;
 
-	//Character::RenderPlayerHealth(fontId, Player);
-	//RenderEnemyHealth(fontId, Enemy);
+	Character::RenderPlayerHealth(fontId, Player);
+	RenderEnemyHealth(fontId, Enemy);
 	GridCheck(Enemy->is_attacking, Enemy->AttackCD, Player->SAFEGRID);
 	playerrender(playertexture, Player, Character::PlayerMesh);
 	
@@ -142,25 +141,24 @@ void Combat_Draw()
 
 
 /*
-	Cleans game object instances.
+	Cleans game object instances. will be run in restart
 */
 void Combat_Free()
 {
 	std::cout << "Combat:Free" << std::endl;
 
-	delete Player;
-	delete Enemy;
-	FreePlayerMesh();
-	FreeEnemyMesh();
-	//AEGfxDestroyFont(fontId);
 }
 
 
 /*
-	Unload game assets. Frees and releases memory
+	Unload game assets. Frees and releases memory, wont be run in restart
 */
 void Combat_Unload()
 {
+	delete Player;
+	delete Enemy;
+	FreePlayerMesh();
+	FreeEnemyMesh();
 	AEGfxTextureUnload(playertexture);
 	AEGfxTextureUnload(enemytexture);
 	std::cout << "Combat:Unload" << std::endl;

@@ -30,6 +30,8 @@ namespace Character
 	void CombatMesh(int RGBcounter)
 	{
 
+		FreePlayerMesh();
+
 		AEGfxMeshStart();
 
 		AEGfxVertexAdd(-240.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
@@ -39,7 +41,7 @@ namespace Character
 		AEGfxVertexAdd(-240.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
 
 		Player4Grid = AEGfxMeshEnd();
-		AE_ASSERT_MESG(Player4Grid, "Failed to create playermesh1!!");
+		AE_ASSERT_MESG(Player4Grid, "Failed to create playermesh4!!");
 
 		//
 
@@ -52,7 +54,7 @@ namespace Character
 		AEGfxVertexAdd(-350.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
 
 		Player3Grid = AEGfxMeshEnd();
-		AE_ASSERT_MESG(Player3Grid, "Failed to create playermesh2!!");
+		AE_ASSERT_MESG(Player3Grid, "Failed to create playermesh3!!");
 
 		// 
 
@@ -65,7 +67,7 @@ namespace Character
 		AEGfxVertexAdd(-240.0f, 160.0f, RGBcounter, 0.0f, 1.0f);
 
 		Player2Grid = AEGfxMeshEnd();
-		AE_ASSERT_MESG(Player2Grid, "Failed to create playermesh3!!");
+		AE_ASSERT_MESG(Player2Grid, "Failed to create playermesh2!!");
 
 		//
 
@@ -78,7 +80,7 @@ namespace Character
 		AEGfxVertexAdd(-240.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
 
 		Player1Grid = AEGfxMeshEnd();
-		AE_ASSERT_MESG(Player1Grid, "Failed to create playermesh4!!");
+		AE_ASSERT_MESG(Player1Grid, "Failed to create playermesh1!!");
 
 		AEGfxMeshStart();
 
@@ -126,12 +128,38 @@ namespace Character
 
 	void FreePlayerMesh()
 	{
-		AEGfxMeshFree(Player1Grid);
-		AEGfxMeshFree(Player2Grid);
-		AEGfxMeshFree(Player3Grid);
-		AEGfxMeshFree(Player4Grid);
-		AEGfxMeshFree(Player5Grid);
-		AEGfxMeshFree(PlayerMesh);
+
+
+		if (Player1Grid != nullptr) {
+			AEGfxMeshFree(Player1Grid);
+			Player1Grid = nullptr;
+		}
+
+		if (Player2Grid != nullptr) {
+			AEGfxMeshFree(Player2Grid);
+			Player2Grid = nullptr;
+		}
+
+		if (Player3Grid != nullptr) {
+			AEGfxMeshFree(Player3Grid);
+			Player3Grid = nullptr;
+		}
+
+		if (Player4Grid != nullptr) {
+			AEGfxMeshFree(Player4Grid);
+			Player4Grid = nullptr;
+		}
+
+		if (Player5Grid != nullptr) {
+			AEGfxMeshFree(Player5Grid);
+			Player5Grid = nullptr;
+		}
+
+		if (PlayerMesh != nullptr) {
+			AEGfxMeshFree(PlayerMesh);
+			PlayerMesh = nullptr;
+		}
+
 	}
 
 
@@ -372,6 +400,8 @@ namespace Enemies
 
 	void EnemyCombatMesh()
 	{
+		FreeEnemyMesh();													//deletes old mesh
+
 		AEGfxMeshStart();
 
 		AEGfxVertexAdd(50.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
@@ -383,6 +413,7 @@ namespace Enemies
 		EnemyGridIdle = AEGfxMeshEnd();
 		AE_ASSERT_MESG(EnemyGridIdle, "Failed to create enemygrididle!!");
 
+
 		AEGfxMeshStart();
 
 		AEGfxVertexAdd(200.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
@@ -393,6 +424,7 @@ namespace Enemies
 
 		EnemyGridAttack = AEGfxMeshEnd();
 		AE_ASSERT_MESG(EnemyGridAttack, "Failed to create enemygrididle!!");
+
 
 		AEGfxMeshStart();
 
@@ -430,8 +462,21 @@ namespace Enemies
 
 	void FreeEnemyMesh()
 	{
-		AEGfxMeshFree(EnemyGridIdle);
-		AEGfxMeshFree(EnemyGridAttack);
+
+		if (EnemyGridIdle != nullptr) {
+			AEGfxMeshFree(EnemyGridIdle);
+			EnemyGridIdle = nullptr;
+		}
+
+		if (EnemyGridAttack != nullptr) {
+			AEGfxMeshFree(EnemyGridAttack);
+			EnemyGridAttack = nullptr;
+		}
+
+		if (EnemyMesh != nullptr) {
+			AEGfxMeshFree(EnemyMesh);
+			EnemyMesh = nullptr;
+		}
 	}
 
 

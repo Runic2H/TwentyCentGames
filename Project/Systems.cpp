@@ -2,6 +2,7 @@
 
 void System_Initialise() {
 
+	fontId = AEGfxCreateFont("Roboto-Regular.ttf", 12);
 
 }
 
@@ -9,5 +10,5 @@ void System_Initialise() {
 
 void System_Exit() {
 
-
+	AEGfxDestroyFont(fontId);
 }

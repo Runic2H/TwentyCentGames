@@ -1,6 +1,8 @@
 // ---------------------------------------------------------------------------
 // includes
 
+
+
 #include "pch.hpp"
 
 
@@ -14,6 +16,13 @@
 		_In_ LPWSTR    lpCmdLine,
 		_In_ int       nCmdShow)
 	{
+
+
+		// Enable run-time memory check for debug builds //
+		#if defined(_DEBUG)
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+		#endif
+
 		UNREFERENCED_PARAMETER(hPrevInstance);
 		UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -39,7 +48,7 @@
 
 		GSM_Initialize(current);
 
-		//System_Initialise();
+		System_Initialise();
 
 
 		// Game Loop
@@ -105,6 +114,6 @@
 
 
 		// free the system
-		//System_Exit();
+		System_Exit();
 		AESysExit();
 	}
