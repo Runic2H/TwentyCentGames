@@ -1,2 +1,12 @@
-﻿  Combat.cpp
+﻿  Characters.cpp
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\Characters.cpp(266,64): warning C4305: 'argument': truncation from 'double' to 'f32'
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\Characters.cpp(456,63): warning C4305: 'argument': truncation from 'double' to 'f32'
+  Combat.cpp
+  GameStateManager.cpp
+  Main.cpp
+  Maze.cpp
+  Systems.cpp
+  input.cpp
+  pch.cpp
+  Generating Code...
   Project.vcxproj -> C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\bin\Debug-x64\Project.exe

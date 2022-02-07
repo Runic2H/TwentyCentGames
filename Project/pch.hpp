@@ -31,6 +31,3 @@
 #define DT (f32)AEFrameRateControllerGetFrameTime();
 
 
-//enum PlayerPos { ORIGIN, TOP, BACK, DOWN, ATTACK }; //Please use this to decipher which grid player is on
-
-//enum EnemyPos { IDLE, ATTACKING };

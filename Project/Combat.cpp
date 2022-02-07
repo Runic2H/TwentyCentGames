@@ -23,7 +23,7 @@ using namespace Character;
 
 int& x{ switchvalue }, y{};
 
-float movementdt;// time{ 1.0 };
+float movementdt;
 
 AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
@@ -59,8 +59,6 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
-
-
 	std::cout << "Combat:Initialize" << std::endl;
 
 }
@@ -86,11 +84,16 @@ void Combat_Update()
 	//Character::CombatMesh(RGBcounter);
 
 
-	if (Enemy->health <= 0 || Player->health <= 0)
-	{
-		std::cout << "Something Died.";
-		next = GS_QUIT;
-	}
+		if (Enemy->health <= 0)
+		{
+			std::cout << "You Won!\n";
+			next = MAZE;
+		}
+
+		else if (Player->health <= 0) {
+			std::cout << "You Died!\n";
+			next = GS_QUIT;
+		}
 
 
 	if (keypressed == 0) {													//so i cant move whilst cooldown active
@@ -150,9 +153,6 @@ void Combat_Free()
 	FreePlayerMesh();
 	FreeEnemyMesh();
 	//AEGfxDestroyFont(fontId);
-	AEGfxTextureUnload(playertexture);
-	AEGfxTextureUnload(enemytexture);
-	AESysExit();
 }
 
 
@@ -161,5 +161,7 @@ void Combat_Free()
 */
 void Combat_Unload()
 {
+	AEGfxTextureUnload(playertexture);
+	AEGfxTextureUnload(enemytexture);
 	std::cout << "Combat:Unload" << std::endl;
 }
