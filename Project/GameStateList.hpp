@@ -1,7 +1,8 @@
 enum GS_STATES
 {
-	COMBAT = 0,
+	MENU = 0,
 	MAZE,
+	COMBAT,
 
 	GS_QUIT,
 	GS_RESTART
