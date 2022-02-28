@@ -14,6 +14,7 @@
 #include "Input.hpp"
 #include "GameStateList.hpp"
 #include "GameStateManager.hpp"
+#include "Menu.hpp"
 
 
 
