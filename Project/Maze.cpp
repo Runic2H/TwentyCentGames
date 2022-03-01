@@ -11,6 +11,7 @@ AEGfxVertexList* pMesh_MainCharacter = 0;
 int starting_Xposition = 7;
 int starting_Yposition = 0;
 
+
 Maze_Struct* Maze;
 
 
@@ -129,32 +130,36 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList*& WALLCellMesh,
 	AEGfxVertexList*& CellOutlineMesh,
 	Maze_Struct* Maze)
 {
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	for (int r = 0; r < Maze->specifications.noOfRows; r++)
-	{
-		for (int c = 0; c < Maze->specifications.noOfCols; c++)
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		for (int r = 0; r < Maze->specifications.noOfRows; r++)
 		{
-			AEGfxSetPosition(
-				(Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth)),
-				(Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight))
-			);
-			if (Maze->grid[r][c].is_wall == 1) // is wall
+			for (int c = 0; c < Maze->specifications.noOfCols; c++)
 			{
-				AEGfxMeshDraw(WALLCellMesh, AE_GFX_MDM_TRIANGLES);
-			}
-			else
-			{
-				AEGfxMeshDraw(PATHCellMesh, AE_GFX_MDM_TRIANGLES);
-			}
+				AEGfxSetPosition(
+					(Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth)),
+					(Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight))
+				);
 
-			AEGfxSetPosition(
-				Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth),
-				Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight)
-			);
-			AEGfxMeshDraw(CellOutlineMesh, AE_GFX_MDM_LINES_STRIP);
+				if (Maze->grid[r][c].is_visible)
+				{
+					if (Maze->grid[r][c].is_wall == 1) // is wall
+					{
+						AEGfxMeshDraw(WALLCellMesh, AE_GFX_MDM_TRIANGLES);
+					}
+					else
+					{
+						AEGfxMeshDraw(PATHCellMesh, AE_GFX_MDM_TRIANGLES);
+					}
+				}
 
+				AEGfxSetPosition(
+					Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth),
+					Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight)
+				);
+				AEGfxMeshDraw(CellOutlineMesh, AE_GFX_MDM_LINES_STRIP);
+
+			}
 		}
-	}
 }
 
 
@@ -204,56 +209,56 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 	case 1: // move up aka y+1 
 		if (Maze->grid[Char_Pos_X][Char_Pos_Y + 1].is_wall != 1 && (Char_Pos_Y + 1) < Maze->specifications.noOfRows)
 		{
-			std::cout << "Can move up" << "\n";
+			//std::cout << "Can move up" << "\n";
 			Char_Pos_Y++;
 			return 1;
 		}
 		else
 		{
-			std::cout << "Cant move up to :" << Char_Pos_X << "-" << Char_Pos_Y + 1
-				<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y + 1].is_wall << "\n";
+			//std::cout << "Cant move up to :" << Char_Pos_X << "-" << Char_Pos_Y + 1
+				//<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y + 1].is_wall << "\n";
 			return 0;
 		}
 		break;
 	case 2: // move left aka x-1
 		if (Maze->grid[Char_Pos_X - 1][Char_Pos_Y].is_wall != 1 && (Char_Pos_X - 1) >= 0)
 		{
-			std::cout << "Can move left" << "\n";
+			//std::cout << "Can move left" << "\n";
 			Char_Pos_X--;
 			return 1;
 		}
 		else
 		{
-			std::cout << "Cant move left to :" << Char_Pos_X - 1 << "-" << Char_Pos_Y
-				<< "because :" << Maze->grid[Char_Pos_X - 1][Char_Pos_Y].is_wall << "\n";
+			//std::cout << "Cant move left to :" << Char_Pos_X - 1 << "-" << Char_Pos_Y
+				//<< "because :" << Maze->grid[Char_Pos_X - 1][Char_Pos_Y].is_wall << "\n";
 			return 0;
 		}
 		break;
 	case 3: // move down aka y-1
 		if (Maze->grid[Char_Pos_X][Char_Pos_Y - 1].is_wall != 1 && (Char_Pos_Y - 1) >= 0)
 		{
-			std::cout << "Can move down" << "\n";
+			//std::cout << "Can move down" << "\n";
 			Char_Pos_Y--;
 			return 1;
 		}
 		else
 		{
-			std::cout << "Cant move down to :" << Char_Pos_X << "-" << Char_Pos_Y - 1
-				<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y - 1].is_wall << "\n";
+			//std::cout << "Cant move down to :" << Char_Pos_X << "-" << Char_Pos_Y - 1
+				//<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y - 1].is_wall << "\n";
 			return 0;
 		}
 		break;
 	case 4: // move right aka x+1
 		if (Maze->grid[Char_Pos_X + 1][Char_Pos_Y].is_wall != 1 && (Char_Pos_X + 1) < Maze->specifications.noOfCols)
 		{
-			std::cout << "Can move right" << "\n";
+			//std::cout << "Can move right" << "\n";
 			Char_Pos_X++;
 			return 1;
 		}
 		else
 		{
-			std::cout << "Cant move right to :" << Char_Pos_X + 1 << "-" << Char_Pos_Y
-				<< "because :" << Maze->grid[Char_Pos_X + 1][Char_Pos_Y].is_wall << "\n";
+			//std::cout << "Cant move right to :" << Char_Pos_X + 1 << "-" << Char_Pos_Y
+				//<< "because :" << Maze->grid[Char_Pos_X + 1][Char_Pos_Y].is_wall << "\n";
 			return 0;
 		}
 		break;
@@ -261,6 +266,32 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 	default: return 0;
 	}
 
+}
+
+void MAZE_FogOfWar(int starting_Xposition, int starting_Yposition)
+{
+	std::cout << "\n\nPlayer's position x: " << starting_Xposition << "\n";
+	std::cout << "Player's position y: " << starting_Yposition << "\n";
+
+
+	//+1 -1 of player's position
+	for (int a = -1; a < 2; ++a)
+	{
+		for (int b = -1; b < 2; ++b)
+		{
+			//check if the grid is within the boundaries
+			if ( (starting_Yposition + b) >= 0 &&
+				 (starting_Yposition + b) < Maze->specifications.noOfRows &&
+				 (starting_Xposition + a) >= 0 &&
+				 (starting_Xposition + a) < Maze->specifications.noOfCols)
+			{
+				//grids surrounding player will be visible	
+				Maze->grid[starting_Xposition+a][starting_Yposition+b].is_visible = 1;
+
+				std::cout << "position x: " << (starting_Xposition+b) << "     position y: " << (starting_Yposition+a) << " is visible.\n\n";
+			}
+		}
+	}
 }
 
 
@@ -356,6 +387,7 @@ void Maze_Update()
 		}
 	}
 
+	MAZE_FogOfWar(starting_Xposition, starting_Yposition);
 }
 
 
@@ -374,7 +406,7 @@ void Maze_Draw()
 	);
 
 
-
+	//must draw
 	MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
 	MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
 }

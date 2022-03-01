@@ -11,6 +11,7 @@ struct MazeCells
 {
 	int is_wall;
 	//int is_PlayerPos;
+	bool is_visible = 0;
 
 };
 
