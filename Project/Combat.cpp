@@ -126,11 +126,13 @@ void Combat_Draw()
 {
 	//std::cout << "Combat:Draw" << std::endl;
 
-	Character::RenderPlayerHealth(fontId, Player);
+	RenderPlayerHealth(fontId, Player);
 	RenderEnemyHealth(fontId, Enemy);
 	GridCheck(Enemy->is_attacking, Enemy->AttackCD, Player->SAFEGRID);
 	playerrender(playertexture, Player, Character::PlayerMesh);
-	
+	RenderPlayerGrid(playermaxhealth);
+
+
 	if (Enemy->AttackCD <= 0.45f)
 	{
 		RenderEnemyGrid(EnemyGridAttack);

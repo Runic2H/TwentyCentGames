@@ -11,7 +11,8 @@ namespace Character
 	extern AEGfxVertexList* Player4Grid;
 	extern AEGfxVertexList* Player5Grid;
 	extern AEGfxVertexList* PlayerMesh;
-
+	extern AEGfxVertexList* playermaxhealth;	//PLAYER HEALTH MESH
+	extern AEGfxVertexList* playercurrhealth;
 
 	enum PlayerPos { ORIGIN, TOP, BACK, DOWN, ATTACK }; //Please use this to decipher which grid player is on
 
@@ -22,6 +23,7 @@ namespace Character
 		int positionID;
 		int SAFEGRID;
 		int health;
+		int maxhealth;
 		int damage;
 		int playerCD;
 		bool is_attacking;
@@ -65,12 +67,15 @@ namespace Enemies
 	extern AEGfxVertexList* EnemyGridIdle;
 	extern AEGfxVertexList* EnemyGridAttack;
 	extern AEGfxVertexList* EnemyMesh;
+	extern AEGfxVertexList* Enemymaxhealth;
+	extern AEGfxVertexList* Enemycurrhealth;
 
 	enum EnemyPos { IDLE, ATTACKING };
 
 	struct E_StatSheet
 	{
 		int health;
+		int maxhealth;
 		int damage;
 		int EnemyState;
 		float EnemyCD;
