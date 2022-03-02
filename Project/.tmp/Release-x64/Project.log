@@ -8,5 +8,7 @@ C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\T
   Maze.cpp
   pch.cpp
   Systems.cpp
-  Generating Code...
-  Project.vcxproj -> C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\bin\Debug-x64\Project.exe
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+c:\users\thebi\onedrive\desktop\rtis\y1t2\csd 1450 gam\gam1450 github versions\test branch, skeleton for gsm\project\systems.cpp : fatal error C1083: Cannot open compiler intermediate file: ' skeleton for GSM\Project\\.tmp\Release-x64\Project.ipdb': No such file or directory
+LINK : fatal error LNK1257: code generation failed
