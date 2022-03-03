@@ -11,7 +11,8 @@ namespace Character
 	extern AEGfxVertexList* Player4Grid;
 	extern AEGfxVertexList* Player5Grid;
 	extern AEGfxVertexList* PlayerMesh;
-
+	extern AEGfxVertexList* playermaxhealth;	//PLAYER HEALTH MESH
+	extern AEGfxVertexList* playercurrhealth;
 
 	enum PlayerPos { ORIGIN, TOP, BACK, DOWN, ATTACK }; //Please use this to decipher which grid player is on
 
@@ -22,8 +23,12 @@ namespace Character
 		int positionID;
 		int SAFEGRID;
 		int health;
+		int staminacount;
+		int staminamax;
+		float staminaCD;
+		float staminaX;
+		int maxhealth;
 		int damage;
-		int playerCD;
 		bool is_attacking;
 		bool is_dmgtaken;
 		float movementdt;
@@ -37,7 +42,7 @@ namespace Character
 
 	void FreePlayerMesh();
 
-	int PlayerMovement(int& x, c_statsheet* player);
+	void PlayerMovement(int& x, c_statsheet* player, int& keypressed);
 
 	void playerrender(AEGfxTexture* playertexture, c_statsheet* player, AEGfxVertexList* playermesh);
 
@@ -46,6 +51,14 @@ namespace Character
 	void GridCheck(bool EnemyAttackState, float timer, int& x);
 
 	void RenderPlayerHealth(s8 font, Character::c_statsheet* Player);
+
+	void FreePlayerMeshOnUpdate();
+
+	void MeshInit();
+
+	void StaminaRender(c_statsheet* Player, AEGfxTexture* staminapotion);
+
+	void StaminaLogic(c_statsheet* Player, int const& keypressed);
 
 	//void PlayerAttack(c_statsheet* Player, e_statsheet* Enemy);
 	//void CameraShake(float camX, float camY);
@@ -65,12 +78,15 @@ namespace Enemies
 	extern AEGfxVertexList* EnemyGridIdle;
 	extern AEGfxVertexList* EnemyGridAttack;
 	extern AEGfxVertexList* EnemyMesh;
+	extern AEGfxVertexList* Enemymaxhealth;
+	extern AEGfxVertexList* Enemycurrhealth;
 
 	enum EnemyPos { IDLE, ATTACKING };
 
 	struct E_StatSheet
 	{
 		int health;
+		int maxhealth;
 		int damage;
 		int EnemyState;
 		float EnemyCD;

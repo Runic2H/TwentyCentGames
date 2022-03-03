@@ -4,9 +4,8 @@ int  RGB{ 16384000 };
 
 int& RGBcounter{ RGB };
 
-int switchvalue{ 1 },
+int switchvalue{ 0 },
 keyvalue{ 0 },
-flag{ 0 },
 counter{ 0 },
 SAFEGRID{ 1 },
 gridcounter{ 0 },
@@ -26,6 +25,7 @@ float movementdt;
 
 AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
+AEGfxTexture* staminapotion;
 
 E_StatSheet* Enemy;
 c_statsheet* Player;
@@ -43,6 +43,8 @@ void Combat_Load()
 	enemytexture = AEGfxTextureLoad("Turtle.png");
 	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
 
+	staminapotion = AEGfxTextureLoad("staminapotion.png");
+	AE_ASSERT_MESG(staminapotion, "cant create stamina potion texture\n");
 
 	Enemy = EnemyInitialize();			//change name to load
 	Player = c_initialize();
@@ -58,7 +60,7 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
-	std::cout << "Combat:Initialize" << std::endl;
+	MeshInit();		// Single init for the meshes that only need to be created once (NON RGB MESHES)
 }
 
 
@@ -69,9 +71,7 @@ void Combat_Initialize()
 */
 void Combat_Update()
 {
-
-	//std::cout << "Combat:Update" << std::endl;
-
+	
 	RGBloop(RGBcounter);
 	CombatMesh(RGBcounter);
 	EnemyCombatMesh();
@@ -94,9 +94,9 @@ void Combat_Update()
 		}
 
 
-	if (keypressed == 0) {													//so i cant move whilst cooldown active
-		keypressed = Character::PlayerMovement(x, Player);								//character movement	
-		flag = keypressed;													//flag for player damage so it only counts once
+	if (keypressed == 0) {													// so i cant move whilst cooldown active
+		PlayerMovement(x, Player, keypressed);								// character movement	
+		StaminaLogic(Player, keypressed);
 	}
 
 	if (keypressed == 1) {
@@ -111,10 +111,6 @@ void Combat_Update()
 	}
 
 	UpdateEnemyState(Enemy, Player);
-	flag = (x == ATTACK) ? 1 : 0;
-	
-	//std::cout << "Player Health: " << Player->health << "| Enemy Health: " << Enemy->health << "\n";
-
 }
 
 
@@ -124,13 +120,14 @@ void Combat_Update()
 */
 void Combat_Draw()
 {
-	//std::cout << "Combat:Draw" << std::endl;
-
-	Character::RenderPlayerHealth(fontId, Player);
+	StaminaRender(Player, staminapotion);
+	RenderPlayerHealth(fontId, Player);
 	RenderEnemyHealth(fontId, Enemy);
 	GridCheck(Enemy->is_attacking, Enemy->AttackCD, Player->SAFEGRID);
 	playerrender(playertexture, Player, Character::PlayerMesh);
-	
+	RenderPlayerGrid(playermaxhealth);
+
+
 	if (Enemy->AttackCD <= 0.45f)
 	{
 		RenderEnemyGrid(EnemyGridAttack);
@@ -161,5 +158,5 @@ void Combat_Unload()
 	FreeEnemyMesh();
 	AEGfxTextureUnload(playertexture);
 	AEGfxTextureUnload(enemytexture);
-	std::cout << "Combat:Unload" << std::endl;
+	AEGfxTextureUnload(staminapotion);
 }

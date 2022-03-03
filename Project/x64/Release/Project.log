@@ -1,7 +1,7 @@
-﻿  Menu.cpp
+﻿  Characters.cpp
   Generating code
-  0 of 73 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  3 of 77 functions ( 3.9%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Project.vcxproj -> C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\bin\Release-x64\Project.exe

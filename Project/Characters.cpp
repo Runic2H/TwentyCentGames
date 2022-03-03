@@ -4,39 +4,48 @@
 namespace Character
 {
 
-	AEGfxVertexList* Player1Grid = 0; //ORIGN
-	AEGfxVertexList* Player2Grid = 0; //TOP
-	AEGfxVertexList* Player3Grid = 0; //BACK
-	AEGfxVertexList* Player4Grid = 0; //BOTTOM
-	AEGfxVertexList* Player5Grid = 0; //ATTACK
+	AEGfxVertexList* Player1Grid = 0;	//ORIGN
+	AEGfxVertexList* Player2Grid = 0;	//TOP
+	AEGfxVertexList* Player3Grid = 0;	//BACK
+	AEGfxVertexList* Player4Grid = 0;	//BOTTOM
+	AEGfxVertexList* Player5Grid = 0;	//ATTACK
 	AEGfxVertexList* PlayerMesh = 0;
+
+	AEGfxVertexList* playermaxhealth = 0;	//PLAYER HEALTH MESH
+	AEGfxVertexList* playercurrhealth = 0;	//PLAYER HEALTH MESH
+	AEGfxVertexList* playerstamina = 0;		//PLAYER STAMINA MESH
+
 
 	c_statsheet* c_initialize()
 	{
 		c_statsheet* c_stats = new c_statsheet;
-		c_stats->health = 100;								//health
-		c_stats->positionID = 1;							//starting grid
-		c_stats->SAFEGRID = 1;								//starting SAFEGRID pos
-		c_stats->damage = 10;								//damage
-		c_stats->playerCD = 5;								//Cooldown for attack and movement
-		c_stats->is_dmgtaken = false;						//to implement visual animations in future
-		c_stats->is_attacking = false;						//for enemy damage checks
+		c_stats->health = 100;								// health
+		c_stats->maxhealth = 100;							// max health
+		c_stats->positionID = ORIGIN;						// starting grid
+		c_stats->SAFEGRID = 1;								// starting SAFEGRID pos
+		c_stats->damage = 10;								// damage
+		c_stats->staminaCD = 1.0f;							// Cooldown for attack and movement
+		c_stats->staminacount = 0;							// Character stamina count
+		c_stats->staminamax = 3;							// Character stamina max
+		c_stats->staminaX = -360.0f;						// X position of stamina
+		c_stats->is_dmgtaken = false;						// to implement visual animations in future
+		c_stats->is_attacking = false;						// for enemy damage checks
 		c_stats->positionX = 0.0f;
 		c_stats->positionY = 0.0f;
 		c_stats->movementdt = 0.0f;
 		return c_stats;
 	}
 
+
 	void CombatMesh(int RGBcounter)
 	{
-
-		FreePlayerMesh();
+		FreePlayerMeshOnUpdate();
 
 		AEGfxMeshStart();
 
 		AEGfxVertexAdd(-240.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
 		AEGfxVertexAdd(-140.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
-		AEGfxVertexAdd(-140.0f, -60.0f, RGBcounter, 1.0f, 1.0f);				//PLAYERGRID 4 BOTTOM
+		AEGfxVertexAdd(-140.0f, -60.0f, RGBcounter, 1.0f, 1.0f);			//PLAYERGRID 4 BOTTOM
 		AEGfxVertexAdd(-240.0f, -60.0f, RGBcounter, 1.0f, 1.0f);
 		AEGfxVertexAdd(-240.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
 
@@ -82,37 +91,105 @@ namespace Character
 		Player1Grid = AEGfxMeshEnd();
 		AE_ASSERT_MESG(Player1Grid, "Failed to create playermesh1!!");
 
+		//
+
 		AEGfxMeshStart();
 
-		AEGfxVertexAdd(0.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
-		AEGfxVertexAdd(-100.0f, -50.0f, 0xFFFFFF, 1.0f, 1.0f);
-		AEGfxVertexAdd(-100.0f, 50.0f, 0xFF0000, 0.0f, 0.0f);				//PLAYERGRID 5 ATTACK
-		AEGfxVertexAdd(0.0f, 50.0f, 0xFFFFFF, 1.0f, 0.0f);
-		AEGfxVertexAdd(0.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
+		AEGfxVertexAdd(0.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
+		AEGfxVertexAdd(-100.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
+		AEGfxVertexAdd(-100.0f, 50.0f, RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 5 ATTACK
+		AEGfxVertexAdd(0.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
+		AEGfxVertexAdd(0.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
 
 		Player5Grid = AEGfxMeshEnd();
 		AE_ASSERT_MESG(Player5Grid, "Failed to create playermesh5!!");
 
+	}
 
+
+	// the meshes that i only want to initialise once
+	void MeshInit() {
+
+		// THE MAX PLAYER HEALTH
+		AEGfxMeshStart();
+		AEGfxVertexAdd(-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+		AEGfxVertexAdd(-230.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+		AEGfxVertexAdd(-230.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+		AEGfxVertexAdd(-390.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+		AEGfxVertexAdd(-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+
+		playermaxhealth = AEGfxMeshEnd();
+		AE_ASSERT_MESG(playermaxhealth, "Failed to create playerhealth!!");
+		
+		//
 
 		AEGfxMeshStart();
-
 		AEGfxTriAdd(
 			-215.0f, -25.0f, 0x00FF00FF, 0.0f, 1.0f,
 			-165.0f, -25.0f, 0x00FFFF00, 1.0f, 1.0f,
 			-215.0f, 25.0f, 0x0000FFFF, 0.0f, 0.0f);
-		//x,y,colour,u,v
 																			//CHARACTER OBJECT
 		AEGfxTriAdd(
 			-165.0f, -25.0f, 0x00FFFFFF, 1.0f, 1.0f,
 			-165.0f, 25.0f, 0x00FFFFFF, 1.0f, 0.0f,
 			-215.0f, 25.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
-
 		PlayerMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(PlayerMesh, "Failed to create character!!");
+
+		//
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-20.0f, -20.0f, 0x00FF00FF, 0.0f, 1.0f,
+			 20.0f, -20.0f, 0x00FFFF00, 1.0f, 1.0f,
+			 20.0f, 20.0f, 0x0000FFFF,  1.0f, 0.0f);
+
+		AEGfxTriAdd(
+			-20.0f, -20.0f, 0x00FFFFFF, 0.0f, 1.0f,
+			-20.0f,  20.0f, 0x00FFFFFF, 0.0f, 0.0f,
+			 20.0f,  20.0f, 0x00FFFFFF, 1.0f, 0.0f);
+
+
+		playerstamina = AEGfxMeshEnd();
+		AE_ASSERT_MESG(playerstamina, "Failed to create stamina mesh!!");
 	}
 
+
+	void StaminaLogic(c_statsheet* Player, int const& keypressed) {
+
+		std::cout << Player->staminacount << "\n";
+		//static int flagset = 0;
+
+		if (Player->staminacount < Player->staminamax) {
+			Player->staminaCD -= DT;
+			
+			if (Player->staminaCD < 0) {
+				
+				Player->staminaCD = 1.0f;	// resets the playerCD
+				++Player->staminacount;
+			}
+		}
+
+		if (keypressed == 1) {
+			--Player->staminacount;
+		}
+	}
+
+
+	void StaminaRender(c_statsheet* Player, AEGfxTexture* staminapotion) {
+
+		for (int i{ 0 }; i < Player->staminacount; ++i) {
+			
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+			AEGfxSetPosition(Player->staminaX + (i*30), -215.0f);
+			AEGfxTextureSet(staminapotion, 0, 0);
+			AEGfxSetTintColor(1, 1, 1, 1);
+			AEGfxSetTransparency(1);
+			AEGfxMeshDraw(playerstamina, AE_GFX_MDM_TRIANGLES);
+		}
+	}
 
 	void RenderPlayerGrid(AEGfxVertexList* PlayerMesh)
 	{
@@ -126,9 +203,39 @@ namespace Character
 	}
 
 
+	// this one frees it before it draws every mesh. to prevent memoryleak
+	void FreePlayerMeshOnUpdate() {
+
+		if (Player1Grid != nullptr) {
+			AEGfxMeshFree(Player1Grid);
+			Player1Grid = nullptr;
+		}
+
+		if (Player2Grid != nullptr) {
+			AEGfxMeshFree(Player2Grid);
+			Player2Grid = nullptr;
+		}
+
+		if (Player3Grid != nullptr) {
+			AEGfxMeshFree(Player3Grid);
+			Player3Grid = nullptr;
+		}
+		
+		if (Player4Grid != nullptr) {
+			AEGfxMeshFree(Player4Grid);
+			Player4Grid = nullptr;
+		}
+
+		if (Player5Grid != nullptr) {
+			AEGfxMeshFree(Player5Grid);
+			Player5Grid = nullptr;
+		}
+	}
+
+
+	// frees player mesh at the end of the GSM
 	void FreePlayerMesh()
 	{
-
 
 		if (Player1Grid != nullptr) {
 			AEGfxMeshFree(Player1Grid);
@@ -160,19 +267,36 @@ namespace Character
 			PlayerMesh = nullptr;
 		}
 
+		if (playermaxhealth != nullptr) {
+			AEGfxMeshFree(playermaxhealth);
+			playermaxhealth = nullptr;
+		}
+
+		if (playercurrhealth != nullptr) {
+			AEGfxMeshFree(playercurrhealth);
+			playercurrhealth = nullptr;
+		}
+
+		if (playerstamina != nullptr) {
+			AEGfxMeshFree(playerstamina);
+			playerstamina = nullptr;
+		}
 	}
 
+	// returns an int. any movement sets the int flag to 1
 
-	int PlayerMovement(int& x, c_statsheet* player) {
+	void PlayerMovement(int& x, c_statsheet* player, int& keypressed) {
 
-		int keypressed = 0;
+		//keypressed = 0;
 		x = 0;
-
-		AEInputCheckTriggered(AEVK_W) ? x = TOP : x = x;	//ID Should be 1
-		AEInputCheckTriggered(AEVK_A) ? x = BACK : x = x;	//ID Should be 2
-		AEInputCheckTriggered(AEVK_S) ? x = DOWN : x = x;	//ID Should be 3
-		AEInputCheckTriggered(AEVK_D) ? x = ATTACK : x = x;	//ID Should be 4
-
+		
+		if (player->staminacount > 0)
+		{
+			AEInputCheckTriggered(AEVK_W) ? x = TOP : x = x;	//ID Should be 1
+			AEInputCheckTriggered(AEVK_A) ? x = BACK : x = x;	//ID Should be 2
+			AEInputCheckTriggered(AEVK_S) ? x = DOWN : x = x;	//ID Should be 3
+			AEInputCheckTriggered(AEVK_D) ? x = ATTACK : x = x;	//ID Should be 4
+		}
 
 		switch (x) {
 
@@ -181,8 +305,8 @@ namespace Character
 			player->positionX = 145.0f;
 			player->positionY = 0.0f;
 			player->movementdt = 0.80f;
-			keypressed = 1;
 			player->is_attacking = true;
+			keypressed = 1;
 			break;
 
 		case TOP:
@@ -213,21 +337,19 @@ namespace Character
 			break;
 
 
-		case 5:	//ATTACK GRID
-			player->positionID = 5;
-			player->positionX = 145.0f;
-			player->positionY = 0.0f;
-			player->is_attacking = true;
-			keypressed = 1;
-			break;
+		//case 5:	//ATTACK GRID
+		//	player->positionID = 5;
+		//	player->positionX = 145.0f;
+		//	player->positionY = 0.0f;		DUPLICATE CASE
+		//	player->is_attacking = true;
+		//	keypressed = 1;
+		//	break;
 		}
 
 		if (player->positionX == 0.0f && player->positionY == 0.0f) {
 			player->positionID = ORIGIN;
 			player->is_attacking = false;
 		}
-
-		return keypressed;
 	}
 
 
@@ -239,7 +361,7 @@ namespace Character
 		AEGfxSetPosition(player->positionX, player->positionY);
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxTextureSet(playertexture, 1.0f, 1.0f);
-
+		
 		AEGfxMeshDraw(playermesh, AE_GFX_MDM_TRIANGLES);
 	}
 
@@ -291,11 +413,40 @@ namespace Character
 		sprintf_s(strBuffer, "Player Health:  %d", Player->health);
 
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxPrint(font, strBuffer, -0.95, -0.95, 1.0f, 1.f, 1.f, 1.f);
+		AEGfxPrint(font, strBuffer, -0.95f, -0.85f, 1.14f, 1.f, 1.f, 1.f);
+
+		sprintf_s(strBuffer, "Stamina: %d", Player->staminacount);
+		AEGfxPrint(font, strBuffer, -0.95f, -0.63f, 1.14f, 1.0f, 1.0f, 1.0f);
 		AEGfxSetBlendMode(AE_GFX_BM_NONE);
+
+			if (playercurrhealth != nullptr) {
+				AEGfxMeshFree(playercurrhealth);
+				playercurrhealth = nullptr;
+			}
+
+		float healthscale = (float)Player->health / Player->maxhealth;
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			-390.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			-390.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+											
+		AEGfxTriAdd(
+			-390.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			-390.0f + 160 * healthscale, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+
+		playercurrhealth = AEGfxMeshEnd();
+		AE_ASSERT_MESG(playercurrhealth, "Failed to create playercurrhealth!!");
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTintColor(0.9f, 0.0f, 0.0f, 1.0f);
+		AEGfxSetPosition(0.0f, 0.0f);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxMeshDraw(playercurrhealth, AE_GFX_MDM_TRIANGLES);
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
-
-
 }
 
 
@@ -312,11 +463,14 @@ namespace Enemies
 	AEGfxVertexList* EnemyGridIdle = 0;
 	AEGfxVertexList* EnemyGridAttack = 0;
 	AEGfxVertexList* EnemyMesh = 0;
+	AEGfxVertexList* Enemymaxhealth = 0;
+	AEGfxVertexList* Enemycurrhealth = 0;
 
 	E_StatSheet* EnemyInitialize()
 	{
 		E_StatSheet* E_Stats = new E_StatSheet;
 		E_Stats->health = 100;
+		E_Stats->maxhealth = 100;
 		E_Stats->damage = 10;
 		E_Stats->EnemyState = IDLE;				//Current Enemy State
 		E_Stats->EnemyCD = 5.0f;				//Cooldown till next enemy attack
@@ -428,12 +582,6 @@ namespace Enemies
 
 		AEGfxMeshStart();
 
-		//AEGfxVertexAdd(75.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
-		//AEGfxVertexAdd(125.0f, -25.0f, 0xFFFFFF, 1.0f, 1.0f);
-		//AEGfxVertexAdd(125.0f, 25.0f, 0xFFFFFF, 0.0f, 0.0f);				//ENEMY MESH
-		//AEGfxVertexAdd(75.0f, 25.0f, 0xFFFFFF, 1.0f, 0.0f);
-		//AEGfxVertexAdd(75.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
-
 		AEGfxTriAdd(
 			75.0f, -25.0f, 0x00FF00FF, 0.0f, 1.0f,
 			125.0f, -25.0f, 0x00FFFF00, 1.0f, 1.0f,
@@ -498,8 +646,37 @@ namespace Enemies
 		sprintf_s(strBuffer, "Enemy Health:  %d", Enemy->health);
 
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxPrint(font, strBuffer, 0.60, -0.95, 1.0f, 1.f, 1.f, 1.f);
+		AEGfxPrint(font, strBuffer, 0.60f, -0.85f, 1.14f, 1.f, 1.f, 1.f);
 		AEGfxSetBlendMode(AE_GFX_BM_NONE);
+
+
+		if (Enemycurrhealth != nullptr) {
+			AEGfxMeshFree(Enemycurrhealth);
+			Enemycurrhealth = nullptr;
+		}
+
+		float healthscale = (float)Enemy->health / Enemy->maxhealth;
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			230.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			230.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			230.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+
+		AEGfxTriAdd(
+			230.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			230.0f + 160 * healthscale, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			230.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+
+		Enemycurrhealth = AEGfxMeshEnd();
+		AE_ASSERT_MESG(Enemycurrhealth, "Failed to create Enemycurrhealth!!");
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTintColor(0.9f, 0.0f, 0.0f, 1.0f);
+		AEGfxSetPosition(0.0f, 0.0f);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxMeshDraw(Enemycurrhealth, AE_GFX_MDM_TRIANGLES);
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 }
