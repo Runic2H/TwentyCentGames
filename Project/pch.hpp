@@ -15,7 +15,8 @@
 #include "GameStateList.hpp"
 #include "GameStateManager.hpp"
 #include "Menu.hpp"
-
+#include "Tutorial.hpp"
+#include "Credits.hpp"
 
 
 #endif	//PCH.H

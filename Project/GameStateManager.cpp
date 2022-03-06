@@ -36,6 +36,24 @@
 			fpUnload = Menu_Unload;
 			break;
 
+		case TUTORIAL:
+			fpLoad = Tutorial_Load;
+			fpInitialize = Tutorial_Init;
+			fpUpdate = Tutorial_Update;
+			fpDraw = Tutorial_Draw;
+			fpFree = Tutorial_Free;
+			fpUnload = Tutorial_Unload;
+			break;
+
+		case CREDITS:
+			fpLoad = Credits_Load;
+			fpInitialize = Credits_Init;
+			fpUpdate = Credits_Update;
+			fpDraw = Credits_Draw;
+			fpFree = Credits_Free;
+			fpUnload = Credits_Unload;
+			break;
+
 		case MAZE:
 			fpLoad = Maze_Load;
 			fpInitialize = Maze_Initialize;

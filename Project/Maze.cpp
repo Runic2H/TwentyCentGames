@@ -14,7 +14,6 @@ int starting_Yposition = 0;
 
 Maze_Struct* Maze;
 
-
 int maze_iswall_isnotwall[noOfRows][noOfCols] =
 {
 	/*
@@ -130,6 +129,7 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList*& WALLCellMesh,
 	AEGfxVertexList*& CellOutlineMesh,
 	Maze_Struct* Maze)
 {
+		AEGfxSetBlendMode(AE_GFX_BM_NONE);
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		for (int r = 0; r < Maze->specifications.noOfRows; r++)
 		{
@@ -388,6 +388,12 @@ void Maze_Update()
 	}
 
 	MAZE_FogOfWar(starting_Xposition, starting_Yposition);
+
+	//go back to MENU
+	if (AEInputCheckTriggered(AEVK_Q))
+	{
+		next = MENU;
+	}
 }
 
 
@@ -409,6 +415,14 @@ void Maze_Draw()
 	//must draw
 	MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
 	MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
+
+	char strBuffer[100];
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetPosition(0.0f, 0.0f);
+	AEGfxTextureSet(NULL, 0, 0); // No texture for object
+	sprintf_s(strBuffer, "Press Q to go back to the main menu");
+	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
 }
 
 
