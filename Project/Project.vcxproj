@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClCompile Include="Characters.cpp" />
     <ClCompile Include="Combat.cpp" />
+    <ClCompile Include="gameover.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -100,6 +101,7 @@
   <ItemGroup>
     <ClInclude Include="Characters.hpp" />
     <ClInclude Include="Combat.hpp" />
+    <ClInclude Include="gameover.hpp" />
     <ClInclude Include="GameStateList.hpp" />
     <ClInclude Include="GameStateManager.hpp" />
     <ClInclude Include="input.hpp" />

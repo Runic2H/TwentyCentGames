@@ -1,7 +1,40 @@
 ﻿  Characters.cpp
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\pch.hpp(18,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Combat.cpp
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\pch.hpp(18,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  GameStateManager.cpp
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\pch.hpp(18,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Main.cpp
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\pch.hpp(18,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Maze.cpp
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\pch.hpp(18,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Menu.cpp
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\pch.hpp(18,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Systems.cpp
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\pch.hpp(18,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  gameover.cpp
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\pch.hpp(18,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(21,44): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(21,21): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(20,46): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(20,22): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(19,45): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(19,22): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(25,45): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(25,21): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(24,46): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(24,22): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(23,44): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(23,21): warning C4244: 'argument': conversion from 'int' to 'f32', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(60,13): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\gameover.cpp(61,13): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  input.cpp
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\pch.hpp(18,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  pch.cpp
+C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\pch.hpp(18,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   Generating code
-  3 of 77 functions ( 3.9%) were compiled, the rest were copied from previous compilation.
+  4 of 83 functions ( 4.8%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Project.vcxproj -> C:\Users\thebi\OneDrive\Desktop\RTIS\Y1T2\CSD 1450 GAM\GAM1450 github versions\TEST branch, skeleton for GSM\Project\bin\Release-x64\Project.exe

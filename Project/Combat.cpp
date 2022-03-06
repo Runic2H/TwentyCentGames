@@ -90,7 +90,7 @@ void Combat_Update()
 
 		else if (Player->health <= 0) {
 			std::cout << "You Died!\n";
-			next = GS_QUIT;
+			next = GAMEOVER;
 		}
 
 

@@ -26,7 +26,7 @@
 
 		switch (current)
 		{
-		break;
+
 		case MENU:
 			fpLoad = Menu_Load;
 			fpInitialize = Menu_Init;
@@ -34,6 +34,15 @@
 			fpDraw = Menu_Draw;
 			fpFree = Menu_Free;
 			fpUnload = Menu_Unload;
+			break;
+
+		case GAMEOVER:
+			fpLoad = GameOver_Load;
+			fpInitialize = GameOver_Init;
+			fpUpdate = GameOver_Update;
+			fpDraw = GameOver_Draw;
+			fpFree = GameOver_Free;
+			fpUnload = GameOver_Unload;
 			break;
 
 		case MAZE:
