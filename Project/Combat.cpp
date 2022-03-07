@@ -1,3 +1,5 @@
+//COMBAT.CPP
+
 #include "pch.hpp"
 
 int  RGB{ 16384000 };
@@ -16,9 +18,9 @@ int& keypressed{ keyvalue },
 showgridcounter{ gridcounter },
 choosegrid{ gr };
 
-
-using namespace Enemies;
-using namespace Character;
+using namespace Characters;
+using namespace Characters::Enemies;
+using namespace Characters::Character;
 
 int& x{ switchvalue }, y{};
 
@@ -27,8 +29,8 @@ float movementdt;
 AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
 
-E_StatSheet* Enemy;
-c_statsheet* Player;
+Enemies::E_StatSheet* Enemy;
+Character::c_statsheet* Player;
 
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
@@ -43,11 +45,10 @@ void Combat_Load()
 	enemytexture = AEGfxTextureLoad("Turtle.png");
 	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
 
+	//Enemy and Player should be initialized at maze
 
-	Enemy = EnemyInitialize();			//change name to load
+	Enemy = EnemyInitialize((rand() % 2) + 0);			//change name to load
 	Player = c_initialize();
-
-
 }
 
 
@@ -76,22 +77,19 @@ void Combat_Update()
 	CombatMesh(RGBcounter);
 	EnemyCombatMesh();
 
-	movementdt = (f32)AEFrameRateControllerGetFrameTime();					//dt time for counter
-
-
 	//Character::CombatMesh(RGBcounter);
 
 
-		if (Enemy->health <= 0)
-		{
-			std::cout << "You Won!\n";
-			next = MAZE;
-		}
+	if (Enemy->health <= 0)
+	{
+		std::cout << "You Won!\n";
+		next = MAZE;
+	}
 
-		else if (Player->health <= 0) {
-			std::cout << "You Died!\n";
-			next = GS_QUIT;
-		}
+	else if (Player->health <= 0) {
+		std::cout << "You Died!\n";
+		next = GS_QUIT;
+	}
 
 
 	if (keypressed == 0) {													//so i cant move whilst cooldown active
@@ -111,9 +109,18 @@ void Combat_Update()
 	}
 
 	UpdateEnemyState(Enemy, Player);
+
+	if (Enemy->health <= 0)
+	{
+		Player->PlayerXP += Enemy->EnemyXP;
+		if (PlayerLevelUp(Player))
+		{
+			Player->PlayerLevel++;
+			Player->PlayerXP = 0;
+		}
+	}
+
 	flag = (x == ATTACK) ? 1 : 0;
-	
-	//std::cout << "Player Health: " << Player->health << "| Enemy Health: " << Enemy->health << "\n";
 
 }
 
@@ -130,12 +137,12 @@ void Combat_Draw()
 	RenderEnemyHealth(fontId, Enemy);
 	GridCheck(Enemy->is_attacking, Enemy->AttackCD, Player->SAFEGRID);
 	playerrender(playertexture, Player, Character::PlayerMesh);
-	
-	if (Enemy->AttackCD <= 0.45f)
+
+	if (Enemy->AttackCD <= 0.30f)
 	{
 		RenderEnemyGrid(EnemyGridAttack);
 	}
-	
+
 	RenderEnemy(enemytexture, EnemyMesh, Enemy);
 }
 
