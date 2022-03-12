@@ -6,9 +6,8 @@ int  RGB{ 16384000 };
 
 int& RGBcounter{ RGB };
 
-int switchvalue{ 1 },
+int switchvalue{ 0 },
 keyvalue{ 0 },
-flag{ 0 },
 counter{ 0 },
 SAFEGRID{ 1 },
 gridcounter{ 0 },
@@ -28,6 +27,7 @@ float movementdt;
 
 AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
+AEGfxTexture* staminapotion;
 
 Enemies::E_StatSheet* Enemy;
 Character::c_statsheet* Player;
@@ -39,12 +39,17 @@ Character::c_statsheet* Player;
 void Combat_Load()
 {
 	std::cout << "Combat:Load" << std::endl;
-	playertexture = AEGfxTextureLoad("ducky.jpg");
+	//playertexture = AEGfxTextureLoad("ducky.jpg");
+	playertexture = AEGfxTextureLoad("Fighting duck.png");
 	AE_ASSERT_MESG(playertexture, "cant create duck texture\n");
 
-	enemytexture = AEGfxTextureLoad("Turtle.png");
+	//enemytexture = AEGfxTextureLoad("Turtle.png");
+	enemytexture = AEGfxTextureLoad("Angry turtle.png");
 	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
 
+
+	staminapotion = AEGfxTextureLoad("staminapotion.png");
+	AE_ASSERT_MESG(staminapotion, "cant create stamina potion texture\n");
 	//Enemy and Player should be initialized at maze
 
 	Enemy = EnemyInitialize((rand() % 2) + 0);			//change name to load
@@ -59,7 +64,7 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
-	std::cout << "Combat:Initialize" << std::endl;
+	MeshInit();		// Single init for the meshes that only need to be created once (NON RGB MESHES)
 }
 
 
@@ -70,8 +75,6 @@ void Combat_Initialize()
 */
 void Combat_Update()
 {
-
-	//std::cout << "Combat:Update" << std::endl;
 
 	RGBloop(RGBcounter);
 	CombatMesh(RGBcounter);
@@ -92,9 +95,9 @@ void Combat_Update()
 	}
 
 
-	if (keypressed == 0) {													//so i cant move whilst cooldown active
-		keypressed = Character::PlayerMovement(x, Player);								//character movement	
-		flag = keypressed;													//flag for player damage so it only counts once
+	if (keypressed == 0) {													// so i cant move whilst cooldown active
+		PlayerMovement(x, Player, keypressed);								// character movement	
+		StaminaLogic(Player, keypressed);
 	}
 
 	if (keypressed == 1) {
@@ -121,7 +124,6 @@ void Combat_Update()
 	}
 
 	flag = (x == ATTACK) ? 1 : 0;
-
 }
 
 
@@ -131,12 +133,12 @@ void Combat_Update()
 */
 void Combat_Draw()
 {
-	//std::cout << "Combat:Draw" << std::endl;
-
-	Character::RenderPlayerHealth(fontId, Player);
+	StaminaRender(Player, staminapotion);
+	RenderPlayerHealth(fontId, Player);
 	RenderEnemyHealth(fontId, Enemy);
 	GridCheck(Enemy->is_attacking, Enemy->AttackCD, Player->SAFEGRID);
 	playerrender(playertexture, Player, Character::PlayerMesh);
+	RenderPlayerGrid(playermaxhealth);
 
 	if (Enemy->AttackCD <= 0.30f)
 	{
@@ -168,5 +170,5 @@ void Combat_Unload()
 	FreeEnemyMesh();
 	AEGfxTextureUnload(playertexture);
 	AEGfxTextureUnload(enemytexture);
-	std::cout << "Combat:Unload" << std::endl;
+	AEGfxTextureUnload(staminapotion);
 }

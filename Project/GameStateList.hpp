@@ -1,6 +1,8 @@
 enum GS_STATES
 {
 	MENU = 0,
+	TUTORIAL,
+	CREDITS,
 	MAZE,
 	COMBAT,
 
