@@ -9,21 +9,22 @@ extern int maze_iswall_isnotwall[noOfRows][noOfCols]; // remove later after fini
 
 struct MazeCells
 {
-	int is_wall;
+	int is_wall = 0;
 	//int is_PlayerPos;
+	bool is_visible = 0;
 
 };
 
 struct MazeDimensions
 {
-	int noOfRows;
-	int noOfCols;
-	float mazeWindowHeight;
-	float mazeWindowWidth;
-	float cellWidth;
-	float cellHeight;
-	float MazeWindowStart_X;
-	float MazeWindowStart_Y;
+	int noOfRows = 0;
+	int noOfCols = 0;
+	float mazeWindowHeight = 0;
+	float mazeWindowWidth = 0;
+	float cellWidth = 0;
+	float cellHeight = 0;
+	float MazeWindowStart_X = 0;
+	float MazeWindowStart_Y = 0;
 
 };
 

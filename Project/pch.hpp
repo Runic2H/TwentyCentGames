@@ -15,6 +15,9 @@
 #include "GameStateList.hpp"
 #include "GameStateManager.hpp"
 #include "Menu.hpp"
+#include "Tutorial.hpp"
+#include "Credits.hpp"
+
 
 #define GRID_NUM 5;
 

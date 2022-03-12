@@ -22,25 +22,42 @@ void GSM_Update()	//only runs once when switched
 {
 	switch (current)
 	{
-	break;
-	case MENU:
-		fpLoad = Menu_Load;
-		fpInitialize = Menu_Init;
-		fpUpdate = Menu_Update;
-		fpDraw = Menu_Draw;
-		fpFree = Menu_Free;
-		fpUnload = Menu_Unload;
-		break;
+		case MENU:
+			fpLoad = Menu_Load;
+			fpInitialize = Menu_Init;
+			fpUpdate = Menu_Update;
+			fpDraw = Menu_Draw;
+			fpFree = Menu_Free;
+			fpUnload = Menu_Unload;
+			break;
 
-	case MAZE:
-		fpLoad = Maze_Load;
-		fpInitialize = Maze_Initialize;
-		fpUpdate = Maze_Update;
-		fpDraw = Maze_Draw;
-		fpFree = Maze_Free;
-		fpUnload = Maze_Unload;
-		break;
+		case TUTORIAL:
+			fpLoad = Tutorial_Load;
+			fpInitialize = Tutorial_Init;
+			fpUpdate = Tutorial_Update;
+			fpDraw = Tutorial_Draw;
+			fpFree = Tutorial_Free;
+			fpUnload = Tutorial_Unload;
+			break;
 
+		case CREDITS:
+			fpLoad = Credits_Load;
+			fpInitialize = Credits_Init;
+			fpUpdate = Credits_Update;
+			fpDraw = Credits_Draw;
+			fpFree = Credits_Free;
+			fpUnload = Credits_Unload;
+			break;
+
+		case MAZE:
+			fpLoad = Maze_Load;
+			fpInitialize = Maze_Initialize;
+			fpUpdate = Maze_Update;
+			fpDraw = Maze_Draw;
+			fpFree = Maze_Free;
+			fpUnload = Maze_Unload;
+			break;
+      
 	case COMBAT:
 		fpLoad = Combat_Load;
 		fpInitialize = Combat_Initialize;
@@ -61,13 +78,3 @@ void GSM_Update()	//only runs once when switched
 	}
 
 }
-
-
-
-	//case MENU:
-	//	fpLoad = Menu_Load;
-	//	fpInitialize = Menu_Initialize;
-	//	fpUpdate = Menu_Update;
-	//	fpDraw = Menu_Draw;
-	//	fpFree = Menu_Free;
-	//	fpUnload = Menu_Unload;
