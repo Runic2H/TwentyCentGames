@@ -37,10 +37,12 @@ c_statsheet* Player;
 void Combat_Load()
 {
 	std::cout << "Combat:Load" << std::endl;
-	playertexture = AEGfxTextureLoad("ducky.jpg");
+	//playertexture = AEGfxTextureLoad("ducky.jpg");
+	playertexture = AEGfxTextureLoad("Fighting duck.png");
 	AE_ASSERT_MESG(playertexture, "cant create duck texture\n");
 
-	enemytexture = AEGfxTextureLoad("Turtle.png");
+	//enemytexture = AEGfxTextureLoad("Turtle.png");
+	enemytexture = AEGfxTextureLoad("Angry turtle.png");
 	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
 
 	staminapotion = AEGfxTextureLoad("staminapotion.png");

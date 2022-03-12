@@ -123,16 +123,16 @@ namespace Character
 
 		//
 
+		//CHARACTER OBJECT
 		AEGfxMeshStart();
 		AEGfxTriAdd(
-			-215.0f, -25.0f, 0x00FF00FF, 0.0f, 1.0f,
-			-165.0f, -25.0f, 0x00FFFF00, 1.0f, 1.0f,
-			-215.0f, 25.0f, 0x0000FFFF, 0.0f, 0.0f);
-		//CHARACTER OBJECT
+			-220.0f, -30.0f, 0x00FF00FF, 0.0f, 1.0f,
+			-160.0f, -30.0f, 0x00FFFF00, 1.0f, 1.0f,
+			-220.0f, 30.0f, 0x0000FFFF, 0.0f, 0.0f);
 		AEGfxTriAdd(
-			-165.0f, -25.0f, 0x00FFFFFF, 1.0f, 1.0f,
-			-165.0f, 25.0f, 0x00FFFFFF, 1.0f, 0.0f,
-			-215.0f, 25.0f, 0x00FFFFFF, 0.0f, 0.0f);
+			-160.0f, -30.0f, 0x00FFFFFF, 1.0f, 1.0f,
+			-160.0f, 30.0f, 0x00FFFFFF, 1.0f, 0.0f,
+			-220.0f, 30.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
 		PlayerMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(PlayerMesh, "Failed to create character!!");
@@ -357,6 +357,7 @@ namespace Character
 	void playerrender(AEGfxTexture* playertexture, c_statsheet* player, AEGfxVertexList* playermesh) {
 
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		// Set position for object 1
 		AEGfxSetPosition(player->positionX, player->positionY);
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -583,15 +584,15 @@ namespace Enemies
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
-			75.0f, -25.0f, 0x00FF00FF, 0.0f, 1.0f,
-			125.0f, -25.0f, 0x00FFFF00, 1.0f, 1.0f,
-			75.0f, 25.0f, 0x0000FFFF, 0.0f, 0.0f);
+			70.0f, -30.0f, 0x00FF00FF, 0.0f, 1.0f,
+			130.0f, -30.0f, 0x00FFFF00, 1.0f, 1.0f,
+			70.0f, 30.0f, 0x0000FFFF, 0.0f, 0.0f);
 		//x,y,colour,u,v
 
 		AEGfxTriAdd(
-			125.0f, -25.0f, 0x00FFFFFF, 1.0f, 1.0f,
-			125.0f, 25.0f, 0x00FFFFFF, 1.0f, 0.0f,
-			75.0f, 25.0f, 0x00FFFFFF, 0.0f, 0.0f);
+			130.0f, -30.0f, 0x00FFFFFF, 1.0f, 1.0f,
+			130.0f, 30.0f, 0x00FFFFFF, 1.0f, 0.0f,
+			70.0f, 30.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
 		EnemyMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(EnemyMesh, "Failed to create character!!");
