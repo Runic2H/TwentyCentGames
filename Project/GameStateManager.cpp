@@ -67,6 +67,15 @@ void GSM_Update()	//only runs once when switched
 		fpUnload = Combat_Unload;
 		break;
 
+	case GAMEOVER:
+		fpLoad = GameOver_Load;
+		fpInitialize = GameOver_Init;
+		fpUpdate = GameOver_Update;
+		fpDraw = GameOver_Draw;
+		fpFree = GameOver_Free;
+		fpUnload = GameOver_Unload;
+		break;
+
 	case GS_RESTART:
 		break;
 
