@@ -123,7 +123,7 @@ void Combat_Update()
 		}
 	}
 
-	flag = (x == ATTACK) ? 1 : 0;
+	//flag = (x == ATTACK) ? 1 : 0;
 }
 
 

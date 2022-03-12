@@ -184,9 +184,9 @@ void MazeGenAlgo_Set_walls()
 				if (
 					maze_iswall_isnotwall[r][c] == 0 // centre cell
 					&&
-					maze_iswall_isnotwall[r-1][c-1] == 1		&& maze_iswall_isnotwall[r -1][c] == 1	&& maze_iswall_isnotwall[r - 1][c+1] == 1 &&
-					maze_iswall_isnotwall[r][c - 1] == 1												&& maze_iswall_isnotwall[r][c+1] == 1 &&
-					maze_iswall_isnotwall[r + 1][c - 1] == 1	&& maze_iswall_isnotwall[r+1][c] == 1	&& maze_iswall_isnotwall[r + 1][c+1] == 1
+					maze_iswall_isnotwall[r - 1][c - 1] == 1 && maze_iswall_isnotwall[r - 1][c] == 1 && maze_iswall_isnotwall[r - 1][c + 1] == 1 &&
+					maze_iswall_isnotwall[r][c - 1] == 1 && maze_iswall_isnotwall[r][c + 1] == 1 &&
+					maze_iswall_isnotwall[r + 1][c - 1] == 1 && maze_iswall_isnotwall[r + 1][c] == 1 && maze_iswall_isnotwall[r + 1][c + 1] == 1
 					)
 				{
 					maze_iswall_isnotwall[r][c] = 1 ;
@@ -339,62 +339,47 @@ void MAZE_CreateSolidCell2(AEGfxVertexList*& SolidCellMesh_Var, Maze_Struct* Maz
 }
 
 
-void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList*& WALLCellMesh,
-	AEGfxVertexList*& PATHCellMesh,
-	AEGfxVertexList*& CellOutlineMesh,
-	Maze_Struct* Maze)
+void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
+	AEGfxVertexList* &PATHCellMesh,
+	AEGfxVertexList* &CellOutlineMesh,
+	Maze_Struct *Maze)
 {
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	for (int r = 0; r < Maze->specifications.noOfRows; r++)
 	{
-
 		for (int c = 0; c < Maze->specifications.noOfCols; c++)
 		{
 			AEGfxSetPosition(
 				(Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth)),
 				(Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight))
 			);
-			if (Maze->grid[r][c].is_wall >= 1) // is wall
-			{
-				AEGfxMeshDraw(WALLCellMesh, AE_GFX_MDM_TRIANGLES);
-			}
-			else
-		AEGfxSetBlendMode(AE_GFX_BM_NONE);
-		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		for (int r = 0; r < Maze->specifications.noOfRows; r++)
-		{
-			for (int c = 0; c < Maze->specifications.noOfCols; c++)
-			{
-				AEGfxSetPosition(
-					(Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth)),
-					(Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight))
-				);
 
-				if (Maze->grid[r][c].is_visible)
+			if (Maze->grid[r][c].is_visible)
+			{
+				if (Maze->grid[r][c].is_wall == 1) // is wall
 				{
-					if (Maze->grid[r][c].is_wall == 1) // is wall
-					{
-						AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-						AEGfxTextureSet(wall_art, 0.0f, 0.0f);
-						AEGfxMeshDraw(WALLCellMesh, AE_GFX_MDM_TRIANGLES);
-					}
-					else
-					{
-						AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-						AEGfxTextureSet(path_art, 0.0f, 0.0f);
-						AEGfxMeshDraw(PATHCellMesh, AE_GFX_MDM_TRIANGLES);
-					}
+					AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+					AEGfxTextureSet(wall_art, 0.0f, 0.0f);
+					AEGfxMeshDraw(WALLCellMesh, AE_GFX_MDM_TRIANGLES);
 				}
-
-				AEGfxSetPosition(
-					Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth),
-					Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight)
-				);
-				AEGfxTextureSet(NULL, 0.0f, 0.0f);
-				AEGfxMeshDraw(CellOutlineMesh, AE_GFX_MDM_LINES_STRIP);
-
+				else
+				{
+					AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+					AEGfxTextureSet(path_art, 0.0f, 0.0f);
+					AEGfxMeshDraw(PATHCellMesh, AE_GFX_MDM_TRIANGLES);
+				}
 			}
+
+			AEGfxSetPosition(
+				Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth),
+				Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight)
+			);
+			AEGfxTextureSet(NULL, 0.0f, 0.0f);
+			AEGfxMeshDraw(CellOutlineMesh, AE_GFX_MDM_LINES_STRIP);
+
 		}
+	}
 }
 
 
