@@ -91,8 +91,8 @@ namespace Characters
 		extern AEGfxVertexList* EnemyGridIdle;
 		extern AEGfxVertexList* EnemyGridAttack;
 		extern AEGfxVertexList* EnemyMesh;
-    extern AEGfxVertexList* Enemymaxhealth;
-	  extern AEGfxVertexList* Enemycurrhealth;
+		extern AEGfxVertexList* Enemymaxhealth;
+		extern AEGfxVertexList* Enemycurrhealth;
 
 		enum EnemyPos { IDLE, ATTACKING };
 
