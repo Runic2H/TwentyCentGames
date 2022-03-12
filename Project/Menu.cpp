@@ -4,6 +4,7 @@
 AEGfxVertexList* Selection = 0;
 AEGfxVertexList* gamelogo = 0;
 AEGfxVertexList* duck = 0;
+AEGfxVertexList* duck1 = 0;
 AEGfxTexture* gamelogotex;
 AEGfxTexture* ducktex;
 AEGfxTexture* duckdrooltex;
@@ -32,16 +33,17 @@ void Menu_Init() {
 	// title mesh
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-			-150.0f, 50.0f, 0xFFFF0000, 0.0f, 0.0f,
-			-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
-			150.0f, 50.0f, 0xFFFFFFFF, 1.0f, 0.0f);
+		-150.0f, 50.0f, 0xFFFF0000, 0.0f, 0.0f,
+		-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
+		150.0f, 50.0f, 0xFFFFFFFF, 1.0f, 0.0f);
 	AEGfxTriAdd(
-			150.0f, 50.0f, 0xFFFF0000, 1.0f, 0.0f,
-			-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
-			150.0f, -50.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		150.0f, 50.0f, 0xFFFF0000, 1.0f, 0.0f,
+		-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
+		150.0f, -50.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 
 	gamelogo = AEGfxMeshEnd();
 	AE_ASSERT_MESG(gamelogo, "Failed to create gamelogo!\n");
+
 
 
 	// duck mesh
@@ -58,6 +60,7 @@ void Menu_Init() {
 	duck = AEGfxMeshEnd();
 	AE_ASSERT_MESG(duck, "Failed to create gamelogo!\n");
 
+
 }
 
 void Menu_Update() {
@@ -67,6 +70,11 @@ void Menu_Update() {
 	RGBcounter <= 16319434 ? flagg = 1 : flagg = flagg;
 	flagg == 1 ? RGBcounter += 150 : RGBcounter -= 150;
 
+
+	if (Selection != nullptr) {
+		AEGfxMeshFree(Selection);
+		Selection = nullptr;
+	}
 
 	AEGfxMeshStart();
 	AEGfxVertexAdd(50.0f, -25.0f, RGBcounter, 0.0f, 1.0f);
@@ -96,9 +104,9 @@ void Menu_Update() {
 		switch (choice) {
 		case 0: next = MAZE;
 			break;
-		case 1:
+		case 1: next = TUTORIAL;
 			break;
-		case 2:
+		case 2: next = CREDITS;
 			break;
 		case 3: next = GS_QUIT;
 			break;
@@ -108,9 +116,9 @@ void Menu_Update() {
 
 void Menu_Draw() {
 
-	char strBuffer[20];
+	char strBuffer[35];
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	memset(strBuffer, 0, 20 * sizeof(char));		// sets all values to 0
+	memset(strBuffer, 0, 35 * sizeof(char));		// sets all values to 0
 
 	sprintf_s(strBuffer, "START GAME");				// stores the string into strBuffer
 	AEGfxPrint(fontId, strBuffer, -0.70f, -0.25f, 1.14f, 1.f, 1.f, 1.f);
@@ -124,21 +132,28 @@ void Menu_Draw() {
 	sprintf_s(strBuffer, "EXIT GAME");				// stores the string into strBuffer
 	AEGfxPrint(fontId, strBuffer, 0.43f, -0.25f, 1.14f, 1.f, 1.f, 1.f);
 
+	sprintf_s(strBuffer, "Press SPACEBAR to select");
+	AEGfxPrint(fontId, strBuffer, -0.2f, -0.08f, 1.14f, 1.0f, 0.5f, 0.5f);
 
-	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	sprintf_s(strBuffer, "WASD for movement");
+	AEGfxPrint(fontId, strBuffer, -0.16f, -0.01f, 1.14f, 1.0f, 0.5f, 0.5f);
+
+
 	// Selection grid
-
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetPosition(posX, posY);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxMeshDraw(Selection, AE_GFX_MDM_LINES_STRIP);
 
-
 	// texture
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetPosition(0.0f, 150.0f);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxTextureSet(gamelogotex, 0.0f, 0.0f);
+	AEGfxSetTintColor(1, 1, 1, 1);
+	AEGfxSetTransparency(1);
 	AEGfxMeshDraw(gamelogo, AE_GFX_MDM_TRIANGLES);
 
 
@@ -154,8 +169,16 @@ void Menu_Draw() {
 		texcounter = 0;
 	}
 	AEGfxSetPosition(250.0f, 150.0f);
+	AEGfxSetTintColor(1, 1, 1, 1);
+	AEGfxSetTransparency(1);
 	AEGfxMeshDraw(duck, AE_GFX_MDM_TRIANGLES);
 
+	AEGfxSetPosition(-250.0f, 150.0f);
+	AEGfxSetTintColor(1, 1, 1, 1);
+	AEGfxSetTransparency(1);
+	AEGfxMeshDraw(duck, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 }
 
 void Menu_Free() {

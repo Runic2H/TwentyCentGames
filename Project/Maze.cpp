@@ -5,14 +5,18 @@ AEGfxVertexList* pMeshMazeWindow = 0;
 AEGfxVertexList* pMeshSolidSquare_PATH = 0;
 AEGfxVertexList* pMeshSolidSquare_WALL = 0;
 
+AEGfxTexture* path_art;
+AEGfxTexture* wall_art;
+AEGfxTexture* main_character_art;
+
 float MC_positionX;
 float MC_positionY;
 AEGfxVertexList* pMesh_MainCharacter = 0;
 int starting_Xposition = 7;
 int starting_Yposition = 0;
 
-Maze_Struct* Maze;
 
+Maze_Struct* Maze;
 
 int maze_iswall_isnotwall[noOfRows][noOfCols] =
 {
@@ -114,12 +118,16 @@ void MAZE_CreateSolidCell2(AEGfxVertexList*& SolidCellMesh_Var, Maze_Struct* Maz
 	AEGfxMeshStart();
 	AEGfxTriAdd(
 		0, 0, colour_HEXA, 0.0f, 1.0f,
-		0, Maze->specifications.cellHeight, colour_HEXA, 1.0f, 1.0f,
-		Maze->specifications.cellWidth, 0, colour_HEXA, 0.0f, 0.0f);
+		//0, Maze->specifications.cellHeight, colour_HEXA, 1.0f, 1.0f,
+		0, Maze->specifications.cellHeight, colour_HEXA, 0.0f, 0.0f,
+		//Maze->specifications.cellWidth, 0, colour_HEXA, 0.0f, 0.0f);
+		Maze->specifications.cellWidth, 0, colour_HEXA, 1.0f, 1.0f);
 	AEGfxTriAdd(
-		0, Maze->specifications.cellHeight, colour_HEXA, 1.0f, 1.0f,
+		//0, Maze->specifications.cellHeight, colour_HEXA, 1.0f, 1.0f,
+		0, Maze->specifications.cellHeight, colour_HEXA, 0.0f, 0.0f,
 		Maze->specifications.cellWidth, Maze->specifications.cellHeight, colour_HEXA, 1.0f, 0.0f,
-		Maze->specifications.cellWidth, 0, colour_HEXA, 0.0f, 0.0f);
+		//Maze->specifications.cellWidth, 0, colour_HEXA, 0.0f, 0.0f);
+		Maze->specifications.cellWidth, 0, colour_HEXA, 1.0f, 1.0f);
 	SolidCellMesh_Var = AEGfxMeshEnd();
 }
 
@@ -129,32 +137,42 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList*& WALLCellMesh,
 	AEGfxVertexList*& CellOutlineMesh,
 	Maze_Struct* Maze)
 {
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	for (int r = 0; r < Maze->specifications.noOfRows; r++)
-	{
-		for (int c = 0; c < Maze->specifications.noOfCols; c++)
+		AEGfxSetBlendMode(AE_GFX_BM_NONE);
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		for (int r = 0; r < Maze->specifications.noOfRows; r++)
 		{
-			AEGfxSetPosition(
-				(Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth)),
-				(Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight))
-			);
-			if (Maze->grid[r][c].is_wall == 1) // is wall
+			for (int c = 0; c < Maze->specifications.noOfCols; c++)
 			{
-				AEGfxMeshDraw(WALLCellMesh, AE_GFX_MDM_TRIANGLES);
-			}
-			else
-			{
-				AEGfxMeshDraw(PATHCellMesh, AE_GFX_MDM_TRIANGLES);
-			}
+				AEGfxSetPosition(
+					(Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth)),
+					(Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight))
+				);
 
-			AEGfxSetPosition(
-				Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth),
-				Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight)
-			);
-			AEGfxMeshDraw(CellOutlineMesh, AE_GFX_MDM_LINES_STRIP);
+				if (Maze->grid[r][c].is_visible)
+				{
+					if (Maze->grid[r][c].is_wall == 1) // is wall
+					{
+						AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+						AEGfxTextureSet(wall_art, 0.0f, 0.0f);
+						AEGfxMeshDraw(WALLCellMesh, AE_GFX_MDM_TRIANGLES);
+					}
+					else
+					{
+						AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+						AEGfxTextureSet(path_art, 0.0f, 0.0f);
+						AEGfxMeshDraw(PATHCellMesh, AE_GFX_MDM_TRIANGLES);
+					}
+				}
 
+				AEGfxSetPosition(
+					Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth),
+					Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight)
+				);
+				AEGfxTextureSet(NULL, 0.0f, 0.0f);
+				AEGfxMeshDraw(CellOutlineMesh, AE_GFX_MDM_LINES_STRIP);
+
+			}
 		}
-	}
 }
 
 
@@ -174,15 +192,19 @@ void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_
 	//light blue: 0x0000FFFF
 
 	AEGfxTriAdd( //This triangle is colorful, blends 3 colours wowza
-		-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink 
+		//-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink 
+		-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 0.0f, 1.0f, //pink 
 		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
-		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
+		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
+		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
 
 
 	AEGfxTriAdd(
 		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
-		(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink
-		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
+		//(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink
+		(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 0.0f, //pink
+		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
+		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
 
 	pMesh_MainCharacter = AEGfxMeshEnd();
 	AE_ASSERT_MESG(pMesh_MainCharacter, "Failed to create main character!!");
@@ -190,10 +212,10 @@ void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_
 
 void MAZE_DrawingMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float MC_positionX, float MC_positionY)
 {
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetPosition(MC_positionX, MC_positionY);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxTextureSet(main_character_art, 0, 0);
 	AEGfxMeshDraw(pMesh_MainCharacter, AE_GFX_MDM_TRIANGLES);
 }
 
@@ -204,56 +226,56 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 	case 1: // move up aka y+1 
 		if (Maze->grid[Char_Pos_X][Char_Pos_Y + 1].is_wall != 1 && (Char_Pos_Y + 1) < Maze->specifications.noOfRows)
 		{
-			std::cout << "Can move up" << "\n";
+			//std::cout << "Can move up" << "\n";
 			Char_Pos_Y++;
 			return 1;
 		}
 		else
 		{
-			std::cout << "Cant move up to :" << Char_Pos_X << "-" << Char_Pos_Y + 1
-				<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y + 1].is_wall << "\n";
+			//std::cout << "Cant move up to :" << Char_Pos_X << "-" << Char_Pos_Y + 1
+				//<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y + 1].is_wall << "\n";
 			return 0;
 		}
 		break;
 	case 2: // move left aka x-1
 		if (Maze->grid[Char_Pos_X - 1][Char_Pos_Y].is_wall != 1 && (Char_Pos_X - 1) >= 0)
 		{
-			std::cout << "Can move left" << "\n";
+			//std::cout << "Can move left" << "\n";
 			Char_Pos_X--;
 			return 1;
 		}
 		else
 		{
-			std::cout << "Cant move left to :" << Char_Pos_X - 1 << "-" << Char_Pos_Y
-				<< "because :" << Maze->grid[Char_Pos_X - 1][Char_Pos_Y].is_wall << "\n";
+			//std::cout << "Cant move left to :" << Char_Pos_X - 1 << "-" << Char_Pos_Y
+				//<< "because :" << Maze->grid[Char_Pos_X - 1][Char_Pos_Y].is_wall << "\n";
 			return 0;
 		}
 		break;
 	case 3: // move down aka y-1
 		if (Maze->grid[Char_Pos_X][Char_Pos_Y - 1].is_wall != 1 && (Char_Pos_Y - 1) >= 0)
 		{
-			std::cout << "Can move down" << "\n";
+			//std::cout << "Can move down" << "\n";
 			Char_Pos_Y--;
 			return 1;
 		}
 		else
 		{
-			std::cout << "Cant move down to :" << Char_Pos_X << "-" << Char_Pos_Y - 1
-				<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y - 1].is_wall << "\n";
+			//std::cout << "Cant move down to :" << Char_Pos_X << "-" << Char_Pos_Y - 1
+				//<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y - 1].is_wall << "\n";
 			return 0;
 		}
 		break;
 	case 4: // move right aka x+1
 		if (Maze->grid[Char_Pos_X + 1][Char_Pos_Y].is_wall != 1 && (Char_Pos_X + 1) < Maze->specifications.noOfCols)
 		{
-			std::cout << "Can move right" << "\n";
+			//std::cout << "Can move right" << "\n";
 			Char_Pos_X++;
 			return 1;
 		}
 		else
 		{
-			std::cout << "Cant move right to :" << Char_Pos_X + 1 << "-" << Char_Pos_Y
-				<< "because :" << Maze->grid[Char_Pos_X + 1][Char_Pos_Y].is_wall << "\n";
+			//std::cout << "Cant move right to :" << Char_Pos_X + 1 << "-" << Char_Pos_Y
+				//<< "because :" << Maze->grid[Char_Pos_X + 1][Char_Pos_Y].is_wall << "\n";
 			return 0;
 		}
 		break;
@@ -261,6 +283,32 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 	default: return 0;
 	}
 
+}
+
+void MAZE_FogOfWar(int starting_Xposition, int starting_Yposition)
+{
+	std::cout << "\n\nPlayer's position x: " << starting_Xposition << "\n";
+	std::cout << "Player's position y: " << starting_Yposition << "\n";
+
+
+	//+1 -1 of player's position
+	for (int a = -1; a < 2; ++a)
+	{
+		for (int b = -1; b < 2; ++b)
+		{
+			//check if the grid is within the boundaries
+			if ( (starting_Yposition + b) >= 0 &&
+				 (starting_Yposition + b) < Maze->specifications.noOfRows &&
+				 (starting_Xposition + a) >= 0 &&
+				 (starting_Xposition + a) < Maze->specifications.noOfCols)
+			{
+				//grids surrounding player will be visible	
+				Maze->grid[starting_Xposition+a][starting_Yposition+b].is_visible = 1;
+
+				std::cout << "position x: " << (starting_Xposition+b) << "     position y: " << (starting_Yposition+a) << " is visible.\n\n";
+			}
+		}
+	}
 }
 
 
@@ -272,6 +320,14 @@ void Maze_Load()
 {
 	std::cout << "Maze:Load" << std::endl;
 
+	wall_art = AEGfxTextureLoad("Wall.png");
+	AE_ASSERT_MESG(wall_art, "Failed to create wall texture!\n");
+
+	path_art = AEGfxTextureLoad("Pond.png");
+	AE_ASSERT_MESG(path_art, "Failed to create path texture!\n");
+
+	main_character_art = AEGfxTextureLoad("Map duck.png");
+	AE_ASSERT_MESG(main_character_art, "Failed to create path texture!\n");
 }
 
 
@@ -356,6 +412,13 @@ void Maze_Update()
 		}
 	}
 
+	MAZE_FogOfWar(starting_Xposition, starting_Yposition);
+
+	//go back to MENU
+	if (AEInputCheckTriggered(AEVK_Q))
+	{
+		next = MENU;
+	}
 }
 
 
@@ -374,9 +437,17 @@ void Maze_Draw()
 	);
 
 
-
+	//must draw
 	MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
 	MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
+
+	char strBuffer[100];
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetPosition(0.0f, 0.0f);
+	AEGfxTextureSet(NULL, 0, 0); // No texture for object
+	sprintf_s(strBuffer, "Press Q to go back to the main menu");
+	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
 }
 
 

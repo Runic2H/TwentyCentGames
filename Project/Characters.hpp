@@ -9,6 +9,7 @@
 
 namespace Characters
 {
+
 	/******************************************************
 	*
 	* PLAYER
@@ -17,11 +18,13 @@ namespace Characters
 	namespace Character
 	{
 		extern AEGfxVertexList* Player1Grid;
-		extern AEGfxVertexList* Player2Grid;
-		extern AEGfxVertexList* Player3Grid;
-		extern AEGfxVertexList* Player4Grid;
-		extern AEGfxVertexList* Player5Grid;
-		extern AEGfxVertexList* PlayerMesh;
+    extern AEGfxVertexList* Player2Grid;
+    extern AEGfxVertexList* Player3Grid;
+    extern AEGfxVertexList* Player4Grid;
+    extern AEGfxVertexList* Player5Grid;
+    extern AEGfxVertexList* PlayerMesh;
+    extern AEGfxVertexList* playermaxhealth;	//PLAYER HEALTH MESH
+    extern AEGfxVertexList* playercurrhealth;
 
 		enum PlayerPos { ORIGIN, TOP, BACK, DOWN, ATTACK };
 
@@ -34,6 +37,11 @@ namespace Characters
 			int positionID;
 			int SAFEGRID;
 			int health;
+      int staminacount;
+      int staminamax;
+      float staminaCD;
+      float staminaX;
+      int maxhealth;
 			int damage;
 			int playerCD;
 			bool is_attacking;
@@ -44,6 +52,8 @@ namespace Characters
 			int PlayerLevel;
 		};
 
+	  void PlayerMovement(int& x, c_statsheet* player, int& keypressed);
+
 		c_statsheet* c_initialize();
 
 		void CombatMesh(int RGBcounter);
@@ -53,6 +63,14 @@ namespace Characters
 		void FreePlayerMesh();
 
 		int PlayerMovement(int& x, c_statsheet* player);
+
+    void FreePlayerMeshOnUpdate();
+
+    void MeshInit();
+
+    void StaminaRender(c_statsheet* Player, AEGfxTexture* staminapotion);
+
+    void StaminaLogic(c_statsheet* Player, int const& keypressed);
 
 		bool PlayerLevelUp(c_statsheet* player);
 
@@ -75,6 +93,8 @@ namespace Characters
 		extern AEGfxVertexList* EnemyGridIdle;
 		extern AEGfxVertexList* EnemyGridAttack;
 		extern AEGfxVertexList* EnemyMesh;
+    extern AEGfxVertexList* Enemymaxhealth;
+	  extern AEGfxVertexList* Enemycurrhealth;
 
 		enum EnemyPos { IDLE, ATTACKING };
 
@@ -101,7 +121,7 @@ namespace Characters
 		E_StatSheet* EnemyInitialize(int EnemyType);
 
 		void EnemyCombatMesh();
-
+  
 		void RenderEnemyGrid(AEGfxVertexList* EnemyMesh);
 
 		void FreeEnemyMesh();
