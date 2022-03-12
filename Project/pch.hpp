@@ -17,6 +17,7 @@
 #include "Menu.hpp"
 #include "Tutorial.hpp"
 #include "Credits.hpp"
+#include "gameover.hpp"
 
 
 #define GRID_NUM 5;
