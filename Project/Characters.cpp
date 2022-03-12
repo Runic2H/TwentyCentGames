@@ -30,6 +30,7 @@ namespace Characters
 			c_stats->PlayerLevel = 1;
 			c_stats->PlayerXP = 0;
 			c_stats->health = 100;								//health
+			c_stats->maxhealth = 100;
 			c_stats->positionID = 1;							//starting grid
 			c_stats->SAFEGRID = 1;								//starting SAFEGRID pos
 			c_stats->damage = 10;								  //damage
@@ -179,11 +180,11 @@ namespace Characters
 
 					if (Player->status == FROSTED)
 					{
-						Player->staminaCD = 1.5f;
+						Player->staminaCD = 1.0f;
 					}
 					else
 					{
-						Player->staminaCD = 1.0f;	// resets the playerCD
+						Player->staminaCD = 0.8f;	// resets the playerCD
 					}
 					++Player->staminacount;
 				}
@@ -312,13 +313,14 @@ namespace Characters
 				AEInputCheckTriggered(AEVK_S) ? x = DOWN : x = x;	//ID Should be 3
 				AEInputCheckTriggered(AEVK_D) ? x = ATTACK : x = x;	//ID Should be 4
 
+				player->movementdt = 0.5f;
+
 				switch (x) {
 
 				case ATTACK:	//ATTACK GRID
 					player->positionID = ATTACK;
 					player->positionX = 145.0f;
 					player->positionY = 0.0f;
-					player->movementdt = 0.80f;
 					player->is_attacking = true;
 					keypressed = 1;
 					break;
@@ -327,7 +329,6 @@ namespace Characters
 					player->positionID = TOP;
 					player->positionX = 0.0f;
 					player->positionY = 110.0f;
-					player->movementdt = 0.5f;
 					player->is_attacking = false;
 					keypressed = 1;
 					break;
@@ -336,7 +337,6 @@ namespace Characters
 					player->positionID = BACK;
 					player->positionX = -110.0f;
 					player->positionY = 0.8f;
-					player->movementdt = 0.5f;
 					player->is_attacking = false;
 					keypressed = 1;
 					break;
@@ -345,7 +345,6 @@ namespace Characters
 					player->positionID = DOWN;
 					player->positionX = 0.0f;
 					player->positionY = -110.0f;
-					player->movementdt = 0.5f;
 					player->is_attacking = false;
 					keypressed = 1;
 					break;
@@ -450,6 +449,7 @@ namespace Characters
 
 			char strBufferStatus[100];
 			memset(strBufferStatus, 0, 100 * sizeof(char));
+
 			switch (Player->status)
 			{
 			case FROSTED:
@@ -463,27 +463,15 @@ namespace Characters
 				break;
 			}
 
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxPrint(font, strBufferHealth, -0.95f, -0.95f, 1.0f, 1.f, 1.f, 1.f);
-			AEGfxPrint(font, strBufferLevel, -0.95f, -0.85f, 1.0f, 1.f, 1.f, 1.f);
-			AEGfxPrint(font, strBufferStatus, -0.95f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
-			AEGfxSetBlendMode(AE_GFX_BM_NONE);
-
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxPrint(font, strBuffer, -0.95f, -0.85f, 1.14f, 1.f, 1.f, 1.f);
-
-			sprintf_s(strBuffer, "Stamina: %d", Player->staminacount);
-			AEGfxPrint(font, strBuffer, -0.10f, -0.80f, 1.14f, 1.0f, 1.0f, 1.0f);
-			AEGfxSetBlendMode(AE_GFX_BM_NONE);
-
 			if (playercurrhealth != nullptr) {
 				AEGfxMeshFree(playercurrhealth);
 				playercurrhealth = nullptr;
 			}
 
-			float healthscale = (float)(Player->health / Player->maxhealth);
+			float healthscale = (float)Player->health / Player->maxhealth;
 
 			AEGfxMeshStart();
+
 			AEGfxTriAdd(
 				-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
 				-390.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
@@ -503,6 +491,15 @@ namespace Characters
 			AEGfxTextureSet(NULL, 0, 0);
 			AEGfxMeshDraw(playercurrhealth, AE_GFX_MDM_TRIANGLES);
 			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxPrint(font, strBufferHealth, -0.95f, -0.95f, 1.0f, 1.f, 1.f, 1.f);
+			AEGfxPrint(font, strBufferLevel, -0.95f, -0.85f, 1.0f, 1.f, 1.f, 1.f);
+			AEGfxPrint(font, strBufferStatus, -0.95f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
+			sprintf_s(strBuffer, "Stamina: %d", Player->staminacount);
+			AEGfxPrint(font, strBuffer, -0.10f, -0.80f, 1.14f, 1.0f, 1.0f, 1.0f);
+			AEGfxSetBlendMode(AE_GFX_BM_NONE);
+
 		}
 	}
 
@@ -517,8 +514,8 @@ namespace Characters
 		AEGfxVertexList* EnemyGridIdle = 0;
 		AEGfxVertexList* EnemyGridAttack = 0;
 		AEGfxVertexList* EnemyMesh = 0;
-    AEGfxVertexList* Enemymaxhealth = 0;
-	  AEGfxVertexList* Enemycurrhealth = 0;
+		AEGfxVertexList* Enemymaxhealth = 0;
+		AEGfxVertexList* Enemycurrhealth = 0;
 
 		E_StatSheet* EnemyInitialize(int EnemyType)
 		{
@@ -745,7 +742,7 @@ namespace Characters
 		void RenderEnemyHealth(s8 font, E_StatSheet* Enemy)
 		{
 			char strBufferHealth[100];
-			char strBuffer[100];
+			//char strBuffer[100];
 			memset(strBufferHealth, 0, 100 * sizeof(char));
 			sprintf_s(strBufferHealth, "Enemy Health:  %d", Enemy->health);
 
@@ -764,8 +761,6 @@ namespace Characters
 				sprintf_s(strBufferType, "Enemy Type: Frost");
 				break;
 			}
-
-
 
 		if (Enemycurrhealth != nullptr) {
 			AEGfxMeshFree(Enemycurrhealth);
@@ -799,7 +794,6 @@ namespace Characters
 			AEGfxPrint(font, strBufferHealth, 0.60f, -0.95f, 1.0f, 1.f, 1.f, 1.f);
 			AEGfxPrint(font, strBufferLevel, 0.60f, -0.85f, 1.0f, 1.f, 1.f, 1.f);
 			AEGfxPrint(font, strBufferType, 0.60f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
-			AEGfxPrint(font, strBuffer, 0.60f, -0.85f, 1.14f, 1.f, 1.f, 1.f);
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
 		}
 	}

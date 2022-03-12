@@ -137,11 +137,10 @@ void Combat_Update()
 void Combat_Draw()
 {
 	StaminaRender(Player, staminapotion);
-	RenderPlayerHealth(fontId, Player);
 	RenderEnemyHealth(fontId, Enemy);
+	RenderPlayerHealth(fontId, Player);
 	GridCheck(Enemy->is_attacking, Enemy->AttackCD, Player->SAFEGRID);
 	playerrender(playertexture, Player, Character::PlayerMesh);
-	RenderPlayerGrid(playermaxhealth);
 
 	if (Enemy->AttackCD <= 0.30f)
 	{
