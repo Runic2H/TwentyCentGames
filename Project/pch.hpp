@@ -1,6 +1,6 @@
 #ifndef PCH_H
 #define PCH_H
-
+//
 
 #include <iostream>
 #include <string>
@@ -20,13 +20,6 @@
 
 
 #endif	//PCH.H
-
-
-//#define ORIGIN 0;
-//#define TOP 1;
-//#define BACK 2;
-//#define DOWN 3;
-//#define ATTACK 4;
 
 #define GRID_NUM 5;
 

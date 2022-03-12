@@ -1,3 +1,5 @@
+// gameover.hpp
+
 void GameOver_Load();
 
 void GameOver_Init();

@@ -1,5 +1,5 @@
 #include "pch.hpp"
-
+// 
 
 namespace Character
 {
@@ -149,7 +149,6 @@ namespace Character
 			-20.0f, -20.0f, 0x00FFFFFF, 0.0f, 1.0f,
 			-20.0f,  20.0f, 0x00FFFFFF, 0.0f, 0.0f,
 			 20.0f,  20.0f, 0x00FFFFFF, 1.0f, 0.0f);
-
 
 		playerstamina = AEGfxMeshEnd();
 		AE_ASSERT_MESG(playerstamina, "Failed to create stamina mesh!!");
