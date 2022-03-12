@@ -8,8 +8,10 @@ AEGfxVertexList* pMeshSolidSquare_WALL = 0;
 float MC_positionX;
 float MC_positionY;
 AEGfxVertexList* pMesh_MainCharacter = 0;
-int starting_Xposition = 7;
-int starting_Yposition = 0;
+int curr_X_GRIDposition;
+int curr_Y_GRIDposition;
+float contact_rate = 0.5f;
+
 
 Maze_Struct* Maze;
 
@@ -51,6 +53,54 @@ int maze_iswall_isnotwall[noOfRows][noOfCols]={
 	
 };
 */
+
+void Maze_EnemySpawn(float contact_rate)
+{
+	// count how many paths there are
+	std::vector<int> path_x;
+	std::vector<int> path_y;
+
+	for (int r = 0; r < noOfRows; r++)
+	{
+		for (int c = 0; c < noOfCols; c++)
+		{
+			if (maze_iswall_isnotwall[r][c] == 0)
+			{
+				if ((r == start_x && c == start_y))
+				{
+					
+				}
+				else if (r == end_x && c == end_y)
+				{
+
+				}
+				else
+				{
+					path_x.push_back(r);
+					path_y.push_back(c);
+				}
+			}
+		}
+	}
+
+	int no_of_battles = (int)(path_x.size() * contact_rate);
+	std::cout << no_of_battles<<"out of "<< path_x.size() << std::endl;
+	
+	int rand_index;
+
+	srand(time(NULL));
+	while (no_of_battles > 0)
+	{
+		int rand_index = rand() % path_x.size();
+
+		maze_iswall_isnotwall[path_x[rand_index]][path_y[rand_index]] = 9;
+
+		path_x.erase(path_x.begin() + rand_index);
+		path_y.erase(path_y.begin() + rand_index);
+		no_of_battles--;
+	}
+	
+}
 
 
 void MazeGenAlgo_MakeMaze()
@@ -94,8 +144,8 @@ void MazeGenAlgo_ChoosingStartingPos(int& startX, int& startY, int& endX, int& e
 	maze_iswall_isnotwall[start_x][start_y] = 0;
 	maze_iswall_isnotwall[end_x][end_y] = 0;
 
-	starting_Xposition = startX;
-	starting_Yposition = starting_Yposition;
+	curr_X_GRIDposition = startX;
+	curr_Y_GRIDposition = startY;
 }
 
 void MazeGenAlgo_Set_walls()
@@ -198,7 +248,7 @@ void  MazeGenAlgo_PrintRetrievedInformation()
 {
 	std::cout << "Width " << noOfCols << std::endl;
 	std::cout << "Height " << noOfRows << std::endl;
-	for (int rows = 0; rows < noOfRows; rows++)
+	for (int rows = noOfRows-1; rows >=0; rows--)
 	{
 		for (int cols = 0; cols < noOfCols; cols++)
 		{
@@ -223,8 +273,8 @@ bool MazeGenAlgo_PostGenCheck() // checks if the center col is not ALL PATH, ret
 {
 	for (int i = 0; i < noOfRows; i++)
 	{
-		std::cout << maze_iswall_isnotwall[starting_Xposition][i];
-		if (maze_iswall_isnotwall[starting_Xposition][i] == 1)
+		std::cout << maze_iswall_isnotwall[curr_X_GRIDposition][i];
+		if (maze_iswall_isnotwall[curr_X_GRIDposition][i] == 1)
 		{
 			return true;
 		}
@@ -346,7 +396,7 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList*& WALLCellMesh,
 				(Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth)),
 				(Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight))
 			);
-			if (Maze->grid[r][c].is_wall >= 1) // is wall
+			if (Maze->grid[r][c].is_wall == 1) // is wall
 			{
 				AEGfxMeshDraw(WALLCellMesh, AE_GFX_MDM_TRIANGLES);
 			}
@@ -495,8 +545,10 @@ void Maze_Load()
 */
 void Maze_Initialize()
 {
-	MazeGenAlgo();
 	std::cout << "Maze:Initialize" << std::endl;
+	MazeGenAlgo();
+	Maze_EnemySpawn(contact_rate);
+	MazeGenAlgo_PrintRetrievedInformation();
 	Maze = CreateMaze(AEGetWindowHeight(), AEGetWindowWidth(), noOfRows, noOfCols);
 
 	MAZE_CreateMESH_MazeWindow2(pMeshMazeWindow, Maze, 0xFF0000);
@@ -505,9 +557,9 @@ void Maze_Initialize()
 	MAZE_CreateSolidCell2(pMeshSolidSquare_PATH, Maze, 0x808080);
 	MAZE_CreateMainCharacter(pMesh_MainCharacter, Maze->specifications.cellHeight, Maze->specifications.cellWidth);
 
-	MC_positionX = Maze->specifications.MazeWindowStart_X + (Maze->specifications.cellWidth / 2) + (starting_Xposition * Maze->specifications.cellWidth);
+	MC_positionX = Maze->specifications.MazeWindowStart_X + (Maze->specifications.cellWidth / 2) + (curr_X_GRIDposition * Maze->specifications.cellWidth);
 
-	MC_positionY = Maze->specifications.MazeWindowStart_Y + (Maze->specifications.cellHeight / 2) + (starting_Yposition * Maze->specifications.cellHeight);
+	MC_positionY = Maze->specifications.MazeWindowStart_Y + (Maze->specifications.cellHeight / 2) + (curr_Y_GRIDposition * Maze->specifications.cellHeight);
 	std::cout << "X : " << MC_positionX << " --- Y : " << MC_positionY << std::endl;
 }
 
@@ -523,45 +575,45 @@ void Maze_Update()
 
 	if (AEInputCheckTriggered(AEVK_W))
 	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(1, Maze, starting_Xposition, starting_Yposition) == 1)
+		if (MAZE_CharMoveCHECK_NEXT_POS(1, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 		{
 			MC_positionY += Maze->specifications.cellHeight;
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
+				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 		}
 	}
 
 	if (AEInputCheckTriggered(AEVK_S))
 	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(3, Maze, starting_Xposition, starting_Yposition) == 1)
+		if (MAZE_CharMoveCHECK_NEXT_POS(3, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 		{
 			MC_positionY -= Maze->specifications.cellHeight;
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
+				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 		}
 	}
 
 
 	if (AEInputCheckTriggered(AEVK_A))
 	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(2, Maze, starting_Xposition, starting_Yposition) == 1)
+		if (MAZE_CharMoveCHECK_NEXT_POS(2, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 		{
 
 			MC_positionX -= Maze->specifications.cellWidth;
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
+				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
 		}
 	}
 
 	if (AEInputCheckTriggered(AEVK_D))
 	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(4, Maze, starting_Xposition, starting_Yposition) == 1)
+		if (MAZE_CharMoveCHECK_NEXT_POS(4, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 		{
 
 			MC_positionX += Maze->specifications.cellWidth;
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
+				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 		}
 	}
 

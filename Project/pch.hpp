@@ -6,6 +6,7 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
+#include <random>
 #include "AEEngine.h"
 #include "Systems.hpp"
 #include "Characters.hpp"
@@ -21,6 +22,10 @@
 #define DT (f32)AEFrameRateControllerGetFrameTime();
 
 extern s8 fontId;
+
+//
+//Maze_Struct* Maze;
+//int maze_init_flag =0;
 
 #endif	//PCH.H
 
