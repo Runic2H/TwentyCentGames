@@ -394,6 +394,7 @@ namespace Characters
 		void playerrender(AEGfxTexture* playertexture, c_statsheet* player, AEGfxVertexList* playermesh) {
 
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			// Set position for object 1
 			AEGfxSetPosition(player->positionX, player->positionY);
 			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
