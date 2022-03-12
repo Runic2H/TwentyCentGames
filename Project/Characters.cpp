@@ -394,6 +394,7 @@ namespace Characters
 		void playerrender(AEGfxTexture* playertexture, c_statsheet* player, AEGfxVertexList* playermesh) {
 
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			// Set position for object 1
 			AEGfxSetPosition(player->positionX, player->positionY);
 			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -536,8 +537,8 @@ namespace Characters
 			switch (EnemyType)
 			{
 			case NORMAL:
-				E_Stats->health = 10;
-				E_Stats->maxhealth = 10;
+				E_Stats->health = 40;
+				E_Stats->maxhealth = 40;
 				E_Stats->damage = 10;
 				E_Stats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
 				E_Stats->EnemyXP = 20;
@@ -545,7 +546,7 @@ namespace Characters
 			case ICE:
 				E_Stats->health = 50;
 				E_Stats->maxhealth = 50;
-				E_Stats->damage = 20;
+				E_Stats->damage = 35;
 				E_Stats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
 				E_Stats->DebuffCounter = 0;
 				E_Stats->EnemyXP = 100;

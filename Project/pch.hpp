@@ -25,5 +25,13 @@
 
 extern s8 fontId;
 
+
+extern Maze_Struct* Maze;
+
+extern int maze_init_flag;
+extern int curr_X_GRIDposition;
+extern int curr_Y_GRIDposition;
+
+
 #endif	//PCH.H
 
