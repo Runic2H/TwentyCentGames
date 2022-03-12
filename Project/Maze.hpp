@@ -34,6 +34,17 @@ struct Maze_Struct
 	MazeDimensions specifications;
 };
 
+
+/* FOR MAZEGEN */
+/*==================================================================================*/
+void MazeGenAlgo_MakeMaze();
+void MazeGenAlgo_ChoosingStartingPos(int& startX, int& startY, int& endX, int& endY, int height, int width);
+void MazeGenAlgo_Set_walls();
+void MazeGenAlgo_PrintRetrievedInformation();
+bool MazeGenAlgo_PostGenCheck();
+void MazeGenAlgo();
+/*========================================================================================*/
+
 Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows, int noOfCols);
 
 void MAZE_CreateMESH_MazeWindow2(AEGfxVertexList*& MazeWindow_Var, Maze_Struct* Maze, int colour_HEXA);

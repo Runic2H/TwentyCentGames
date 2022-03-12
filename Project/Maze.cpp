@@ -13,27 +13,26 @@ int starting_Yposition = 0;
 
 Maze_Struct* Maze;
 
+/* FOR MAZEGEN */
+/*==================================================================================*/
 
-int maze_iswall_isnotwall[noOfRows][noOfCols] =
+int start_x, start_y, end_x, end_y;
+
+const int initial_wallcells_count = (((noOfCols - 2) - 1) / 2) * (((noOfRows - 2) - 1) / 2);
+
+struct wallXY
 {
-	/*
-	1,1,1,1,1, 1,1,0,1,1, 1,1,1,1,1,
-	1,0,0,0,1, 0,0,0,0,0, 0,0,0,0,1,
-	1,0,1,0,1, 0,1,1,1,1, 1,0,1,1,1,
-	1,0,1,0,1, 0,0,0,1,0, 1,0,0,0,1,
-	1,0,1,1,1, 1,1,0,1,0, 1,1,1,0,1,
-	1,0,1,0,0, 0,0,0,1,0, 0,0,1,0,1,
-	1,0,1,0,1, 1,1,1,1,1, 1,0,1,1,1,
-	1,0,0,0,1, 0,0,0,0,0, 1,0,0,0,1,
-	1,0,1,1,1, 0,1,1,1,0, 1,0,1,0,1,
-	1,0,1,0,0, 0,1,0,1,0, 0,0,1,0,1,
-	1,0,1,0,1, 1,1,0,1,1, 1,1,1,0,1,
-	1,0,0,0,1, 0,0,0,1,0, 0,0,1,0,1,
-	1,1,1,1,1, 0,1,0,1,0, 1,0,1,0,1,
-	1,0,0,0,0, 0,1,0,0,0, 1,0,0,0,1,
-	1,1,1,1,1, 1,1,0,1,1, 1,1,1,1,1
-	*/
+	int x;
+	int y;
+};
 
+std::vector<wallXY> MazeOGWalls_XY;
+
+int maze_iswall_isnotwall[noOfRows][noOfCols];
+/*
+int maze_iswall_isnotwall[noOfRows][noOfCols]={
+
+	
 	1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1,
 	1,0,0,0,0, 0,0,0,0,0, 0,0,1,0,1,
 	1,0,1,1,1, 1,1,0,1,1, 1,0,1,0,1,
@@ -41,7 +40,7 @@ int maze_iswall_isnotwall[noOfRows][noOfCols] =
 	1,1,1,1,1, 0,1,1,1,0, 1,1,1,0,1,
 	1,0,0,0,1, 0,1,0,0,0, 1,0,0,0,1,
 	1,0,1,0,1, 0,1,0,1,1, 1,0,1,1,1,
-	0,0,1,0,0, 0,1,0,1,0, 0,0,0,0,0,
+	0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
 	1,0,1,1,1, 1,1,0,1,1, 1,1,1,0,1,
 	1,0,1,0,0, 0,1,0,0,0, 1,0,0,0,1,
 	1,0,1,1,1, 0,1,1,1,0, 1,0,1,1,1,
@@ -49,10 +48,218 @@ int maze_iswall_isnotwall[noOfRows][noOfCols] =
 	1,0,1,0,1, 1,1,0,1,1, 1,1,1,0,1,
 	1,0,1,0,0, 0,1,0,0,0, 0,0,0,0,1,
 	1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1
-
+	
 };
+*/
 
 
+void MazeGenAlgo_MakeMaze()
+{
+	// draw the walls 
+	for (int r = 0; r < noOfRows; r++)
+	{
+		for (int c = 0; c < noOfCols; c++)
+		{
+
+			if (r == 0 || r == noOfRows - 1)
+			{
+				maze_iswall_isnotwall[r][c] = 1;
+			}
+			else if (c == 0 || c == noOfCols - 1)
+			{
+				maze_iswall_isnotwall[r][c] = 1;
+			}
+			else if ((r % 2 == 0) && (c % 2 == 0))
+			{
+				maze_iswall_isnotwall[r][c] = 7;
+				wallXY p = { r,c };
+				MazeOGWalls_XY.push_back(p);
+			}
+			else
+			{
+				maze_iswall_isnotwall[r][c] = 0;
+			}
+		}
+	}
+}
+
+void MazeGenAlgo_ChoosingStartingPos(int& startX, int& startY, int& endX, int& endY, int height, int width)
+{
+	startX = ((width - 2) - 1) / 2 + 1;
+	startY = 0;
+
+	endX = startX;
+	endY = height - 1;
+
+	maze_iswall_isnotwall[start_x][start_y] = 0;
+	maze_iswall_isnotwall[end_x][end_y] = 0;
+
+	starting_Xposition = startX;
+	starting_Yposition = starting_Yposition;
+}
+
+void MazeGenAlgo_Set_walls()
+{
+	//std::cout << initial_wallcells_count << std::endl;
+	srand(time(NULL));
+
+
+	while (MazeOGWalls_XY.size() != 0)
+	{
+		int wall_counter = 0;
+		int rand_index = rand() % MazeOGWalls_XY.size();
+
+		//std::cout << "rand x is " << MazeOGWalls_XY[rand_index].x << std::endl;
+		//std::cout << "rand y is " << MazeOGWalls_XY[rand_index].y << std::endl;
+		//std::cout << MazeOGWalls_XY.size() << "left" << std::endl << "------------" << std::endl;
+
+		int wall_flag[4] = { 0,0,0,0 };
+		if (maze_iswall_isnotwall[MazeOGWalls_XY[rand_index].x][MazeOGWalls_XY[rand_index].y - 1] != 0) { wall_flag[0] = 1; wall_counter++; } 	// UP 
+		else if (maze_iswall_isnotwall[MazeOGWalls_XY[rand_index].x - 1][MazeOGWalls_XY[rand_index].y] != 0) { wall_flag[1] = 1;  wall_counter++; }// LEFT
+		else if (maze_iswall_isnotwall[MazeOGWalls_XY[rand_index].x + 1][MazeOGWalls_XY[rand_index].y] != 0) { wall_flag[2] = 1;  wall_counter++; }// RIGHT
+		else if (maze_iswall_isnotwall[MazeOGWalls_XY[rand_index].x][MazeOGWalls_XY[rand_index].y + 1] != 0) { wall_flag[3] = 1;  wall_counter++; }// DOWN
+		for (int i = 0; i < 4; i++)
+		{
+			//std::cout << wall_flag[i];
+		}
+		// set wall
+		int rand_wall = rand() % (4 - wall_counter); // 0-3 is the max
+		int index = 0;
+		while (rand_wall > 0)
+		{
+			if (wall_flag[index] == 0)
+			{
+				rand_wall--;
+				index++;
+			}
+			else if (wall_flag[index] == 1)
+			{
+				index++;
+			}
+		}
+		//std::cout << "\n" << index << std::endl;
+
+		if (index == 0)
+		{
+			//std::cout << "Wall will be placed at top\n";
+			maze_iswall_isnotwall[MazeOGWalls_XY[rand_index].x][MazeOGWalls_XY[rand_index].y - 1] = 1;
+		}
+		else if (index == 1)
+		{
+			//std::cout << "Wall will be placed at left\n";
+			maze_iswall_isnotwall[MazeOGWalls_XY[rand_index].x - 1][MazeOGWalls_XY[rand_index].y] = 1;
+		}
+		else if (index == 2)
+		{
+			//std::cout << "Wall will be placed at right\n";
+			maze_iswall_isnotwall[MazeOGWalls_XY[rand_index].x + 1][MazeOGWalls_XY[rand_index].y] = 1;
+		}
+		else if (index == 3)
+		{
+			//std::cout << "Wall will be placed at bot\n";
+			maze_iswall_isnotwall[MazeOGWalls_XY[rand_index].x][MazeOGWalls_XY[rand_index].y + 1] = 1;
+		}
+
+		MazeOGWalls_XY.erase(MazeOGWalls_XY.begin() + rand_index);
+		//std::cout << "\n";
+
+		// change all walls to 1
+		for (int r = 0; r < noOfRows; r++)
+		{
+			for (int c = 0; c < noOfCols; c++)
+			{
+				if (maze_iswall_isnotwall[r][c] != 0) maze_iswall_isnotwall[r][c] = 1;
+			}
+		}
+
+		// if path is surrounded by walls, block out that path
+		for (int r = 0; r < noOfRows; r++)
+		{
+			for (int c = 0; c < noOfCols; c++)
+			{
+				if (
+					maze_iswall_isnotwall[r][c] == 0 // centre cell
+					&&
+					maze_iswall_isnotwall[r-1][c-1] == 1		&& maze_iswall_isnotwall[r -1][c] == 1	&& maze_iswall_isnotwall[r - 1][c+1] == 1 &&
+					maze_iswall_isnotwall[r][c - 1] == 1												&& maze_iswall_isnotwall[r][c+1] == 1 &&
+					maze_iswall_isnotwall[r + 1][c - 1] == 1	&& maze_iswall_isnotwall[r+1][c] == 1	&& maze_iswall_isnotwall[r + 1][c+1] == 1
+					)
+				{
+					maze_iswall_isnotwall[r][c] = 1 ;
+
+				}
+			}
+		}
+
+	}
+}
+
+void  MazeGenAlgo_PrintRetrievedInformation()
+{
+	std::cout << "Width " << noOfCols << std::endl;
+	std::cout << "Height " << noOfRows << std::endl;
+	for (int rows = 0; rows < noOfRows; rows++)
+	{
+		for (int cols = 0; cols < noOfCols; cols++)
+		{
+			if (cols < noOfCols - 1)
+			{
+				std::cout << maze_iswall_isnotwall[cols][rows] << " ";
+				//std::cout << cols << ","<<  rows<< " ";
+				//printf("%i ", Maze[cols][rows]);
+			}
+			else
+			{
+				//std::cout<< cols << ","<< rows << std::endl;
+				std::cout << maze_iswall_isnotwall[cols][rows] << std::endl;
+				//printf("%i\n", Maze[cols][rows]);
+			}
+		}
+	}
+
+}
+
+bool MazeGenAlgo_PostGenCheck() // checks if the center col is not ALL PATH, returns true if not all path
+{
+	for (int i = 0; i < noOfRows; i++)
+	{
+		std::cout << maze_iswall_isnotwall[starting_Xposition][i];
+		if (maze_iswall_isnotwall[starting_Xposition][i] == 1)
+		{
+			return true;
+		}
+	}
+	return false;
+	std::cout<<std::endl;
+}
+
+
+void MazeGenAlgo()
+{
+	MazeGenAlgo_MakeMaze();
+	MazeGenAlgo_ChoosingStartingPos(start_x, start_y, end_x, end_y, noOfRows, noOfCols);
+	MazeGenAlgo_Set_walls();
+	MazeGenAlgo_PrintRetrievedInformation();
+
+	bool flag = MazeGenAlgo_PostGenCheck();
+	
+	while (!flag)
+	{
+		std::cout << "LOOP ENTERED" << std::endl;
+
+		MazeGenAlgo_MakeMaze();
+		MazeGenAlgo_ChoosingStartingPos(start_x, start_y, end_x, end_y, noOfRows, noOfCols);
+		MazeGenAlgo_Set_walls();
+		MazeGenAlgo_PrintRetrievedInformation();
+
+		flag = MazeGenAlgo_PostGenCheck();
+	}
+	
+	
+	(flag) ? std::cout << "ALL OK" << std::endl : std::cout << "ONE COL STRAIGHT UP" << std::endl;
+}
+
+/*========================================================================================*/
 Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows, int noOfCols)
 {
 	Maze_Struct* Maze = new Maze_Struct;
@@ -132,13 +339,14 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList*& WALLCellMesh,
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	for (int r = 0; r < Maze->specifications.noOfRows; r++)
 	{
+
 		for (int c = 0; c < Maze->specifications.noOfCols; c++)
 		{
 			AEGfxSetPosition(
 				(Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth)),
 				(Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight))
 			);
-			if (Maze->grid[r][c].is_wall == 1) // is wall
+			if (Maze->grid[r][c].is_wall >= 1) // is wall
 			{
 				AEGfxMeshDraw(WALLCellMesh, AE_GFX_MDM_TRIANGLES);
 			}
@@ -271,7 +479,7 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 void Maze_Load()
 {
 	std::cout << "Maze:Load" << std::endl;
-
+	
 }
 
 
@@ -287,6 +495,7 @@ void Maze_Load()
 */
 void Maze_Initialize()
 {
+	MazeGenAlgo();
 	std::cout << "Maze:Initialize" << std::endl;
 	Maze = CreateMaze(AEGetWindowHeight(), AEGetWindowWidth(), noOfRows, noOfCols);
 
