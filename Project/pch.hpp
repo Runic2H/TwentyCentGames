@@ -19,17 +19,11 @@
 #include "Credits.hpp"
 
 
-#endif	//PCH.H
-
-
-//#define ORIGIN 0;
-//#define TOP 1;
-//#define BACK 2;
-//#define DOWN 3;
-//#define ATTACK 4;
-
 #define GRID_NUM 5;
 
 #define DT (f32)AEFrameRateControllerGetFrameTime();
 
 extern s8 fontId;
+
+#endif	//PCH.H
+

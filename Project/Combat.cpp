@@ -1,3 +1,5 @@
+//COMBAT.CPP
+
 #include "pch.hpp"
 
 int  RGB{ 16384000 };
@@ -15,9 +17,9 @@ int& keypressed{ keyvalue },
 showgridcounter{ gridcounter },
 choosegrid{ gr };
 
-
-using namespace Enemies;
-using namespace Character;
+using namespace Characters;
+using namespace Characters::Enemies;
+using namespace Characters::Character;
 
 int& x{ switchvalue }, y{};
 
@@ -27,8 +29,8 @@ AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
 AEGfxTexture* staminapotion;
 
-E_StatSheet* Enemy;
-c_statsheet* Player;
+Enemies::E_StatSheet* Enemy;
+Character::c_statsheet* Player;
 
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
@@ -45,13 +47,13 @@ void Combat_Load()
 	enemytexture = AEGfxTextureLoad("Angry turtle.png");
 	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
 
+
 	staminapotion = AEGfxTextureLoad("staminapotion.png");
 	AE_ASSERT_MESG(staminapotion, "cant create stamina potion texture\n");
+	//Enemy and Player should be initialized at maze
 
-	Enemy = EnemyInitialize();			//change name to load
+	Enemy = EnemyInitialize((rand() % 2) + 0);			//change name to load
 	Player = c_initialize();
-
-
 }
 
 
@@ -77,9 +79,6 @@ void Combat_Update()
 	RGBloop(RGBcounter);
 	CombatMesh(RGBcounter);
 	EnemyCombatMesh();
-
-	movementdt = (f32)AEFrameRateControllerGetFrameTime();					//dt time for counter
-
 
 	//Character::CombatMesh(RGBcounter);
 
@@ -113,6 +112,18 @@ void Combat_Update()
 	}
 
 	UpdateEnemyState(Enemy, Player);
+
+	if (Enemy->health <= 0)
+	{
+		Player->PlayerXP += Enemy->EnemyXP;
+		if (PlayerLevelUp(Player))
+		{
+			Player->PlayerLevel++;
+			Player->PlayerXP = 0;
+		}
+	}
+
+	flag = (x == ATTACK) ? 1 : 0;
 }
 
 
@@ -129,8 +140,7 @@ void Combat_Draw()
 	playerrender(playertexture, Player, Character::PlayerMesh);
 	RenderPlayerGrid(playermaxhealth);
 
-
-	if (Enemy->AttackCD <= 0.45f)
+	if (Enemy->AttackCD <= 0.30f)
 	{
 		RenderEnemyGrid(EnemyGridAttack);
 	}
