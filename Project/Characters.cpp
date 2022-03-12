@@ -180,11 +180,11 @@ namespace Characters
 
 					if (Player->status == FROSTED)
 					{
-						Player->staminaCD = 1.0f;
+						Player->staminaCD = 1.25f;
 					}
 					else
 					{
-						Player->staminaCD = 0.8f;	// resets the playerCD
+						Player->staminaCD = 1.0f;	// resets the playerCD
 					}
 					++Player->staminacount;
 				}
