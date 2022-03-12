@@ -87,11 +87,14 @@ void Combat_Update()
 	{
 		std::cout << "You Won!\n";
 		next = MAZE;
+		maze_init_flag = 1;
+		std::cout << "return to maze\n";
 	}
 
 	else if (Player->health <= 0) {
 		std::cout << "You Died!\n";
 		next = GS_QUIT;
+
 	}
 
 
@@ -120,7 +123,7 @@ void Combat_Update()
 		{
 			Player->PlayerLevel++;
 			Player->PlayerXP = 0;
-		}
+		}		
 	}
 
 	//flag = (x == ATTACK) ? 1 : 0;

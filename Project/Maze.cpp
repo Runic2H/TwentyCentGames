@@ -12,13 +12,18 @@ AEGfxTexture* main_character_art;
 float MC_positionX;
 float MC_positionY;
 AEGfxVertexList* pMesh_MainCharacter = 0;
-int starting_Xposition = 7;
-int starting_Yposition = 0;
+extern int curr_X_GRIDposition;
+extern int curr_Y_GRIDposition;
+
+float contact_rate = 0.3f;
+
+
 
 
 /* FOR MAZEGEN */
 /*==================================================================================*/
-Maze_Struct* Maze;
+extern Maze_Struct* Maze;
+extern int maze_init_flag;
 
 int start_x, start_y, end_x, end_y;
 
@@ -55,6 +60,56 @@ int maze_iswall_isnotwall[noOfRows][noOfCols]={
 	
 };
 */
+
+
+void Maze_EnemySpawn(float contact_rate)
+{
+	// count how many paths there are
+	std::vector<int> path_x;
+	std::vector<int> path_y;
+
+	for (int r = 0; r < noOfRows; r++)
+	{
+		for (int c = 0; c < noOfCols; c++)
+		{
+			if (maze_iswall_isnotwall[r][c] == 0)
+			{
+				if ((r == start_x && c == start_y))
+				{
+
+				}
+				else if (r == end_x && c == end_y)
+				{
+
+				}
+				else
+				{
+					path_x.push_back(r);
+					path_y.push_back(c);
+				}
+			}
+		}
+	}
+
+	int no_of_battles = (int)(path_x.size() * contact_rate);
+	std::cout << no_of_battles << "out of " << path_x.size() << std::endl;
+
+	int rand_index;
+
+	srand(time(NULL));
+	while (no_of_battles > 0)
+	{
+		int rand_index = rand() % path_x.size();
+
+		maze_iswall_isnotwall[path_x[rand_index]][path_y[rand_index]] = 9;
+
+		path_x.erase(path_x.begin() + rand_index);
+		path_y.erase(path_y.begin() + rand_index);
+		no_of_battles--;
+	}
+
+}
+
 
 
 void MazeGenAlgo_MakeMaze()
@@ -98,8 +153,8 @@ void MazeGenAlgo_ChoosingStartingPos(int& startX, int& startY, int& endX, int& e
 	maze_iswall_isnotwall[start_x][start_y] = 0;
 	maze_iswall_isnotwall[end_x][end_y] = 0;
 
-	starting_Xposition = startX;
-	starting_Yposition = starting_Yposition;
+	curr_X_GRIDposition = startX;
+	curr_Y_GRIDposition = curr_Y_GRIDposition;
 }
 
 void MazeGenAlgo_Set_walls()
@@ -202,7 +257,7 @@ void  MazeGenAlgo_PrintRetrievedInformation()
 {
 	std::cout << "Width " << noOfCols << std::endl;
 	std::cout << "Height " << noOfRows << std::endl;
-	for (int rows = 0; rows < noOfRows; rows++)
+	for (int rows = noOfRows - 1; rows >= 0; rows--)
 	{
 		for (int cols = 0; cols < noOfCols; cols++)
 		{
@@ -227,8 +282,8 @@ bool MazeGenAlgo_PostGenCheck() // checks if the center col is not ALL PATH, ret
 {
 	for (int i = 0; i < noOfRows; i++)
 	{
-		std::cout << maze_iswall_isnotwall[starting_Xposition][i];
-		if (maze_iswall_isnotwall[starting_Xposition][i] == 1)
+		std::cout << maze_iswall_isnotwall[curr_X_GRIDposition][i];
+		if (maze_iswall_isnotwall[curr_X_GRIDposition][i] == 1)
 		{
 			return true;
 		}
@@ -236,6 +291,7 @@ bool MazeGenAlgo_PostGenCheck() // checks if the center col is not ALL PATH, ret
 	return false;
 	std::cout<<std::endl;
 }
+
 
 
 void MazeGenAlgo()
@@ -382,6 +438,11 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 	}
 }
 
+void MAZE_SetPosAsEmpty(Maze_Struct* Maze, int curr_X_GRIDposition, int curr_Y_GRIDposition )
+{
+	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].is_wall = 0;
+	maze_iswall_isnotwall[curr_X_GRIDposition][curr_Y_GRIDposition] = 0;
+}
 
 void MAZE_DrawMazeOutline2(AEGfxVertexList*& mazeOutlineMesh, Maze_Struct* Maze)
 {
@@ -492,10 +553,10 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 
 }
 
-void MAZE_FogOfWar(int starting_Xposition, int starting_Yposition)
+void MAZE_FogOfWar(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
-	std::cout << "\n\nPlayer's position x: " << starting_Xposition << "\n";
-	std::cout << "Player's position y: " << starting_Yposition << "\n";
+	//std::cout << "\n\nPlayer's position x: " << curr_X_GRIDposition << "\n";
+	//std::cout << "Player's position y: " << curr_Y_GRIDposition << "\n";
 
 
 	//+1 -1 of player's position
@@ -504,20 +565,33 @@ void MAZE_FogOfWar(int starting_Xposition, int starting_Yposition)
 		for (int b = -1; b < 2; ++b)
 		{
 			//check if the grid is within the boundaries
-			if ( (starting_Yposition + b) >= 0 &&
-				 (starting_Yposition + b) < Maze->specifications.noOfRows &&
-				 (starting_Xposition + a) >= 0 &&
-				 (starting_Xposition + a) < Maze->specifications.noOfCols)
+			if ( (curr_Y_GRIDposition + b) >= 0 &&
+				 (curr_Y_GRIDposition + b) < Maze->specifications.noOfRows &&
+				 (curr_X_GRIDposition + a) >= 0 &&
+				 (curr_X_GRIDposition + a) < Maze->specifications.noOfCols)
 			{
 				//grids surrounding player will be visible	
-				Maze->grid[starting_Xposition+a][starting_Yposition+b].is_visible = 1;
+				Maze->grid[curr_X_GRIDposition+a][curr_Y_GRIDposition+b].is_visible = 1;
 
-				std::cout << "position x: " << (starting_Xposition+b) << "     position y: " << (starting_Yposition+a) << " is visible.\n\n";
+				//std::cout << "position x: " << (curr_X_GRIDposition+b) << "     position y: " << (curr_Y_GRIDposition+a) << " is visible.\n\n";
 			}
 		}
 	}
 }
 
+void MAZE_EnterCombat(int curr_X_GRIDposition, int curr_Y_GRIDposition)
+{
+	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].is_wall == 9)
+	{
+		next = COMBAT;
+	}
+
+	if (curr_X_GRIDposition == end_x && curr_Y_GRIDposition == end_y)
+	{
+		next = CREDITS;
+	}
+
+}
 
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
@@ -550,8 +624,18 @@ void Maze_Load()
 */
 void Maze_Initialize()
 {
-	MazeGenAlgo();
-	std::cout << "Maze:Initialize" << std::endl;
+	if (maze_init_flag == 0)
+	{
+		std::cout << "Maze:Initialize" << std::endl;
+		MazeGenAlgo();
+		Maze_EnemySpawn(contact_rate);
+		MazeGenAlgo_PrintRetrievedInformation();
+	}
+	else
+	{
+		
+		
+	}
 	Maze = CreateMaze(AEGetWindowHeight(), AEGetWindowWidth(), noOfRows, noOfCols);
 
 	MAZE_CreateMESH_MazeWindow2(pMeshMazeWindow, Maze, 0xFF0000);
@@ -560,10 +644,13 @@ void Maze_Initialize()
 	MAZE_CreateSolidCell2(pMeshSolidSquare_PATH, Maze, 0x808080);
 	MAZE_CreateMainCharacter(pMesh_MainCharacter, Maze->specifications.cellHeight, Maze->specifications.cellWidth);
 
-	MC_positionX = Maze->specifications.MazeWindowStart_X + (Maze->specifications.cellWidth / 2) + (starting_Xposition * Maze->specifications.cellWidth);
+	MC_positionX = Maze->specifications.MazeWindowStart_X + (Maze->specifications.cellWidth / 2) + (curr_X_GRIDposition * Maze->specifications.cellWidth);
 
-	MC_positionY = Maze->specifications.MazeWindowStart_Y + (Maze->specifications.cellHeight / 2) + (starting_Yposition * Maze->specifications.cellHeight);
+	MC_positionY = Maze->specifications.MazeWindowStart_Y + (Maze->specifications.cellHeight / 2) + (curr_Y_GRIDposition * Maze->specifications.cellHeight);
 	std::cout << "X : " << MC_positionX << " --- Y : " << MC_positionY << std::endl;
+
+	MAZE_SetPosAsEmpty(Maze, curr_X_GRIDposition, curr_Y_GRIDposition);
+	
 }
 
 
@@ -578,55 +665,58 @@ void Maze_Update()
 
 	if (AEInputCheckTriggered(AEVK_W))
 	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(1, Maze, starting_Xposition, starting_Yposition) == 1)
+		if (MAZE_CharMoveCHECK_NEXT_POS(1, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 		{
 			MC_positionY += Maze->specifications.cellHeight;
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
+				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 		}
 	}
 
 	if (AEInputCheckTriggered(AEVK_S))
 	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(3, Maze, starting_Xposition, starting_Yposition) == 1)
+		if (MAZE_CharMoveCHECK_NEXT_POS(3, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 		{
 			MC_positionY -= Maze->specifications.cellHeight;
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
+				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 		}
 	}
 
 
 	if (AEInputCheckTriggered(AEVK_A))
 	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(2, Maze, starting_Xposition, starting_Yposition) == 1)
+		if (MAZE_CharMoveCHECK_NEXT_POS(2, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 		{
 
 			MC_positionX -= Maze->specifications.cellWidth;
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
+				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
 		}
 	}
 
 	if (AEInputCheckTriggered(AEVK_D))
 	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(4, Maze, starting_Xposition, starting_Yposition) == 1)
+		if (MAZE_CharMoveCHECK_NEXT_POS(4, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 		{
 
 			MC_positionX += Maze->specifications.cellWidth;
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << starting_Xposition << "\t\t" << starting_Yposition << "\n";
+				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 		}
 	}
 
-	MAZE_FogOfWar(starting_Xposition, starting_Yposition);
+	MAZE_FogOfWar(curr_X_GRIDposition, curr_Y_GRIDposition);
 
 	//go back to MENU
 	if (AEInputCheckTriggered(AEVK_Q))
 	{
 		next = MENU;
 	}
+
+	MAZE_EnterCombat(curr_X_GRIDposition,curr_Y_GRIDposition);
+
 }
 
 
@@ -682,4 +772,7 @@ void Maze_Free()
 void Maze_Unload()
 {
 	std::cout << "Maze:Unload" << std::endl;
+	AEGfxTextureUnload(wall_art);
+	AEGfxTextureUnload(path_art);
+	AEGfxTextureUnload(main_character_art);
 }

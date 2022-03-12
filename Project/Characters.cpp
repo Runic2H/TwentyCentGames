@@ -536,8 +536,8 @@ namespace Characters
 			switch (EnemyType)
 			{
 			case NORMAL:
-				E_Stats->health = 10;
-				E_Stats->maxhealth = 10;
+				E_Stats->health = 40;
+				E_Stats->maxhealth = 40;
 				E_Stats->damage = 10;
 				E_Stats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
 				E_Stats->EnemyXP = 20;
@@ -545,7 +545,7 @@ namespace Characters
 			case ICE:
 				E_Stats->health = 50;
 				E_Stats->maxhealth = 50;
-				E_Stats->damage = 20;
+				E_Stats->damage = 35;
 				E_Stats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
 				E_Stats->DebuffCounter = 0;
 				E_Stats->EnemyXP = 100;

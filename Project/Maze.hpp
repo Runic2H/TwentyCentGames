@@ -1,7 +1,7 @@
 #include "pch.hpp"
 
 #pragma once
-const int noOfRows = 15, noOfCols = 15; // DO NOT CHANGE MY GRIDS PLZZZZ :((
+const int noOfRows = 11, noOfCols = 11; // DO NOT CHANGE MY GRIDS PLZZZZ :((
 
 extern int maze_iswall_isnotwall[noOfRows][noOfCols]; // remove later after finishing maze-gen algo
 
