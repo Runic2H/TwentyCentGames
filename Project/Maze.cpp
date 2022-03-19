@@ -21,6 +21,7 @@ float chest_spawn_rate = 0.3f;
 
 
 
+
 /* FOR MAZEGEN */
 /*==================================================================================*/
 extern Maze_Struct* Maze;
@@ -648,7 +649,21 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
 	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].is_wall = 0;
-	std::cout << "Plater has opened chest" << std::endl;
+	std::cout << "Player has opened chest" << std::endl;
+	
+	int randindex;
+	srand(time(NULL));
+	randindex = ( rand() % 2 ) + 1;
+	if (randindex == 1)
+	{
+		std::cout << "player +10 hp" << std::endl;
+		Player->health += 10;
+	}
+	else if (randindex == 2)
+	{
+		std::cout << "player +10 dmg" << std::endl;
+		Player->damage += 10;
+	}
 	//1 - increased hp
 	//2 - increase dmg
 }

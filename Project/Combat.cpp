@@ -30,7 +30,7 @@ AEGfxTexture* enemytexture;
 AEGfxTexture* staminapotion;
 
 Enemies::E_StatSheet* Enemy;
-Character::c_statsheet* Player;
+extern Characters::Character::c_statsheet* Player;
 
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
@@ -53,7 +53,7 @@ void Combat_Load()
 	//Enemy and Player should be initialized at maze
 
 	Enemy = EnemyInitialize((rand() % 2) + 0);			//change name to load
-	Player = c_initialize();
+	Player = c_initialize();	//flag for restart state
 }
 
 
