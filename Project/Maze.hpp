@@ -68,6 +68,10 @@ void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_
 
 int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Char_Pos_X, int& Char_Pos_Y);
 
+void MAZE_ChestOpen(int curr_X_GRIDposition, int curr_Y_GRIDposition);
+
+void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition);
+
 
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
