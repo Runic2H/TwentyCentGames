@@ -16,7 +16,6 @@ extern int curr_X_GRIDposition;
 extern int curr_Y_GRIDposition;
 
 float contact_rate = 0.3f;
-float chest_spawn_rate = 0.3f;
 
 
 
@@ -111,53 +110,6 @@ void Maze_EnemySpawn(float contact_rate)
 
 }
 
-void Maze_ChestSpawn(float spawn_rate)
-{
-	// count how many paths there are
-	std::vector<int> path_x;
-	std::vector<int> path_y;
-
-	for (int r = 0; r < noOfRows; r++)
-	{
-		for (int c = 0; c < noOfCols; c++)
-		{
-			if (maze_iswall_isnotwall[r][c] == 0)
-			{
-				if ((r == start_x && c == start_y))
-				{
-
-				}
-				else if (r == end_x && c == end_y)
-				{
-
-				}
-				else
-				{
-					path_x.push_back(r);
-					path_y.push_back(c);
-				}
-			}
-		}
-	}
-
-	int no_of_chests = (int)(path_x.size() * spawn_rate); //path_x size is no of empty cells pushed in vector, spawn_rate is % of chests we want to spawn
-	std::cout << no_of_chests << "out of " << path_x.size() << std::endl;
-
-	int rand_index{};
-
-	srand(time(NULL));
-	while (no_of_chests > 0)
-	{
-		int rand_index = rand() % path_x.size();
-
-		maze_iswall_isnotwall[path_x[rand_index]][path_y[rand_index]] = 3; //set grid value of mapdata to 3 for chests
-
-		path_x.erase(path_x.begin() + rand_index); //remove spawned chests from vectors
-		path_y.erase(path_y.begin() + rand_index);
-		no_of_chests--;	// --chest count
-	}
-
-}
 
 
 void MazeGenAlgo_MakeMaze()
@@ -627,7 +579,7 @@ void MAZE_FogOfWar(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	}
 }
 
-void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
+void MAZE_EnterCombat(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].is_wall == 9)
 	{
@@ -639,20 +591,8 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 		next = CREDITS;
 	}
 
-	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].is_wall == 3)
-	{
-		std::cout << "player is on chest" << std::endl;
-		MAZE_ChestOpen(curr_X_GRIDposition, curr_Y_GRIDposition);
-	}
 }
 
-void MAZE_ChestOpen(int curr_X_GRIDposition, int curr_Y_GRIDposition)
-{
-	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].is_wall = 0;
-	std::cout << "player opened chest" << std::endl;
-	//1 - add hp
-	//2 - add dmg
-}
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
 	Opens and reads required files, and assigns values to necessary variables.
@@ -689,7 +629,6 @@ void Maze_Initialize()
 		std::cout << "Maze:Initialize" << std::endl;
 		MazeGenAlgo();
 		Maze_EnemySpawn(contact_rate);
-		Maze_ChestSpawn(chest_spawn_rate); //order of spawn matters because we want enemies to spawn first 
 		MazeGenAlgo_PrintRetrievedInformation();
 	}
 	else
@@ -776,7 +715,7 @@ void Maze_Update()
 		next = MENU;
 	}
 
-	MAZE_StepOntoSpecialCell(curr_X_GRIDposition,curr_Y_GRIDposition);
+	MAZE_EnterCombat(curr_X_GRIDposition,curr_Y_GRIDposition);
 
 }
 
