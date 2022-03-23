@@ -6,10 +6,19 @@ const int noOfRows = 11, noOfCols = 11; // DO NOT CHANGE MY GRIDS PLZZZZ :((
 extern int maze_iswall_isnotwall[noOfRows][noOfCols]; // remove later after finishing maze-gen algo
 
 
+enum MazeCellValue
+{
+	EMPTY_PATH = 0,
+	WALL = 1,
+	CHEST = 3,
+	ENEMY = 9
+	
+};
+
 
 struct MazeCells
 {
-	int is_wall = 0;
+	int value = 0;
 	//int is_PlayerPos;
 	bool is_visible = 0;
 
