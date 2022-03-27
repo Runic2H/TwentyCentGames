@@ -14,6 +14,7 @@ float MC_positionY;
 AEGfxVertexList* pMesh_MainCharacter = 0;
 extern int curr_X_GRIDposition;
 extern int curr_Y_GRIDposition;
+extern sys systemsettings;
 
 float contact_rate = 0.3f;
 
@@ -99,7 +100,7 @@ void Maze_EnemySpawn(float contact_rate)
 	srand(time(NULL));
 	while (no_of_battles > 0)
 	{
-		int rand_index = rand() % path_x.size();
+		rand_index = rand() % path_x.size();
 
 		maze_iswall_isnotwall[path_x[rand_index]][path_y[rand_index]] = 9;
 
@@ -624,6 +625,8 @@ void Maze_Load()
 */
 void Maze_Initialize()
 {
+	AEToogleFullScreen(systemsettings.fullscreen); // R: added
+
 	if (maze_init_flag == 0)
 	{
 		std::cout << "Maze:Initialize" << std::endl;
@@ -662,6 +665,18 @@ void Maze_Initialize()
 void Maze_Update()
 {
 	//std::cout << "Maze:Update" << std::endl;
+
+	if (AEInputCheckTriggered(AEVK_F11)) {		// R: added
+		if (systemsettings.fullscreen == 0) {	// FOR TESTING: TO BE REPLACED WITH PAUSE MENU BUTTON
+			systemsettings.fullscreen = 1;
+			AEToogleFullScreen(systemsettings.fullscreen);
+		}
+
+		else if (systemsettings.fullscreen == 1) {
+			systemsettings.fullscreen = 0;
+			AEToogleFullScreen(systemsettings.fullscreen);
+		}
+	}
 
 	if (AEInputCheckTriggered(AEVK_W))
 	{

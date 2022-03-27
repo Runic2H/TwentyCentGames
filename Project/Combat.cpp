@@ -29,9 +29,6 @@ AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
 AEGfxTexture* staminapotion;
 
-Enemies::E_StatSheet* Enemy;
-Character::c_statsheet* Player;
-
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
 	Opens and reads required files, and assigns values to necessary variables.
@@ -50,10 +47,7 @@ void Combat_Load()
 
 	staminapotion = AEGfxTextureLoad("staminapotion.png");
 	AE_ASSERT_MESG(staminapotion, "cant create stamina potion texture\n");
-	//Enemy and Player should be initialized at maze
 
-	Enemy = EnemyInitialize((rand() % 2) + 0);			//change name to load
-	Player = c_initialize();
 }
 
 
@@ -64,7 +58,9 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
+	ChoosingEnemyType((rand() % 2) + 0);
 	MeshInit();		// Single init for the meshes that only need to be created once (NON RGB MESHES)
+	AEToogleFullScreen(systemsettings.fullscreen); // R: added
 }
 
 
@@ -75,15 +71,23 @@ void Combat_Initialize()
 */
 void Combat_Update()
 {
-
 	RGBloop(RGBcounter);
 	CombatMesh(RGBcounter);
 	EnemyCombatMesh();
 
-	//Character::CombatMesh(RGBcounter);
+	if (AEInputCheckTriggered(AEVK_F11)) {	// FOR TESTING: TO BE REPLACED WITH PAUSE MENU BUTTON
+		if (systemsettings.fullscreen == 0) {
+			systemsettings.fullscreen = 1;
+			AEToogleFullScreen(systemsettings.fullscreen);
+		}
 
+		else if (systemsettings.fullscreen == 1) {
+			systemsettings.fullscreen = 0;
+			AEToogleFullScreen(systemsettings.fullscreen);
+		}
+	}
 
-	if (Enemy->health <= 0)
+	if (enemystats->health <= 0)
 	{
 		std::cout << "You Won!\n";
 		next = MAZE;
@@ -91,42 +95,38 @@ void Combat_Update()
 		std::cout << "return to maze\n";
 	}
 
-	else if (Player->health <= 0) {
+	else if (playerstats->health <= 0) {
 		std::cout << "You Died!\n";
 		next = GAMEOVER;
-
 	}
 
-
-	if (keypressed == 0) {													// so i cant move whilst cooldown active
-		PlayerMovement(x, Player, keypressed);								// character movement	
-		StaminaLogic(Player, keypressed);
+	if (keypressed == 0) {											// so i cant move whilst cooldown active
+		PlayerMovement(x, keypressed);								// character movement	
+		StaminaLogic(keypressed);
 	}
 
 	if (keypressed == 1) {
-		Player->movementdt -= DT;
-		if (Player->movementdt <= 0.0f) {
-			Player->positionX = 0.0f;
-			Player->positionY = 0.0f;
-			Player->positionID = 1;
-			Player->is_attacking = false;
+		playerstats->movementdt -= DT;
+		if (playerstats->movementdt <= 0.0f) {
+			playerstats->positionX = 0.0f;
+			playerstats->positionY = 0.0f;
+			playerstats->positionID = 1;
+			playerstats->is_attacking = false;
 			keypressed = 0;
 		}
 	}
 
-	UpdateEnemyState(Enemy, Player);
+	UpdateEnemyState();
 
-	if (Enemy->health <= 0)
+	if (enemystats->health <= 0)
 	{
-		Player->PlayerXP += Enemy->EnemyXP;
-		if (PlayerLevelUp(Player))
+		playerstats->PlayerXP += enemystats->EnemyXP;
+		if (PlayerLevelUp())
 		{
-			Player->PlayerLevel++;
-			Player->PlayerXP = 0;
+			playerstats->PlayerLevel += 1;
+			playerstats->PlayerXP = 0;
 		}		
 	}
-
-	//flag = (x == ATTACK) ? 1 : 0;
 }
 
 
@@ -136,18 +136,18 @@ void Combat_Update()
 */
 void Combat_Draw()
 {
-	StaminaRender(Player, staminapotion);
-	RenderEnemyHealth(fontId, Enemy);
-	RenderPlayerHealth(fontId, Player);
-	GridCheck(Enemy->is_attacking, Enemy->AttackCD, Player->SAFEGRID);
-	playerrender(playertexture, Player, Character::PlayerMesh);
+	StaminaRender(staminapotion);
+	RenderEnemyHealth();
+	RenderPlayerHealth();
+	GridCheck(enemystats->is_attacking, enemystats->AttackCD, playerstats->SAFEGRID);
+	playerrender(playertexture, Character::PlayerMesh);
 
-	if (Enemy->AttackCD <= 0.30f)
+	if (enemystats->AttackCD <= 0.30f)
 	{
 		RenderEnemyGrid(EnemyGridAttack);
 	}
 
-	RenderEnemy(enemytexture, EnemyMesh, Enemy);
+	RenderEnemy(enemytexture, EnemyMesh);
 }
 
 
@@ -157,7 +157,8 @@ void Combat_Draw()
 void Combat_Free()
 {
 	std::cout << "Combat:Free" << std::endl;
-
+	FreePlayerMesh();
+	FreeEnemyMesh();
 }
 
 
@@ -166,10 +167,6 @@ void Combat_Free()
 */
 void Combat_Unload()
 {
-	delete Player;
-	delete Enemy;
-	FreePlayerMesh();
-	FreeEnemyMesh();
 	AEGfxTextureUnload(playertexture);
 	AEGfxTextureUnload(enemytexture);
 	AEGfxTextureUnload(staminapotion);

@@ -2,6 +2,11 @@
 
 #include "pch.hpp"
 
+/************************************************************
+*			GLOBAL DECLARATIONS
+************************************************************/
+
+
 namespace Characters
 {
 	/******************************************************
@@ -11,7 +16,10 @@ namespace Characters
 	*******************************************************/
 	namespace Character
 	{
-
+		
+		/************************************************************
+		*			CHARACTER NAMESPACE DECLARATIONS
+		************************************************************/
 		AEGfxVertexList* Player1Grid = 0;	//ORIGN
 		AEGfxVertexList* Player2Grid = 0;	//TOP
 		AEGfxVertexList* Player3Grid = 0;	//BACK
@@ -24,33 +32,8 @@ namespace Characters
 		AEGfxVertexList* playerstamina = 0;		//PLAYER STAMINA MESH
 		int counter{ 21 };
 
-		c_statsheet* c_initialize()
-		{
-			c_statsheet* c_stats = new c_statsheet;
-			c_stats->PlayerLevel = 1;
-			c_stats->PlayerXP = 0;
-			c_stats->health = 100;								//health
-			c_stats->maxhealth = 100;
-			c_stats->positionID = 1;							//starting grid
-			c_stats->SAFEGRID = 1;								//starting SAFEGRID pos
-			c_stats->damage = 10;								  //damage
-			c_stats->staminaCD = 1.0f;						// Cooldown for attack and movement
-			c_stats->staminacount = 3;						// Character stamina count
-			c_stats->staminamax = 3;							// Character stamina max
-			c_stats->staminaX = -37.0f;					// X position of stamina
-			c_stats->playerCD = 5;								//Cooldown for attack and movement
-			c_stats->is_dmgtaken = 0.0f;					//to implement visual animations in future
-			c_stats->is_attacking = false;				//for enemy damage checks
-			c_stats->positionX = 0.0f;
-			c_stats->positionY = 0.0f;
-			c_stats->movementdt = 0.0f;
-			c_stats->status = NEUTRAL;
-			return c_stats;
-		}
-
 		void CombatMesh(int RGBcounter)
 		{
-
 			FreePlayerMeshOnUpdate();
 
 			AEGfxMeshStart();
@@ -163,47 +146,45 @@ namespace Characters
 
 			playerstamina = AEGfxMeshEnd();
 			AE_ASSERT_MESG(playerstamina, "Failed to create stamina mesh!!");
-
 		}
 
 
-		void StaminaLogic(c_statsheet* Player, int const& keypressed)
+		void StaminaLogic(int const& keypressed)
 		{
 
-			std::cout << Player->staminacount << "\n";
+			//std::cout << playerstats->staminacount << "\n";
 			//static int flagset = 0;
 
-			if (Player->staminacount < Player->staminamax) {
-				Player->staminaCD -= DT;
+			if (playerstats->staminacount < playerstats->staminamax) {
+				playerstats->staminaCD -= DT;
 
-				if (Player->staminaCD < 0) {
+				if (playerstats->staminaCD < 0) {
 
-					if (Player->status == FROSTED)
+					if (playerstats->status == FROSTED)
 					{
-						Player->staminaCD = 1.25f;
+						playerstats->staminaCD = 1.25f;
 					}
 					else
 					{
-						Player->staminaCD = 1.0f;	// resets the playerCD
+						playerstats->staminaCD = 1.0f;	// resets the playerCD
 					}
-					++Player->staminacount;
+					++playerstats->staminacount;
 				}
 			}
 
 			if (keypressed == 1) {
-				--Player->staminacount;
+				--playerstats->staminacount;
 			}
 		}
 
 
-		void StaminaRender(c_statsheet* Player, AEGfxTexture* staminapotion)
+		void StaminaRender(AEGfxTexture* staminapotion)
 		{
-
-			for (int i{ 0 }; i < Player->staminacount; ++i) {
+			for (int i{ 0 }; i < playerstats->staminacount; ++i) {
 
 				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-				AEGfxSetPosition(Player->staminaX + (i * 30), -270.0f);
+				AEGfxSetPosition(playerstats->staminaX + (i * 30), -270.0f);
 				AEGfxTextureSet(staminapotion, 0, 0);
 				AEGfxSetTintColor(1, 1, 1, 1);
 				AEGfxSetTransparency(1);
@@ -214,9 +195,7 @@ namespace Characters
 		void RenderPlayerGrid(AEGfxVertexList* PlayerMesh)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-			// Set position for object 1
 			AEGfxSetPosition(0.0f, 0.0f);
-			// No texture for object 1
 			AEGfxTextureSet(NULL, 0, 0);
 
 			AEGfxMeshDraw(PlayerMesh, AE_GFX_MDM_LINES_STRIP);
@@ -298,84 +277,85 @@ namespace Characters
 				AEGfxMeshFree(Player5Grid);
 				Player5Grid = nullptr;
 			}
+
 		}
 
 		// returns an int. any movement sets the int flag to 1
 
-		void PlayerMovement(int& x, c_statsheet* player, int& keypressed) {
+		void PlayerMovement(int& x, int& keypressed) {
 
 			x = 0;
 
-			if (player->staminacount > 0 && player->status != FROZEN)
+			if (playerstats->staminacount > 0 && playerstats->status != FROZEN)
 			{
 				AEInputCheckTriggered(AEVK_W) ? x = TOP : x = x;	//ID Should be 1
 				AEInputCheckTriggered(AEVK_A) ? x = BACK : x = x;	//ID Should be 2
 				AEInputCheckTriggered(AEVK_S) ? x = DOWN : x = x;	//ID Should be 3
 				AEInputCheckTriggered(AEVK_D) ? x = ATTACK : x = x;	//ID Should be 4
 
-				player->movementdt = 0.5f;
+				playerstats->movementdt = 0.5f;
 
 				switch (x) {
 
 				case ATTACK:	//ATTACK GRID
-					player->positionID = ATTACK;
-					player->positionX = 145.0f;
-					player->positionY = 0.0f;
-					player->is_attacking = true;
+					playerstats->positionID = ATTACK;
+					playerstats->positionX = 145.0f;
+					playerstats->positionY = 0.0f;
+					playerstats->is_attacking = true;
 					keypressed = 1;
 					break;
 
 				case TOP:
-					player->positionID = TOP;
-					player->positionX = 0.0f;
-					player->positionY = 110.0f;
-					player->is_attacking = false;
+					playerstats->positionID = TOP;
+					playerstats->positionX = 0.0f;
+					playerstats->positionY = 110.0f;
+					playerstats->is_attacking = false;
 					keypressed = 1;
 					break;
 
 				case BACK:
-					player->positionID = BACK;
-					player->positionX = -110.0f;
-					player->positionY = 0.8f;
-					player->is_attacking = false;
+					playerstats->positionID = BACK;
+					playerstats->positionX = -110.0f;
+					playerstats->positionY = 0.8f;
+					playerstats->is_attacking = false;
 					keypressed = 1;
 					break;
 
 				case DOWN:
-					player->positionID = DOWN;
-					player->positionX = 0.0f;
-					player->positionY = -110.0f;
-					player->is_attacking = false;
+					playerstats->positionID = DOWN;
+					playerstats->positionX = 0.0f;
+					playerstats->positionY = -110.0f;
+					playerstats->is_attacking = false;
 					keypressed = 1;
 					break;
 				}
 			}
-			if (player->status == FROZEN)
+			if (playerstats->status == FROZEN)
 			{
 				if (counter == 0)
 				{
-					player->status = NEUTRAL;
+					playerstats->status = NEUTRAL;
 				}
 				else
 				{
 					if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_D))
 					{
 						--counter;
-						std::cout << counter << "\n";
+						//std::cout << counter << "\n";
 					}
 				}
 			}
 
-			if (player->positionX == 0.0f && player->positionY == 0.0f) {
-				player->positionID = ORIGIN;
-				player->is_attacking = false;
+			if (playerstats->positionX == 0.0f && playerstats->positionY == 0.0f) {
+				playerstats->positionID = ORIGIN;
+				playerstats->is_attacking = false;
 			}
 		}
 
 
-		bool PlayerLevelUp(c_statsheet* player)
+		bool PlayerLevelUp()
 		{
-			if (player->PlayerXP >= 100)
+			if (playerstats->PlayerXP >= 100)
 			{
 				return true;
 			}
@@ -390,12 +370,12 @@ namespace Characters
 			}
 		}
 
-		void playerrender(AEGfxTexture* playertexture, c_statsheet* player, AEGfxVertexList* playermesh) {
+		void playerrender(AEGfxTexture* playertexture, AEGfxVertexList* playermesh) {
 
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			// Set position for object 1
-			AEGfxSetPosition(player->positionX, player->positionY);
+			AEGfxSetPosition(playerstats->positionX, playerstats->positionY);
 			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 			AEGfxTextureSet(playertexture, 1.0f, 1.0f);
 
@@ -436,21 +416,21 @@ namespace Characters
 			}
 		}
 
-		void RenderPlayerHealth(s8 font, Character::c_statsheet* Player)
+		void RenderPlayerHealth()
 		{
 			char strBufferHealth[100];
 			char strBuffer[100];
 			memset(strBufferHealth, 0, 100 * sizeof(char));
-			sprintf_s(strBufferHealth, "Player Health:  %d", Player->health);
+			sprintf_s(strBufferHealth, "Player Health:  %d", playerstats->health);
 
 			char strBufferLevel[100];
 			memset(strBufferLevel, 0, 100 * sizeof(char));
-			sprintf_s(strBufferLevel, "Level: %d", Player->PlayerLevel);
+			sprintf_s(strBufferLevel, "Level: %d", playerstats->PlayerLevel);
 
 			char strBufferStatus[100];
 			memset(strBufferStatus, 0, 100 * sizeof(char));
 
-			switch (Player->status)
+			switch (playerstats->status)
 			{
 			case FROSTED:
 				sprintf_s(strBufferStatus, "Status: Frosted");
@@ -468,7 +448,7 @@ namespace Characters
 				playercurrhealth = nullptr;
 			}
 
-			float healthscale = (float)Player->health / Player->maxhealth;
+			float healthscale = (float)playerstats->health / playerstats->maxhealth;
 
 			AEGfxMeshStart();
 
@@ -493,11 +473,11 @@ namespace Characters
 			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxPrint(font, strBufferHealth, -0.95f, -0.95f, 1.0f, 1.f, 1.f, 1.f);
-			AEGfxPrint(font, strBufferLevel, -0.95f, -0.85f, 1.0f, 1.f, 1.f, 1.f);
-			AEGfxPrint(font, strBufferStatus, -0.95f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
-			sprintf_s(strBuffer, "Stamina: %d", Player->staminacount);
-			AEGfxPrint(font, strBuffer, -0.10f, -0.80f, 1.14f, 1.0f, 1.0f, 1.0f);
+			AEGfxPrint(fontId, strBufferHealth, -0.95f, -0.95f, 1.0f, 1.f, 1.f, 1.f);
+			AEGfxPrint(fontId, strBufferLevel, -0.95f, -0.85f, 1.0f, 1.f, 1.f, 1.f);
+			AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
+			sprintf_s(strBuffer, "Stamina: %d", playerstats->staminacount);
+			AEGfxPrint(fontId, strBuffer, -0.10f, -0.80f, 1.14f, 1.0f, 1.0f, 1.0f);
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
 
 		}
@@ -517,59 +497,30 @@ namespace Characters
 		AEGfxVertexList* Enemymaxhealth = 0;
 		AEGfxVertexList* Enemycurrhealth = 0;
 
-		E_StatSheet* EnemyInitialize(int EnemyType)
-		{
-			E_StatSheet* E_Stats = new E_StatSheet;
+		enum EnemyPos { IDLE, ATTACKING };
+		enum ENEMY_TYPE { NORMAL, ICE, FIRE };
 
-			E_Stats->EnemyType = EnemyType;
-			E_Stats->EnemyState = IDLE;				//Current Enemy State
-			E_Stats->positionX = 0.0f;
-			E_Stats->positionY = 0.0f;
-			E_Stats->is_attacking = false;			//Check for enemy attacking, used for check when player can attack
-			E_Stats->AttackCD = 0.60f;				//Delay timer before enemy attack during attack phase
-			E_Stats->EnemyGrid = (rand() % 3) + 1;	//Sets the safety grid for next attack
-			E_Stats->DamageCD = 0.0f;				//Damage Cooldown after enemy attack phase, for players to not deal phantom damage
-			E_Stats->EnemyLevel = 1;
-
-			switch (EnemyType)
-			{
-			case NORMAL:
-				E_Stats->health = 40;
-				E_Stats->maxhealth = 40;
-				E_Stats->damage = 10;
-				E_Stats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
-				E_Stats->EnemyXP = 20;
-				break;
-			case ICE:
-				E_Stats->health = 50;
-				E_Stats->maxhealth = 50;
-				E_Stats->damage = 35;
-				E_Stats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
-				E_Stats->DebuffCounter = 0;
-				E_Stats->EnemyXP = 100;
-				break;
-			}
-			return E_Stats;
-		}
 
 		namespace
 		{
-			void EnemyTypeCheckToApplyPlayerDebuff(E_StatSheet* Enemy, Character::c_statsheet* Player)
+
+
+			void EnemyTypeCheckToApplyPlayerDebuff()
 			{
 
-				switch (Enemy->EnemyType)
+				switch (enemystats->EnemyType)
 				{
 				case ICE:
-					++Enemy->DebuffCounter;
-					if (Player->status != Character::FROZEN)
+					++enemystats->DebuffCounter;
+					if (playerstats->status != Character::FROZEN)
 					{
-						Player->status = Character::FROSTED;
+						playerstats->status = Character::FROSTED;
 					}
-					if (Enemy->DebuffCounter == 3 && Player->status == Character::FROSTED)
+					if (enemystats->DebuffCounter == 3 && playerstats->status == Character::FROSTED)
 					{
-						Player->status = Character::FROZEN;
+						playerstats->status = Character::FROZEN;
 						Character::counter = 21;
-						Enemy->DebuffCounter = 0;
+						enemystats->DebuffCounter = 0;
 					}
 					break;
 				case NORMAL:
@@ -577,73 +528,96 @@ namespace Characters
 				}
 			}
 
-			void EnemyAttackState(E_StatSheet* Enemy, Character::c_statsheet* Player)
+			void EnemyAttackState()
 			{
-				Player->SAFEGRID = Enemy->EnemyGrid;
-				Enemy->EnemyState = ATTACKING;
-				Enemy->is_attacking = true;
+				playerstats->SAFEGRID = enemystats->EnemyGrid;
+				enemystats->EnemyState = ATTACKING;
+				enemystats->is_attacking = true;
 
 				//Movement to Attack Grid
-				if (Enemy->positionX != 150.0f)
+				if (enemystats->positionX != 150.0f)
 				{
-					Enemy->positionX += 10.0f;
+					enemystats->positionX += 10.0f;
 				}
-				if (Enemy->EnemyState == ATTACKING && Enemy->is_attacking == true)
+				if (enemystats->EnemyState == ATTACKING && enemystats->is_attacking == true)
 				{
 					//Delay before enemy attack
-					Enemy->AttackCD -= DT;
-					if (Enemy->AttackCD <= 0.0f)
+					enemystats->AttackCD -= DT;
+					if (enemystats->AttackCD <= 0.0f)
 					{
-						if (Player->positionID != Player->SAFEGRID)
+						if (playerstats->positionID != playerstats->SAFEGRID)
 						{
-							Player->health -= Enemy->damage;
-							EnemyTypeCheckToApplyPlayerDebuff(Enemy, Player);
+							playerstats->health -= enemystats->damage;
+							EnemyTypeCheckToApplyPlayerDebuff();
 						}
 
 						//Resets Everything such as Enemy Cooldown while in idle
 						//Sets the AttackCD for the next attack phase
 						//Sets the next safe grid for next attack
-						Enemy->AttackCD = 0.60f;
-						Enemy->EnemyCD = static_cast<float>((rand() % 4) + 1);
-						Enemy->EnemyGrid = (rand() % 3) + 1;
-						Enemy->DamageCD = 1.0f;
+						enemystats->AttackCD = 0.60f;
+						enemystats->EnemyCD = static_cast<float>((rand() % 4) + 1);
+						enemystats->EnemyGrid = (rand() % 3) + 1;
+						enemystats->DamageCD = 1.0f;
 					}
 				}
 			}
 
-			void EnemyIdleState(E_StatSheet* Enemy, Character::c_statsheet* Player)
+			void EnemyIdleState()
 			{
 				//Idle state and reducing of enemyCD to next attack
 				//DamageCD is for frames where player cannot attack the enemy as enemy
 				//is returning to idle state
-				Enemy->EnemyState = IDLE;
-				Enemy->is_attacking = false;
-				Enemy->positionX = 0.0f;
-				Enemy->positionY = 0.0f;
-				Enemy->EnemyCD -= DT;
-				Enemy->DamageCD -= DT;
-				if (Enemy->EnemyState == IDLE && Enemy->is_attacking == false)
+				enemystats->EnemyState = IDLE;
+				enemystats->is_attacking = false;
+				enemystats->positionX = 0.0f;
+				enemystats->positionY = 0.0f;
+				enemystats->EnemyCD -= DT;
+				enemystats->DamageCD -= DT;
+				if (enemystats->EnemyState == IDLE && enemystats->is_attacking == false)
 				{
 					//Check for Player Damage
-					if (Player->is_attacking == true && Enemy->DamageCD <= 0.0f)
+					if (playerstats->is_attacking == true && enemystats->DamageCD <= 0.0f)
 					{
-						Enemy->health -= Player->damage;
-						Player->is_attacking = false;
+						enemystats->health -= playerstats->damage;
+						playerstats->is_attacking = false;
 					}
 				}
 			}
 		}
+			void ChoosingEnemyType(float RNG) {
+
+				switch ((int)RNG)
+				{
+				case 0:
+					enemystats->EnemyType = NORMAL;
+					enemystats->health = 40;
+					enemystats->maxhealth = 40;
+					enemystats->damage = 10;
+					enemystats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
+					enemystats->EnemyXP = 20;
+					break;
+				case 1:
+					enemystats->EnemyType = ICE;
+					enemystats->health = 50;
+					enemystats->maxhealth = 50;
+					enemystats->damage = 35;
+					enemystats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
+					enemystats->DebuffCounter = 0;
+					enemystats->EnemyXP = 50;
+					break;
+				}
+			}
 
 		//Main Update loop for Idle and Attack States of Enemy
-		void UpdateEnemyState(E_StatSheet* Enemy, Character::c_statsheet* Player)
+		void UpdateEnemyState()
 		{
-			if (Enemy->EnemyCD <= 0.0f)
+			if (enemystats->EnemyCD <= 0.0f)
 			{
-				EnemyAttackState(Enemy, Player);
+				EnemyAttackState();
 			}
 			else
 			{
-				EnemyIdleState(Enemy, Player);
+				EnemyIdleState();
 			}
 		}
 
@@ -725,34 +699,39 @@ namespace Characters
 				AEGfxMeshFree(EnemyMesh);
 				EnemyMesh = nullptr;
 			}
+
+			if (Enemycurrhealth != nullptr) {
+				AEGfxMeshFree(Enemycurrhealth);
+				Enemycurrhealth = nullptr;
+			}
 		}
 
 
-		void RenderEnemy(AEGfxTexture* enemytexture, AEGfxVertexList* EnemyMesh, E_StatSheet* Enemy)
+		void RenderEnemy(AEGfxTexture* enemytexture, AEGfxVertexList* EnemyMesh)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 			// Set position for object 1
-			AEGfxSetPosition(Enemy->positionX, Enemy->positionY);
+			AEGfxSetPosition(enemystats->positionX, enemystats->positionY);
 			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 			// No texture for object 1;
 			AEGfxTextureSet(enemytexture, 1.0f, 1.0f);
 			AEGfxMeshDraw(EnemyMesh, AE_GFX_MDM_TRIANGLES);
 		}
 
-		void RenderEnemyHealth(s8 font, E_StatSheet* Enemy)
+		void RenderEnemyHealth()
 		{
 			char strBufferHealth[100];
 			//char strBuffer[100];
 			memset(strBufferHealth, 0, 100 * sizeof(char));
-			sprintf_s(strBufferHealth, "Enemy Health:  %d", Enemy->health);
+			sprintf_s(strBufferHealth, "Enemy Health:  %d", enemystats->health);
 
 			char strBufferLevel[100];
 			memset(strBufferLevel, 0, 100 * sizeof(char));
-			sprintf_s(strBufferLevel, "Level: %d", Enemy->EnemyLevel);
+			sprintf_s(strBufferLevel, "Level: %d", enemystats->EnemyLevel);
 
 			char strBufferType[100];
 			memset(strBufferType, 0, 100 * sizeof(char));
-			switch (Enemy->EnemyType)
+			switch (enemystats->EnemyType)
 			{
 			case NORMAL:
 				sprintf_s(strBufferType, "Enemy Type: Normal");
@@ -762,12 +741,13 @@ namespace Characters
 				break;
 			}
 
-		if (Enemycurrhealth != nullptr) {
-			AEGfxMeshFree(Enemycurrhealth);
-			Enemycurrhealth = nullptr;
-		}
+		float healthscale = (float)enemystats->health / enemystats->maxhealth;
 
-		float healthscale = (float)Enemy->health / Enemy->maxhealth;
+
+			if (Enemycurrhealth != nullptr) {
+				AEGfxMeshFree(Enemycurrhealth);
+				Enemycurrhealth = nullptr;
+			}
 
 		AEGfxMeshStart();
 		AEGfxTriAdd(
@@ -791,9 +771,9 @@ namespace Characters
 			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
       
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxPrint(font, strBufferHealth, 0.60f, -0.95f, 1.0f, 1.f, 1.f, 1.f);
-			AEGfxPrint(font, strBufferLevel, 0.60f, -0.85f, 1.0f, 1.f, 1.f, 1.f);
-			AEGfxPrint(font, strBufferType, 0.60f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
+			AEGfxPrint(fontId, strBufferHealth, 0.60f, -0.95f, 1.0f, 1.f, 1.f, 1.f);
+			AEGfxPrint(fontId, strBufferLevel, 0.60f, -0.85f, 1.0f, 1.f, 1.f, 1.f);
+			AEGfxPrint(fontId, strBufferType, 0.60f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
 		}
 	}

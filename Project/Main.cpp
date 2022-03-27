@@ -40,15 +40,14 @@
 
 		// Using custom window procedure
 		AESysInit(hInstance, nCmdShow, 800, 600, 1, 60, true, NULL);
-
 	
 		AESysSetWindowTitle("TwentyCentGames!");
 
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
-		GSM_Initialize(current);
-
 		System_Initialise();
+
+		GSM_Initialize(current);
 
 
 		// Game Loop

@@ -5,6 +5,7 @@
 int page {1};
 enum pages {page_1 = 1, page_2};
 
+extern sys systemsettings;
 
 /* Objects */
 AEGfxVertexList* fake_window_box;
@@ -281,7 +282,7 @@ void Tutorial_Load()
 
 void Tutorial_Init()
 {
-
+	AEToogleFullScreen(systemsettings.fullscreen);
 }
 
 void Tutorial_Update()
