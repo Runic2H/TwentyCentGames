@@ -9,3 +9,4 @@ int maze_init_flag = 0;
 int curr_X_GRIDposition;
 int curr_Y_GRIDposition;
 
+

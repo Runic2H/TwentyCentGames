@@ -26,6 +26,7 @@
 
 extern s8 fontId;
 
+extern Characters::Character::c_statsheet* Player;
 
 extern Maze_Struct* Maze;
 

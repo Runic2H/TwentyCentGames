@@ -17,6 +17,8 @@ extern int curr_Y_GRIDposition;
 extern sys systemsettings;
 
 float contact_rate = 0.3f;
+float chest_spawn_rate = 0.3f;
+
 
 
 
@@ -111,7 +113,53 @@ void Maze_EnemySpawn(float contact_rate)
 
 }
 
+void Maze_ChestSpawn(float spawn_rate)
+{
+	// count how many paths there are
+	std::vector<int> path_x;
+	std::vector<int> path_y;
 
+	for (int r = 0; r < noOfRows; r++)
+	{
+		for (int c = 0; c < noOfCols; c++)
+		{
+			if (maze_iswall_isnotwall[r][c] == 0)
+			{
+				if ((r == start_x && c == start_y))
+				{
+
+				}
+				else if (r == end_x && c == end_y)
+				{
+
+				}
+				else
+				{
+					path_x.push_back(r);
+					path_y.push_back(c);
+				}
+			}
+		}
+	}
+
+	int no_of_chests = (int)(path_x.size() * spawn_rate);
+	std::cout << no_of_chests << "out of " << path_x.size() << std::endl;
+
+	int rand_index;
+
+	srand(time(NULL));
+	while (no_of_chests > 0)
+	{
+		int rand_index = rand() % path_x.size();
+
+		maze_iswall_isnotwall[path_x[rand_index]][path_y[rand_index]] = 3;
+
+		path_x.erase(path_x.begin() + rand_index);
+		path_y.erase(path_y.begin() + rand_index);
+		no_of_chests--;
+	}
+
+}
 
 void MazeGenAlgo_MakeMaze()
 {
@@ -342,7 +390,7 @@ Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows,
 		for (int c = 0; c < Maze->specifications.noOfCols; c++)
 		{
 
-			Maze->grid[r][c].is_wall = maze_iswall_isnotwall[r][c];
+			Maze->grid[r][c].value = maze_iswall_isnotwall[r][c];
 			//Maze->grid[r][c].is_PlayerPos = 0;
 
 		}
@@ -414,7 +462,7 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 
 			if (Maze->grid[r][c].is_visible)
 			{
-				if (Maze->grid[r][c].is_wall == 1) // is wall
+				if (Maze->grid[r][c].value == WALL) // is wall
 				{
 					AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 					AEGfxTextureSet(wall_art, 0.0f, 0.0f);
@@ -441,8 +489,8 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 
 void MAZE_SetPosAsEmpty(Maze_Struct* Maze, int curr_X_GRIDposition, int curr_Y_GRIDposition )
 {
-	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].is_wall = 0;
-	maze_iswall_isnotwall[curr_X_GRIDposition][curr_Y_GRIDposition] = 0;
+	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
+	maze_iswall_isnotwall[curr_X_GRIDposition][curr_Y_GRIDposition] = EMPTY_PATH;
 }
 
 void MAZE_DrawMazeOutline2(AEGfxVertexList*& mazeOutlineMesh, Maze_Struct* Maze)
@@ -493,7 +541,7 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 	switch (UpDownLeftRight)//1 is up, 2 is left, 3 is down, 3 is right
 	{
 	case 1: // move up aka y+1 
-		if (Maze->grid[Char_Pos_X][Char_Pos_Y + 1].is_wall != 1 && (Char_Pos_Y + 1) < Maze->specifications.noOfRows)
+		if (Maze->grid[Char_Pos_X][Char_Pos_Y + 1].value != WALL && (Char_Pos_Y + 1) < Maze->specifications.noOfRows)
 		{
 			//std::cout << "Can move up" << "\n";
 			Char_Pos_Y++;
@@ -502,12 +550,12 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 		else
 		{
 			//std::cout << "Cant move up to :" << Char_Pos_X << "-" << Char_Pos_Y + 1
-				//<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y + 1].is_wall << "\n";
+				//<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y + 1].value << "\n";
 			return 0;
 		}
 		break;
 	case 2: // move left aka x-1
-		if (Maze->grid[Char_Pos_X - 1][Char_Pos_Y].is_wall != 1 && (Char_Pos_X - 1) >= 0)
+		if (Maze->grid[Char_Pos_X - 1][Char_Pos_Y].value != WALL && (Char_Pos_X - 1) >= 0)
 		{
 			//std::cout << "Can move left" << "\n";
 			Char_Pos_X--;
@@ -516,12 +564,12 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 		else
 		{
 			//std::cout << "Cant move left to :" << Char_Pos_X - 1 << "-" << Char_Pos_Y
-				//<< "because :" << Maze->grid[Char_Pos_X - 1][Char_Pos_Y].is_wall << "\n";
+				//<< "because :" << Maze->grid[Char_Pos_X - 1][Char_Pos_Y].value << "\n";
 			return 0;
 		}
 		break;
 	case 3: // move down aka y-1
-		if (Maze->grid[Char_Pos_X][Char_Pos_Y - 1].is_wall != 1 && (Char_Pos_Y - 1) >= 0)
+		if (Maze->grid[Char_Pos_X][Char_Pos_Y - 1].value != WALL && (Char_Pos_Y - 1) >= 0)
 		{
 			//std::cout << "Can move down" << "\n";
 			Char_Pos_Y--;
@@ -530,12 +578,12 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 		else
 		{
 			//std::cout << "Cant move down to :" << Char_Pos_X << "-" << Char_Pos_Y - 1
-				//<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y - 1].is_wall << "\n";
+				//<< "because :" << Maze->grid[Char_Pos_X][Char_Pos_Y - 1].value << "\n";
 			return 0;
 		}
 		break;
 	case 4: // move right aka x+1
-		if (Maze->grid[Char_Pos_X + 1][Char_Pos_Y].is_wall != 1 && (Char_Pos_X + 1) < Maze->specifications.noOfCols)
+		if (Maze->grid[Char_Pos_X + 1][Char_Pos_Y].value != WALL && (Char_Pos_X + 1) < Maze->specifications.noOfCols)
 		{
 			//std::cout << "Can move right" << "\n";
 			Char_Pos_X++;
@@ -544,7 +592,7 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 		else
 		{
 			//std::cout << "Cant move right to :" << Char_Pos_X + 1 << "-" << Char_Pos_Y
-				//<< "because :" << Maze->grid[Char_Pos_X + 1][Char_Pos_Y].is_wall << "\n";
+				//<< "because :" << Maze->grid[Char_Pos_X + 1][Char_Pos_Y].value << "\n";
 			return 0;
 		}
 		break;
@@ -580,9 +628,9 @@ void MAZE_FogOfWar(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	}
 }
 
-void MAZE_EnterCombat(int curr_X_GRIDposition, int curr_Y_GRIDposition)
+void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
-	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].is_wall == 9)
+	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == ENEMY)
 	{
 		next = COMBAT;
 	}
@@ -592,6 +640,33 @@ void MAZE_EnterCombat(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 		next = CREDITS;
 	}
 
+	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == CHEST)
+	{
+		std::cout << "player is on chest" << std::endl;
+		MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);
+	}
+}
+
+void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
+{
+	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
+	std::cout << "Player has opened chest" << std::endl;
+	
+	int randindex;
+	srand(time(NULL));
+	randindex = ( rand() % 2 ) + 1;
+	if (randindex == 1)
+	{
+		std::cout << "player +10 hp" << std::endl;
+		Player->health += 10;
+	}
+	else if (randindex == 2)
+	{
+		std::cout << "player +10 dmg" << std::endl;
+		Player->damage += 10;
+	}
+	//1 - increased hp
+	//2 - increase dmg
 }
 
 /*
@@ -632,6 +707,7 @@ void Maze_Initialize()
 		std::cout << "Maze:Initialize" << std::endl;
 		MazeGenAlgo();
 		Maze_EnemySpawn(contact_rate);
+		Maze_ChestSpawn(chest_spawn_rate);
 		MazeGenAlgo_PrintRetrievedInformation();
 	}
 	else
@@ -730,7 +806,7 @@ void Maze_Update()
 		next = MENU;
 	}
 
-	MAZE_EnterCombat(curr_X_GRIDposition,curr_Y_GRIDposition);
+	MAZE_StepOntoSpecialCell(curr_X_GRIDposition,curr_Y_GRIDposition);
 
 }
 
