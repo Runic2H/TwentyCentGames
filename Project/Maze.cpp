@@ -20,9 +20,9 @@ float contact_rate = 0.3f;
 float chest_spawn_rate = 0.3f;
 
 float x_scaling = noOfRows/2;
-float y_scaling = noOfCols / 2;
+float y_scaling = noOfCols/2;
 
-
+//extern Characters::Character::c_statsheet* Player;
 
 
 /* FOR MAZEGEN */
@@ -379,12 +379,27 @@ Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows,
 	//INITIALIZING THE DIMENSIONS STRUCT
 	Maze->specifications.noOfRows = noOfRows;
 	Maze->specifications.noOfCols = noOfCols;
+	
+	
+	Maze->specifications.cellWidth = (float)Exe_WindowWidth /  6 ;
+	Maze->specifications.cellHeight = Maze->specifications.cellWidth;//(float)Exe_WindowHeight / 6;
+	
+	Maze->specifications.mazeWindowHeight = Maze->specifications.cellHeight * noOfRows; //((float)Exe_WindowHeight / 6.0f) * 5 *y_scaling;
+	Maze->specifications.mazeWindowWidth = Maze->specifications.cellWidth * noOfRows;//(float)Exe_WindowWidth / 2.0f * x_scaling;
+	Maze->specifications.MazeWindowStart_X = -Maze->specifications.mazeWindowWidth/2;
+	Maze->specifications.MazeWindowStart_Y = (Exe_WindowHeight / 6.0f * 5 / -2);  //(Exe_WindowHeight / 6.0f * 5 / -2);
+
+
+	/*
+	Maze->specifications.noOfCols = noOfCols;
 	Maze->specifications.mazeWindowHeight = ((float)Exe_WindowHeight / 6.0f) * 5;
 	Maze->specifications.mazeWindowWidth = (float)Exe_WindowWidth / 2.0f;
+	Maze->specifications.cellHeight = Maze->specifications.mazeWindowHeight / noOfRows;
 	Maze->specifications.cellHeight = Maze->specifications.mazeWindowHeight / noOfRows ;
 	Maze->specifications.cellWidth = Maze->specifications.mazeWindowWidth / noOfCols;
 	Maze->specifications.MazeWindowStart_X = Exe_WindowWidth / 2.0f / -2;
-	Maze->specifications.MazeWindowStart_Y = (Exe_WindowHeight / 6.0f * 5 / -2);
+	Maze->specifications.MazeWindowStart_Y = (Exe_WindowHeight / 6.0f * 5 / -2)
+	*/
 
 	// Init the grid cells
 	for (int r = 0; r < Maze->specifications.noOfRows; r++)
@@ -635,21 +650,23 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == ENEMY)
 	{
 		next = COMBAT;
+		AEGfxSetCamPosition(0.0f, 0.0f);
 	}
 
 	if (curr_X_GRIDposition == end_x && curr_Y_GRIDposition == end_y)
 	{
 		next = CREDITS;
+		AEGfxSetCamPosition(0.0f, 0.0f);
 	}
 
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == CHEST)
 	{
 		std::cout << "player is on chest" << std::endl;
-		//MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);
+		MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);
 	}
 }
 
-/*
+
 void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
 	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
@@ -660,18 +677,18 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	randindex = ( rand() % 2 ) + 1;
 	if (randindex == 1)
 	{
-		std::cout << "player +10 hp" << std::endl;
-		Player->health += 10;
+		std::cout << "PLACEHOLDER : player +10 hp" << std::endl;
+		playerstats->health + 10;
 	}
 	else if (randindex == 2)
 	{
-		std::cout << "player +10 dmg" << std::endl;
-		Player->damage += 10;
+		std::cout << "PLACEHOLDER : player +10 dmg" << std::endl;
+		playerstats->damage += 10;
 	}
 	//1 - increased hp
 	//2 - increase dmg
 }
-*/
+
 
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
@@ -733,6 +750,8 @@ void Maze_Initialize()
 	std::cout << "X : " << MC_positionX << " --- Y : " << MC_positionY << std::endl;
 
 	MAZE_SetPosAsEmpty(Maze, curr_X_GRIDposition, curr_Y_GRIDposition);
+
+	AEGfxSetCamPosition(0.0f, 0.0f);
 	
 }
 
@@ -745,6 +764,10 @@ void Maze_Initialize()
 void Maze_Update()
 {
 	//std::cout << "Maze:Update" << std::endl;
+
+	float cam_x, cam_y;
+
+	AEGfxGetCamPosition(&cam_x, &cam_y);
 
 	if (AEInputCheckTriggered(AEVK_F11)) {		// R: added
 		if (systemsettings.fullscreen == 0) {	// FOR TESTING: TO BE REPLACED WITH PAUSE MENU BUTTON
@@ -765,6 +788,8 @@ void Maze_Update()
 			MC_positionY += Maze->specifications.cellHeight;
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
 				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+
+			AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
 		}
 	}
 
@@ -775,6 +800,8 @@ void Maze_Update()
 			MC_positionY -= Maze->specifications.cellHeight;
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
 				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+
+			AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
 		}
 	}
 
@@ -788,6 +815,7 @@ void Maze_Update()
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
 				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
+			AEGfxSetCamPosition(cam_x- Maze->specifications.cellWidth, cam_y);
 		}
 	}
 
@@ -799,6 +827,9 @@ void Maze_Update()
 			MC_positionX += Maze->specifications.cellWidth;
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
 				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+		
+
+			AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
 		}
 	}
 
@@ -807,6 +838,8 @@ void Maze_Update()
 	//go back to MENU
 	if (AEInputCheckTriggered(AEVK_Q))
 	{
+
+		AEGfxSetCamPosition(0.0f, 0.0f);
 		next = MENU;
 	}
 
