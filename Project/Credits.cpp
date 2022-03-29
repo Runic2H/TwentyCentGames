@@ -28,7 +28,9 @@ void Credits_Update()
 void Credits_Draw()
 {
 	char strBuffer[1000];
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
 	sprintf_s(strBuffer, "Credits");
 	AEGfxPrint(fontId, strBuffer, -0.06f, 0.9f, 1.0f, 1.f, 1.f, 1.f);
 

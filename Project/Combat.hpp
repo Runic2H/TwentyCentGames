@@ -36,3 +36,4 @@ void Combat_Free();
 	Unload game assets. Frees and releases memory
 */
 void Combat_Unload();
+

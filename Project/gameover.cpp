@@ -58,8 +58,8 @@ void GameOver_Update() {
 
 void GameOver_Draw() {
 
-	float w_ht = AEGetWindowHeight();
-	float w_wd = AEGetWindowWidth();
+	float w_ht = (float)AEGetWindowHeight();
+	float w_wd = (float)AEGetWindowWidth();
 
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);

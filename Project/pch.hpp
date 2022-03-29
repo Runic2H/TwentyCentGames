@@ -8,14 +8,14 @@
 #include <iomanip>
 #include "AEEngine.h"
 #include "Systems.hpp"
-#include "Characters.hpp"
-#include "Maze.hpp"
-#include "Combat.hpp"
 #include "Input.hpp"
 #include "GameStateList.hpp"
 #include "GameStateManager.hpp"
 #include "Menu.hpp"
+#include "Characters.hpp"
 #include "Tutorial.hpp"
+#include "Combat.hpp"
+#include "Maze.hpp"
 #include "Credits.hpp"
 #include "gameover.hpp"
 
@@ -33,6 +33,10 @@ extern Maze_Struct* Maze;
 extern int maze_init_flag;
 extern int curr_X_GRIDposition;
 extern int curr_Y_GRIDposition;
+
+extern player_statsheet* playerstats;
+extern enemy_statsheet* enemystats;
+extern sys systemsettings;
 
 
 #endif	//PCH.H
