@@ -19,6 +19,8 @@ extern sys systemsettings;
 float contact_rate = 0.3f;
 float chest_spawn_rate = 0.3f;
 
+float x_scaling = noOfRows/2;
+float y_scaling = noOfCols / 2;
 
 
 
@@ -379,7 +381,7 @@ Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows,
 	Maze->specifications.noOfCols = noOfCols;
 	Maze->specifications.mazeWindowHeight = ((float)Exe_WindowHeight / 6.0f) * 5;
 	Maze->specifications.mazeWindowWidth = (float)Exe_WindowWidth / 2.0f;
-	Maze->specifications.cellHeight = Maze->specifications.mazeWindowHeight / noOfRows;
+	Maze->specifications.cellHeight = Maze->specifications.mazeWindowHeight / noOfRows ;
 	Maze->specifications.cellWidth = Maze->specifications.mazeWindowWidth / noOfCols;
 	Maze->specifications.MazeWindowStart_X = Exe_WindowWidth / 2.0f / -2;
 	Maze->specifications.MazeWindowStart_Y = (Exe_WindowHeight / 6.0f * 5 / -2);
@@ -643,10 +645,11 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == CHEST)
 	{
 		std::cout << "player is on chest" << std::endl;
-		MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);
+		//MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);
 	}
 }
 
+/*
 void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
 	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
@@ -668,6 +671,7 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	//1 - increased hp
 	//2 - increase dmg
 }
+*/
 
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
