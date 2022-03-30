@@ -6,10 +6,19 @@ const int noOfRows = 11, noOfCols = 11; // DO NOT CHANGE MY GRIDS PLZZZZ :((
 extern int maze_iswall_isnotwall[noOfRows][noOfCols]; // remove later after finishing maze-gen algo
 
 
+enum MazeCellValue
+{
+	EMPTY_PATH = 0,
+	WALL = 1,
+	CHEST = 3,
+	ENEMY = 9
+	
+};
+
 
 struct MazeCells
 {
-	int is_wall = 0;
+	int value = 0;
 	//int is_PlayerPos;
 	bool is_visible = 0;
 
@@ -67,6 +76,10 @@ void MAZE_DrawingMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float MC_p
 void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_height, float cell_width);
 
 int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Char_Pos_X, int& Char_Pos_Y);
+
+void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition);
+
+void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition);
 
 
 /*
