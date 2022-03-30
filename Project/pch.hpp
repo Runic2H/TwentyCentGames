@@ -35,7 +35,17 @@ extern int curr_Y_GRIDposition;
 
 extern player_statsheet* playerstats;
 extern enemy_statsheet* enemystats;
+extern inv* playerinventory;
 extern sys systemsettings;
+
+void player_initialise();
+void enemy_initialise();
+
+enum consumables { HEALTH, STAMINA, DEFENCE };
+enum EnemyPos { IDLE, ATTACKING };
+enum ENEMY_TYPE { NORMAL, ICE, FIRE };
+enum PlayerPos { ORIGIN, TOP, BACK, DOWN, ATTACK };
+enum PlayerStatus { NEUTRAL, FROSTED, FROZEN, BURNING };
 
 
 #endif	//PCH.H

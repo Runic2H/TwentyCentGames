@@ -627,6 +627,9 @@ void Maze_Initialize()
 {
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
 
+	static float initialplayerCD = playerstats->resetCD;	//R: added, combat
+	playerstats->resetCD = initialplayerCD;					// resets CD after combat
+
 	if (maze_init_flag == 0)
 	{
 		std::cout << "Maze:Initialize" << std::endl;

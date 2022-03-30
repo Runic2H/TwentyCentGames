@@ -1,0 +1,17 @@
+PlayerLevel 	1
+PlayerXP 		0
+health 		100
+maxhealth 		100
+positionID 		1
+safegrid 		1
+damage 		10
+staminaCD 		1.0
+staminacount 	0
+staminamax 		3
+staminaX 		-37.0
+isdamagetaken 	0.0
+isattacking 	0
+positionX 		0.0
+positionY 		0.0
+movementdt 		0.0
+Status 		0

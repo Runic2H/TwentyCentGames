@@ -11,8 +11,25 @@ typedef struct sys
 	int fullscreen;
 } sys;
 
+
+typedef struct item {
+	AEGfxVertexList* pMesh;
+	AEGfxTexture*	 pTexture;
+	AEMtx33			 transform;
+	int				 itemcounter;
+}item;
+
+
+typedef struct inv {
+	item healthpotion;
+	item staminapotion;
+	item defencepotion;
+}inv;
+
+
 typedef struct player_statsheet
 {
+	inv playerinventory;
 	float positionX;
 	float positionY;
 	int positionID;
@@ -21,10 +38,10 @@ typedef struct player_statsheet
 	int staminacount;
 	int staminamax;
 	float staminaCD;
+	float resetCD;
 	float staminaX;
 	int maxhealth;
 	int damage;
-	int playerCD;
 	bool is_attacking;
 	float is_dmgtaken;
 	float movementdt;
@@ -39,7 +56,8 @@ typedef struct enemy_statsheet
 	int EnemyType;
 	int health;
 	int maxhealth;
-	int damage;
+	float damage;
+	float enemytypedamage;
 	int EnemyState;
 	float EnemyCD;
 	float positionX;

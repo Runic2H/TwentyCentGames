@@ -84,7 +84,7 @@
 															// Press 2 to switch to combat gamestate, ESC to quit
 				AESysFrameEnd();
 
-			if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())	// check if forcing the application to quit
+			if (0 == AESysDoesWindowExist())	// check if forcing the application to quit
 				next = GS_QUIT;
 
 			}

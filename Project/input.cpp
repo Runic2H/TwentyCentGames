@@ -13,7 +13,7 @@ void Input_Handle() {
 	//	next = COMBAT;
 	//}
 
-	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
-		next = GS_QUIT;
-	}
+	//if (AEInputCheckTriggered(AEVK_ESCAPE)) {
+	//	next = GS_QUIT;
+	//}
 }

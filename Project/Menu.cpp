@@ -87,12 +87,18 @@ void Menu_Init() {
 
 }
 
+	static int X, Y;
 void Menu_Update() {
 
-	win_w = AEGetWindowWidth();
-	win_h = AEGetWindowHeight();
+		//AEInputGetCursorPosition(&X, &Y);						// for debugging
+		//std::cout << "x: " << X << " y: " << Y << std::endl;
 
-	if (AEInputCheckTriggered(AEVK_F11)) {	//QUESTION:
+	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
+		next = GS_QUIT;
+	}
+
+	// FOR TOGGLE FULLSCREEN
+	if (AEInputCheckTriggered(AEVK_F11)) {
 		if (systemsettings.fullscreen == 0) {
 			systemsettings.fullscreen = 1;
 			AEToogleFullScreen(systemsettings.fullscreen);
@@ -168,6 +174,8 @@ void Menu_Update() {
 		}
 	}
 
+
+	// for mouse input
 	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 		// if cursor is within windowedmode box
 		if (x >= 660 && x <= 720 && y >= 543 && y <= 555) {
@@ -224,7 +232,6 @@ void Menu_Draw() {
 	}
 	
 	AEInputGetCursorPosition(&x, &y);
-	//std::cout << posX << " " << posY << std::endl;
 	
 	// Selection grid
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -254,6 +261,7 @@ void Menu_Draw() {
 		AEGfxTextureSet(ducktex, 0.0f, 0.0f);
 		texcounter = 0;
 	}
+
 	AEGfxSetPosition(250.0f, 150.0f);
 	AEGfxSetTintColor(1, 1, 1, 1);
 	AEGfxSetTransparency(1);
@@ -290,34 +298,5 @@ void Menu_Unload() {
 	AEGfxTextureUnload(gamelogostruct.pTexture);
 	AEGfxTextureUnload(ducktex);
 	AEGfxTextureUnload(duckdrooltex);
+
 }
-
-
-//AEMtx33 scale, rot, trans;
-//AEMtx33Scale(&scale, 100.0f, 50.0f);
-//AEMtx33Rot(&rot, 0);
-//AEMtx33Trans(&trans, 295.0f, -250.0f);
-//AEMtx33Concat(&buttonstruct.transform, &scale, &rot);
-//AEMtx33Concat(&buttonstruct.transform, &trans, &buttonstruct.transform);
-
-//AEGfxMeshStart();
-//
-//AEGfxTriAdd(
-//	-0.5f, 0.2f, 0xFFFFFFFF, 0.0f, 0.0f,
-//	-0.5f, -0.2f, 0xFFFFFFFF, 0.0f, 1.0f,
-//	0.5f, 0.2f, 0xFFFFFFFF, 1.0f, 0.0f);
-//AEGfxTriAdd(
-//	0.5f, 0.2f, 0xFFFFFFFF, 1.0f, 0.0f,
-//	-0.5f, -0.2f, 0xFFFFFFFF, 0.0f, 1.0f,
-//	0.5f, -0.2f, 0xFFFFFFFF, 1.0f, 1.0f);
-//
-//buttonstruct.pMesh = AEGfxMeshEnd();
-//AE_ASSERT_MESG(buttonstruct.pMesh, "Failed to create buttonstruct!\n");
-
-//GameObjInst buttonstruct;
-
-//
-//if (buttonstruct.pMesh != nullptr) {
-//	AEGfxMeshFree(buttonstruct.pMesh);
-//	buttonstruct.pMesh = nullptr;
-//}
