@@ -98,6 +98,7 @@ void Combat_Update()
 	else if (playerstats->health <= 0) {
 		std::cout << "You Died!\n";
 		next = GAMEOVER;
+		maze_init_flag = 0;
 	}
 
 	if (keypressed == 0) {											// so i cant move whilst cooldown active
