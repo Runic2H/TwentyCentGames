@@ -30,7 +30,8 @@ namespace Characters
 		AEGfxVertexList* playermaxhealth = 0;	//PLAYER HEALTH MESH
 		AEGfxVertexList* playercurrhealth = 0;	//PLAYER HEALTH MESH
 		AEGfxVertexList* playerstamina = 0;		//PLAYER STAMINA MESH
-		int counter{ 21 };
+		int counter{ 10 };
+		float debuffcounter{0};
 
 		void CombatMesh(int RGBcounter)
 		{
@@ -166,7 +167,7 @@ namespace Characters
 					}
 					else
 					{
-						playerstats->staminaCD = 1.0f;	// resets the playerCD
+						playerstats->staminaCD = 0.85f;	// resets the playerCD
 					}
 					++playerstats->staminacount;
 				}
@@ -293,7 +294,7 @@ namespace Characters
 				AEInputCheckTriggered(AEVK_S) ? x = DOWN : x = x;	//ID Should be 3
 				AEInputCheckTriggered(AEVK_D) ? x = ATTACK : x = x;	//ID Should be 4
 
-				playerstats->movementdt = 0.5f;
+				playerstats->movementdt = 0.50f;
 
 				switch (x) {
 
@@ -352,6 +353,36 @@ namespace Characters
 			}
 		}
 
+		void CheckandUpdatePlayerStatus()
+		{
+			if (debuffcounter > 0)
+			{
+				debuffcounter -= DT;
+			}
+			if (playerstats->status == FROSTED)
+			{
+				if (debuffcounter <= 0)
+				{
+					playerstats->status = NEUTRAL;
+				}
+			}
+			if (playerstats->status == BURNING)
+			{
+				playerstats->is_dmgtaken -= DT;
+				if (debuffcounter <= 0)
+				{
+					playerstats->status = NEUTRAL;
+				}
+				else
+				{
+					if (playerstats->is_dmgtaken <= 0)
+					{
+						playerstats->health -= 2;
+						playerstats->is_dmgtaken = 0.5f;
+					}
+				}
+			}
+		}
 
 		bool PlayerLevelUp()
 		{
@@ -438,6 +469,9 @@ namespace Characters
 			case FROZEN:
 				sprintf_s(strBufferStatus, "Status: Frozen");
 				break;
+			case BURNING:
+				sprintf_s(strBufferStatus, "Status: Burning");
+				break;
 			case NEUTRAL:
 				sprintf_s(strBufferStatus, "Status: Normal");
 				break;
@@ -504,7 +538,6 @@ namespace Characters
 		namespace
 		{
 
-
 			void EnemyTypeCheckToApplyPlayerDebuff()
 			{
 
@@ -515,12 +548,21 @@ namespace Characters
 					if (playerstats->status != Character::FROZEN)
 					{
 						playerstats->status = Character::FROSTED;
+						Character::debuffcounter = 5.0f;
 					}
-					if (enemystats->DebuffCounter == 3 && playerstats->status == Character::FROSTED)
+					if (enemystats->DebuffCounter == 3)
 					{
 						playerstats->status = Character::FROZEN;
-						Character::counter = 21;
+						Character::counter = 10;
 						enemystats->DebuffCounter = 0;
+					}
+					break;
+				case FIRE:
+					if (playerstats->status != Character::BURNING)
+					{
+						playerstats->status = Character::BURNING;
+						Character::debuffcounter = 5.0f;
+						playerstats->is_dmgtaken = 0.5f;
 					}
 					break;
 				case NORMAL:
@@ -596,16 +638,29 @@ namespace Characters
 					enemystats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
 					enemystats->EnemyXP = 20;
 					break;
+
 				case 1:
 					enemystats->EnemyType = ICE;
 					enemystats->health = 50;
 					enemystats->maxhealth = 50;
-					enemystats->damage = 35;
+					enemystats->damage = 25;
+					enemystats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
+					enemystats->DebuffCounter = 0;
+					enemystats->EnemyXP = 50;
+					break;
+
+				case 2:
+					enemystats->EnemyType = FIRE;
+					enemystats->health = 50;
+					enemystats->maxhealth = 50;
+					enemystats->damage = 10;
 					enemystats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
 					enemystats->DebuffCounter = 0;
 					enemystats->EnemyXP = 50;
 					break;
 				}
+
+
 			}
 
 		//Main Update loop for Idle and Attack States of Enemy
@@ -738,6 +793,9 @@ namespace Characters
 				break;
 			case ICE:
 				sprintf_s(strBufferType, "Enemy Type: Frost");
+				break;
+			case FIRE:
+				sprintf_s(strBufferType, "Enemy Type: Fire");
 				break;
 			}
 

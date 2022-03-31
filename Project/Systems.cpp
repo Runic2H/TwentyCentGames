@@ -11,6 +11,7 @@ void System_Initialise() {
 *		FONTS AND SYSTEM SETTINGS
 ******************************************************************/
 	fontId = AEGfxCreateFont("Roboto-Regular.ttf", 12);
+	fontLarge = AEGfxCreateFont("Roboto-Regular.ttf", 67);
 	systemsettings.fullscreen = 0;
 
 
@@ -26,7 +27,7 @@ void System_Initialise() {
 	playerstats->SAFEGRID = 1;							//starting SAFEGRID pos
 	playerstats->damage = 10;							//damage
 	playerstats->staminaCD = 1.0f;						// Cooldown for attack and movement
-	playerstats->staminacount = 3;						// Character stamina count
+	playerstats->staminacount = 0;						// Character stamina count
 	playerstats->staminamax = 3;						// Character stamina max
 	playerstats->staminaX = -37.0f;						// X position of stamina
 	playerstats->playerCD = 5;							//Cooldown for attack and movement
@@ -61,6 +62,7 @@ void System_Initialise() {
 void System_Exit() {
 
 	AEGfxDestroyFont(fontId);
+	AEGfxDestroyFont(fontLarge);
 	delete playerstats;
 	delete enemystats;
 }

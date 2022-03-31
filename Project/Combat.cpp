@@ -58,7 +58,7 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
-	ChoosingEnemyType((rand() % 2) + 0);
+	ChoosingEnemyType((rand() % 3) + 0);
 	MeshInit();		// Single init for the meshes that only need to be created once (NON RGB MESHES)
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
 }
@@ -74,6 +74,7 @@ void Combat_Update()
 	RGBloop(RGBcounter);
 	CombatMesh(RGBcounter);
 	EnemyCombatMesh();
+	CheckandUpdatePlayerStatus();
 
 	if (AEInputCheckTriggered(AEVK_F11)) {	// FOR TESTING: TO BE REPLACED WITH PAUSE MENU BUTTON
 		if (systemsettings.fullscreen == 0) {
@@ -125,6 +126,7 @@ void Combat_Update()
 		{
 			playerstats->PlayerLevel += 1;
 			playerstats->PlayerXP = 0;
+			next = LEVELUP;
 		}		
 	}
 }
@@ -142,7 +144,7 @@ void Combat_Draw()
 	GridCheck(enemystats->is_attacking, enemystats->AttackCD, playerstats->SAFEGRID);
 	playerrender(playertexture, Character::PlayerMesh);
 
-	if (enemystats->AttackCD <= 0.30f)
+	if (enemystats->AttackCD <= 0.40f)
 	{
 		RenderEnemyGrid(EnemyGridAttack);
 	}

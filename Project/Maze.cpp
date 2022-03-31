@@ -672,19 +672,19 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
 	std::cout << "Player has opened chest" << std::endl;
 	
-	int randindex;
-	srand(time(NULL));
-	randindex = ( rand() % 2 ) + 1;
-	if (randindex == 1)
-	{
-		std::cout << "PLACEHOLDER : player +10 hp" << std::endl;
-		playerstats->health + 10;
-	}
-	else if (randindex == 2)
-	{
-		std::cout << "PLACEHOLDER : player +10 dmg" << std::endl;
-		playerstats->damage += 10;
-	}
+	//int randindex;
+	//srand(time(NULL));
+	//randindex = ( rand() % 2 ) + 1;
+	//if (randindex == 1)
+	//{
+	//	std::cout << "PLACEHOLDER : player +10 hp" << std::endl;
+	//	playerstats->health + 10;
+	//}
+	//else if (randindex == 2)
+	//{
+	//	std::cout << "PLACEHOLDER : player +10 dmg" << std::endl;
+	//	playerstats->damage += 10;
+	//}
 	//1 - increased hp
 	//2 - increase dmg
 }
