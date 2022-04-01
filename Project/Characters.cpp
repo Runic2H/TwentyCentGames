@@ -802,20 +802,20 @@ namespace Characters
 					++enemystats->DebuffCounter;
 					if (playerstats->status != FROZEN)
 					{
-						playerstats->status = Character::FROSTED;
+						playerstats->status = FROSTED;
 						Character::debuffcounter = 5.0f;
 					}
 					if (enemystats->DebuffCounter == 3)
 					{
-						playerstats->status = Character::FROZEN;
+						playerstats->status = FROZEN;
 						Character::counter = 10;
 						enemystats->DebuffCounter = 0;
 					}
 					break;
 				case FIRE:
-					if (playerstats->status != Character::BURNING)
+					if (playerstats->status != BURNING)
 					{
-						playerstats->status = Character::BURNING;
+						playerstats->status = BURNING;
 						Character::debuffcounter = 5.0f;
 						playerstats->is_dmgtaken = 0.5f;
 					}
