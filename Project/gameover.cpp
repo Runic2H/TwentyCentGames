@@ -38,11 +38,13 @@ void GameOver_Update() {
 
 	if (AEInputCheckTriggered(AEVK_R)) {
 		// QUESTION: is there a maze restart?
+		maze_init_flag = 0;
 		next = MAZE;
 	}
 
 	if (AEInputCheckTriggered(AEVK_Q)) {
 		next = MENU;
+		maze_init_flag = 0;
 	}
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
@@ -77,7 +79,7 @@ void GameOver_Draw() {
 
 
 	char strbuffer[100];
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND); 
 	memset(strbuffer, 0, 100 * sizeof(char));		// sets all values to 0
 
 	sprintf_s(strbuffer, "HOTKEYS");

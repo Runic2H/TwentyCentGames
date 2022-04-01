@@ -30,7 +30,6 @@ namespace Characters
 		//enum PlayerPos { ORIGIN, TOP, BACK, DOWN, ATTACK };
 		//enum PlayerStatus { NEUTRAL, FROSTED, FROZEN, BURNING };
 
-
 		void PlayerMovement(int& x, int& keypressed);
 
 		void CombatMesh(int RGBcounter);
@@ -46,6 +45,8 @@ namespace Characters
 		void StaminaRender(AEGfxTexture* staminapotion);
 
 		void StaminaLogic(int const& keypressed);
+
+		void CheckandUpdatePlayerStatus();
 
 		bool PlayerLevelUp();
 

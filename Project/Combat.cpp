@@ -66,7 +66,7 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
-	ChoosingEnemyType((rand() % 2) + 0);
+	ChoosingEnemyType((rand() % 3) + 0);
 	MeshInit();		// Single init for the meshes that only need to be created once (NON RGB MESHES)
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
 }
@@ -79,7 +79,7 @@ void Combat_Initialize()
 */
 void Combat_Update()
 {
-
+  
 	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
 		systemsettings.paused = 1;
 	} 
@@ -91,10 +91,12 @@ void Combat_Update()
 	// if not paused
 	if (systemsettings.paused == 0)
 	{
+    
 		RGBloop(RGBcounter);
 		CombatMesh(RGBcounter);
 		EnemyCombatMesh();
 		inventorylogic();
+    CheckandUpdatePlayerStatus();
 
 		if (enemystats->health <= 0)
 		{
@@ -103,12 +105,12 @@ void Combat_Update()
 			maze_init_flag = 1;
 			std::cout << "return to maze\n";
 		}
-
-		else if (playerstats->health <= 0) {
-			std::cout << "You Died!\n";
-			next = GAMEOVER;
-		}
-
+    else if (playerstats->health <= 0) {
+      std::cout << "You Died!\n";
+      next = GAMEOVER;
+      maze_init_flag = 0;
+    }
+  
 		if (keypressed == 0) {											// so i cant move whilst cooldown active
 			PlayerMovement(x, keypressed);								// character movement	
 			StaminaLogic(keypressed);
@@ -133,9 +135,11 @@ void Combat_Update()
 			if (PlayerLevelUp())
 			{
 				playerstats->PlayerLevel += 1;
-				playerstats->PlayerXP = 0;
+			  playerstats->PlayerXP = 0;
+			  next = LEVELUP;
 			}
 		}
+    
 	}
 
 	// else paused
@@ -143,8 +147,9 @@ void Combat_Update()
 		//render pause menu here
 		logicpausemenu();
 		renderpausemenu();
-	}
-}
+		}	
+  
+  }
 
 
 /*
@@ -161,7 +166,7 @@ void Combat_Draw()
 	GridCheck(enemystats->is_attacking, enemystats->AttackCD, playerstats->SAFEGRID);
 	playerrender(playertexture, Character::PlayerMesh);
 
-	if (enemystats->AttackCD <= 0.30f)
+	if (enemystats->AttackCD <= 0.40f)
 	{
 		RenderEnemyGrid(EnemyGridAttack);
 	}
