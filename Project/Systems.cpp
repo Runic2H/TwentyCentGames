@@ -153,6 +153,7 @@ void System_Initialise() {
 *		FONTS AND SYSTEM SETTINGS
 ******************************************************************/
 	fontId = AEGfxCreateFont("Roboto-Regular.ttf", 12);
+	fontLarge = AEGfxCreateFont("Roboto-Regular.ttf", 67);
 	systemsettings.fullscreen = 0;
 	systemsettings.paused = 0;
 
@@ -160,7 +161,6 @@ void System_Initialise() {
 /******************************************************************
 *		PLAYER INVENTORY CONSUMABLES
 ******************************************************************/
-
 	playerinventory = new inv;
 	inventory_initialise();
 
@@ -174,16 +174,13 @@ void System_Initialise() {
 
 
 void System_Exit() {
-
 	AEGfxDestroyFont(fontId);
-	AEGfxTextureUnload(playerinventory->defencepotion.pTexture);		//EXCEPTION THROWN HERE
+  AEGfxDestroyFont(fontLarge);
+	AEGfxTextureUnload(playerinventory->defencepotion.pTexture);
 	AEGfxTextureUnload(playerinventory->healthpotion.pTexture);
 	AEGfxTextureUnload(playerinventory->staminapotion.pTexture);
-
 	AEGfxMeshFree(playerinventory->defencepotion.pMesh);
-	
 	delete playerstats;
 	delete enemystats;
 	delete playerinventory;
-
 }

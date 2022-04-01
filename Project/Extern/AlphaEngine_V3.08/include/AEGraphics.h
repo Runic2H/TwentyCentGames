@@ -310,7 +310,8 @@ AE_API f32 AEGfxGetWinMaxY(void);
 
 /******************************************************************************/
 /*!
-\fn         void AEGfxSetCamPosition(f32 X, f32 Y)
+\fn         void 
+(f32 X, f32 Y)
 
 \brief      Set the camera's X and Y position.
 
