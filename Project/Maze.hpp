@@ -1,23 +1,28 @@
 #include "pch.hpp"
 
 #pragma once
-const int noOfRows = 11, noOfCols = 11; // DO NOT CHANGE MY GRIDS PLZZZZ :((
+constexpr int level[4] = {11,15,19,23};
+const int noOfRows = level[0],noOfCols = level[0]; // DO NOT CHANGE MY GRIDS PLZZZZ :((
 
 extern int maze_iswall_isnotwall[noOfRows][noOfCols]; 
 extern int maze_visibility[noOfRows][noOfCols];
 
 
 
+
 enum MazeCellValue
 {
-	EMPTY_PATH = 0,
-	WALL = 1,
+	UNUSED = 0,
+	EMPTY_PATH = 1,
+	WALL = 2,
 	CHEST = 3,
-	ENEMY = 9
+	ENEMY = 9,
+	BOSS =5
+
 	
 };
 
-
+ 
 struct MazeCells
 {
 	int value = 0;
@@ -54,6 +59,7 @@ void MazeGenAlgo_ChoosingStartingPos(int& startX, int& startY, int& endX, int& e
 void MazeGenAlgo_Set_walls();
 void MazeGenAlgo_PrintRetrievedInformation();
 bool MazeGenAlgo_PostGenCheck();
+void MazeGenAlgo_BossSpawn();
 void MazeGenAlgo();
 /*========================================================================================*/
 

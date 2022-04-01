@@ -50,6 +50,11 @@ std::vector<wallXY> MazeOGWalls_XY;
 int maze_iswall_isnotwall[noOfRows][noOfCols];
 int maze_visibility[noOfRows][noOfCols];
 
+void MazeGenAlgo_BossSpawn()
+{
+	maze_iswall_isnotwall[end_x][end_y - 1] = 5;
+}
+
 void Maze_EnemySpawn(float contact_rate)
 {
 	// count how many paths there are
@@ -333,6 +338,7 @@ void MazeGenAlgo()
 	MazeGenAlgo_MakeMaze();
 	MazeGenAlgo_ChoosingStartingPos(start_x, start_y, end_x, end_y, noOfRows, noOfCols);
 	MazeGenAlgo_Set_walls();
+	//MazeGenAlgo_BossSpawn();
 	MazeGenAlgo_PrintRetrievedInformation();
 
 	bool flag = MazeGenAlgo_PostGenCheck();
@@ -351,6 +357,8 @@ void MazeGenAlgo()
 	
 	
 	(flag) ? std::cout << "ALL OK" << std::endl : std::cout << "ONE COL STRAIGHT UP" << std::endl;
+	MazeGenAlgo_BossSpawn();
+	std::cout << "BOSS SPAWNED" << std::endl;
 }
 
 /*========================================================================================*/
@@ -653,8 +661,16 @@ void MAZE_ReLOADCellVisibility(Maze_Struct* maze_var)
 
 void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
+	
+	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == BOSS)
+	{
+		next = COMBAT;
+		global_maze_cam_x = cam_x;
+		global_maze_cam_y = cam_y;
+		MAZE_SaveCellVisibility(Maze);
 
-
+		AEGfxSetCamPosition(0.0f, 0.0f);
+	}
 
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == ENEMY)
 	{
