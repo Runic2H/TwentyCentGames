@@ -817,8 +817,6 @@ void Maze_Load()
 
 
 
-
-
 /*
 	Initializes and sets the starting values of level1.
 	Ensures the input file stream opens correctly, and the values
@@ -827,6 +825,9 @@ void Maze_Load()
 void Maze_Initialize()
 {
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
+
+	static float initialplayerCD = playerstats->resetCD;	//R: added, combat
+	playerstats->resetCD = initialplayerCD;					// resets CD after combat
 
 	if (maze_init_flag == 0)
 	{

@@ -27,8 +27,8 @@ namespace Characters
 		extern AEGfxVertexList* playermaxhealth;	//PLAYER HEALTH MESH
 		extern AEGfxVertexList* playercurrhealth;
 
-		enum PlayerPos { ORIGIN, TOP, BACK, DOWN, ATTACK };
-		enum PlayerStatus { NEUTRAL, FROSTED, FROZEN, BURNING };
+		//enum PlayerPos { ORIGIN, TOP, BACK, DOWN, ATTACK };
+		//enum PlayerStatus { NEUTRAL, FROSTED, FROZEN, BURNING };
 
 		void PlayerMovement(int& x, int& keypressed);
 
@@ -57,6 +57,14 @@ namespace Characters
 		void GridCheck(bool EnemyAttackState, float timer, int& x);
 
 		void RenderPlayerHealth();
+
+		void inventorylogic();
+
+		void inventoryrender();
+
+		void renderpausemenu();
+
+		void logicpausemenu();
 	}
 
 	/******************************************************

@@ -17,33 +17,38 @@ void GameOver_Load() {
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
-		-AEGetWindowWidth()/2, AEGetWindowHeight()/2, 0xFFFF0000, 0.0f, 0.0f,
-		-AEGetWindowWidth()/2, -AEGetWindowHeight()/2, 0xFFFF0000, 0.0f, 1.0f,
-		AEGetWindowWidth()/2, AEGetWindowHeight()/2, 0xFFFFFFFF, 1.0f, 0.0f);
+		-(float)AEGetWindowWidth()/2, (float)AEGetWindowHeight()/2, 0xFFFF0000, 0.0f, 0.0f,
+		-(float)AEGetWindowWidth()/2, -(float)AEGetWindowHeight()/2, 0xFFFF0000, 0.0f, 1.0f,
+		(float)AEGetWindowWidth()/2, (float)AEGetWindowHeight()/2, 0xFFFFFFFF, 1.0f, 0.0f);
 	AEGfxTriAdd(
-		AEGetWindowWidth()/2, AEGetWindowHeight()/2, 0xFFFF0000, 1.0f, 0.0f,
-		-AEGetWindowWidth()/2, -AEGetWindowHeight()/2, 0xFFFF0000, 0.0f, 1.0f,
-		AEGetWindowWidth()/2, -AEGetWindowHeight()/2, 0xFFFFFFFF, 1.0f, 1.0f);
+		(float)AEGetWindowWidth()/2, (float)AEGetWindowHeight()/2, 0xFFFF0000, 1.0f, 0.0f,
+		-(float)AEGetWindowWidth()/2, -(float)AEGetWindowHeight()/2, 0xFFFF0000, 0.0f, 1.0f,
+		(float)AEGetWindowWidth()/2, -(float)AEGetWindowHeight()/2, 0xFFFFFFFF, 1.0f, 1.0f);
 
 	gamemesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(gamemesh, "Failed to create gamelogo!\n");
 }
 
 void GameOver_Init() {
-
+	player_initialise();			// reinitialises the player stats
+	enemy_initialise();				// reinitialises the enemy stats
 }
 
 void GameOver_Update() {
 
 	if (AEInputCheckTriggered(AEVK_R)) {
+		// QUESTION: is there a maze restart?
 		maze_init_flag = 0;
 		next = MAZE;
-
 	}
 
 	if (AEInputCheckTriggered(AEVK_Q)) {
 		next = MENU;
 		maze_init_flag = 0;
+	}
+
+	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
+		next = GS_QUIT;
 	}
 
 	//AEGfxGetCamPosition(&camX, &camY);			// cam position for debugging

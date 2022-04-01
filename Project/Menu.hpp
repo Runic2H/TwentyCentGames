@@ -10,3 +10,5 @@ void Menu_Draw();
 void Menu_Free();
 
 void Menu_Unload();
+
+void systemupdate();

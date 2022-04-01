@@ -20,6 +20,10 @@ namespace Characters
 		/************************************************************
 		*			CHARACTER NAMESPACE DECLARATIONS
 		************************************************************/
+		item* menubutton;
+		item* exitbutton;
+		item* resumebutton;
+		
 		AEGfxVertexList* Player1Grid = 0;	//ORIGN
 		AEGfxVertexList* Player2Grid = 0;	//TOP
 		AEGfxVertexList* Player3Grid = 0;	//BACK
@@ -105,6 +109,10 @@ namespace Characters
 		// the meshes that i only want to initialise once
 		void MeshInit() {
 
+			menubutton = new item;
+			exitbutton = new item;
+			resumebutton = new item;
+
 			// THE MAX PLAYER HEALTH
 			AEGfxMeshStart();
 			AEGfxVertexAdd(-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
@@ -115,6 +123,30 @@ namespace Characters
 
 			playermaxhealth = AEGfxMeshEnd();
 			AE_ASSERT_MESG(playermaxhealth, "Failed to create playerhealth!!");
+
+			//
+
+			AEGfxMeshStart();
+			AEGfxTriAdd(
+				-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+				0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+				-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+			AEGfxTriAdd(
+				0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+				0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+				-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+				menubutton->pMesh
+				= exitbutton->pMesh
+				= resumebutton->pMesh
+				= AEGfxMeshEnd();
+			AE_ASSERT_MESG(menubutton->pMesh, "Failed to create pause meshes!!\n");
+
+		
+			menubutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\mainmenubutton.png");
+			resumebutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\resumebutton.png");
+			exitbutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\exitbutton.png");
+	
 
 			//
 
@@ -148,11 +180,10 @@ namespace Characters
 			playerstamina = AEGfxMeshEnd();
 			AE_ASSERT_MESG(playerstamina, "Failed to create stamina mesh!!");
 		}
-
+		
 
 		void StaminaLogic(int const& keypressed)
 		{
-
 			//std::cout << playerstats->staminacount << "\n";
 			//static int flagset = 0;
 
@@ -167,7 +198,7 @@ namespace Characters
 					}
 					else
 					{
-						playerstats->staminaCD = 0.85f;	// resets the playerCD
+						playerstats->staminaCD = playerstats->resetCD;	// resets the playerCD
 					}
 					++playerstats->staminacount;
 				}
@@ -176,6 +207,102 @@ namespace Characters
 			if (keypressed == 1) {
 				--playerstats->staminacount;
 			}
+		}
+
+		
+		// QUESTION: ACCESS VIOLATION
+		void logicpausemenu() {
+			
+			// insert textures here
+			if (AEInputCheckTriggered(AEVK_Q)) {
+				next = GS_QUIT;
+			}
+
+			menubutton->itemcounter = resumebutton->itemcounter = exitbutton->itemcounter = 0.5f;
+			AEMtx33 scale, rot, trans, buffer;
+
+			AEInputGetCursorPosition(&cursorx, &cursory);
+
+			AEMtx33Scale(&scale, 150.0f, 50.0f);
+			AEMtx33Rot(&rot, 0.0f);
+			AEMtx33Concat(&buffer, &scale, &rot);
+			
+			AEMtx33Trans(&trans, -250.0f, -100.0f);
+			AEMtx33Concat(&menubutton->transform, &trans, &buffer);
+
+			AEMtx33Trans(&trans, 0.0f, -100.0f);
+			AEMtx33Concat(&resumebutton->transform, &trans, &buffer);
+
+			AEMtx33Trans(&trans, 250.0f, -100.0f);
+			AEMtx33Concat(&exitbutton->transform, &trans, &buffer);
+
+			if (cursorx >= 76 && cursorx <= 224 && cursory >= 375 && cursory <= 420) {
+				menubutton->itemcounter = 1.0f;
+				if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+					next = MENU;
+				}
+			}
+
+			if (cursorx >= 326 && cursorx <= 474 && cursory >= 375 && cursory <= 420) {
+				resumebutton->itemcounter = 1.0f;
+				if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+					systemsettings.paused = 0;
+				}
+			}
+
+			if (cursorx >= 577 && cursorx <= 726 && cursory >= 375 && cursory <= 420) {
+				exitbutton->itemcounter = 1.0f;
+				if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+					next = GS_QUIT;
+				}
+			}
+
+			if (AEInputCheckTriggered(AEVK_F11)) {
+				systemsettings.fullscreen == 1 ? systemsettings.fullscreen = 0 : systemsettings.fullscreen = 1;
+				AEToogleFullScreen(systemsettings.fullscreen);
+			}
+		}
+
+		void renderpausemenu() {
+
+			// draw my buttons and meshes
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+			AEGfxSetTintColor(1, 1, 1, 1);
+			AEGfxSetTransparency(1);
+
+			AEGfxSetTransform(menubutton->transform.m);
+			AEGfxSetTransparency(menubutton->itemcounter);
+			AEGfxTextureSet(menubutton->pTexture, 0, 0);
+			AEGfxMeshDraw(menubutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+			AEGfxSetTransform(resumebutton->transform.m);
+			AEGfxSetTransparency(resumebutton->itemcounter);
+			AEGfxTextureSet(resumebutton->pTexture, 0, 0);
+			AEGfxMeshDraw(resumebutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+			AEGfxSetTransform(exitbutton->transform.m);
+			AEGfxSetTransparency(exitbutton->itemcounter);
+			AEGfxTextureSet(exitbutton->pTexture , 0, 0);
+			AEGfxMeshDraw(exitbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+
+
+			char strBuffer[35];
+
+			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxTextureSet(NULL, 0, 0);
+			AEGfxSetTransparency(1.0f);
+
+			sprintf_s(strBuffer, "PAUSED");
+			AEGfxPrint(fontId, strBuffer, -0.12f, 0.35f, 2.0f, 1.0f, 0.0f, 0.0f);
+
+			sprintf_s(strBuffer, "Press F11 to toggle fullscreen!");
+			AEGfxPrint(fontId, strBuffer, -0.23f, 0.3f, 1.14f, 0.5f, 0.5f, 0.5f);
+			AEGfxSetBlendMode(AE_GFX_BM_NONE);
+
+
 		}
 
 
@@ -192,6 +319,107 @@ namespace Characters
 				AEGfxMeshDraw(playerstamina, AE_GFX_MDM_TRIANGLES);
 			}
 		}
+
+
+		void inventorylogic() {
+
+			playerinventory->healthpotion.itemcounter += 1.0f;	// TO BE REPLACED BY CHEST UPGRADES
+			playerinventory->defencepotion.itemcounter += 1.0f;
+			playerinventory->staminapotion.itemcounter += 1.0f;
+			//std::cout << playerstats->resetCD << std::endl;
+
+			if (AEInputCheckTriggered(AEVK_1)) {
+				if (playerinventory->defencepotion.itemcounter > 0) {
+					--playerinventory->defencepotion.itemcounter;
+					enemystats->damage *= 0.7f;
+				}
+			}
+
+			if (AEInputCheckTriggered(AEVK_2)) {
+				if (playerinventory->healthpotion.itemcounter > 0) {
+					--playerinventory->healthpotion.itemcounter;
+					playerstats->health += 50;
+
+					if (playerstats->health > playerstats->maxhealth) {
+						playerstats->health = playerstats->maxhealth;
+						}
+				}
+			}
+
+			if (AEInputCheckTriggered(AEVK_3)) {
+				if (playerinventory->staminapotion.itemcounter > 0) {
+					--playerinventory->staminapotion.itemcounter;
+					playerstats->resetCD *= 0.7f;
+				}
+			}
+		}
+
+
+		void inventoryrender() {
+
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+			AEGfxSetTintColor(1, 1, 1, 1);
+			AEGfxSetTransparency(1);
+
+			AEGfxSetTransform(playerinventory->defencepotion.transform.m);
+			AEGfxTextureSet(playerinventory->defencepotion.pTexture, 0, 0);
+			AEGfxMeshDraw(playerinventory->defencepotion.pMesh, AE_GFX_MDM_TRIANGLES);
+
+			AEGfxSetTransform(playerinventory->healthpotion.transform.m);
+			AEGfxTextureSet(playerinventory->healthpotion.pTexture, 0, 0);
+			AEGfxMeshDraw(playerinventory->healthpotion.pMesh, AE_GFX_MDM_TRIANGLES);
+
+			AEGfxSetTransform(playerinventory->staminapotion.transform.m);
+			AEGfxTextureSet(playerinventory->staminapotion.pTexture, 0, 0);
+			AEGfxMeshDraw(playerinventory->staminapotion.pMesh, AE_GFX_MDM_TRIANGLES);
+
+
+			char defencestr[20], staminastr[20], healthstr[20];
+			sprintf_s(defencestr, "%0.0f", playerinventory->defencepotion.itemcounter);
+			sprintf_s(staminastr, "%0.0f", playerinventory->staminapotion.itemcounter);
+			sprintf_s(healthstr, "%0.0f", playerinventory->healthpotion.itemcounter);
+
+			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+			
+
+			if (playerinventory->healthpotion.itemcounter == 0) {	// print red when count = 0
+				AEGfxPrint(fontId, healthstr, 0.03f, -0.7f, 1.14f, 1.f, 0.f, 0.f);
+			}
+			else {
+				AEGfxPrint(fontId, healthstr, 0.03f, -0.7f, 1.14f, 1.f, 1.f, 1.f);
+			}
+
+
+			if (playerinventory->defencepotion.itemcounter == 0) {	// print red when count = 0
+				AEGfxPrint(fontId, defencestr, -0.15f, -0.7f, 1.14f, 1.f, 0.f, 0.f);
+			}
+			else {
+				AEGfxPrint(fontId, defencestr, -0.15f, -0.7f, 1.14f, 1.f, 1.f, 1.f);
+			}
+
+
+			if (playerinventory->staminapotion.itemcounter == 0) {	// print red when count = 0
+				AEGfxPrint(fontId, staminastr, 0.2f, -0.7f, 1.14f, 1.f, 0.f, 0.f);
+			}
+			else {
+				AEGfxPrint(fontId, staminastr, 0.2f, -0.7f, 1.14f, 1.f, 1.f, 1.f);
+			}
+
+			// reusing char[] tp print out the names
+			sprintf_s(defencestr, "1");
+			sprintf_s(healthstr, "2");
+			sprintf_s(staminastr, "3");
+			AEGfxPrint(fontId, defencestr, -0.25f, -0.57f, 0.9f, 1.0f, 1.0f, 1.0f);
+			AEGfxPrint(fontId, healthstr, -0.08f, -0.57f, 0.9f, 1.0f, 1.0f, 1.0f);
+			AEGfxPrint(fontId, staminastr, 0.09f, -0.57f, 0.9f, 1.0f, 1.0f, 1.0f);
+
+			AEGfxSetBlendMode(AE_GFX_BM_NONE);
+			// TO ADD: POTION COUNT
+		}
+
 
 		void RenderPlayerGrid(AEGfxVertexList* PlayerMesh)
 		{
@@ -232,6 +460,7 @@ namespace Characters
 			}
 		}
 
+		// single update free player mesh
 		void FreePlayerMesh()
 		{
 			if (PlayerMesh != nullptr) {
@@ -279,6 +508,14 @@ namespace Characters
 				Player5Grid = nullptr;
 			}
 
+			if (menubutton->pMesh != nullptr) {
+				AEGfxMeshFree(menubutton->pMesh);			// 1 MESH FREES ALL 3 MESHES
+				menubutton->pMesh = nullptr;
+			}
+			
+			delete menubutton;
+			delete exitbutton;
+			delete resumebutton;
 		}
 
 		// returns an int. any movement sets the int flag to 1
@@ -465,15 +702,34 @@ namespace Characters
 			{
 			case FROSTED:
 				sprintf_s(strBufferStatus, "Status: Frosted");
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.75f, 1.0f, 0.0f, 0.7f, 0.9f);
+				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
+
 			case FROZEN:
 				sprintf_s(strBufferStatus, "Status: Frozen");
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.75f, 1.0f, 0.f, 0.7f, 0.6f);
+				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
+
 			case BURNING:
 				sprintf_s(strBufferStatus, "Status: Burning");
+         AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.75f, 1.0f, 0.7f, 0.0f, 0.6f);
+				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
+
 			case NEUTRAL:
 				sprintf_s(strBufferStatus, "Status: Normal");
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
+				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
 			}
 
@@ -509,7 +765,6 @@ namespace Characters
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			AEGfxPrint(fontId, strBufferHealth, -0.95f, -0.95f, 1.0f, 1.f, 1.f, 1.f);
 			AEGfxPrint(fontId, strBufferLevel, -0.95f, -0.85f, 1.0f, 1.f, 1.f, 1.f);
-			AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
 			sprintf_s(strBuffer, "Stamina: %d", playerstats->staminacount);
 			AEGfxPrint(fontId, strBuffer, -0.10f, -0.80f, 1.14f, 1.0f, 1.0f, 1.0f);
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -531,8 +786,8 @@ namespace Characters
 		AEGfxVertexList* Enemymaxhealth = 0;
 		AEGfxVertexList* Enemycurrhealth = 0;
 
-		enum EnemyPos { IDLE, ATTACKING };
-		enum ENEMY_TYPE { NORMAL, ICE, FIRE };
+		//enum EnemyPos { IDLE, ATTACKING };
+		//enum ENEMY_TYPE { NORMAL, ICE, FIRE };
 
 
 		namespace
@@ -545,7 +800,7 @@ namespace Characters
 				{
 				case ICE:
 					++enemystats->DebuffCounter;
-					if (playerstats->status != Character::FROZEN)
+					if (playerstats->status != FROZEN)
 					{
 						playerstats->status = Character::FROSTED;
 						Character::debuffcounter = 5.0f;
@@ -589,7 +844,7 @@ namespace Characters
 					{
 						if (playerstats->positionID != playerstats->SAFEGRID)
 						{
-							playerstats->health -= enemystats->damage;
+							playerstats->health -= (int)enemystats->damage;
 							EnemyTypeCheckToApplyPlayerDebuff();
 						}
 
@@ -634,7 +889,8 @@ namespace Characters
 					enemystats->EnemyType = NORMAL;
 					enemystats->health = 40;
 					enemystats->maxhealth = 40;
-					enemystats->damage = 10;
+					enemystats->enemytypedamage = 10;
+					enemystats->damage = enemystats->enemytypedamage;
 					enemystats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
 					enemystats->EnemyXP = 20;
 					break;
@@ -643,6 +899,8 @@ namespace Characters
 					enemystats->EnemyType = ICE;
 					enemystats->health = 50;
 					enemystats->maxhealth = 50;
+					enemystats->enemytypedamage = 20;
+					enemystats->damage = enemystats->enemytypedamage;
 					enemystats->damage = 25;
 					enemystats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
 					enemystats->DebuffCounter = 0;
@@ -653,7 +911,8 @@ namespace Characters
 					enemystats->EnemyType = FIRE;
 					enemystats->health = 50;
 					enemystats->maxhealth = 50;
-					enemystats->damage = 10;
+					enemystats->enemytypedamage = 10;
+					enemystats->damage = enemystats->enemytypedamage;
 					enemystats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
 					enemystats->DebuffCounter = 0;
 					enemystats->EnemyXP = 50;
@@ -789,10 +1048,17 @@ namespace Characters
 			switch (enemystats->EnemyType)
 			{
 			case NORMAL:
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				sprintf_s(strBufferType, "Enemy Type: Normal");
+				AEGfxPrint(fontId, strBufferType, 0.60f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
+				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
+
 			case ICE:
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				sprintf_s(strBufferType, "Enemy Type: Frost");
+				AEGfxPrint(fontId, strBufferType, 0.60f, -0.75f, 1.0f, 0.0f, 0.7f, 0.9f);
+				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
 			case FIRE:
 				sprintf_s(strBufferType, "Enemy Type: Fire");
@@ -831,7 +1097,6 @@ namespace Characters
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			AEGfxPrint(fontId, strBufferHealth, 0.60f, -0.95f, 1.0f, 1.f, 1.f, 1.f);
 			AEGfxPrint(fontId, strBufferLevel, 0.60f, -0.85f, 1.0f, 1.f, 1.f, 1.f);
-			AEGfxPrint(fontId, strBufferType, 0.60f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
 		}
 	}

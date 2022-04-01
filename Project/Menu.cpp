@@ -15,8 +15,8 @@ int RGBcounter = 16384000, flagg = 1;
 int texcounter{ 0 };
 float posX{ -340.0f }, posY{ -70.0f };
 int choice{ 0 };
-static s32 x, y;
-
+s32 cursorx, cursory;
+AEMtx33 scale, rot, trans, buffer;
 
 
 /**************************************************
@@ -26,15 +26,15 @@ static s32 x, y;
 struct GameObjInst {
 	AEGfxVertexList* pMesh;
 	AEGfxTexture*	pTexture;
-	float			scale;
-	AEVec2			posCurr;
-	AEMtx33			transform;
 };
 
 GameObjInst ducklogostruct;
 GameObjInst selectionstruct;
 GameObjInst gamelogostruct;
-
+item		startbutton;
+item		tutorialbutton;
+item		creditsbutton;
+item		exitbutton;
 
 
 void Menu_Load() {
@@ -81,6 +81,28 @@ void Menu_Load() {
 	ducklogostruct.pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(ducklogostruct.pMesh, "Failed to create gamelogo!\n");
 
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+		startbutton.pMesh
+		= tutorialbutton.pMesh
+		= creditsbutton.pMesh
+		= exitbutton.pMesh
+		= AEGfxMeshEnd();
+	AE_ASSERT_MESG(tutorialbutton.pMesh, "Failed to create pause meshes!!\n");
+
+	startbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\startbutton.png");
+	tutorialbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\tutorialbutton.png");
+	exitbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\exitbutton.png");
+	creditsbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\creditsbutton.png");
 }
 
 void Menu_Init() {
@@ -89,25 +111,17 @@ void Menu_Init() {
 
 void Menu_Update() {
 
-	win_w = AEGetWindowWidth();
-	win_h = AEGetWindowHeight();
 
-	if (AEInputCheckTriggered(AEVK_F11)) {	//QUESTION:
-		if (systemsettings.fullscreen == 0) {
-			systemsettings.fullscreen = 1;
-			AEToogleFullScreen(systemsettings.fullscreen);
-		}
-
-		else if (systemsettings.fullscreen == 1){
-			systemsettings.fullscreen = 0;
-			AEToogleFullScreen(systemsettings.fullscreen);
-		}
-	}
+	startbutton.itemcounter 
+		= tutorialbutton.itemcounter 
+		= exitbutton.itemcounter 
+		= creditsbutton.itemcounter
+		= 0.5f;
 
 	RGBcounter >= 16449436 ? flagg = 0 : flagg = flagg;
 	RGBcounter <= 16319434 ? flagg = 1 : flagg = flagg;
 	flagg == 1 ? RGBcounter += 150 : RGBcounter -= 150;
-
+	
 
 	if (selectionstruct.pMesh != nullptr) {
 		AEGfxMeshFree(selectionstruct.pMesh);
@@ -117,96 +131,72 @@ void Menu_Update() {
 	AEGfxMeshStart();
 	AEGfxVertexAdd(50.0f, -25.0f, RGBcounter, 0.0f, 1.0f);
 	AEGfxVertexAdd(150.0f, -25.0f, RGBcounter, 1.0f, 1.0f);
-	AEGfxVertexAdd(150.0f, 25.0f, RGBcounter, 0.0f, 0.0f);				// SELECTION GRID
+	AEGfxVertexAdd(150.0f, 25.0f, RGBcounter, 0.0f, 0.0f);				// for RGB
 	AEGfxVertexAdd(50.0f, 25.0f, RGBcounter, 1.0f, 0.0f);
 	AEGfxVertexAdd(50.0f, -25.0f, RGBcounter, 0.0f, 1.0f);
 	selectionstruct.pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(selectionstruct.pMesh, "failed to create Selection object");
 
-	if (AEInputCheckTriggered(AEVK_D)) {
-		if (!(posX >= 110.0f)) {
-			posX += 150.0f;
-			++choice;
-		}
-	}
+	systemupdate();
 
-	if (AEInputCheckTriggered(AEVK_A)) {
-		if (!(posX <= -340.0f)) {
-			posX -= 150.0f;
-			--choice;
-		}
-	}
+	AEMtx33Scale(&scale, 100.0f, 50.0f);
+	AEMtx33Rot(&rot, 0.0f);
+	AEMtx33Concat(&buffer, &scale, &rot);
 
-	if (AEInputCheckTriggered(AEVK_S)) {
-			posX =  195.0f;
-			posY = -250.0f;
-			choice = 4;
-	}
+	AEMtx33Trans(&trans, -241.0f, -70.0f);
+	AEMtx33Concat(&startbutton.transform, &trans, &buffer);
 
-	if (AEInputCheckTriggered(AEVK_W)) {
-			posX = -340.0f;
-			posY = -70.0f;
-			choice = 0;
-	}
+	AEMtx33Trans(&trans, -91.0f, -70.0f);
+	AEMtx33Concat(&tutorialbutton.transform, &trans, &buffer);
 
-	if (AEInputCheckTriggered(AEVK_SPACE)) {
+	AEMtx33Trans(&trans,  59.0f, -70.0f);
+	AEMtx33Concat(&creditsbutton.transform, &trans, &buffer);
 
-		switch (choice) {
-		case 0: next = MAZE;
-			break;
-		case 1: next = TUTORIAL;
-			break;
-		case 2: next = CREDITS;
-			break;
-		case 3: next = GS_QUIT;
-			break;
-		case 4: 
-			systemsettings.fullscreen == 0 ? systemsettings.fullscreen = 1 : systemsettings.fullscreen = 0;
-			AEToogleFullScreen(systemsettings.fullscreen);
-			break;
-
-		}
-	}
-
-	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-		// if cursor is within windowedmode box
-		if (x >= 660 && x <= 720 && y >= 543 && y <= 555) {
-			systemsettings.fullscreen == 0 ? systemsettings.fullscreen = 1 : systemsettings.fullscreen = 0;
-			AEToogleFullScreen(systemsettings.fullscreen);
-		}
-	}
+	AEMtx33Trans(&trans,  209.0f, -70.0f);
+	AEMtx33Concat(&exitbutton.transform, &trans, &buffer);
 }
 
 void Menu_Draw() {
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1, 1, 1, 1);
+	AEGfxSetTransparency(1);
+
+	AEGfxSetTransform(startbutton.transform.m);
+	AEGfxSetTransparency(startbutton.itemcounter);
+	AEGfxTextureSet(startbutton.pTexture,0,0);
+	AEGfxMeshDraw(startbutton.pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(tutorialbutton.transform.m);
+	AEGfxSetTransparency(tutorialbutton.itemcounter);
+	AEGfxTextureSet(tutorialbutton.pTexture, 0, 0);
+	AEGfxMeshDraw(tutorialbutton.pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(creditsbutton.transform.m);
+	AEGfxSetTransparency(creditsbutton.itemcounter);
+	AEGfxTextureSet(creditsbutton.pTexture, 0, 0);
+	AEGfxMeshDraw(creditsbutton.pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(exitbutton.transform.m);
+	AEGfxSetTransparency(exitbutton.itemcounter);
+	AEGfxTextureSet(exitbutton.pTexture, 0, 0);
+	AEGfxMeshDraw(exitbutton.pMesh, AE_GFX_MDM_TRIANGLES);
 
 	char strBuffer[35];
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
-	sprintf_s(strBuffer, "START GAME");				// stores the string into strBuffer
-	AEGfxPrint(fontId, strBuffer, -0.70f, -0.25f, 1.14f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "TUTORIAL");				// stores the string into strBuffer
-	AEGfxPrint(fontId, strBuffer, -0.30f, -0.25f, 1.14f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "CREDITS");				// stores the string into strBuffer
-	AEGfxPrint(fontId, strBuffer, 0.08f, -0.25f, 1.14f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "EXIT GAME");				// stores the string into strBuffer
-	AEGfxPrint(fontId, strBuffer, 0.43f, -0.25f, 1.14f, 1.f, 1.f, 1.f);
-
 	sprintf_s(strBuffer, "Press SPACEBAR to select");
-	AEGfxPrint(fontId, strBuffer, -0.2f, -0.08f, 1.14f, 1.0f, 0.5f, 0.5f);
+	AEGfxPrint(fontId, strBuffer, -0.2f, 0.08f, 1.14f, 1.0f, 0.5f, 0.5f);
 
 	sprintf_s(strBuffer, "WASD for movement");
-	AEGfxPrint(fontId, strBuffer, -0.16f, -0.01f, 1.14f, 1.0f, 0.5f, 0.5f);
-
-
+	AEGfxPrint(fontId, strBuffer, -0.16f, 0.01f, 1.14f, 1.0f, 0.5f, 0.5f);
 
 	if (systemsettings.fullscreen == 0) {
 		sprintf_s(strBuffer, "Windowed");
 		AEGfxPrint(fontId, strBuffer, 0.65f, -0.85f, 1.14f, 0.1f, 0.7f, 0.6f);
-		if (x >= 660 && x <= 720 && y >= 543 && y <= 555) {
+		if (cursorx >= 660 && cursorx <= 720 && cursory >= 543 && cursory <= 555) {
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
 			AEGfxSetPosition(195.0f, -250.0f);
 			AEGfxMeshDraw(selectionstruct.pMesh, AE_GFX_MDM_LINES_STRIP);
@@ -216,15 +206,14 @@ void Menu_Draw() {
 	if (systemsettings.fullscreen == 1) {
 		sprintf_s(strBuffer, "Full Screen");
 		AEGfxPrint(fontId, strBuffer, 0.65f, -0.85f, 1.07f, 0.1f, 0.7f, 0.6f);
-		if (x >= 660 && x <= 720 && y >= 543 && y <= 555) {
+		if (cursorx >= 660 && cursorx <= 720 && cursory >= 543 && cursory <= 555) {
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
 			AEGfxSetPosition(195.0f, -250.0f);
 			AEGfxMeshDraw(selectionstruct.pMesh, AE_GFX_MDM_LINES_STRIP);
 		} 
 	}
 	
-	AEInputGetCursorPosition(&x, &y);
-	//std::cout << posX << " " << posY << std::endl;
+	AEInputGetCursorPosition(&cursorx, &cursory);
 	
 	// Selection grid
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -254,6 +243,7 @@ void Menu_Draw() {
 		AEGfxTextureSet(ducktex, 0.0f, 0.0f);
 		texcounter = 0;
 	}
+
 	AEGfxSetPosition(250.0f, 150.0f);
 	AEGfxSetTintColor(1, 1, 1, 1);
 	AEGfxSetTransparency(1);
@@ -283,6 +273,11 @@ void Menu_Free() {
 		AEGfxMeshFree(gamelogostruct.pMesh);
 		gamelogostruct.pMesh = nullptr;
 	}
+
+	if (startbutton.pMesh != nullptr) {
+		AEGfxMeshFree(startbutton.pMesh);
+		startbutton.pMesh = nullptr;
+	}
 }
 
 void Menu_Unload() {
@@ -290,34 +285,96 @@ void Menu_Unload() {
 	AEGfxTextureUnload(gamelogostruct.pTexture);
 	AEGfxTextureUnload(ducktex);
 	AEGfxTextureUnload(duckdrooltex);
+	AEGfxTextureUnload(startbutton.pTexture);
+	AEGfxTextureUnload(creditsbutton.pTexture);
+	AEGfxTextureUnload(tutorialbutton.pTexture);
+	AEGfxTextureUnload(exitbutton.pTexture);
+
 }
 
 
-//AEMtx33 scale, rot, trans;
-//AEMtx33Scale(&scale, 100.0f, 50.0f);
-//AEMtx33Rot(&rot, 0);
-//AEMtx33Trans(&trans, 295.0f, -250.0f);
-//AEMtx33Concat(&buttonstruct.transform, &scale, &rot);
-//AEMtx33Concat(&buttonstruct.transform, &trans, &buttonstruct.transform);
+void systemupdate() {
 
-//AEGfxMeshStart();
-//
-//AEGfxTriAdd(
-//	-0.5f, 0.2f, 0xFFFFFFFF, 0.0f, 0.0f,
-//	-0.5f, -0.2f, 0xFFFFFFFF, 0.0f, 1.0f,
-//	0.5f, 0.2f, 0xFFFFFFFF, 1.0f, 0.0f);
-//AEGfxTriAdd(
-//	0.5f, 0.2f, 0xFFFFFFFF, 1.0f, 0.0f,
-//	-0.5f, -0.2f, 0xFFFFFFFF, 0.0f, 1.0f,
-//	0.5f, -0.2f, 0xFFFFFFFF, 1.0f, 1.0f);
-//
-//buttonstruct.pMesh = AEGfxMeshEnd();
-//AE_ASSERT_MESG(buttonstruct.pMesh, "Failed to create buttonstruct!\n");
+	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
+		next = GS_QUIT;
+	}
 
-//GameObjInst buttonstruct;
+	// FOR TOGGLE FULLSCREEN
+	if (AEInputCheckTriggered(AEVK_F11)) {
+		if (systemsettings.fullscreen == 0) {
+			systemsettings.fullscreen = 1;
+			AEToogleFullScreen(systemsettings.fullscreen);
+		}
 
-//
-//if (buttonstruct.pMesh != nullptr) {
-//	AEGfxMeshFree(buttonstruct.pMesh);
-//	buttonstruct.pMesh = nullptr;
-//}
+		else if (systemsettings.fullscreen == 1) {
+			systemsettings.fullscreen = 0;
+			AEToogleFullScreen(systemsettings.fullscreen);
+		}
+	}
+
+
+	if (AEInputCheckTriggered(AEVK_D)) {
+		if (!(posX >= 110.0f)) {
+			posX += 150.0f;
+			++choice;
+		}
+	}
+
+	if (AEInputCheckTriggered(AEVK_A)) {
+		if (!(posX <= -340.0f)) {
+			posX -= 150.0f;
+			--choice;
+		}
+	}
+
+	if (AEInputCheckTriggered(AEVK_S)) {
+		posX = 195.0f;
+		posY = -250.0f;
+		choice = 4;
+	}
+
+	if (AEInputCheckTriggered(AEVK_W)) {
+		posX = -340.0f;
+		posY = -70.0f;
+		choice = 0;
+	}
+
+	switch (choice) {
+	case 0: startbutton.itemcounter = 1.0f;
+		break;
+	case 1: tutorialbutton.itemcounter = 1.0f;
+		break;
+	case 2: creditsbutton.itemcounter = 1.0f;
+		break;
+	case 3: exitbutton.itemcounter = 1.0f;
+		break;
+	}
+
+	if (AEInputCheckTriggered(AEVK_SPACE)) {
+
+		switch (choice) {
+		case 0: next = MAZE;
+			break;
+		case 1: next = TUTORIAL;
+			break;
+		case 2: next = CREDITS;
+			break;
+		case 3: next = GS_QUIT;
+			break;
+		case 4:
+			systemsettings.fullscreen == 0 ? systemsettings.fullscreen = 1 : systemsettings.fullscreen = 0;
+			AEToogleFullScreen(systemsettings.fullscreen);
+			break;
+
+		}
+	}
+
+	// for mouse input
+	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+		// if cursor is within windowedmode box
+		if (cursorx >= 660 && cursorx <= 720 && cursory >= 543 && cursory <= 555) {
+			systemsettings.fullscreen == 0 ? systemsettings.fullscreen = 1 : systemsettings.fullscreen = 0;
+			AEToogleFullScreen(systemsettings.fullscreen);
+		}
+	}
+}

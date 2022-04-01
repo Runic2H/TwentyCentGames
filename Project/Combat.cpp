@@ -2,32 +2,40 @@
 
 #include "pch.hpp"
 
-int  RGB{ 16384000 };
+/*****************************************************************
+				GLOBAL DECLARATIONS
+*****************************************************************/
 
-int& RGBcounter{ RGB };
+int		RGB{ 16384000 };
+int		&RGBcounter{ RGB };
 
-int switchvalue{ 0 },
-keyvalue{ 0 },
-counter{ 0 },
-SAFEGRID{ 1 },
-gridcounter{ 0 },
-gr{ 0 };
+int		switchvalue{ 0 },
+		keyvalue{ 0 },
+		counter{ 0 },
+		SAFEGRID{ 1 },
+		gridcounter{ 0 },
+		gr{ 0 };
 
-int& keypressed{ keyvalue },
-showgridcounter{ gridcounter },
-choosegrid{ gr };
+int		&keypressed{ keyvalue },
+		showgridcounter{ gridcounter },
+		choosegrid{ gr };
 
-using namespace Characters;
-using namespace Characters::Enemies;
-using namespace Characters::Character;
+int		&x{ switchvalue }, y{};
 
-int& x{ switchvalue }, y{};
-
-float movementdt;
+float	movementdt;
 
 AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
 AEGfxTexture* staminapotion;
+
+
+/*****************************************************************
+				USING NAMESPACES
+*****************************************************************/
+using namespace Characters;
+using namespace Characters::Enemies;
+using namespace Characters::Character;
+
 
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
@@ -71,66 +79,77 @@ void Combat_Initialize()
 */
 void Combat_Update()
 {
-	RGBloop(RGBcounter);
-	CombatMesh(RGBcounter);
-	EnemyCombatMesh();
-	CheckandUpdatePlayerStatus();
+  
+	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
+		systemsettings.paused = 1;
+	} 
 
-	if (AEInputCheckTriggered(AEVK_F11)) {	// FOR TESTING: TO BE REPLACED WITH PAUSE MENU BUTTON
-		if (systemsettings.fullscreen == 0) {
-			systemsettings.fullscreen = 1;
-			AEToogleFullScreen(systemsettings.fullscreen);
-		}
-
-		else if (systemsettings.fullscreen == 1) {
-			systemsettings.fullscreen = 0;
-			AEToogleFullScreen(systemsettings.fullscreen);
-		}
+	else if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 1) {
+		systemsettings.paused = 0;
 	}
 
-	if (enemystats->health <= 0)
+	// if not paused
+	if (systemsettings.paused == 0)
 	{
-		std::cout << "You Won!\n";
-		next = MAZE;
-		maze_init_flag = 1;
-		std::cout << "return to maze\n";
-	}
+    
+		RGBloop(RGBcounter);
+		CombatMesh(RGBcounter);
+		EnemyCombatMesh();
+		inventorylogic();
+    CheckandUpdatePlayerStatus();
 
-	else if (playerstats->health <= 0) {
-		std::cout << "You Died!\n";
-		next = GAMEOVER;
-		maze_init_flag = 0;
-	}
-
-	if (keypressed == 0) {											// so i cant move whilst cooldown active
-		PlayerMovement(x, keypressed);								// character movement	
-		StaminaLogic(keypressed);
-	}
-
-	if (keypressed == 1) {
-		playerstats->movementdt -= DT;
-		if (playerstats->movementdt <= 0.0f) {
-			playerstats->positionX = 0.0f;
-			playerstats->positionY = 0.0f;
-			playerstats->positionID = 1;
-			playerstats->is_attacking = false;
-			keypressed = 0;
-		}
-	}
-
-	UpdateEnemyState();
-
-	if (enemystats->health <= 0)
-	{
-		playerstats->PlayerXP += enemystats->EnemyXP;
-		if (PlayerLevelUp())
+		if (enemystats->health <= 0)
 		{
-			playerstats->PlayerLevel += 1;
-			playerstats->PlayerXP = 0;
-			next = LEVELUP;
-		}		
+			std::cout << "You Won!\n";
+			next = MAZE;
+			maze_init_flag = 1;
+			std::cout << "return to maze\n";
+		}
+    else if (playerstats->health <= 0) {
+      std::cout << "You Died!\n";
+      next = GAMEOVER;
+      maze_init_flag = 0;
+    }
+  
+		if (keypressed == 0) {											// so i cant move whilst cooldown active
+			PlayerMovement(x, keypressed);								// character movement	
+			StaminaLogic(keypressed);
+		}
+
+		if (keypressed == 1) {
+			playerstats->movementdt -= DT;
+			if (playerstats->movementdt <= 0.0f) {
+				playerstats->positionX = 0.0f;
+				playerstats->positionY = 0.0f;
+				playerstats->positionID = 1;
+				playerstats->is_attacking = false;
+				keypressed = 0;
+			}
+		}
+
+		UpdateEnemyState();
+
+		if (enemystats->health <= 0)
+		{
+			playerstats->PlayerXP += enemystats->EnemyXP;
+			if (PlayerLevelUp())
+			{
+				playerstats->PlayerLevel += 1;
+			  playerstats->PlayerXP = 0;
+			  next = LEVELUP;
+			}
+		}
+    
 	}
-}
+
+	// else paused
+	else {
+		//render pause menu here
+		logicpausemenu();
+		renderpausemenu();
+		}	
+  
+  }
 
 
 /*
@@ -139,7 +158,9 @@ void Combat_Update()
 */
 void Combat_Draw()
 {
+
 	StaminaRender(staminapotion);
+	inventoryrender();
 	RenderEnemyHealth();
 	RenderPlayerHealth();
 	GridCheck(enemystats->is_attacking, enemystats->AttackCD, playerstats->SAFEGRID);
@@ -173,4 +194,5 @@ void Combat_Unload()
 	AEGfxTextureUnload(playertexture);
 	AEGfxTextureUnload(enemytexture);
 	AEGfxTextureUnload(staminapotion);
+
 }
