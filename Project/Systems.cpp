@@ -98,9 +98,9 @@ void enemy_initialise() {
 
 
 void inventory_initialise() {
-	playerinventory->defencepotion.itemcounter = 0;
-	playerinventory->healthpotion.itemcounter = 0;
-	playerinventory->staminapotion.itemcounter = 0;
+	playerinventory->defencepotion.itemcounter = 0.0f;
+	playerinventory->healthpotion.itemcounter = 0.0f;
+	playerinventory->staminapotion.itemcounter = 0.0f;
 
 	AEGfxMeshStart();
 	AEGfxTriAdd(
@@ -154,6 +154,7 @@ void System_Initialise() {
 ******************************************************************/
 	fontId = AEGfxCreateFont("Roboto-Regular.ttf", 12);
 	systemsettings.fullscreen = 0;
+	systemsettings.paused = 0;
 
 
 /******************************************************************
@@ -175,11 +176,14 @@ void System_Initialise() {
 void System_Exit() {
 
 	AEGfxDestroyFont(fontId);
+	AEGfxTextureUnload(playerinventory->defencepotion.pTexture);		//EXCEPTION THROWN HERE
+	AEGfxTextureUnload(playerinventory->healthpotion.pTexture);
+	AEGfxTextureUnload(playerinventory->staminapotion.pTexture);
+
+	AEGfxMeshFree(playerinventory->defencepotion.pMesh);
+	
 	delete playerstats;
 	delete enemystats;
 	delete playerinventory;
 
-	AEGfxTextureUnload(playerinventory->defencepotion.pTexture);		//EXCEPTION THROWN HERE
-	AEGfxTextureUnload(playerinventory->healthpotion.pTexture);
-	AEGfxTextureUnload(playerinventory->staminapotion.pTexture);
 }

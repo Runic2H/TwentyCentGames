@@ -26,13 +26,12 @@
 
 extern s8 fontId;
 
-extern Characters::Character::c_statsheet* Player;
-
 extern Maze_Struct* Maze;
 
 extern int maze_init_flag;
 extern int curr_X_GRIDposition;
 extern int curr_Y_GRIDposition;
+extern s32 cursorx, cursory;
 
 extern player_statsheet* playerstats;
 extern enemy_statsheet* enemystats;

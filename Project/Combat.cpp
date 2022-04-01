@@ -24,8 +24,6 @@ int		&x{ switchvalue }, y{};
 
 float	movementdt;
 
-static int paused{ 0 };
-
 AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
 AEGfxTexture* staminapotion;
@@ -82,20 +80,21 @@ void Combat_Initialize()
 void Combat_Update()
 {
 
-	if (AEInputCheckTriggered(AEVK_ESCAPE) && paused == 0) {
-		paused = 1;
+	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
+		systemsettings.paused = 1;
 	} 
 
-	else if (AEInputCheckTriggered(AEVK_ESCAPE) && paused == 1) {
-		paused = 0;
+	else if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 1) {
+		systemsettings.paused = 0;
 	}
 
 	// if not paused
-	if (paused == 0)
+	if (systemsettings.paused == 0)
 	{
 		RGBloop(RGBcounter);
 		CombatMesh(RGBcounter);
 		EnemyCombatMesh();
+		inventorylogic();
 
 		if (enemystats->health <= 0)
 		{
@@ -142,7 +141,7 @@ void Combat_Update()
 	// else paused
 	else {
 		//render pause menu here
-		//logicpausemenu();
+		logicpausemenu();
 		renderpausemenu();
 	}
 }
@@ -154,8 +153,8 @@ void Combat_Update()
 */
 void Combat_Draw()
 {
+
 	StaminaRender(staminapotion);
-	inventorylogic();
 	inventoryrender();
 	RenderEnemyHealth();
 	RenderPlayerHealth();

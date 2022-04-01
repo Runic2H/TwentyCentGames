@@ -658,12 +658,12 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	if (randindex == 1)
 	{
 		std::cout << "player +10 hp" << std::endl;
-		Player->health += 10;
+		playerstats->health += 10;
 	}
 	else if (randindex == 2)
 	{
 		std::cout << "player +10 dmg" << std::endl;
-		Player->damage += 10;
+		playerstats->damage += 10;
 	}
 	//1 - increased hp
 	//2 - increase dmg

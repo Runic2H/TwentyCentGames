@@ -108,9 +108,9 @@ namespace Characters
 		// the meshes that i only want to initialise once
 		void MeshInit() {
 
-			item* menubutton = new item;
-			item* exitbutton = new item;
-			item* resumebutton = new item;
+			menubutton = new item;
+			exitbutton = new item;
+			resumebutton = new item;
 
 			// THE MAX PLAYER HEALTH
 			AEGfxMeshStart();
@@ -127,19 +127,25 @@ namespace Characters
 
 			AEGfxMeshStart();
 			AEGfxTriAdd(
-				-0.7f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-				0.7f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-				-0.7f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+				-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+				0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+				-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 			AEGfxTriAdd(
-				0.7f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-				0.7f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-				-0.7f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+				0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+				0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+				-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 
 				menubutton->pMesh
 				= exitbutton->pMesh
 				= resumebutton->pMesh
 				= AEGfxMeshEnd();
 			AE_ASSERT_MESG(menubutton->pMesh, "Failed to create pause meshes!!\n");
+
+		
+			menubutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\mainmenubutton.png");
+			resumebutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\resumebutton.png");
+			exitbutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\exitbutton.png");
+	
 
 			//
 
@@ -207,38 +213,95 @@ namespace Characters
 		void logicpausemenu() {
 			
 			// insert textures here
+			if (AEInputCheckTriggered(AEVK_Q)) {
+				next = GS_QUIT;
+			}
 
+			menubutton->itemcounter = resumebutton->itemcounter = exitbutton->itemcounter = 0.5f;
 			AEMtx33 scale, rot, trans, buffer;
 
-			AEMtx33Scale(&scale, 50.0f, 50.0f);
+			AEInputGetCursorPosition(&cursorx, &cursory);
+
+			AEMtx33Scale(&scale, 150.0f, 50.0f);
 			AEMtx33Rot(&rot, 0.0f);
 			AEMtx33Concat(&buffer, &scale, &rot);
 			
-			AEMtx33Trans(&trans, 0.0f, 0.0f);
-			AEMtx33Concat(&menubutton->transform, &trans, &menubutton->transform);
+			AEMtx33Trans(&trans, -250.0f, -100.0f);
+			AEMtx33Concat(&menubutton->transform, &trans, &buffer);
+
+			AEMtx33Trans(&trans, 0.0f, -100.0f);
+			AEMtx33Concat(&resumebutton->transform, &trans, &buffer);
+
+			AEMtx33Trans(&trans, 250.0f, -100.0f);
+			AEMtx33Concat(&exitbutton->transform, &trans, &buffer);
+
+			if (cursorx >= 76 && cursorx <= 224 && cursory >= 375 && cursory <= 420) {
+				menubutton->itemcounter = 1.0f;
+				if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+					next = MENU;
+				}
+			}
+
+			if (cursorx >= 326 && cursorx <= 474 && cursory >= 375 && cursory <= 420) {
+				resumebutton->itemcounter = 1.0f;
+				if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+					systemsettings.paused = 0;
+				}
+			}
+
+			if (cursorx >= 577 && cursorx <= 726 && cursory >= 375 && cursory <= 420) {
+				exitbutton->itemcounter = 1.0f;
+				if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+					next = GS_QUIT;
+				}
+			}
+
+			if (AEInputCheckTriggered(AEVK_F11)) {
+				systemsettings.fullscreen == 1 ? systemsettings.fullscreen = 0 : systemsettings.fullscreen = 1;
+				AEToogleFullScreen(systemsettings.fullscreen);
+			}
 		}
 
 		void renderpausemenu() {
+
+			// draw my buttons and meshes
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+			AEGfxSetTintColor(1, 1, 1, 1);
+			AEGfxSetTransparency(1);
+
+			AEGfxSetTransform(menubutton->transform.m);
+			AEGfxSetTransparency(menubutton->itemcounter);
+			AEGfxTextureSet(menubutton->pTexture, 0, 0);
+			AEGfxMeshDraw(menubutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+			AEGfxSetTransform(resumebutton->transform.m);
+			AEGfxSetTransparency(resumebutton->itemcounter);
+			AEGfxTextureSet(resumebutton->pTexture, 0, 0);
+			AEGfxMeshDraw(resumebutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+			AEGfxSetTransform(exitbutton->transform.m);
+			AEGfxSetTransparency(exitbutton->itemcounter);
+			AEGfxTextureSet(exitbutton->pTexture , 0, 0);
+			AEGfxMeshDraw(exitbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+
+
 			char strBuffer[35];
-			sprintf_s(strBuffer, "PAUSED");
 
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			AEGfxTextureSet(NULL, 0, 0);
 			AEGfxSetTransparency(1.0f);
 
+			sprintf_s(strBuffer, "PAUSED");
 			AEGfxPrint(fontId, strBuffer, -0.12f, 0.35f, 2.0f, 1.0f, 0.0f, 0.0f);
+
+			sprintf_s(strBuffer, "Press F11 to toggle fullscreen!");
+			AEGfxPrint(fontId, strBuffer, -0.23f, 0.3f, 1.14f, 0.5f, 0.5f, 0.5f);
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
 
 
-			//AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			//AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-			//AEGfxSetTintColor(1, 1, 1, 1);
-			//AEGfxSetTransparency(1);
-
-			//AEGfxSetTransform(menubutton->transform.m);
-			////AEGfxTextureSet(NULL, 0, 0);
-			//AEGfxMeshDraw(menubutton->pMesh, AE_GFX_MDM_TRIANGLES);
 		}
 
 
@@ -259,9 +322,9 @@ namespace Characters
 
 		void inventorylogic() {
 
-			++playerinventory->healthpotion.itemcounter;	// TO BE REPLACED BY CHEST UPGRADES
-			++playerinventory->defencepotion.itemcounter;
-			++playerinventory->staminapotion.itemcounter;
+			playerinventory->healthpotion.itemcounter += 1.0f;	// TO BE REPLACED BY CHEST UPGRADES
+			playerinventory->defencepotion.itemcounter += 1.0f;
+			playerinventory->staminapotion.itemcounter += 1.0f;
 			//std::cout << playerstats->resetCD << std::endl;
 
 			if (AEInputCheckTriggered(AEVK_1)) {
@@ -312,9 +375,9 @@ namespace Characters
 
 
 			char defencestr[20], staminastr[20], healthstr[20];
-			sprintf_s(defencestr, "%d", playerinventory->defencepotion.itemcounter);
-			sprintf_s(staminastr, "%d", playerinventory->staminapotion.itemcounter);
-			sprintf_s(healthstr, "%d", playerinventory->healthpotion.itemcounter);
+			sprintf_s(defencestr, "%0.0f", playerinventory->defencepotion.itemcounter);
+			sprintf_s(staminastr, "%0.0f", playerinventory->staminapotion.itemcounter);
+			sprintf_s(healthstr, "%0.0f", playerinventory->healthpotion.itemcounter);
 
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -445,19 +508,13 @@ namespace Characters
 			}
 
 			if (menubutton->pMesh != nullptr) {
-				AEGfxMeshFree(menubutton->pMesh);
+				AEGfxMeshFree(menubutton->pMesh);			// 1 MESH FREES ALL 3 MESHES
 				menubutton->pMesh = nullptr;
 			}
-
-			if (exitbutton->pMesh != nullptr) {
-				AEGfxMeshFree(exitbutton->pMesh);
-				exitbutton->pMesh = nullptr;
-			}
-
-			if (resumebutton->pMesh != nullptr) {
-				AEGfxMeshFree(resumebutton->pMesh);
-				resumebutton->pMesh = nullptr;
-			}
+			
+			delete menubutton;
+			delete exitbutton;
+			delete resumebutton;
 		}
 
 		// returns an int. any movement sets the int flag to 1

@@ -9,6 +9,7 @@ void System_Exit();
 typedef struct sys
 {
 	int fullscreen;
+	int paused;
 } sys;
 
 
@@ -16,7 +17,7 @@ typedef struct item {
 	AEGfxVertexList* pMesh;
 	AEGfxTexture*	 pTexture;
 	AEMtx33			 transform;
-	int				 itemcounter;
+	float			 itemcounter;
 }item;
 
 
