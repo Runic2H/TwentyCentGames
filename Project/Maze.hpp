@@ -1,10 +1,19 @@
 #include "pch.hpp"
 
 #pragma once
-const int noOfRows = 11, noOfCols = 11; // DO NOT CHANGE MY GRIDS PLZZZZ :((
+/*
+constexpr int level[4] = {11,15,19,23};
+const int noOfRows = level[0],noOfCols = level[0]; // DO NOT CHANGE MY GRIDS PLZZZZ :((
 
 extern int maze_iswall_isnotwall[noOfRows][noOfCols]; 
 extern int maze_visibility[noOfRows][noOfCols];
+*/
+
+constexpr int level[4] = { 7,15,19,31 };
+const int maxRows = level[4 - 1], maxCols = level[4 - 1];
+
+extern int maze_iswall_isnotwall[maxRows][maxCols];
+extern int maze_visibility[maxRows][maxCols];
 
 
 
@@ -13,11 +22,13 @@ enum MazeCellValue
 	EMPTY_PATH = 0,
 	WALL = 1,
 	CHEST = 3,
-	ENEMY = 9
+	ENEMY = 9,
+	BOSS =5
+
 	
 };
 
-
+ 
 struct MazeCells
 {
 	int value = 0;
@@ -42,7 +53,8 @@ struct MazeDimensions
 
 struct Maze_Struct
 {
-	MazeCells grid[noOfRows][noOfCols];
+	//MazeCells grid[noOfRows][noOfCols];
+	MazeCells grid[maxRows][maxCols];
 	MazeDimensions specifications;
 };
 
@@ -54,6 +66,7 @@ void MazeGenAlgo_ChoosingStartingPos(int& startX, int& startY, int& endX, int& e
 void MazeGenAlgo_Set_walls();
 void MazeGenAlgo_PrintRetrievedInformation();
 bool MazeGenAlgo_PostGenCheck();
+void MazeGenAlgo_BossSpawn();
 void MazeGenAlgo();
 /*========================================================================================*/
 
