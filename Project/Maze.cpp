@@ -27,7 +27,9 @@ extern float global_maze_cam_x;
 extern float global_maze_cam_y;
 float cam_x, cam_y;
 
-//extern Characters::Character::c_statsheet* Player;
+//test bench
+extern int level_iter;
+int noOfRows = level[level_iter], noOfCols = level[level_iter];
 
 
 /* FOR MAZEGEN */
@@ -47,8 +49,13 @@ struct wallXY
 
 std::vector<wallXY> MazeOGWalls_XY;
 
+/*
 int maze_iswall_isnotwall[noOfRows][noOfCols];
 int maze_visibility[noOfRows][noOfCols];
+*/
+int maze_iswall_isnotwall[maxRows][maxCols];
+int maze_visibility[maxRows][maxCols];
+
 
 void MazeGenAlgo_BossSpawn()
 {
@@ -65,7 +72,7 @@ void Maze_EnemySpawn(float contact_rate)
 	{
 		for (int c = 0; c < noOfCols; c++)
 		{
-			if (maze_iswall_isnotwall[r][c] == 0)
+			if (maze_iswall_isnotwall[r][c] == EMPTY_PATH)
 			{
 				if ((r == start_x && c == start_y))
 				{
@@ -113,7 +120,7 @@ void Maze_ChestSpawn(float spawn_rate)
 	{
 		for (int c = 0; c < noOfCols; c++)
 		{
-			if (maze_iswall_isnotwall[r][c] == 0)
+			if (maze_iswall_isnotwall[r][c] == EMPTY_PATH)
 			{
 				if ((r == start_x && c == start_y))
 				{
@@ -276,11 +283,11 @@ void MazeGenAlgo_Set_walls()
 			for (int c = 0; c < noOfCols; c++)
 			{
 				if (
-					maze_iswall_isnotwall[r][c] == 0 // centre cell
+					maze_iswall_isnotwall[r][c] == EMPTY_PATH // centre cell
 					&&
-					maze_iswall_isnotwall[r - 1][c - 1] == 1 && maze_iswall_isnotwall[r - 1][c] == 1 && maze_iswall_isnotwall[r - 1][c + 1] == 1 &&
-					maze_iswall_isnotwall[r][c - 1] == 1 && maze_iswall_isnotwall[r][c + 1] == 1 &&
-					maze_iswall_isnotwall[r + 1][c - 1] == 1 && maze_iswall_isnotwall[r + 1][c] == 1 && maze_iswall_isnotwall[r + 1][c + 1] == 1
+					maze_iswall_isnotwall[r - 1][c - 1] == WALL && maze_iswall_isnotwall[r - 1][c] == WALL && maze_iswall_isnotwall[r - 1][c + 1] == WALL &&
+					maze_iswall_isnotwall[r][c - 1] == WALL && maze_iswall_isnotwall[r][c + 1] == WALL &&
+					maze_iswall_isnotwall[r + 1][c - 1] == WALL && maze_iswall_isnotwall[r + 1][c] == WALL && maze_iswall_isnotwall[r + 1][c + 1] == WALL
 					)
 				{
 					maze_iswall_isnotwall[r][c] = 1 ;
@@ -338,7 +345,7 @@ void MazeGenAlgo()
 	MazeGenAlgo_MakeMaze();
 	MazeGenAlgo_ChoosingStartingPos(start_x, start_y, end_x, end_y, noOfRows, noOfCols);
 	MazeGenAlgo_Set_walls();
-	//MazeGenAlgo_BossSpawn();
+	MazeGenAlgo_BossSpawn();
 	MazeGenAlgo_PrintRetrievedInformation();
 
 	bool flag = MazeGenAlgo_PostGenCheck();
@@ -648,6 +655,17 @@ void MAZE_SaveCellVisibility(Maze_Struct* maze_var)
 	}
 }
 
+void MAZE_ResetCellVisibility(Maze_Struct* maze_var)
+{
+	for (int r = 0; r < maze_var->specifications.noOfRows; r++)
+	{
+		for (int c = 0; c < maze_var->specifications.noOfRows; c++)
+		{
+			maze_visibility[r][c] = 0;
+		}
+	}
+}
+
 void MAZE_ReLOADCellVisibility(Maze_Struct* maze_var)
 {
 	for (int r=0; r < maze_var->specifications.noOfRows; r++)
@@ -661,7 +679,7 @@ void MAZE_ReLOADCellVisibility(Maze_Struct* maze_var)
 
 void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
-	
+	/*
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == BOSS)
 	{
 		next = COMBAT;
@@ -671,6 +689,7 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 
 		AEGfxSetCamPosition(0.0f, 0.0f);
 	}
+	*/
 
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == ENEMY)
 	{
@@ -684,7 +703,12 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 
 	if (curr_X_GRIDposition == end_x && curr_Y_GRIDposition == end_y)
 	{
-		next = CREDITS;
+		next = GAMEOVER;
+		level_iter+= 1;
+		noOfCols = level[level_iter];
+		noOfRows = level[level_iter];
+		maze_init_flag = 0; 
+		MAZE_ResetCellVisibility(Maze);
 		global_maze_cam_x = cam_x;
 		global_maze_cam_y = cam_y;
 		AEGfxSetCamPosition(0.0f, 0.0f);
@@ -809,6 +833,7 @@ void Maze_Initialize()
 		std::cout << "Maze:Initialize" << std::endl;
 		MazeGenAlgo();
 		Maze_EnemySpawn(contact_rate);
+		//MazeGenAlgo_BossSpawn();
 		Maze_ChestSpawn(chest_spawn_rate);
 		MazeGenAlgo_PrintRetrievedInformation();
 		//AEGfxSetCamPosition(0.0f, 0.0f);

@@ -13,3 +13,5 @@ int curr_Y_GRIDposition;
 float global_maze_cam_x;
 float global_maze_cam_y;
 
+// test bench
+int level_iter;
