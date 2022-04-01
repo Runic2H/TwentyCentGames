@@ -12,9 +12,8 @@ extern int maze_visibility[noOfRows][noOfCols];
 
 enum MazeCellValue
 {
-	UNUSED = 0,
-	EMPTY_PATH = 1,
-	WALL = 2,
+	EMPTY_PATH = 0,
+	WALL = 1,
 	CHEST = 3,
 	ENEMY = 9,
 	BOSS =5
