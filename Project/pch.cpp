@@ -3,6 +3,8 @@
 
 s8 fontId = -1;
 
+s8 fontLarge = -1;
+
 Maze_Struct* Maze;
 
 int maze_init_flag = 0;

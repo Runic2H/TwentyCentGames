@@ -31,6 +31,7 @@ typedef struct player_statsheet
 	int status;
 	int PlayerXP;
 	int PlayerLevel;
+
 }player_statsheet;
 
 
@@ -51,4 +52,5 @@ typedef struct enemy_statsheet
 	int DebuffCounter;
 	int EnemyXP;
 	int EnemyLevel;
+
 }enemy_statsheet;

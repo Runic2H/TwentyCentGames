@@ -18,6 +18,7 @@
 #include "Maze.hpp"
 #include "Credits.hpp"
 #include "gameover.hpp"
+#include "LevelUp.hpp"
 
 
 #define GRID_NUM 5;
@@ -25,8 +26,7 @@
 #define DT (f32)AEFrameRateControllerGetFrameTime();
 
 extern s8 fontId;
-
-//extern Characters::Character::c_statsheet* Player;
+extern s8 fontLarge;
 
 extern Maze_Struct* Maze;
 
