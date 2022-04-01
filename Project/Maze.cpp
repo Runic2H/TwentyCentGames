@@ -16,11 +16,16 @@ extern int curr_X_GRIDposition;
 extern int curr_Y_GRIDposition;
 extern sys systemsettings;
 
+
 float contact_rate = 0.3f;
 float chest_spawn_rate = 0.3f;
 
-float x_scaling = noOfRows/2;
-float y_scaling = noOfCols/2;
+float x_scaling = 1; //noOfRows/2.0f;
+float y_scaling = 1; // noOfCols / 2.0f;
+
+extern float global_maze_cam_x;
+extern float global_maze_cam_y;
+float cam_x, cam_y;
 
 //extern Characters::Character::c_statsheet* Player;
 
@@ -43,29 +48,7 @@ struct wallXY
 std::vector<wallXY> MazeOGWalls_XY;
 
 int maze_iswall_isnotwall[noOfRows][noOfCols];
-/*
-int maze_iswall_isnotwall[noOfRows][noOfCols]={
-
-	
-	1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1,
-	1,0,0,0,0, 0,0,0,0,0, 0,0,1,0,1,
-	1,0,1,1,1, 1,1,0,1,1, 1,0,1,0,1,
-	1,0,0,0,1, 0,0,0,1,0, 0,0,1,0,1,
-	1,1,1,1,1, 0,1,1,1,0, 1,1,1,0,1,
-	1,0,0,0,1, 0,1,0,0,0, 1,0,0,0,1,
-	1,0,1,0,1, 0,1,0,1,1, 1,0,1,1,1,
-	0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
-	1,0,1,1,1, 1,1,0,1,1, 1,1,1,0,1,
-	1,0,1,0,0, 0,1,0,0,0, 1,0,0,0,1,
-	1,0,1,1,1, 0,1,1,1,0, 1,0,1,1,1,
-	1,0,0,0,1, 0,0,0,0,0, 1,0,0,0,1,
-	1,0,1,0,1, 1,1,0,1,1, 1,1,1,0,1,
-	1,0,1,0,0, 0,1,0,0,0, 0,0,0,0,1,
-	1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1
-	
-};
-*/
-
+int maze_visibility[noOfRows][noOfCols];
 
 void Maze_EnemySpawn(float contact_rate)
 {
@@ -205,7 +188,7 @@ void MazeGenAlgo_ChoosingStartingPos(int& startX, int& startY, int& endX, int& e
 	maze_iswall_isnotwall[end_x][end_y] = 0;
 
 	curr_X_GRIDposition = startX;
-	curr_Y_GRIDposition = curr_Y_GRIDposition;
+	curr_Y_GRIDposition = startY;
 }
 
 void MazeGenAlgo_Set_walls()
@@ -377,6 +360,7 @@ Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows,
 
 
 	//INITIALIZING THE DIMENSIONS STRUCT
+
 	Maze->specifications.noOfRows = noOfRows;
 	Maze->specifications.noOfCols = noOfCols;
 	
@@ -391,10 +375,10 @@ Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows,
 
 
 	/*
+	Maze->specifications.noOfRows = noOfRows;
 	Maze->specifications.noOfCols = noOfCols;
 	Maze->specifications.mazeWindowHeight = ((float)Exe_WindowHeight / 6.0f) * 5;
 	Maze->specifications.mazeWindowWidth = (float)Exe_WindowWidth / 2.0f;
-	Maze->specifications.cellHeight = Maze->specifications.mazeWindowHeight / noOfRows;
 	Maze->specifications.cellHeight = Maze->specifications.mazeWindowHeight / noOfRows ;
 	Maze->specifications.cellWidth = Maze->specifications.mazeWindowWidth / noOfCols;
 	Maze->specifications.MazeWindowStart_X = Exe_WindowWidth / 2.0f / -2;
@@ -645,17 +629,48 @@ void MAZE_FogOfWar(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	}
 }
 
+void MAZE_SaveCellVisibility(Maze_Struct* maze_var)
+{
+	for (int r =0; r < maze_var->specifications.noOfRows; r++)
+	{
+		for (int c =0; c < maze_var->specifications.noOfRows; c++)
+		{
+			maze_visibility[r][c] = maze_var->grid[r][c].is_visible;
+		}
+	}
+}
+
+void MAZE_ReLOADCellVisibility(Maze_Struct* maze_var)
+{
+	for (int r=0; r < maze_var->specifications.noOfRows; r++)
+	{
+		for (int c=0; c < maze_var->specifications.noOfRows; c++)
+		{
+			maze_var->grid[r][c].is_visible = maze_visibility[r][c];
+		}
+	}
+}
+
 void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
+
+
+
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == ENEMY)
 	{
 		next = COMBAT;
+		global_maze_cam_x = cam_x;
+		global_maze_cam_y = cam_y;
+		MAZE_SaveCellVisibility(Maze);
+
 		AEGfxSetCamPosition(0.0f, 0.0f);
 	}
 
 	if (curr_X_GRIDposition == end_x && curr_Y_GRIDposition == end_y)
 	{
 		next = CREDITS;
+		global_maze_cam_x = cam_x;
+		global_maze_cam_y = cam_y;
 		AEGfxSetCamPosition(0.0f, 0.0f);
 	}
 
@@ -687,6 +702,56 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	//}
 	//1 - increased hp
 	//2 - increase dmg
+}
+
+
+void Maze_CameraAdjustment(int direction)
+{
+	float min_Cam_AA_x = cam_x - AEGetWindowWidth()/2 ;
+	float min_Cam_AA_y = cam_y - AEGetWindowHeight()/2;
+	float max_Cam_BB_x = cam_x + AEGetWindowWidth()/2;
+	float max_Cam_BB_y = cam_y + AEGetWindowHeight()/2;
+
+	if (direction == 1) // up
+	{
+		//if (MC_positionY + Maze->specifications.cellHeight > max_Cam_BB_y)
+		if (MC_positionY + Maze->specifications.cellHeight /2 > max_Cam_BB_y)
+		{
+			std::cout << " camera move" << std::endl;
+			AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
+		}
+	}
+	else if (direction == 2) // left
+	{
+		//if (MC_positionX - Maze->specifications.cellWidth < min_Cam_AA_x)
+		if (MC_positionX - Maze->specifications.cellWidth/2 < min_Cam_AA_x)
+		{
+			std::cout << " camera move" << std::endl;
+			AEGfxSetCamPosition(cam_x - Maze->specifications.cellWidth, cam_y );
+		}
+	}
+	else if (direction == 3) // down
+	{
+		//if (MC_positionY - Maze->specifications.cellHeight < min_Cam_AA_y)
+		if (MC_positionY - Maze->specifications.cellHeight / 2 < min_Cam_AA_y)
+		{
+			std::cout << " camera move" << std::endl;
+			AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
+		}
+	}
+	else if (direction == 4) // right
+	{
+		//if (MC_positionX + Maze->specifications.cellWidth > max_Cam_BB_x)
+		if (MC_positionX + Maze->specifications.cellWidth / 2 > max_Cam_BB_x)
+		{
+			std::cout << " camera move" << std::endl;
+			AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
+		}
+	}
+
+
+	AEGfxGetCamPosition(&cam_x, &cam_y);
+	std::cout << "cam X position is " << cam_x << "cam Y position is " << cam_y <<  std::endl;
 }
 
 
@@ -730,14 +795,19 @@ void Maze_Initialize()
 		Maze_EnemySpawn(contact_rate);
 		Maze_ChestSpawn(chest_spawn_rate);
 		MazeGenAlgo_PrintRetrievedInformation();
+		//AEGfxSetCamPosition(0.0f, 0.0f);
+		Maze = CreateMaze(AEGetWindowHeight(), AEGetWindowWidth(), noOfRows, noOfCols);
 	}
 	else
 	{
-		
-		
+		cam_x = global_maze_cam_x; 
+		cam_y = global_maze_cam_y;
+		AEGfxSetCamPosition(cam_x, cam_y);
+		Maze = CreateMaze(AEGetWindowHeight(), AEGetWindowWidth(), noOfRows, noOfCols);
+		MAZE_ReLOADCellVisibility(Maze);
 	}
-	Maze = CreateMaze(AEGetWindowHeight(), AEGetWindowWidth(), noOfRows, noOfCols);
-
+	
+	
 	MAZE_CreateMESH_MazeWindow2(pMeshMazeWindow, Maze, 0xFF0000);
 	MAZE_CreateMESH_CellOutline2(pMeshCellOutline, Maze, 0xFFFFFFFF);
 	MAZE_CreateSolidCell2(pMeshSolidSquare_WALL, Maze, 0x000000);
@@ -751,7 +821,7 @@ void Maze_Initialize()
 
 	MAZE_SetPosAsEmpty(Maze, curr_X_GRIDposition, curr_Y_GRIDposition);
 
-	AEGfxSetCamPosition(0.0f, 0.0f);
+	
 	
 }
 
@@ -765,7 +835,7 @@ void Maze_Update()
 {
 	//std::cout << "Maze:Update" << std::endl;
 
-	float cam_x, cam_y;
+	
 
 	AEGfxGetCamPosition(&cam_x, &cam_y);
 
@@ -789,7 +859,8 @@ void Maze_Update()
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
 				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
-			AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
+			Maze_CameraAdjustment(1);
+			//AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
 		}
 	}
 
@@ -801,7 +872,9 @@ void Maze_Update()
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
 				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
-			AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
+
+			Maze_CameraAdjustment(3);
+			//AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
 		}
 	}
 
@@ -815,7 +888,9 @@ void Maze_Update()
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
 				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
-			AEGfxSetCamPosition(cam_x- Maze->specifications.cellWidth, cam_y);
+
+			Maze_CameraAdjustment(2);
+			//AEGfxSetCamPosition(cam_x- Maze->specifications.cellWidth, cam_y);
 		}
 	}
 
@@ -828,8 +903,8 @@ void Maze_Update()
 			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
 				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 		
-
-			AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
+			Maze_CameraAdjustment(4);
+			//AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
 		}
 	}
 
@@ -841,9 +916,17 @@ void Maze_Update()
 
 		AEGfxSetCamPosition(0.0f, 0.0f);
 		next = MENU;
+		curr_X_GRIDposition = start_x;
+		curr_Y_GRIDposition = start_y;
 	}
 
 	MAZE_StepOntoSpecialCell(curr_X_GRIDposition,curr_Y_GRIDposition);
+
+
+
+	AEGfxGetCamPosition(&cam_x, &cam_y);
+
+//	std::cout << "Cam X is " << cam_x << " Cam Y is " << cam_y << std::endl;
 
 }
 

@@ -26,7 +26,6 @@
 #define DT (f32)AEFrameRateControllerGetFrameTime();
 
 extern s8 fontId;
-
 extern s8 fontLarge;
 
 extern Maze_Struct* Maze;

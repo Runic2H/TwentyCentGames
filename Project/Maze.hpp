@@ -3,7 +3,9 @@
 #pragma once
 const int noOfRows = 11, noOfCols = 11; // DO NOT CHANGE MY GRIDS PLZZZZ :((
 
-extern int maze_iswall_isnotwall[noOfRows][noOfCols]; // remove later after finishing maze-gen algo
+extern int maze_iswall_isnotwall[noOfRows][noOfCols]; 
+extern int maze_visibility[noOfRows][noOfCols];
+
 
 
 enum MazeCellValue
@@ -81,6 +83,11 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition);
 
 void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition);
 
+void Maze_CameraAdjustment(int direction);
+
+void MAZE_SaveCellVisibility(Maze_Struct* maze_var);
+
+void MAZE_ReLOADCellVisibility(Maze_Struct* maze_var);
 
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
