@@ -17,8 +17,8 @@ extern int curr_Y_GRIDposition;
 extern sys systemsettings;
 
 
-float contact_rate = 0.3f;
-float chest_spawn_rate = 0.3f;
+float contact_rate = 0.2f;
+float chest_spawn_rate = 0.2f;
 
 float x_scaling = 1; //noOfRows/2.0f;
 float y_scaling = 1; // noOfCols / 2.0f;

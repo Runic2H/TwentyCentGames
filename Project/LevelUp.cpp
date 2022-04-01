@@ -8,8 +8,10 @@ namespace {
 	AEGfxVertexList* LevelTriRight = 0;
 	AEGfxVertexList* LevelTriLeft = 0;
 	int selection{ 1 };
-	int skillpoints{ 2 };
-	int skillselected[3]{ 0 };
+	int skillpoints;
+	int skillselected[3];
+	int damage;
+	int maxhealth;
 }
 
 void LevelUp_Load()
@@ -65,6 +67,14 @@ void LevelUp_Load()
 
 void LevelUp_Init()
 {
+	selection = 1;
+	skillpoints = 2;
+	for (int i = 0; i < 3; i++)
+	{
+		skillselected[i] = 0;
+	}
+	maxhealth = playerstats->maxhealth;
+	damage = playerstats->damage;
 }
 
 void LevelUp_Update()
@@ -134,7 +144,10 @@ void LevelUp_Update()
 			{
 				playerstats->damage += skillselected[1] * 1;
 			}
-			playerstats->health = playerstats->maxhealth;
+			if (playerstats->health < playerstats->maxhealth / 2)
+			{
+				playerstats->health = playerstats->maxhealth/2;
+			}
 			next = MAZE;
 		}
 	}
@@ -164,6 +177,35 @@ void LevelUp_Draw()
 	AEGfxSetTransparency(1.0f);
 	AEGfxMeshDraw(LevelMesh, AE_GFX_MDM_TRIANGLES);
 
+	if (selection == 0)
+	{
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetPosition(-w_wd / 4.55, w_ht / 6);
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		if (AEInputCheckTriggered(AEVK_A))
+		{
+			AEGfxSetTransparency(1.0f);
+		}
+		else
+		{
+			AEGfxSetTransparency(0.2f);
+		}
+		AEGfxMeshDraw(LevelTriLeft, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetPosition(w_wd / 3.3, w_ht / 6);
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		if (AEInputCheckTriggered(AEVK_D))
+		{
+			AEGfxSetTransparency(1.0f);
+		}
+		else
+		{
+			AEGfxSetTransparency(0.2f);
+		}
+		AEGfxMeshDraw(LevelTriRight, AE_GFX_MDM_TRIANGLES);
+	}
+
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetPosition(0.0f, w_ht / 6);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -177,10 +219,39 @@ void LevelUp_Draw()
 	}
 	AEGfxMeshDraw(LevelButtons, AE_GFX_MDM_TRIANGLES);
 
-	sprintf_s(strBuffer, "Health %d |+%d %d", playerstats->maxhealth,skillselected[0], playerstats->maxhealth + skillselected[0]*10);
+	sprintf_s(strBuffer, "Health %d |+%d %d", playerstats->maxhealth,skillselected[0], maxhealth + skillselected[0]*10);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxPrint(fontLarge, strBuffer, -0.35f, 0.29f, 0.5f, 0.0f, 0.0f, 0.0f);
+
+	if (selection == 1)
+	{
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetPosition(-w_wd / 4.55, w_ht / 22);
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		if (AEInputCheckTriggered(AEVK_A))
+		{
+			AEGfxSetTransparency(1.0f);
+		}
+		else
+		{
+			AEGfxSetTransparency(0.2f);
+		}
+		AEGfxMeshDraw(LevelTriLeft, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetPosition(w_wd / 3.3, w_ht / 22);
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		if (AEInputCheckTriggered(AEVK_D))
+		{
+			AEGfxSetTransparency(1.0f);
+		}
+		else
+		{
+			AEGfxSetTransparency(0.2f);
+		}
+		AEGfxMeshDraw(LevelTriRight, AE_GFX_MDM_TRIANGLES);
+	}
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetPosition(0.0f, w_ht / 22);
@@ -195,7 +266,7 @@ void LevelUp_Draw()
 	}
 	AEGfxMeshDraw(LevelButtons, AE_GFX_MDM_TRIANGLES);
 
-	sprintf_s(strBuffer, "Damage %d |+%d %d", playerstats->damage, skillselected[1], playerstats->damage + skillselected[1]*1);
+	sprintf_s(strBuffer, "Damage %d |+%d %d", playerstats->damage, skillselected[1], damage + skillselected[1]*1);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxPrint(fontLarge, strBuffer, -0.35f, 0.05f, 0.5f, 0.0f, 0.0f, 0.0f);
@@ -211,32 +282,6 @@ void LevelUp_Draw()
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxPrint(fontLarge, strBuffer, -0.35f, -0.20f, 0.40f, 0.0f, 0.0f, 0.0f);
-
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition(-w_wd / 70, -w_ht / 5.25);
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-	if (AEInputCheckTriggered(AEVK_A))
-	{
-		AEGfxSetTransparency(1.0f);
-	}
-	else
-	{
-		AEGfxSetTransparency(0.1f);
-	}
-	AEGfxMeshDraw(LevelTriLeft, AE_GFX_MDM_TRIANGLES);
-
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition(w_wd / 10, -w_ht / 5.25);
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-	if (AEInputCheckTriggered(AEVK_D))
-	{
-		AEGfxSetTransparency(1.0f);
-	}
-	else
-	{
-		AEGfxSetTransparency(0.1f);
-	}
-	AEGfxMeshDraw(LevelTriRight, AE_GFX_MDM_TRIANGLES);
 
 	sprintf_s(strBuffer, "%d", skillpoints);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
