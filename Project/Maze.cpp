@@ -7,6 +7,11 @@ AEGfxVertexList* pMeshSolidSquare_WALL = 0;
 AEGfxVertexList* pMesh_MainCharacter = 0;
 AEGfxVertexList* pMeshChest = 0;	//JN: new code
 
+AEGfxVertexList* pMesh_MiniMapWindow = 0;
+AEGfxVertexList* pMesh_MiniMapChests = 0;
+AEGfxVertexList* pMesh_MiniMapMainChar = 0;
+AEGfxVertexList* pMesh_MiniMapEndPt = 0;
+
 AEGfxTexture* path_art;
 AEGfxTexture* wall_art;
 AEGfxTexture* main_character_art;
@@ -59,6 +64,117 @@ int maze_visibility[noOfRows][noOfCols];
 int maze_iswall_isnotwall[maxRows][maxCols];
 int maze_visibility[maxRows][maxCols];
 
+void Maze_Minimap_LoadMeshes()
+{
+	// This shape has 5 vertices
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		0, 0, 0xFFFFFFFF, 0.0f, 1.0f,
+		0, Maze->specifications.cellHeight, 0xFFFFFFFF, 0.0f, 0.0f,
+		Maze->specifications.cellWidth, 0, 0xFFFFFFFF, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		0, Maze->specifications.cellHeight, 0xFFFFFFFF, 0.0f, 0.0f,
+		Maze->specifications.cellWidth, Maze->specifications.cellHeight, 0xFFFFFFFF, 1.0f, 0.0f,
+		Maze->specifications.cellWidth, 0, 0xFFFFFFFF, 1.0f, 1.0f);
+	pMesh_MiniMapWindow = AEGfxMeshEnd();
+
+
+
+	float cells_size_x = (Maze->specifications.cellWidth) / noOfCols;
+	float cells_size_y = (Maze->specifications.cellHeight) / noOfCols;
+	// draw main char
+	AEGfxMeshStart();
+	// This shape has 5 vertices
+	AEGfxTriAdd(
+		0, 0, 0xFFFF0000, 0.0f, 1.0f,
+		0, cells_size_y, 0xFFFF0000, 0.0f, 0.0f,
+		cells_size_x, 0, 0xFFFF0000, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		0, cells_size_y, 0xFFFF0000, 0.0f, 0.0f,
+		cells_size_x, cells_size_y, 0xFFFF0000, 1.0f, 0.0f,
+		cells_size_x, 0, 0xFFFF0000, 1.0f, 1.0f);
+	pMesh_MiniMapMainChar = AEGfxMeshEnd();
+
+	AEGfxMeshStart();
+	// This shape has 5 vertices 0x964B0000
+	AEGfxTriAdd(
+		0, 0, 0xD27D2D00, 0.0f, 1.0f,
+		0, cells_size_y, 0xD27D2D00, 0.0f, 0.0f,
+		cells_size_x, 0, 0xD27D2D00, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		0, cells_size_y, 0xD27D2D00, 0.0f, 0.0f,
+		cells_size_x, cells_size_y, 0xD27D2D00, 1.0f, 0.0f,
+		cells_size_x, 0, 0xD27D2D00, 1.0f, 1.0f);
+	pMesh_MiniMapChests = AEGfxMeshEnd();
+
+	AEGfxMeshStart();
+	// This shape has 5 vertices 0xADD8E600
+	AEGfxTriAdd(
+		0, 0, 0xADD8E600, 0.0f, 1.0f,
+		0, cells_size_y, 0xADD8E600, 0.0f, 0.0f,
+		cells_size_x, 0, 0xADD8E600, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		0, cells_size_y, 0xADD8E600, 0.0f, 0.0f,
+		cells_size_x, cells_size_y, 0xADD8E600, 1.0f, 0.0f,
+		cells_size_x, 0, 0xADD8E600, 1.0f, 1.0f);
+	pMesh_MiniMapEndPt = AEGfxMeshEnd();
+}
+
+void Maze_Minimap_Draw(float cam_x, float cam_y, float x_offset, float y_offset)
+{
+	float func_starting_x = cam_x + x_offset;
+	float func_starting_y = cam_y + y_offset;
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
+	AEGfxSetPosition(func_starting_x, func_starting_y);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 0.5f);
+	AEGfxMeshDraw(pMesh_MiniMapWindow, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	for (int r = 0; r < Maze->specifications.noOfRows; r++)
+	{
+		for (int c = 0; c < Maze->specifications.noOfRows; c++)
+		{
+
+			AEGfxSetPosition(
+				(func_starting_x + (r * (Maze->specifications.cellWidth / noOfCols)))
+				,
+				(func_starting_y + (c * (Maze->specifications.cellHeight) / noOfRows))
+			);
+
+			if (r == curr_X_GRIDposition && c == curr_Y_GRIDposition) // is wall
+			{
+
+				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 0.5f);
+				AEGfxTextureSet(main_character_art, 0.0f, 0.0f);
+				AEGfxMeshDraw(pMesh_MiniMapMainChar, AE_GFX_MDM_TRIANGLES);
+			}
+			else if (r == end_x && c == end_y)
+			{
+				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 0.5f);
+				AEGfxTextureSet(exit_art, 0.0f, 0.0f);
+				AEGfxMeshDraw(pMesh_MiniMapEndPt, AE_GFX_MDM_TRIANGLES);
+			}
+			else if (Maze->grid[r][c].value == CHEST)
+			{
+				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 0.5f);
+				AEGfxTextureSet(chest_art, 0.0f, 0.0f);
+				AEGfxMeshDraw(pMesh_MiniMapChests, AE_GFX_MDM_TRIANGLES);
+			}
+			else
+			{
+
+			}
+			AEGfxTextureSet(NULL, 0.0f, 0.0f);
+
+
+
+		}
+	}
+}
 
 void MazeGenAlgo_BossSpawn()
 {
@@ -694,6 +810,7 @@ void MAZE_SaveCellVisibility(Maze_Struct* maze_var)
 		for (int c =0; c < maze_var->specifications.noOfRows; c++)
 		{
 			maze_visibility[r][c] = maze_var->grid[r][c].is_visible;
+			maze_iswall_isnotwall[r][c]= maze_var->grid[r][c].value;
 		}
 	}
 }
@@ -901,6 +1018,7 @@ void Maze_Initialize()
 		MAZE_ReLOADCellVisibility(Maze);
 	}
 	
+	Maze_Minimap_LoadMeshes();
 	
 	MAZE_CreateMESH_MazeWindow2(pMeshMazeWindow, Maze, 0xFF0000);
 	MAZE_CreateMESH_CellOutline2(pMeshCellOutline, Maze, 0xFFFFFFFF);
@@ -1059,10 +1177,13 @@ void Maze_Draw()
 		Maze
 	);
 
+	
 
 	//must draw
 	MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
 	MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
+
+	Maze_Minimap_Draw(cam_x, cam_y, -300.0f, -250.0f);
 
 	char strBuffer[100];
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -1086,6 +1207,11 @@ void Maze_Free()
 	AEGfxMeshFree(pMeshSolidSquare_WALL);
 	AEGfxMeshFree(pMesh_MainCharacter);
 	AEGfxMeshFree(pMeshChest);	//JN: new code
+
+	AEGfxMeshFree(pMesh_MiniMapChests);
+	AEGfxMeshFree(pMesh_MiniMapMainChar);
+	AEGfxMeshFree(pMesh_MiniMapWindow);
+	AEGfxMeshFree(pMesh_MiniMapEndPt);
 
 	delete(Maze);
 }
