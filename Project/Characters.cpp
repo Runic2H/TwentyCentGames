@@ -24,6 +24,8 @@ namespace Characters
 		item* exitbutton;
 		item* resumebutton;
 		item* pausebackground;
+		item* rightbutton;
+		item* leftbutton;
 		
 		AEGfxVertexList* Player1Grid = 0;	//ORIGN
 		AEGfxVertexList* Player2Grid = 0;	//TOP
@@ -114,6 +116,8 @@ namespace Characters
 			exitbutton = new item;
 			resumebutton = new item;
 			pausebackground = new item;
+			rightbutton = new item;
+			leftbutton = new item;
 
 			// THE MAX PLAYER HEALTH
 			AEGfxMeshStart();
@@ -138,7 +142,9 @@ namespace Characters
 				0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
 				-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 
-			pausebackground->pMesh
+			rightbutton->pMesh
+				= leftbutton->pMesh
+				= pausebackground->pMesh
 				= menubutton->pMesh
 				= exitbutton->pMesh
 				= resumebutton->pMesh
@@ -149,6 +155,8 @@ namespace Characters
 			menubutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\mainmenubutton.png");
 			resumebutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\resumebutton.png");
 			exitbutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\exitbutton.png");
+			rightbutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\rightbutton.png");
+			leftbutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\leftbutton.png");
 	
 
 			//
@@ -212,7 +220,58 @@ namespace Characters
 			}
 		}
 
-		
+		void FROZENbuttonlogic() {
+
+			leftbutton->itemcounter = rightbutton->itemcounter = 0.5f;
+			AEMtx33 scale, rot, trans, buffer;
+
+			AEMtx33Scale(&scale, 50.0f, 50.0f);
+			AEMtx33Rot(&rot, 0.0f);
+			AEMtx33Concat(&buffer, &scale, &rot);
+
+			AEMtx33Trans(&trans, -150.0f, 120.0f);
+			AEMtx33Concat(&leftbutton->transform, &trans, &buffer);
+
+			AEMtx33Trans(&trans, 150.0f, 120.0f);
+			AEMtx33Concat(&rightbutton->transform, &trans, &buffer);
+
+			if (AEInputCheckTriggered(AEVK_D)) {
+				rightbutton->itemcounter = 1.0f;
+			}
+			if (AEInputCheckTriggered(AEVK_A)) {
+				leftbutton->itemcounter = 1.0f;
+			}
+		}
+
+		void FROZENbuttonrender() {
+
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+			AEGfxSetTransform(leftbutton->transform.m);
+			AEGfxSetTransparency(leftbutton->itemcounter);
+			AEGfxTextureSet(leftbutton->pTexture, 0, 0);
+			AEGfxMeshDraw(leftbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+			AEGfxSetTransform(rightbutton->transform.m);
+			AEGfxSetTransparency(rightbutton->itemcounter);
+			AEGfxTextureSet(rightbutton->pTexture, 0, 0);
+			AEGfxMeshDraw(rightbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+			char strBuffer[35];
+
+			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxTextureSet(NULL, 0, 0);
+			AEGfxSetTransparency(1.0f);
+
+			sprintf_s(strBuffer, "FROZEN");
+			AEGfxPrint(fontLarge, strBuffer, -0.19f, 0.35f, 0.6f, 0.0f, 1.0f, 1.0f);
+			AEGfxSetBlendMode(AE_GFX_BM_NONE);
+		}
+
+
 		void logicpausemenu() {
 			
 			// insert textures here
@@ -319,8 +378,6 @@ namespace Characters
 			sprintf_s(strBuffer, "Press F11 to toggle fullscreen!");
 			AEGfxPrint(fontId, strBuffer, -0.23f, 0.3f, 1.14f, 0.5f, 0.5f, 0.5f);
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
-
-
 		}
 
 
@@ -340,11 +397,6 @@ namespace Characters
 
 
 		void inventorylogic() {
-
-			playerinventory->healthpotion.itemcounter += 1.0f;	// TO BE REPLACED BY CHEST UPGRADES
-			playerinventory->defencepotion.itemcounter += 1.0f;
-			playerinventory->staminapotion.itemcounter += 1.0f;
-			//std::cout << playerstats->resetCD << std::endl;
 
 			if (AEInputCheckTriggered(AEVK_1)) {
 				if (playerinventory->defencepotion.itemcounter > 0) {
@@ -534,14 +586,25 @@ namespace Characters
 				menubutton->pMesh = nullptr;
 			}
 			
+		}
+
+		void unloadtextures() {
+
+			AEGfxTextureUnload(menubutton->pTexture);
+			AEGfxTextureUnload(exitbutton->pTexture);
+			AEGfxTextureUnload(resumebutton->pTexture);
+			AEGfxTextureUnload(rightbutton->pTexture);
+			AEGfxTextureUnload(leftbutton->pTexture);
+
 			delete menubutton;
 			delete exitbutton;
 			delete resumebutton;
 			delete pausebackground;
+			delete rightbutton;
+			delete leftbutton;
 		}
 
 		// returns an int. any movement sets the int flag to 1
-
 		void PlayerMovement(int& x, int& keypressed) {
 
 			x = 0;
@@ -599,6 +662,9 @@ namespace Characters
 				}
 				else
 				{
+					FROZENbuttonlogic();
+					FROZENbuttonrender();
+
 					if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_D))
 					{
 						--counter;
@@ -629,7 +695,7 @@ namespace Characters
 			if (playerstats->status == BURNING)
 			{
 				playerstats->is_dmgtaken -= DT;
-				if (debuffcounter <= 0)
+				if (debuffcounter <= 0 || next != COMBAT)
 				{
 					playerstats->status = NEUTRAL;
 				}
@@ -651,6 +717,14 @@ namespace Characters
 				return true;
 			}
 			return false;
+		}
+
+		void godmode() {
+			if (AEInputCheckCurr(AEVK_G)) {
+				playerinventory->defencepotion.itemcounter += 1.0f;
+				playerinventory->healthpotion.itemcounter += 1.0f;
+				playerinventory->staminapotion.itemcounter += 1.0f;
+			}
 		}
 
 		void RGBloop(int& RGBcounter) {
@@ -1085,7 +1159,10 @@ namespace Characters
 				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
 			case FIRE:
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				sprintf_s(strBufferType, "Enemy Type: Fire");
+				AEGfxPrint(fontId, strBufferType, 0.60f, -0.75f, 1.0f, 1.0f, 0.2f, 0.2f);
+				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
 			}
 

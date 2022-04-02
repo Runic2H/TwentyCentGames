@@ -65,6 +65,14 @@ namespace Characters
 		void renderpausemenu();
 
 		void logicpausemenu();
+
+		void godmode();
+
+		void FROZENbuttonlogic();
+
+		void FROZENbuttonrender();
+
+		void unloadtextures();
 	}
 
 	/******************************************************

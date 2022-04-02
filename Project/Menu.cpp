@@ -116,7 +116,7 @@ void Menu_Update() {
 	decrease_master_fader();		//JN: new code
 
 	AEInputGetCursorPosition(&cursorx, &cursory);
-	std::cout << cursorx << "  " << cursory << std::endl;
+	//std::cout << cursorx << "  " << cursory << std::endl;
 
 	startbutton.itemcounter 
 		= tutorialbutton.itemcounter 
