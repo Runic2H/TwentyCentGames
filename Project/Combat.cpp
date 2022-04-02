@@ -66,7 +66,8 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
-	Audio_Init();	//JN: new code
+	Audio_Init();
+	combat_background_Audio();	//JN: new code
 	ChoosingEnemyType((rand() % 3) + 0);
 	MeshInit();		// Single init for the meshes that only need to be created once (NON RGB MESHES)
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
@@ -95,7 +96,6 @@ void Combat_Update()
 	// if not paused
 	if (systemsettings.paused == 0)
 	{
-    
 		RGBloop(RGBcounter);
 		CombatMesh(RGBcounter);
 		EnemyCombatMesh();

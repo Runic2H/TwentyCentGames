@@ -350,6 +350,7 @@ namespace Characters
 				if (playerinventory->defencepotion.itemcounter > 0) {
 					--playerinventory->defencepotion.itemcounter;
 					enemystats->damage *= 0.7f;
+					portion_Audio();
 				}
 			}
 
@@ -361,6 +362,7 @@ namespace Characters
 					if (playerstats->health > playerstats->maxhealth) {
 						playerstats->health = playerstats->maxhealth;
 						}
+					portion_Audio();
 				}
 			}
 
@@ -368,6 +370,7 @@ namespace Characters
 				if (playerinventory->staminapotion.itemcounter > 0) {
 					--playerinventory->staminapotion.itemcounter;
 					playerstats->resetCD *= 0.7f;
+					portion_Audio();
 				}
 			}
 		}

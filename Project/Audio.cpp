@@ -14,6 +14,9 @@ FMOD::Sound* slashing_sound2 = nullptr;
 FMOD::Sound* win_screen_bgm = nullptr;
 FMOD::Sound* lose_screen_bgm = nullptr;
 FMOD::Sound* swimming_sound = nullptr;
+FMOD::Sound* portion_sound = nullptr;
+FMOD::Sound* menu_bgm = nullptr;
+FMOD::Sound* combat_bgm = nullptr;
 extern FMOD::Channel* channel;
 float volume = 0.5;
 
@@ -41,6 +44,12 @@ void Audio_Init()
 	audio_system->createSound("Music/TubaComedy CTE09_40.2.wav", FMOD_DEFAULT, nullptr, &lose_screen_bgm);
 	//swimming sound
 	audio_system->createSound("Music/WATER-SPLASH_GEN-HDF-25630-short.wav", FMOD_DEFAULT, nullptr, &swimming_sound);
+	//portion drinking
+	audio_system->createSound("Music/ICE-GLASS_GEN-HDF-15591.wav", FMOD_DEFAULT, nullptr, &portion_sound);
+	//menu background
+	audio_system->createSound("Music/menu.wav", FMOD_LOOP_NORMAL, nullptr, &menu_bgm);
+	//menu background
+	audio_system->createSound("Music/gameplay.wav", FMOD_LOOP_NORMAL, nullptr, &combat_bgm);
 }
 
 //Update audio
@@ -61,6 +70,9 @@ void Audio_Unload()
 	win_screen_bgm->release();
 	lose_screen_bgm->release();
 	swimming_sound->release();
+	portion_sound->release();
+	menu_bgm->release();
+	combat_bgm->release();
 }
 
 //seperate audio function
@@ -69,6 +81,25 @@ void maze_background_Audio()
 	// Play the sound.
 	result = audio_system->playSound(maze_bgm, nullptr, false, &channel);
 	std::cout << "maze background sound audio\n\n";
+
+	//channel->getVolume(&volume);
+	channel->setVolume(0.1f);
+	increase_master_fader();
+	decrease_master_fader();
+
+	//adjusting_master_fader();
+	//bool isPlaying = false;
+	////check if sound is playing or not
+	//channel->isPlaying(&isPlaying);
+	//channel->stop();
+	//channel->setMute(1);
+}
+
+void menu_background_Audio()
+{
+	// Play the sound.
+	result = audio_system->playSound(menu_bgm, nullptr, false, &channel);
+	std::cout << "menu background sound audio\n\n";
 
 	//channel->getVolume(&volume);
 	increase_master_fader();
@@ -80,8 +111,24 @@ void maze_background_Audio()
 	//channel->isPlaying(&isPlaying);
 	//channel->stop();
 	//channel->setMute(1);
+}
 
-	
+void combat_background_Audio()
+{
+	// Play the sound.
+	result = audio_system->playSound(combat_bgm, nullptr, false, &channel);
+	std::cout << "menu background sound audio\n\n";
+
+	//channel->getVolume(&volume);
+	increase_master_fader();
+	decrease_master_fader();
+
+	//adjusting_master_fader();
+	//bool isPlaying = false;
+	////check if sound is playing or not
+	//channel->isPlaying(&isPlaying);
+	//channel->stop();
+	//channel->setMute(1);
 }
 
 void wall_hit_Audio()
@@ -208,6 +255,23 @@ void swimming_Audio()
 	// Play the sound.
 	result = audio_system->playSound(swimming_sound, nullptr, false, &channel);
 	std::cout << "swim audio\n\n";
+
+	//channel->getVolume(&volume);
+	//increase_master_fader();
+	//decrease_master_fader();
+
+	//adjusting_master_fader();
+	//bool isPlaying = false;
+	////check if sound is playing or not
+	//channel->isPlaying(&isPlaying);
+	//channel->setVolume(1);
+}
+
+void portion_Audio()
+{
+	// Play the sound.
+	result = audio_system->playSound(portion_sound, nullptr, false, &channel);
+	std::cout << "drinking portion audio\n\n";
 
 	//channel->getVolume(&volume);
 	//increase_master_fader();
