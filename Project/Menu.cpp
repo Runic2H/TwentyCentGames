@@ -106,10 +106,14 @@ void Menu_Load() {
 }
 
 void Menu_Init() {
-
+	Audio_Init();	//JN: new code
+	maze_background_Audio();	//JN: new code
 }
 
 void Menu_Update() {
+	Audio_Update();		//JN: new code
+	increase_master_fader();		//JN: new code
+	decrease_master_fader();		//JN: new code
 
 	AEInputGetCursorPosition(&cursorx, &cursory);
 	std::cout << cursorx << "  " << cursory << std::endl;
@@ -289,7 +293,7 @@ void Menu_Unload() {
 	AEGfxTextureUnload(creditsbutton.pTexture);
 	AEGfxTextureUnload(tutorialbutton.pTexture);
 	AEGfxTextureUnload(exitbutton.pTexture);
-
+	Audio_Unload();		//JN: new code
 }
 
 

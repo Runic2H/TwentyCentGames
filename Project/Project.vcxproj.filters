@@ -48,6 +48,18 @@
     <ClCompile Include="Credits.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gameover.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelUp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="victoryscreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems.hpp">
@@ -83,5 +95,52 @@
     <ClInclude Include="Credits.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gameover.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelUp.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="victoryscreen.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Extern\FMOD\inc\fmod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Extern\FMOD\inc\fmod.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Extern\FMOD\inc\fmod_codec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Extern\FMOD\inc\fmod_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Extern\FMOD\inc\fmod_dsp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Extern\FMOD\inc\fmod_dsp_effects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Extern\FMOD\inc\fmod_errors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Extern\FMOD\inc\fmod_output.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Extern\FMOD\inc\fmod.cs" />
+    <None Include="Extern\FMOD\inc\fmod_dsp.cs" />
+    <None Include="Extern\FMOD\inc\fmod_errors.cs" />
+    <None Include="Extern\FMOD\lib\fmod.dll" />
+    <None Include="Extern\FMOD\lib\fmodL.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Extern\FMOD\lib\fmod_vc.lib" />
+    <Library Include="Extern\FMOD\lib\fmodL_vc.lib" />
   </ItemGroup>
 </Project>

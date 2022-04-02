@@ -282,15 +282,49 @@ void Tutorial_Load()
 
 void Tutorial_Init()
 {
+	Audio_Init();	//JN: new code 
 	AEToogleFullScreen(systemsettings.fullscreen);
 }
 
 void Tutorial_Update()
 {
+	Audio_Update();	//JN: new code 
+	increase_master_fader();		//JN: new code
+	decrease_master_fader();		//JN: new code
+
 	//go back to MENU
 	if (AEInputCheckTriggered(AEVK_Q)) 
 	{
 		next = MENU;
+	}
+
+	if (AEInputCheckCurr(AEVK_A))
+	{
+		if (--page) page_flip1_Audio();	//JN: new code
+		if (page < 1)
+		{
+			page = 1;
+		}
+	}
+
+	if (AEInputCheckCurr(AEVK_D))
+	{
+		++page;
+		if (page == 2) page_flip2_Audio();	//JN: new code
+		if (page > 2)
+		{
+			page = 2;
+		}
+	}
+
+
+	switch (page) {
+	case page_1: page_one_code();
+		break;
+
+
+	case page_2: page_two_code();
+		break;
 	}
 }
 
@@ -319,35 +353,6 @@ void Tutorial_Draw()
 
 	sprintf_s(strBuffer, "Press Q to go back to the main menu");
 	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
-
-	if (AEInputCheckCurr(AEVK_A))
-	{
-		--page;
-		if (page < 1)
-		{
-			page = 1;
-		}
-	}
-
-	if (AEInputCheckCurr(AEVK_D))
-	{
-		++page;
-
-		if (page > 2)
-		{
-			page = 2;
-		}
-	}
-
-	
-	switch (page) {
-	case page_1: page_one_code();
-		break;
-
-
-	case page_2: page_two_code();
-		break;
-	}
 }
 
 void Tutorial_Free()
@@ -359,5 +364,5 @@ void Tutorial_Free()
 
 void Tutorial_Unload()
 {
-	
+	Audio_Unload();	//JN: new code
 }

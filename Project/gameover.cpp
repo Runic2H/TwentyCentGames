@@ -30,11 +30,14 @@ void GameOver_Load() {
 }
 
 void GameOver_Init() {
+	Audio_Init();	//JN: new code
+	lose_screen_background_Audio();	//JN: new code
 	player_initialise();			// reinitialises the player stats
 	enemy_initialise();				// reinitialises the enemy stats
 }
 
 void GameOver_Update() {
+	Audio_Update();	//JN: new code
 
 	if (AEInputCheckTriggered(AEVK_R)) {
 		// QUESTION: is there a maze restart?
@@ -108,4 +111,5 @@ void GameOver_Free() {
 void GameOver_Unload() {
 
 	AEGfxTextureUnload(gameovertex);
+	Audio_Unload();	//JN: new code
 }
