@@ -31,10 +31,10 @@ struct GameObjInst {
 GameObjInst ducklogostruct;
 GameObjInst selectionstruct;
 GameObjInst gamelogostruct;
-item		startbutton;
-item		tutorialbutton;
-item		creditsbutton;
-item		exitbutton;
+item		menustartbutton;
+item		menututorialbutton;
+item		menucreditsbutton;
+item		menuexitbutton;
 
 
 void Menu_Load() {
@@ -92,17 +92,17 @@ void Menu_Load() {
 		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
 		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 
-		startbutton.pMesh
-		= tutorialbutton.pMesh
-		= creditsbutton.pMesh
-		= exitbutton.pMesh
+	menustartbutton.pMesh
+		= menututorialbutton.pMesh
+		= menucreditsbutton.pMesh
+		= menuexitbutton.pMesh
 		= AEGfxMeshEnd();
-	AE_ASSERT_MESG(tutorialbutton.pMesh, "Failed to create pause meshes!!\n");
+	AE_ASSERT_MESG(menututorialbutton.pMesh, "Failed to create pause meshes!!\n");
 
-	startbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\startbutton.png");
-	tutorialbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\tutorialbutton.png");
-	exitbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\exitbutton.png");
-	creditsbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\creditsbutton.png");
+	menustartbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\startbutton.png");
+	menututorialbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\tutorialbutton.png");
+	menuexitbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\exitbutton.png");
+	menucreditsbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\creditsbutton.png");
 }
 
 void Menu_Init() {
@@ -118,10 +118,10 @@ void Menu_Update() {
 	AEInputGetCursorPosition(&cursorx, &cursory);
 	//std::cout << cursorx << "  " << cursory << std::endl;
 
-	startbutton.itemcounter 
-		= tutorialbutton.itemcounter 
-		= exitbutton.itemcounter 
-		= creditsbutton.itemcounter
+	menustartbutton.itemcounter
+		= menututorialbutton.itemcounter
+		= menuexitbutton.itemcounter
+		= menucreditsbutton.itemcounter
 		= 0.5f;
 
 	RGBcounter >= 16449436 ? flagg = 0 : flagg = flagg;
@@ -150,16 +150,16 @@ void Menu_Update() {
 	AEMtx33Concat(&buffer, &scale, &rot);
 
 	AEMtx33Trans(&trans, -241.0f, -70.0f);
-	AEMtx33Concat(&startbutton.transform, &trans, &buffer);
+	AEMtx33Concat(&menustartbutton.transform, &trans, &buffer);
 
 	AEMtx33Trans(&trans, -91.0f, -70.0f);
-	AEMtx33Concat(&tutorialbutton.transform, &trans, &buffer);
+	AEMtx33Concat(&menututorialbutton.transform, &trans, &buffer);
 
 	AEMtx33Trans(&trans,  59.0f, -70.0f);
-	AEMtx33Concat(&creditsbutton.transform, &trans, &buffer);
+	AEMtx33Concat(&menucreditsbutton.transform, &trans, &buffer);
 
 	AEMtx33Trans(&trans,  209.0f, -70.0f);
-	AEMtx33Concat(&exitbutton.transform, &trans, &buffer);
+	AEMtx33Concat(&menuexitbutton.transform, &trans, &buffer);
 }
 
 void Menu_Draw() {
@@ -169,25 +169,25 @@ void Menu_Draw() {
 	AEGfxSetTintColor(1, 1, 1, 1);
 	AEGfxSetTransparency(1);
 
-	AEGfxSetTransform(startbutton.transform.m);
-	AEGfxSetTransparency(startbutton.itemcounter);
-	AEGfxTextureSet(startbutton.pTexture,0,0);
-	AEGfxMeshDraw(startbutton.pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTransform(menustartbutton.transform.m);
+	AEGfxSetTransparency(menustartbutton.itemcounter);
+	AEGfxTextureSet(menustartbutton.pTexture,0,0);
+	AEGfxMeshDraw(menustartbutton.pMesh, AE_GFX_MDM_TRIANGLES);
 
-	AEGfxSetTransform(tutorialbutton.transform.m);
-	AEGfxSetTransparency(tutorialbutton.itemcounter);
-	AEGfxTextureSet(tutorialbutton.pTexture, 0, 0);
-	AEGfxMeshDraw(tutorialbutton.pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTransform(menututorialbutton.transform.m);
+	AEGfxSetTransparency(menututorialbutton.itemcounter);
+	AEGfxTextureSet(menututorialbutton.pTexture, 0, 0);
+	AEGfxMeshDraw(menututorialbutton.pMesh, AE_GFX_MDM_TRIANGLES);
 
-	AEGfxSetTransform(creditsbutton.transform.m);
-	AEGfxSetTransparency(creditsbutton.itemcounter);
-	AEGfxTextureSet(creditsbutton.pTexture, 0, 0);
-	AEGfxMeshDraw(creditsbutton.pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTransform(menucreditsbutton.transform.m);
+	AEGfxSetTransparency(menucreditsbutton.itemcounter);
+	AEGfxTextureSet(menucreditsbutton.pTexture, 0, 0);
+	AEGfxMeshDraw(menucreditsbutton.pMesh, AE_GFX_MDM_TRIANGLES);
 
-	AEGfxSetTransform(exitbutton.transform.m);
-	AEGfxSetTransparency(exitbutton.itemcounter);
-	AEGfxTextureSet(exitbutton.pTexture, 0, 0);
-	AEGfxMeshDraw(exitbutton.pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTransform(menuexitbutton.transform.m);
+	AEGfxSetTransparency(menuexitbutton.itemcounter);
+	AEGfxTextureSet(menuexitbutton.pTexture, 0, 0);
+	AEGfxMeshDraw(menuexitbutton.pMesh, AE_GFX_MDM_TRIANGLES);
 
 	char strBuffer[35];
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -278,9 +278,9 @@ void Menu_Free() {
 		gamelogostruct.pMesh = nullptr;
 	}
 
-	if (startbutton.pMesh != nullptr) {
-		AEGfxMeshFree(startbutton.pMesh);
-		startbutton.pMesh = nullptr;
+	if (menustartbutton.pMesh != nullptr) {
+		AEGfxMeshFree(menustartbutton.pMesh);
+		menustartbutton.pMesh = nullptr;
 	}
 }
 
@@ -289,10 +289,10 @@ void Menu_Unload() {
 	AEGfxTextureUnload(gamelogostruct.pTexture);
 	AEGfxTextureUnload(ducktex);
 	AEGfxTextureUnload(duckdrooltex);
-	AEGfxTextureUnload(startbutton.pTexture);
-	AEGfxTextureUnload(creditsbutton.pTexture);
-	AEGfxTextureUnload(tutorialbutton.pTexture);
-	AEGfxTextureUnload(exitbutton.pTexture);
+	AEGfxTextureUnload(menustartbutton.pTexture);
+	AEGfxTextureUnload(menucreditsbutton.pTexture);
+	AEGfxTextureUnload(menututorialbutton.pTexture);
+	AEGfxTextureUnload(menuexitbutton.pTexture);
 	Audio_Unload();		//JN: new code
 }
 
@@ -317,16 +317,16 @@ void systemupdate() {
 	}
 
 	if (cursorx >= 109 && cursorx <= 210 && cursory >= 344 && cursory <= 391) {
-		startbutton.itemcounter = 1.0f;
+		menustartbutton.itemcounter = 1.0f;
 	}
 	else if (cursorx >= 257 && cursorx <= 360 && cursory >= 344 && cursory <= 391) {
-		tutorialbutton.itemcounter = 1.0f;
+		menututorialbutton.itemcounter = 1.0f;
 	}
 	else if (cursorx >= 407 && cursorx <= 509 && cursory >= 344 && cursory <= 391) {
-		creditsbutton.itemcounter = 1.0f;
+		menucreditsbutton.itemcounter = 1.0f;
 	}
 	else if (cursorx >= 557 && cursorx <= 661 && cursory >= 344 && cursory <= 391) {
-		exitbutton.itemcounter = 1.0f;
+		menuexitbutton.itemcounter = 1.0f;
 	}
 
 	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
@@ -371,13 +371,13 @@ void systemupdate() {
 	}
 
 	switch (choice) {
-	case 0: startbutton.itemcounter = 1.0f;
+	case 0: menustartbutton.itemcounter = 1.0f;
 		break;
-	case 1: tutorialbutton.itemcounter = 1.0f;
+	case 1: menututorialbutton.itemcounter = 1.0f;
 		break;
-	case 2: creditsbutton.itemcounter = 1.0f;
+	case 2: menucreditsbutton.itemcounter = 1.0f;
 		break;
-	case 3: exitbutton.itemcounter = 1.0f;
+	case 3: menuexitbutton.itemcounter = 1.0f;
 		break;
 	}
 

@@ -333,7 +333,6 @@ namespace Characters
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
 			
-
 			if (playerinventory->healthpotion.itemcounter == 0) {	// print red when count = 0
 				AEGfxPrint(fontId, healthstr, 0.03f, -0.7f, 1.14f, 1.f, 0.f, 0.f);
 			}
@@ -455,6 +454,12 @@ namespace Characters
 			if (Player5Grid != nullptr) {
 				AEGfxMeshFree(Player5Grid);
 				Player5Grid = nullptr;
+			}
+
+			if (rightbutton->pMesh != nullptr) {
+				AEGfxMeshFree(rightbutton->pMesh);
+				rightbutton->pMesh = nullptr;
+				leftbutton->pMesh = nullptr;
 			}
 			
 		}
