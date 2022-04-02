@@ -15,3 +15,5 @@ float global_maze_cam_y;
 
 // test bench
 int level_iter;
+
+FMOD::Channel* channel;	//JN: new code

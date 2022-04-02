@@ -4,14 +4,17 @@ AEGfxVertexList* pMeshCellOutline = 0;
 AEGfxVertexList* pMeshMazeWindow = 0;
 AEGfxVertexList* pMeshSolidSquare_PATH = 0;
 AEGfxVertexList* pMeshSolidSquare_WALL = 0;
+AEGfxVertexList* pMesh_MainCharacter = 0;
+AEGfxVertexList* pMeshChest = 0;	//JN: new code
 
 AEGfxTexture* path_art;
 AEGfxTexture* wall_art;
 AEGfxTexture* main_character_art;
+AEGfxTexture* chest_art;	//JN: new code
+AEGfxTexture* exit_art;		//JN: new code
 
 float MC_positionX;
 float MC_positionY;
-AEGfxVertexList* pMesh_MainCharacter = 0;
 extern int curr_X_GRIDposition;
 extern int curr_Y_GRIDposition;
 extern sys systemsettings;
@@ -490,6 +493,28 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 					AEGfxTextureSet(path_art, 0.0f, 0.0f);
 					AEGfxMeshDraw(PATHCellMesh, AE_GFX_MDM_TRIANGLES);
 				}
+
+				//JN: new code (the entire if (..... == CHEST))
+				if (Maze->grid[r][c].value == CHEST)
+				{
+					AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+					AEGfxSetPosition(
+						(Maze->specifications.MazeWindowStart_X + (r * Maze->specifications.cellWidth) + Maze->specifications.cellWidth / 2),
+						(Maze->specifications.MazeWindowStart_Y + (c * Maze->specifications.cellHeight) + Maze->specifications.cellHeight / 2)
+					);
+					AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+					AEGfxTextureSet(chest_art, 0, 0);
+					AEGfxMeshDraw(pMesh_MainCharacter, AE_GFX_MDM_TRIANGLES);
+				}
+
+				//JN: new code (the entire if statement)
+				if (r == (Maze->specifications.noOfRows - 1) && c == (Maze->specifications.noOfCols / 2 + 1))
+				{
+					AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+					AEGfxTextureSet(exit_art, 0.0f, 0.0f);
+					AEGfxMeshDraw(PATHCellMesh, AE_GFX_MDM_TRIANGLES);
+				}
 			}
 
 			AEGfxSetPosition(
@@ -542,6 +567,24 @@ void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_
 	pMesh_MainCharacter
 	= AEGfxMeshEnd();
 	AE_ASSERT_MESG(pMesh_MainCharacter, "Failed to create main character!!");
+}
+
+//JN: new code
+void MAZE_CreateMESH_Chests(AEGfxVertexList*& pMeshChest, float cell_height, float cell_width)
+{
+	AEGfxMeshStart();
+	AEGfxTriAdd( //This triangle is colorful, blends 3 colours wowza
+		-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 0.0f, 1.0f, //pink 
+		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
+		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
+
+	AEGfxTriAdd(
+		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
+		(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 0.0f, //pink
+		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
+
+	pMeshChest = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pMeshChest, "fail to create chest!!");
 }
 
 void MAZE_DrawingMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float MC_positionX, float MC_positionY)
@@ -828,7 +871,11 @@ void Maze_Load()
 	main_character_art = AEGfxTextureLoad("Map duck.png");
 	AE_ASSERT_MESG(main_character_art, "Failed to create path texture!\n");
 
+	chest_art = AEGfxTextureLoad("Chest.png");	//JN: new code
+	AE_ASSERT_MESG(chest_art, "Failed to create chest texture!\n");	//JN: new code
 
+	exit_art = AEGfxTextureLoad("Whirlpool.png");	//JN: new code
+	AE_ASSERT_MESG(exit_art, "Failed to create chest texture!\n");	//JN: new code
 }
 
 
@@ -842,6 +889,9 @@ void Maze_Load()
 */
 void Maze_Initialize()
 {
+	Audio_Init();	//JN: new code
+	maze_background_Audio();	//JN: new code
+
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
 
 	static float initialplayerCD = playerstats->resetCD;	//R: added, combat
@@ -873,6 +923,7 @@ void Maze_Initialize()
 	MAZE_CreateSolidCell2(pMeshSolidSquare_WALL, Maze, 0x000000);
 	MAZE_CreateSolidCell2(pMeshSolidSquare_PATH, Maze, 0x808080);
 	MAZE_CreateMainCharacter(pMesh_MainCharacter, Maze->specifications.cellHeight, Maze->specifications.cellWidth);
+	MAZE_CreateMESH_Chests(pMeshChest, Maze->specifications.cellHeight, Maze->specifications.cellWidth);	//JN: new code
 
 	MC_positionX = Maze->specifications.MazeWindowStart_X + (Maze->specifications.cellWidth / 2) + (curr_X_GRIDposition * Maze->specifications.cellWidth);
 
@@ -894,6 +945,11 @@ void Maze_Initialize()
 void Maze_Update()
 {
 	//std::cout << "Maze:Update" << std::endl;
+	Audio_Update();		//JN: new code 
+	//get_current_volume();
+	increase_master_fader();		//JN: new code
+	decrease_master_fader();		//JN: new code
+
 
 	AEGfxGetCamPosition(&cam_x, &cam_y);
 
@@ -919,7 +975,11 @@ void Maze_Update()
 
 			Maze_CameraAdjustment(1);
 			//AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
+
+			swimming_Audio();		//JN: new code 
 		}
+
+		else wall_hit_Audio();		//JN: new code 
 	}
 
 	if (AEInputCheckTriggered(AEVK_S))
@@ -933,7 +993,11 @@ void Maze_Update()
 
 			Maze_CameraAdjustment(3);
 			//AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
+
+			swimming_Audio();		//JN: new code 
 		}
+
+		else wall_hit_Audio();		//JN: new code 
 	}
 
 
@@ -949,7 +1013,11 @@ void Maze_Update()
 
 			Maze_CameraAdjustment(2);
 			//AEGfxSetCamPosition(cam_x- Maze->specifications.cellWidth, cam_y);
+
+			swimming_Audio();		//JN: new code 
 		}
+
+		else wall_hit_Audio();		//JN: new code 
 	}
 
 	if (AEInputCheckTriggered(AEVK_D))
@@ -963,7 +1031,11 @@ void Maze_Update()
 		
 			Maze_CameraAdjustment(4);
 			//AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
+
+			swimming_Audio();		//JN: new code 
 		}
+
+		else wall_hit_Audio();		//JN: new code 
 	}
 
 	MAZE_FogOfWar(curr_X_GRIDposition, curr_Y_GRIDposition);
@@ -1029,6 +1101,8 @@ void Maze_Free()
 	AEGfxMeshFree(pMeshSolidSquare_PATH);
 	AEGfxMeshFree(pMeshSolidSquare_WALL);
 	AEGfxMeshFree(pMesh_MainCharacter);
+	AEGfxMeshFree(pMeshChest);	//JN: new code
+
 
 	delete(Maze);
 }
@@ -1043,4 +1117,7 @@ void Maze_Unload()
 	AEGfxTextureUnload(wall_art);
 	AEGfxTextureUnload(path_art);
 	AEGfxTextureUnload(main_character_art);
+	AEGfxTextureUnload(chest_art);	//JN: new code
+	AEGfxTextureUnload(exit_art);	//JN: new code
+	Audio_Unload();		//JN: new code
 }

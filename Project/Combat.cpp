@@ -66,6 +66,7 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
+	Audio_Init();	//JN: new code
 	ChoosingEnemyType((rand() % 3) + 0);
 	MeshInit();		// Single init for the meshes that only need to be created once (NON RGB MESHES)
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
@@ -79,7 +80,10 @@ void Combat_Initialize()
 */
 void Combat_Update()
 {
-  
+	Audio_Update();	//JN: new code
+	increase_master_fader();		//JN: new code
+	decrease_master_fader();		//JN: new code
+
 	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
 		systemsettings.paused = 1;
 	} 
@@ -196,4 +200,5 @@ void Combat_Unload()
 	AEGfxTextureUnload(playertexture);
 	AEGfxTextureUnload(enemytexture);
 	AEGfxTextureUnload(staminapotion);
+	Audio_Unload();	//JN: new code
 }
