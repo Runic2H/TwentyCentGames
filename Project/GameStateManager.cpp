@@ -83,6 +83,16 @@ void GSM_Update()	//only runs once when switched
 		fpDraw = LevelUp_Draw;
 		fpFree = LevelUp_Free;
 		fpUnload = LevelUp_Unload;
+		break;
+
+	case VICTORY:
+		fpLoad = victory_load;
+		fpInitialize = victory_init;
+		fpUpdate = victory_update;
+		fpDraw = victory_draw;
+		fpFree = victory_free;
+		fpUnload = victory_unload;
+		break;
 
 	case GS_RESTART:
 		break;

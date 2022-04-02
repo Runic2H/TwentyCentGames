@@ -19,6 +19,7 @@
 #include "Credits.hpp"
 #include "gameover.hpp"
 #include "LevelUp.hpp"
+#include "victoryscreen.hpp"
 
 
 #define GRID_NUM 5;
