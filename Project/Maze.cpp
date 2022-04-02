@@ -470,6 +470,7 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 {
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTransparency(1.0f);
 	for (int r = 0; r < Maze->specifications.noOfRows; r++)
 	{
 		for (int c = 0; c < Maze->specifications.noOfCols; c++)
@@ -536,6 +537,7 @@ void MAZE_SetPosAsEmpty(Maze_Struct* Maze, int curr_X_GRIDposition, int curr_Y_G
 
 void MAZE_DrawMazeOutline2(AEGfxVertexList*& mazeOutlineMesh, Maze_Struct* Maze)
 {
+	AEGfxSetTransparency(1.0f);
 	AEGfxSetPosition(Maze->specifications.MazeWindowStart_X, Maze->specifications.MazeWindowStart_Y);
 	AEGfxMeshDraw(mazeOutlineMesh, AE_GFX_MDM_LINES_STRIP);
 }
@@ -891,6 +893,7 @@ void Maze_Initialize()
 {
 	Audio_Init();	//JN: new code
 	maze_background_Audio();	//JN: new code
+	initialise_pausemenu();
 
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
 
@@ -950,114 +953,123 @@ void Maze_Update()
 	increase_master_fader();		//JN: new code
 	decrease_master_fader();		//JN: new code
 
-
-	AEGfxGetCamPosition(&cam_x, &cam_y);
-
-	if (AEInputCheckTriggered(AEVK_F11)) {		// R: added
-		if (systemsettings.fullscreen == 0) {	// FOR TESTING: TO BE REPLACED WITH PAUSE MENU BUTTON
-			systemsettings.fullscreen = 1;
-			AEToogleFullScreen(systemsettings.fullscreen);
-		}
-
-		else if (systemsettings.fullscreen == 1) {
-			systemsettings.fullscreen = 0;
-			AEToogleFullScreen(systemsettings.fullscreen);
-		}
+	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
+		systemsettings.paused = 1;
 	}
 
-	if (AEInputCheckTriggered(AEVK_W))
-	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(1, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+	else if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 1) {
+		systemsettings.paused = 0;
+	}
+
+
+		AEGfxGetCamPosition(&cam_x, &cam_y);
+
+		//if (AEInputCheckTriggered(AEVK_F11)) {		// R: added
+		//	if (systemsettings.fullscreen == 0) {	// FOR TESTING: TO BE REPLACED WITH PAUSE MENU BUTTON
+		//		systemsettings.fullscreen = 1;
+		//		AEToogleFullScreen(systemsettings.fullscreen);
+		//	}
+
+		//	else if (systemsettings.fullscreen == 1) {
+		//		systemsettings.fullscreen = 0;
+		//		AEToogleFullScreen(systemsettings.fullscreen);
+		//	}
+		//}
+
+	if (systemsettings.paused == 0) {
+		if (AEInputCheckTriggered(AEVK_W))
 		{
-			MC_positionY += Maze->specifications.cellHeight;
-			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+			if (MAZE_CharMoveCHECK_NEXT_POS(1, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+			{
+				MC_positionY += Maze->specifications.cellHeight;
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
-			Maze_CameraAdjustment(1);
-			//AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
+				Maze_CameraAdjustment(1);
+				//AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
 
-			swimming_Audio();		//JN: new code 
+				swimming_Audio();		//JN: new code 
+			}
+
+			else wall_hit_Audio();		//JN: new code 
 		}
 
-		else wall_hit_Audio();		//JN: new code 
-	}
-
-	if (AEInputCheckTriggered(AEVK_S))
-	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(3, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+		if (AEInputCheckTriggered(AEVK_S))
 		{
-			MC_positionY -= Maze->specifications.cellHeight;
-			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+			if (MAZE_CharMoveCHECK_NEXT_POS(3, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+			{
+				MC_positionY -= Maze->specifications.cellHeight;
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
 
-			Maze_CameraAdjustment(3);
-			//AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
+				Maze_CameraAdjustment(3);
+				//AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
 
-			swimming_Audio();		//JN: new code 
+				swimming_Audio();		//JN: new code 
+			}
+
+			else wall_hit_Audio();		//JN: new code 
 		}
 
-		else wall_hit_Audio();		//JN: new code 
-	}
+
+		if (AEInputCheckTriggered(AEVK_A))
+		{
+			if (MAZE_CharMoveCHECK_NEXT_POS(2, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+			{
+
+				MC_positionX -= Maze->specifications.cellWidth;
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
 
-	if (AEInputCheckTriggered(AEVK_A))
-	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(2, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+				Maze_CameraAdjustment(2);
+				//AEGfxSetCamPosition(cam_x- Maze->specifications.cellWidth, cam_y);
+
+				swimming_Audio();		//JN: new code 
+			}
+
+			else wall_hit_Audio();		//JN: new code 
+		}
+
+		if (AEInputCheckTriggered(AEVK_D))
+		{
+			if (MAZE_CharMoveCHECK_NEXT_POS(4, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+			{
+
+				MC_positionX += Maze->specifications.cellWidth;
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+
+				Maze_CameraAdjustment(4);
+				//AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
+
+				swimming_Audio();		//JN: new code 
+			}
+
+			else wall_hit_Audio();		//JN: new code 
+		}
+
+		MAZE_FogOfWar(curr_X_GRIDposition, curr_Y_GRIDposition);
+
+		//go back to MENU
+		if (AEInputCheckTriggered(AEVK_Q))
 		{
 
-			MC_positionX -= Maze->specifications.cellWidth;
-			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
-
-
-			Maze_CameraAdjustment(2);
-			//AEGfxSetCamPosition(cam_x- Maze->specifications.cellWidth, cam_y);
-
-			swimming_Audio();		//JN: new code 
+			AEGfxSetCamPosition(0.0f, 0.0f);
+			next = MENU;
+			curr_X_GRIDposition = start_x;
+			curr_Y_GRIDposition = start_y;
 		}
 
-		else wall_hit_Audio();		//JN: new code 
+		MAZE_StepOntoSpecialCell(curr_X_GRIDposition, curr_Y_GRIDposition);
+		AEGfxGetCamPosition(&cam_x, &cam_y);
 	}
 
-	if (AEInputCheckTriggered(AEVK_D))
-	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(4, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
-		{
-
-			MC_positionX += Maze->specifications.cellWidth;
-			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
-		
-			Maze_CameraAdjustment(4);
-			//AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
-
-			swimming_Audio();		//JN: new code 
-		}
-
-		else wall_hit_Audio();		//JN: new code 
+	else {
+		logicpausemenu();
+		renderpausemenu();
 	}
-
-	MAZE_FogOfWar(curr_X_GRIDposition, curr_Y_GRIDposition);
-
-	//go back to MENU
-	if (AEInputCheckTriggered(AEVK_Q))
-	{
-
-		AEGfxSetCamPosition(0.0f, 0.0f);
-		next = MENU;
-		curr_X_GRIDposition = start_x;
-		curr_Y_GRIDposition = start_y;
-	}
-
-	MAZE_StepOntoSpecialCell(curr_X_GRIDposition,curr_Y_GRIDposition);
-
-
-
-	AEGfxGetCamPosition(&cam_x, &cam_y);
-
-//	std::cout << "Cam X is " << cam_x << " Cam Y is " << cam_y << std::endl;
-
 }
 
 
@@ -1068,25 +1080,26 @@ void Maze_Update()
 void Maze_Draw()
 {
 	//std::cout << "Maze:Draw" << std::endl;
+	if (systemsettings.paused == 0) {
 
-	MAZE_DrawMazeCellsandCellOutline2(pMeshSolidSquare_WALL,
-		pMeshSolidSquare_PATH,
-		pMeshCellOutline,
-		Maze
-	);
+		MAZE_DrawMazeCellsandCellOutline2(pMeshSolidSquare_WALL,
+			pMeshSolidSquare_PATH,
+			pMeshCellOutline,
+			Maze
+		);
 
+		//must draw
+		MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
+		MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
 
-	//must draw
-	MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
-	MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
-
-	char strBuffer[100];
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition(0.0f, 0.0f);
-	AEGfxTextureSet(NULL, 0, 0); // No texture for object
-	sprintf_s(strBuffer, "Press Q to go back to the main menu");
-	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
+		char strBuffer[100];
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetPosition(0.0f, 0.0f);
+		AEGfxTextureSet(NULL, 0, 0); // No texture for object
+		sprintf_s(strBuffer, "Press Q to go back to the main menu");
+		AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
+	}
 }
 
 
@@ -1102,7 +1115,7 @@ void Maze_Free()
 	AEGfxMeshFree(pMeshSolidSquare_WALL);
 	AEGfxMeshFree(pMesh_MainCharacter);
 	AEGfxMeshFree(pMeshChest);	//JN: new code
-
+	unloadpausemenu();
 
 	delete(Maze);
 }

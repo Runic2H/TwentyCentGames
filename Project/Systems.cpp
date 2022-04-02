@@ -8,8 +8,157 @@ sys systemsettings;
 player_statsheet* playerstats;
 enemy_statsheet* enemystats;
 inv* playerinventory;
+item* menubutton;
+item* exitbutton;
+item* resumebutton;
+item* pausebackground;
 
 
+void initialise_pausemenu() {
+
+	menubutton = new item;
+	exitbutton = new item;
+	resumebutton = new item;
+	pausebackground = new item;
+
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+	pausebackground->pMesh
+		= menubutton->pMesh
+		= exitbutton->pMesh
+		= resumebutton->pMesh
+		= AEGfxMeshEnd();
+	AE_ASSERT_MESG(menubutton->pMesh, "Failed to create pause meshes!!\n");
+
+
+	menubutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\mainmenubutton.png");
+	resumebutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\resumebutton.png");
+	exitbutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\exitbutton.png");
+}
+
+
+void logicpausemenu() {
+
+	// insert textures here
+	if (AEInputCheckTriggered(AEVK_Q)) {
+		next = GS_QUIT;
+	}
+
+	menubutton->itemcounter = resumebutton->itemcounter = exitbutton->itemcounter = 0.5f;
+	AEMtx33 scale, rot, trans, buffer;
+
+	AEInputGetCursorPosition(&cursorx, &cursory);
+
+	AEMtx33Scale(&scale, 150.0f, 50.0f);
+	AEMtx33Rot(&rot, 0.0f);
+	AEMtx33Concat(&buffer, &scale, &rot);
+
+	AEMtx33Trans(&trans, -250.0f, -100.0f);
+	AEMtx33Concat(&menubutton->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, 0.0f, -100.0f);
+	AEMtx33Concat(&resumebutton->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, 250.0f, -100.0f);
+	AEMtx33Concat(&exitbutton->transform, &trans, &buffer);
+
+	AEMtx33Scale(&scale, 1000.0f, 1000.0f);
+	AEMtx33Concat(&buffer, &scale, &rot);
+	AEMtx33Trans(&trans, 0.0f, 0.0f);
+	AEMtx33Concat(&pausebackground->transform, &trans, &buffer);
+
+
+	if (cursorx >= 76 && cursorx <= 224 && cursory >= 375 && cursory <= 420) {
+		menubutton->itemcounter = 1.0f;
+		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+			systemsettings.paused = 0;
+			player_initialise();
+			enemy_initialise();
+			next = MENU;
+		}
+	}
+
+	if (cursorx >= 326 && cursorx <= 474 && cursory >= 375 && cursory <= 420) {
+		resumebutton->itemcounter = 1.0f;
+		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+			systemsettings.paused = 0;
+		}
+	}
+
+	if (cursorx >= 577 && cursorx <= 726 && cursory >= 375 && cursory <= 420) {
+		exitbutton->itemcounter = 1.0f;
+		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+			systemsettings.paused = 0;
+			next = GS_QUIT;
+		}
+	}
+
+	if (AEInputCheckTriggered(AEVK_F11)) {
+		systemsettings.fullscreen == 1 ? systemsettings.fullscreen = 0 : systemsettings.fullscreen = 1;
+		AEToogleFullScreen(systemsettings.fullscreen);
+	}
+}
+
+void renderpausemenu() {
+
+	// draw my buttons and meshes
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+
+	AEGfxSetTransform(pausebackground->transform.m);
+	AEGfxSetTransparency(0.28f);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxMeshDraw(pausebackground->pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(menubutton->transform.m);
+	AEGfxSetTransparency(menubutton->itemcounter);
+	AEGfxTextureSet(menubutton->pTexture, 0, 0);
+	AEGfxMeshDraw(menubutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(resumebutton->transform.m);
+	AEGfxSetTransparency(resumebutton->itemcounter);
+	AEGfxTextureSet(resumebutton->pTexture, 0, 0);
+	AEGfxMeshDraw(resumebutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(exitbutton->transform.m);
+	AEGfxSetTransparency(exitbutton->itemcounter);
+	AEGfxTextureSet(exitbutton->pTexture, 0, 0);
+	AEGfxMeshDraw(exitbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+	char strBuffer[35];
+
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetTransparency(1.0f);
+
+	sprintf_s(strBuffer, "PAUSED");
+	AEGfxPrint(fontId, strBuffer, -0.12f, 0.35f, 2.0f, 1.0f, 0.0f, 0.0f);
+
+	sprintf_s(strBuffer, "Press F11 to toggle fullscreen!");
+	AEGfxPrint(fontId, strBuffer, -0.23f, 0.3f, 1.14f, 0.5f, 0.5f, 0.5f);
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+}
+
+void unloadpausemenu() {
+	
+	if (menubutton->pMesh != nullptr) {
+		AEGfxMeshFree(menubutton->pMesh);			// 1 MESH FREES ALL 3 MESHES
+		menubutton->pMesh = nullptr;
+	}
+
+}
 
 void player_initialise() {
 
@@ -179,8 +328,15 @@ void System_Exit() {
 	AEGfxTextureUnload(playerinventory->defencepotion.pTexture);
 	AEGfxTextureUnload(playerinventory->healthpotion.pTexture);
 	AEGfxTextureUnload(playerinventory->staminapotion.pTexture);
+	AEGfxTextureUnload(menubutton->pTexture);
+	AEGfxTextureUnload(exitbutton->pTexture);
+	AEGfxTextureUnload(resumebutton->pTexture);
 	AEGfxMeshFree(playerinventory->defencepotion.pMesh);
 	delete playerstats;
 	delete enemystats;
 	delete playerinventory;
+	delete menubutton;
+	delete exitbutton;
+	delete resumebutton;
+	delete pausebackground;
 }
