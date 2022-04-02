@@ -66,6 +66,7 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
+	initialise_pausemenu();
 	Audio_Init();	//JN: new code
 	ChoosingEnemyType((rand() % 3) + 0);
 	MeshInit();		// Single init for the meshes that only need to be created once (NON RGB MESHES)
@@ -188,6 +189,7 @@ void Combat_Free()
 	std::cout << "Combat:Free" << std::endl;
 	FreePlayerMesh();
 	FreeEnemyMesh();
+	unloadpausemenu();
 }
 
 
