@@ -157,7 +157,6 @@ void unloadpausemenu() {
 		AEGfxMeshFree(menubutton->pMesh);			// 1 MESH FREES ALL 3 MESHES
 		menubutton->pMesh = nullptr;
 	}
-
 }
 
 void player_initialise() {
@@ -319,10 +318,12 @@ void System_Initialise() {
 	enemystats = new enemy_statsheet;
 	enemy_initialise();
 
+	initialise_pausemenu();
 }
 
 
 void System_Exit() {
+	unloadpausemenu();
 	AEGfxDestroyFont(fontId);
 	AEGfxDestroyFont(fontLarge);
 	AEGfxTextureUnload(playerinventory->defencepotion.pTexture);
