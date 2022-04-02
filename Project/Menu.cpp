@@ -111,6 +111,8 @@ void Menu_Init() {
 
 void Menu_Update() {
 
+	AEInputGetCursorPosition(&cursorx, &cursory);
+	std::cout << cursorx << "  " << cursory << std::endl;
 
 	startbutton.itemcounter 
 		= tutorialbutton.itemcounter 
@@ -139,7 +141,7 @@ void Menu_Update() {
 
 	systemupdate();
 
-	AEMtx33Scale(&scale, 100.0f, 50.0f);
+	AEMtx33Scale(&scale, 105.0f, 50.0f);
 	AEMtx33Rot(&rot, 0.0f);
 	AEMtx33Concat(&buffer, &scale, &rot);
 
@@ -212,8 +214,6 @@ void Menu_Draw() {
 			AEGfxMeshDraw(selectionstruct.pMesh, AE_GFX_MDM_LINES_STRIP);
 		} 
 	}
-	
-	AEInputGetCursorPosition(&cursorx, &cursory);
 	
 	// Selection grid
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -312,6 +312,33 @@ void systemupdate() {
 		}
 	}
 
+	if (cursorx >= 109 && cursorx <= 210 && cursory >= 344 && cursory <= 391) {
+		startbutton.itemcounter = 1.0f;
+	}
+	else if (cursorx >= 257 && cursorx <= 360 && cursory >= 344 && cursory <= 391) {
+		tutorialbutton.itemcounter = 1.0f;
+	}
+	else if (cursorx >= 407 && cursorx <= 509 && cursory >= 344 && cursory <= 391) {
+		creditsbutton.itemcounter = 1.0f;
+	}
+	else if (cursorx >= 557 && cursorx <= 661 && cursory >= 344 && cursory <= 391) {
+		exitbutton.itemcounter = 1.0f;
+	}
+
+	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+		if (cursorx >= 109 && cursorx <= 210 && cursory >= 344 && cursory <= 391) {
+			next = MAZE;
+		}
+		else if (cursorx >= 257 && cursorx <= 360 && cursory >= 344 && cursory <= 391) {
+			next = TUTORIAL;
+		}
+		else if (cursorx >= 407 && cursorx <= 509 && cursory >= 344 && cursory <= 391) {
+			next = CREDITS;
+		}
+		else if (cursorx >= 557 && cursorx <= 661 && cursory >= 344 && cursory <= 391) {
+			next = GS_QUIT;
+		}
+	}
 
 	if (AEInputCheckTriggered(AEVK_D)) {
 		if (!(posX >= 110.0f)) {
