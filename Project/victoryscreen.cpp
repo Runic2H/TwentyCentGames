@@ -45,7 +45,7 @@ void victory_update() {
 	AEMtx33Concat(&coffeebutton->transform, &trans, &buffer);
 
 	AEInputGetCursorPosition(&cursorx, &cursory);
-	std::cout << cursorx << " " << cursory << std::endl;
+	//std::cout << cursorx << " " << cursory << std::endl;
 
 	if (cursorx >= 334 && cursorx <= 448 && cursory >= 201 && cursory <= 397) {
 		coffeebutton->itemcounter = 1.0f;
@@ -77,11 +77,11 @@ void victory_draw() {
 	sprintf_s(strBuffer, "CONGRATULATIONS!");
 	AEGfxPrint(fontLarge, strBuffer, -0.6f, 0.8f, 0.8f, 0.9f, 0.21f, 0.21f);
 
-	sprintf_s(strBuffer, "You can now rest");
+	sprintf_s(strBuffer, "You have managed to escape the maze");
 	AEGfxPrint(fontLarge, strBuffer, -0.2f, 0.65f, 0.3f, 0.5f, 0.21f, 0.21f);
 
-	sprintf_s(strBuffer, "Have some coffee");
-	AEGfxPrint(fontId, strBuffer, -0.2f, -0.5f, 1.63f, 0.2f, 0.5f, 0.5f);
+	sprintf_s(strBuffer, "You can finally rest");
+	AEGfxPrint(fontId, strBuffer, -0.12f, -0.5f, 1.63f, 0.2f, 0.5f, 0.5f);
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 }
 

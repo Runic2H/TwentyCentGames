@@ -27,6 +27,7 @@ extern float global_maze_cam_x;
 extern float global_maze_cam_y;
 float cam_x, cam_y;
 
+
 //test bench
 extern int level_iter;
 int noOfRows = level[level_iter], noOfCols = level[level_iter];
@@ -107,7 +108,6 @@ void Maze_EnemySpawn(float contact_rate)
 		path_y.erase(path_y.begin() + rand_index);
 		no_of_battles--;
 	}
-
 }
 
 void Maze_ChestSpawn(float spawn_rate)
@@ -124,11 +124,11 @@ void Maze_ChestSpawn(float spawn_rate)
 			{
 				if ((r == start_x && c == start_y))
 				{
-
+					// blank by design
 				}
 				else if (r == end_x && c == end_y)
 				{
-
+					// blank by design
 				}
 				else
 				{
@@ -139,7 +139,7 @@ void Maze_ChestSpawn(float spawn_rate)
 		}
 	}
 
-	int no_of_chests = (int)(path_x.size() * spawn_rate);
+	int no_of_chests = (int)(path_x.size() * spawn_rate);					
 	std::cout << no_of_chests << "out of " << path_x.size() << std::endl;
 
 	int rand_index;
@@ -149,7 +149,7 @@ void Maze_ChestSpawn(float spawn_rate)
 	{
 		int rand_index = rand() % path_x.size();
 
-		maze_iswall_isnotwall[path_x[rand_index]][path_y[rand_index]] = 3;
+		maze_iswall_isnotwall[path_x[rand_index]][path_y[rand_index]] = 3;		// setting mapvalue to chest(3) in maze
 
 		path_x.erase(path_x.begin() + rand_index);
 		path_y.erase(path_y.begin() + rand_index);
@@ -539,7 +539,8 @@ void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_
 		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
 		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
 
-	pMesh_MainCharacter = AEGfxMeshEnd();
+	pMesh_MainCharacter
+	= AEGfxMeshEnd();
 	AE_ASSERT_MESG(pMesh_MainCharacter, "Failed to create main character!!");
 }
 
@@ -703,21 +704,36 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 
 	if (curr_X_GRIDposition == end_x && curr_Y_GRIDposition == end_y)
 	{
-		next = GAMEOVER;
-		level_iter+= 1;
-		noOfCols = level[level_iter];
-		noOfRows = level[level_iter];
-		maze_init_flag = 0; 
-		MAZE_ResetCellVisibility(Maze);
-		global_maze_cam_x = cam_x;
-		global_maze_cam_y = cam_y;
-		AEGfxSetCamPosition(0.0f, 0.0f);
+		if (level_iter < 3) {
+			next = GS_RESTART;
+			level_iter += 1;
+			noOfCols = level[level_iter];
+			noOfRows = level[level_iter];
+			maze_init_flag = 0;
+			MAZE_ResetCellVisibility(Maze);
+			global_maze_cam_x = cam_x;
+			global_maze_cam_y = cam_y;
+			AEGfxSetCamPosition(0.0f, 0.0f);
+		}
+
+		else {
+			next = VICTORY;
+			level_iter += 1;
+			noOfCols = level[level_iter];
+			noOfRows = level[level_iter];
+			maze_init_flag = 0;
+			MAZE_ResetCellVisibility(Maze);
+			global_maze_cam_x = cam_x;
+			global_maze_cam_y = cam_y;
+			AEGfxSetCamPosition(0.0f, 0.0f);
+			level_iter = 0;
+		}
 	}
 
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == CHEST)
 	{
 		std::cout << "player is on chest" << std::endl;
-		MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);
+		MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);				
 	}
 }
 
@@ -727,21 +743,21 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
 	std::cout << "Player has opened chest" << std::endl;
 	
-	//int randindex;
-	//srand(time(NULL));
-	//randindex = ( rand() % 2 ) + 1;
-	//if (randindex == 1)
-	//{
-	//	std::cout << "PLACEHOLDER : player +10 hp" << std::endl;
-	//	playerstats->health + 10;
-	//}
-	//else if (randindex == 2)
-	//{
-	//	std::cout << "PLACEHOLDER : player +10 dmg" << std::endl;
-	//	playerstats->damage += 10;
-	//}
-	//1 - increased hp
-	//2 - increase dmg
+	int randindex;
+	srand(time(NULL));
+	randindex = ( rand() % 3 ) + 1;
+	if (randindex == 1)
+	{
+		playerinventory->healthpotion.itemcounter += 1;
+	}
+	else if (randindex == 2)
+	{
+		playerinventory->staminapotion.itemcounter += 1;
+	}
+	else if (randindex == 3)
+	{
+		playerinventory->defencepotion.itemcounter += 1;
+	}
 }
 
 
@@ -802,7 +818,7 @@ void Maze_CameraAdjustment(int direction)
 void Maze_Load()
 {
 	std::cout << "Maze:Load" << std::endl;
-	
+
 	wall_art = AEGfxTextureLoad("Wall.png");
 	AE_ASSERT_MESG(wall_art, "Failed to create wall texture!\n");
 
@@ -811,6 +827,8 @@ void Maze_Load()
 
 	main_character_art = AEGfxTextureLoad("Map duck.png");
 	AE_ASSERT_MESG(main_character_art, "Failed to create path texture!\n");
+
+
 }
 
 
@@ -876,8 +894,6 @@ void Maze_Initialize()
 void Maze_Update()
 {
 	//std::cout << "Maze:Update" << std::endl;
-
-	
 
 	AEGfxGetCamPosition(&cam_x, &cam_y);
 
@@ -1013,7 +1029,6 @@ void Maze_Free()
 	AEGfxMeshFree(pMeshSolidSquare_PATH);
 	AEGfxMeshFree(pMeshSolidSquare_WALL);
 	AEGfxMeshFree(pMesh_MainCharacter);
-
 
 	delete(Maze);
 }

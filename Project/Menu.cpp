@@ -112,7 +112,7 @@ void Menu_Init() {
 void Menu_Update() {
 
 	AEInputGetCursorPosition(&cursorx, &cursory);
-	std::cout << cursorx << "  " << cursory << std::endl;
+	//std::cout << cursorx << "  " << cursory << std::endl;
 
 	startbutton.itemcounter 
 		= tutorialbutton.itemcounter 
