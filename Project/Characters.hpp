@@ -15,7 +15,7 @@ namespace Characters
 	* PLAYER
 	*
 	*******************************************************/
-
+	
 	namespace Character
 	{
 		extern AEGfxVertexList* Player1Grid;

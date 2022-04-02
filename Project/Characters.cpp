@@ -23,6 +23,7 @@ namespace Characters
 		item* menubutton;
 		item* exitbutton;
 		item* resumebutton;
+		item* pausebackground;
 		
 		AEGfxVertexList* Player1Grid = 0;	//ORIGN
 		AEGfxVertexList* Player2Grid = 0;	//TOP
@@ -112,6 +113,7 @@ namespace Characters
 			menubutton = new item;
 			exitbutton = new item;
 			resumebutton = new item;
+			pausebackground = new item;
 
 			// THE MAX PLAYER HEALTH
 			AEGfxMeshStart();
@@ -136,7 +138,8 @@ namespace Characters
 				0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
 				-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 
-				menubutton->pMesh
+			pausebackground->pMesh
+				= menubutton->pMesh
 				= exitbutton->pMesh
 				= resumebutton->pMesh
 				= AEGfxMeshEnd();
@@ -210,7 +213,6 @@ namespace Characters
 		}
 
 		
-		// QUESTION: ACCESS VIOLATION
 		void logicpausemenu() {
 			
 			// insert textures here
@@ -236,9 +238,18 @@ namespace Characters
 			AEMtx33Trans(&trans, 250.0f, -100.0f);
 			AEMtx33Concat(&exitbutton->transform, &trans, &buffer);
 
+			AEMtx33Scale(&scale, 1000.0f, 1000.0f);
+			AEMtx33Concat(&buffer, &scale, &rot);
+			AEMtx33Trans(&trans, 0.0f, 0.0f);
+			AEMtx33Concat(&pausebackground->transform, &trans, &buffer);
+			
+
 			if (cursorx >= 76 && cursorx <= 224 && cursory >= 375 && cursory <= 420) {
 				menubutton->itemcounter = 1.0f;
 				if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+					systemsettings.paused = 0;
+					player_initialise();
+					enemy_initialise();
 					next = MENU;
 				}
 			}
@@ -253,6 +264,7 @@ namespace Characters
 			if (cursorx >= 577 && cursorx <= 726 && cursory >= 375 && cursory <= 420) {
 				exitbutton->itemcounter = 1.0f;
 				if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+					systemsettings.paused = 0;
 					next = GS_QUIT;
 				}
 			}
@@ -268,8 +280,13 @@ namespace Characters
 			// draw my buttons and meshes
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-			AEGfxSetTintColor(1, 1, 1, 1);
-			AEGfxSetTransparency(1);
+			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+
+			AEGfxSetTransform(pausebackground->transform.m);
+			AEGfxSetTransparency(0.28f);
+			AEGfxTextureSet(NULL, 0, 0);
+			AEGfxMeshDraw(pausebackground->pMesh, AE_GFX_MDM_TRIANGLES);
 
 			AEGfxSetTransform(menubutton->transform.m);
 			AEGfxSetTransparency(menubutton->itemcounter);
@@ -285,6 +302,7 @@ namespace Characters
 			AEGfxSetTransparency(exitbutton->itemcounter);
 			AEGfxTextureSet(exitbutton->pTexture , 0, 0);
 			AEGfxMeshDraw(exitbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
 
 
 
@@ -516,6 +534,7 @@ namespace Characters
 			delete menubutton;
 			delete exitbutton;
 			delete resumebutton;
+			delete pausebackground;
 		}
 
 		// returns an int. any movement sets the int flag to 1
@@ -1020,7 +1039,7 @@ namespace Characters
 			}
 		}
 
-
+		// EXCEPTION THROWN HERE
 		void RenderEnemy(AEGfxTexture* enemytexture, AEGfxVertexList* EnemyMesh)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);

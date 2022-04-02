@@ -96,7 +96,7 @@ void Combat_Update()
 		CombatMesh(RGBcounter);
 		EnemyCombatMesh();
 		inventorylogic();
-    CheckandUpdatePlayerStatus();
+		CheckandUpdatePlayerStatus();
 
 		if (enemystats->health <= 0)
 		{
@@ -139,7 +139,6 @@ void Combat_Update()
 			  next = LEVELUP;
 			}
 		}
-    
 	}
 
 	// else paused

@@ -175,7 +175,7 @@ void System_Initialise() {
 
 void System_Exit() {
 	AEGfxDestroyFont(fontId);
-  AEGfxDestroyFont(fontLarge);
+	AEGfxDestroyFont(fontLarge);
 	AEGfxTextureUnload(playerinventory->defencepotion.pTexture);
 	AEGfxTextureUnload(playerinventory->healthpotion.pTexture);
 	AEGfxTextureUnload(playerinventory->staminapotion.pTexture);
