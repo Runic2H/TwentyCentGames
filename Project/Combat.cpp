@@ -66,6 +66,7 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
+	initialise_pausemenu();
 	Audio_Init();	//JN: new code
 	ChoosingEnemyType((rand() % 3) + 0);
 	MeshInit();		// Single init for the meshes that only need to be created once (NON RGB MESHES)
@@ -101,6 +102,8 @@ void Combat_Update()
 		EnemyCombatMesh();
 		inventorylogic();
 		CheckandUpdatePlayerStatus();
+		godmode();
+
 
 		if (enemystats->health <= 0)
 		{
@@ -109,11 +112,12 @@ void Combat_Update()
 			maze_init_flag = 1;
 			std::cout << "return to maze\n";
 		}
-    else if (playerstats->health <= 0) {
-      std::cout << "You Died!\n";
-      next = GAMEOVER;
-      maze_init_flag = 0;
-    }
+
+		else if (playerstats->health <= 0) {
+		  std::cout << "You Died!\n";
+		  next = GAMEOVER;
+		  maze_init_flag = 0;
+		}
   
 		if (keypressed == 0) {											// so i cant move whilst cooldown active
 			PlayerMovement(x, keypressed);								// character movement	
@@ -161,7 +165,6 @@ void Combat_Update()
 */
 void Combat_Draw()
 {
-
 	StaminaRender(staminapotion);
 	inventoryrender();
 	RenderEnemyHealth();
@@ -186,6 +189,7 @@ void Combat_Free()
 	std::cout << "Combat:Free" << std::endl;
 	FreePlayerMesh();
 	FreeEnemyMesh();
+	unloadpausemenu();
 }
 
 
@@ -194,6 +198,7 @@ void Combat_Free()
 */
 void Combat_Unload()
 {
+	unloadtextures();
 	AEGfxTextureUnload(playertexture);
 	AEGfxTextureUnload(enemytexture);
 	AEGfxTextureUnload(staminapotion);

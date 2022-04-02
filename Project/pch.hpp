@@ -43,6 +43,10 @@ extern enemy_statsheet* enemystats;
 extern inv* playerinventory;
 extern sys systemsettings;
 
+void initialise_pausemenu();
+void logicpausemenu();
+void renderpausemenu();
+void unloadpausemenu();
 void player_initialise();
 void enemy_initialise();
 

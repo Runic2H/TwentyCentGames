@@ -35,6 +35,7 @@ extern float global_maze_cam_x;
 extern float global_maze_cam_y;
 float cam_x, cam_y;
 
+
 //test bench
 extern int level_iter;
 int noOfRows = level[level_iter], noOfCols = level[level_iter];
@@ -226,7 +227,6 @@ void Maze_EnemySpawn(float contact_rate)
 		path_y.erase(path_y.begin() + rand_index);
 		no_of_battles--;
 	}
-
 }
 
 void Maze_ChestSpawn(float spawn_rate)
@@ -243,11 +243,11 @@ void Maze_ChestSpawn(float spawn_rate)
 			{
 				if ((r == start_x && c == start_y))
 				{
-
+					// blank by design
 				}
 				else if (r == end_x && c == end_y)
 				{
-
+					// blank by design
 				}
 				else
 				{
@@ -258,7 +258,7 @@ void Maze_ChestSpawn(float spawn_rate)
 		}
 	}
 
-	int no_of_chests = (int)(path_x.size() * spawn_rate);
+	int no_of_chests = (int)(path_x.size() * spawn_rate);					
 	std::cout << no_of_chests << "out of " << path_x.size() << std::endl;
 
 	int rand_index;
@@ -268,7 +268,7 @@ void Maze_ChestSpawn(float spawn_rate)
 	{
 		int rand_index = rand() % path_x.size();
 
-		maze_iswall_isnotwall[path_x[rand_index]][path_y[rand_index]] = 3;
+		maze_iswall_isnotwall[path_x[rand_index]][path_y[rand_index]] = 3;		// setting mapvalue to chest(3) in maze
 
 		path_x.erase(path_x.begin() + rand_index);
 		path_y.erase(path_y.begin() + rand_index);
@@ -586,6 +586,7 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 {
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTransparency(1.0f);
 	for (int r = 0; r < Maze->specifications.noOfRows; r++)
 	{
 		for (int c = 0; c < Maze->specifications.noOfCols; c++)
@@ -652,6 +653,7 @@ void MAZE_SetPosAsEmpty(Maze_Struct* Maze, int curr_X_GRIDposition, int curr_Y_G
 
 void MAZE_DrawMazeOutline2(AEGfxVertexList*& mazeOutlineMesh, Maze_Struct* Maze)
 {
+	AEGfxSetTransparency(1.0f);
 	AEGfxSetPosition(Maze->specifications.MazeWindowStart_X, Maze->specifications.MazeWindowStart_Y);
 	AEGfxMeshDraw(mazeOutlineMesh, AE_GFX_MDM_LINES_STRIP);
 }
@@ -680,7 +682,8 @@ void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_
 		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
 		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
 
-	pMesh_MainCharacter = AEGfxMeshEnd();
+	pMesh_MainCharacter
+	= AEGfxMeshEnd();
 	AE_ASSERT_MESG(pMesh_MainCharacter, "Failed to create main character!!");
 }
 
@@ -863,21 +866,36 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 
 	if (curr_X_GRIDposition == end_x && curr_Y_GRIDposition == end_y)
 	{
-		next = GAMEOVER;
-		level_iter+= 1;
-		noOfCols = level[level_iter];
-		noOfRows = level[level_iter];
-		maze_init_flag = 0; 
-		MAZE_ResetCellVisibility(Maze);
-		global_maze_cam_x = cam_x;
-		global_maze_cam_y = cam_y;
-		AEGfxSetCamPosition(0.0f, 0.0f);
+		if (level_iter < 3) {
+			next = GS_RESTART;
+			level_iter += 1;
+			noOfCols = level[level_iter];
+			noOfRows = level[level_iter];
+			maze_init_flag = 0;
+			MAZE_ResetCellVisibility(Maze);
+			global_maze_cam_x = cam_x;
+			global_maze_cam_y = cam_y;
+			AEGfxSetCamPosition(0.0f, 0.0f);
+		}
+
+		else {
+			next = VICTORY;
+			level_iter += 1;
+			noOfCols = level[level_iter];
+			noOfRows = level[level_iter];
+			maze_init_flag = 0;
+			MAZE_ResetCellVisibility(Maze);
+			global_maze_cam_x = cam_x;
+			global_maze_cam_y = cam_y;
+			AEGfxSetCamPosition(0.0f, 0.0f);
+			level_iter = 0;
+		}
 	}
 
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == CHEST)
 	{
 		std::cout << "player is on chest" << std::endl;
-		MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);
+		MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);				
 	}
 }
 
@@ -887,21 +905,21 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
 	std::cout << "Player has opened chest" << std::endl;
 	
-	//int randindex;
-	//srand(time(NULL));
-	//randindex = ( rand() % 2 ) + 1;
-	//if (randindex == 1)
-	//{
-	//	std::cout << "PLACEHOLDER : player +10 hp" << std::endl;
-	//	playerstats->health + 10;
-	//}
-	//else if (randindex == 2)
-	//{
-	//	std::cout << "PLACEHOLDER : player +10 dmg" << std::endl;
-	//	playerstats->damage += 10;
-	//}
-	//1 - increased hp
-	//2 - increase dmg
+	int randindex;
+	srand(time(NULL));
+	randindex = ( rand() % 3 ) + 1;
+	if (randindex == 1)
+	{
+		playerinventory->healthpotion.itemcounter += 1;
+	}
+	else if (randindex == 2)
+	{
+		playerinventory->staminapotion.itemcounter += 1;
+	}
+	else if (randindex == 3)
+	{
+		playerinventory->defencepotion.itemcounter += 1;
+	}
 }
 
 
@@ -962,7 +980,7 @@ void Maze_CameraAdjustment(int direction)
 void Maze_Load()
 {
 	std::cout << "Maze:Load" << std::endl;
-	
+
 	wall_art = AEGfxTextureLoad("Wall.png");
 	AE_ASSERT_MESG(wall_art, "Failed to create wall texture!\n");
 
@@ -992,6 +1010,7 @@ void Maze_Initialize()
 {
 	Audio_Init();	//JN: new code
 	maze_background_Audio();	//JN: new code
+	initialise_pausemenu();
 
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
 
@@ -1051,115 +1070,124 @@ void Maze_Update()
 	//get_current_volume();
 	increase_master_fader();		//JN: new code
 	decrease_master_fader();		//JN: new code
-	
 
-	AEGfxGetCamPosition(&cam_x, &cam_y);
-
-	if (AEInputCheckTriggered(AEVK_F11)) {		// R: added
-		if (systemsettings.fullscreen == 0) {	// FOR TESTING: TO BE REPLACED WITH PAUSE MENU BUTTON
-			systemsettings.fullscreen = 1;
-			AEToogleFullScreen(systemsettings.fullscreen);
-		}
-
-		else if (systemsettings.fullscreen == 1) {
-			systemsettings.fullscreen = 0;
-			AEToogleFullScreen(systemsettings.fullscreen);
-		}
+	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
+		systemsettings.paused = 1;
 	}
 
-	if (AEInputCheckTriggered(AEVK_W))
-	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(1, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+	else if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 1) {
+		systemsettings.paused = 0;
+	}
+
+
+		AEGfxGetCamPosition(&cam_x, &cam_y);
+
+		//if (AEInputCheckTriggered(AEVK_F11)) {		// R: added
+		//	if (systemsettings.fullscreen == 0) {	// FOR TESTING: TO BE REPLACED WITH PAUSE MENU BUTTON
+		//		systemsettings.fullscreen = 1;
+		//		AEToogleFullScreen(systemsettings.fullscreen);
+		//	}
+
+		//	else if (systemsettings.fullscreen == 1) {
+		//		systemsettings.fullscreen = 0;
+		//		AEToogleFullScreen(systemsettings.fullscreen);
+		//	}
+		//}
+
+	if (systemsettings.paused == 0) {
+		if (AEInputCheckTriggered(AEVK_W))
 		{
-			MC_positionY += Maze->specifications.cellHeight;
-			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+			if (MAZE_CharMoveCHECK_NEXT_POS(1, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+			{
+				MC_positionY += Maze->specifications.cellHeight;
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
-			Maze_CameraAdjustment(1);
-			//AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
+				Maze_CameraAdjustment(1);
+				//AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
 
-			swimming_Audio();		//JN: new code 
+				swimming_Audio();		//JN: new code 
+			}
+
+			else wall_hit_Audio();		//JN: new code 
 		}
 
-		else wall_hit_Audio();		//JN: new code 
-	}
-
-	if (AEInputCheckTriggered(AEVK_S))
-	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(3, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+		if (AEInputCheckTriggered(AEVK_S))
 		{
-			MC_positionY -= Maze->specifications.cellHeight;
-			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+			if (MAZE_CharMoveCHECK_NEXT_POS(3, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+			{
+				MC_positionY -= Maze->specifications.cellHeight;
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
 
-			Maze_CameraAdjustment(3);
-			//AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
+				Maze_CameraAdjustment(3);
+				//AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
 
-			swimming_Audio();		//JN: new code 
+				swimming_Audio();		//JN: new code 
+			}
+
+			else wall_hit_Audio();		//JN: new code 
 		}
 
-		else wall_hit_Audio();		//JN: new code 
-	}
+
+		if (AEInputCheckTriggered(AEVK_A))
+		{
+			if (MAZE_CharMoveCHECK_NEXT_POS(2, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+			{
+
+				MC_positionX -= Maze->specifications.cellWidth;
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
 
-	if (AEInputCheckTriggered(AEVK_A))
-	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(2, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+				Maze_CameraAdjustment(2);
+				//AEGfxSetCamPosition(cam_x- Maze->specifications.cellWidth, cam_y);
+
+				swimming_Audio();		//JN: new code 
+			}
+
+			else wall_hit_Audio();		//JN: new code 
+		}
+
+		if (AEInputCheckTriggered(AEVK_D))
+		{
+			if (MAZE_CharMoveCHECK_NEXT_POS(4, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
+			{
+
+				MC_positionX += Maze->specifications.cellWidth;
+				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+
+				Maze_CameraAdjustment(4);
+				//AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
+
+				swimming_Audio();		//JN: new code 
+			}
+
+			else wall_hit_Audio();		//JN: new code 
+		}
+
+		MAZE_FogOfWar(curr_X_GRIDposition, curr_Y_GRIDposition);
+
+		//go back to MENU
+		if (AEInputCheckTriggered(AEVK_Q))
 		{
 
-			MC_positionX -= Maze->specifications.cellWidth;
-			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
-
-
-			Maze_CameraAdjustment(2);
-			//AEGfxSetCamPosition(cam_x- Maze->specifications.cellWidth, cam_y);
-
-			swimming_Audio();		//JN: new code 
+			AEGfxSetCamPosition(0.0f, 0.0f);
+			next = MENU;
+			curr_X_GRIDposition = start_x;
+			curr_Y_GRIDposition = start_y;
 		}
 
-		else wall_hit_Audio();		//JN: new code 
+		MAZE_StepOntoSpecialCell(curr_X_GRIDposition, curr_Y_GRIDposition);
+		AEGfxGetCamPosition(&cam_x, &cam_y);
 	}
 
-	if (AEInputCheckTriggered(AEVK_D))
-	{
-		if (MAZE_CharMoveCHECK_NEXT_POS(4, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
-		{
-
-			MC_positionX += Maze->specifications.cellWidth;
-			std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-				"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
-		
-			Maze_CameraAdjustment(4);
-			//AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
-
-			swimming_Audio();		//JN: new code 
-		}
-
-		else wall_hit_Audio();		//JN: new code 
+	else {
+		logicpausemenu();
+		renderpausemenu();
 	}
-
-	MAZE_FogOfWar(curr_X_GRIDposition, curr_Y_GRIDposition);
-
-	//go back to MENU
-	if (AEInputCheckTriggered(AEVK_Q))
-	{
-
-		AEGfxSetCamPosition(0.0f, 0.0f);
-		next = MENU;
-		curr_X_GRIDposition = start_x;
-		curr_Y_GRIDposition = start_y;
-	}
-
-	MAZE_StepOntoSpecialCell(curr_X_GRIDposition,curr_Y_GRIDposition);
-
-
-
-	AEGfxGetCamPosition(&cam_x, &cam_y);
-
-//	std::cout << "Cam X is " << cam_x << " Cam Y is " << cam_y << std::endl;
-
 }
 
 
@@ -1170,28 +1198,26 @@ void Maze_Update()
 void Maze_Draw()
 {
 	//std::cout << "Maze:Draw" << std::endl;
+	if (systemsettings.paused == 0) {
 
-	MAZE_DrawMazeCellsandCellOutline2(pMeshSolidSquare_WALL,
-		pMeshSolidSquare_PATH,
-		pMeshCellOutline,
-		Maze
-	);
+		MAZE_DrawMazeCellsandCellOutline2(pMeshSolidSquare_WALL,
+			pMeshSolidSquare_PATH,
+			pMeshCellOutline,
+			Maze
+		);
 
-	
-
-	//must draw
-	MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
-	MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
-
-	Maze_Minimap_Draw(cam_x, cam_y, -300.0f, -250.0f);
-
-	char strBuffer[100];
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition(0.0f, 0.0f);
-	AEGfxTextureSet(NULL, 0, 0); // No texture for object
-	sprintf_s(strBuffer, "Press Q to go back to the main menu");
-	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
+		//must draw
+		MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
+		MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
+    Maze_Minimap_Draw(cam_x, cam_y, -300.0f, -250.0f);
+		char strBuffer[100];
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetPosition(0.0f, 0.0f);
+		AEGfxTextureSet(NULL, 0, 0); // No texture for object
+		sprintf_s(strBuffer, "Press Q to go back to the main menu");
+		AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
+	}
 }
 
 
@@ -1207,6 +1233,7 @@ void Maze_Free()
 	AEGfxMeshFree(pMeshSolidSquare_WALL);
 	AEGfxMeshFree(pMesh_MainCharacter);
 	AEGfxMeshFree(pMeshChest);	//JN: new code
+	unloadpausemenu();
 
 	AEGfxMeshFree(pMesh_MiniMapChests);
 	AEGfxMeshFree(pMesh_MiniMapMainChar);

@@ -62,9 +62,13 @@ namespace Characters
 
 		void inventoryrender();
 
-		void renderpausemenu();
+		void godmode();
 
-		void logicpausemenu();
+		void FROZENbuttonlogic();
+
+		void FROZENbuttonrender();
+
+		void unloadtextures();
 	}
 
 	/******************************************************
