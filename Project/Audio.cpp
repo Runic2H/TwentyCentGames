@@ -39,7 +39,7 @@ void Audio_Init()
 	//slashing sound 2
 	audio_system->createSound("Music/HORROR_GEN-HDF-14515.wav", FMOD_DEFAULT, nullptr, &slashing_sound2);
 	//win screen background
-	audio_system->createSound("Music/PRIDE OF OWNERSHIP - Corporate MSCCRP1_35.wav", FMOD_DEFAULT, nullptr, &win_screen_bgm);
+	audio_system->createSound("Music/PRIDE OF OWNERSHIP - Corporate MSCCRP1_35.wav", FMOD_LOOP_NORMAL, nullptr, &win_screen_bgm);
 	//lose screen background
 	audio_system->createSound("Music/TubaComedy CTE09_40.2.wav", FMOD_DEFAULT, nullptr, &lose_screen_bgm);
 	//swimming sound
@@ -84,8 +84,8 @@ void maze_background_Audio()
 
 	//channel->getVolume(&volume);
 	channel->setVolume(0.1f);
-	increase_master_fader();
-	decrease_master_fader();
+	//increase_master_fader();
+	//decrease_master_fader();
 
 	//adjusting_master_fader();
 	//bool isPlaying = false;
@@ -102,8 +102,8 @@ void menu_background_Audio()
 	std::cout << "menu background sound audio\n\n";
 
 	//channel->getVolume(&volume);
-	increase_master_fader();
-	decrease_master_fader();
+	//increase_master_fader();
+	//decrease_master_fader();
 
 	//adjusting_master_fader();
 	//bool isPlaying = false;
@@ -120,8 +120,8 @@ void combat_background_Audio()
 	std::cout << "menu background sound audio\n\n";
 
 	//channel->getVolume(&volume);
-	increase_master_fader();
-	decrease_master_fader();
+	//increase_master_fader();
+	//decrease_master_fader();
 
 	//adjusting_master_fader();
 	//bool isPlaying = false;
