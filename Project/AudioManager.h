@@ -8,6 +8,10 @@ void Audio_Unload(); //put at unload
 
 void maze_background_Audio(); //put at init (play once)
 
+void menu_background_Audio();
+
+void combat_background_Audio();
+
 void wall_hit_Audio(); //put at update
 
 void page_flip1_Audio();
@@ -23,6 +27,8 @@ void win_screen_background_Audio();
 void lose_screen_background_Audio();
 
 void swimming_Audio();
+
+void portion_Audio();
 
 void increase_master_fader();
 

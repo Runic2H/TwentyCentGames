@@ -107,7 +107,7 @@ void Menu_Load() {
 
 void Menu_Init() {
 	Audio_Init();	//JN: new code
-	maze_background_Audio();	//JN: new code
+	menu_background_Audio();	//JN: new code
 }
 
 void Menu_Update() {

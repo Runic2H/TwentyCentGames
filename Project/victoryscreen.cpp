@@ -25,9 +25,14 @@ void victory_load() {
 }
 
 void victory_init() {
+	Audio_Init();
+	win_screen_background_Audio();
 }
 
 void victory_update() {
+	Audio_Update();
+	increase_master_fader();
+	decrease_master_fader();
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
 		next = GS_QUIT;
@@ -92,4 +97,6 @@ void victory_free() {
 void victory_unload() {
 	AEGfxTextureUnload(coffeebutton->pTexture);
 	delete coffeebutton;
+
+	Audio_Unload();
 }

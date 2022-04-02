@@ -626,7 +626,7 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 				}
 
 				//JN: new code (the entire if statement)
-				if (r == (Maze->specifications.noOfRows - 1) && c == (Maze->specifications.noOfCols / 2 + 1))
+				if (r == (end_x) && c == (end_y))
 				{
 					AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 					AEGfxTextureSet(exit_art, 0.0f, 0.0f);
