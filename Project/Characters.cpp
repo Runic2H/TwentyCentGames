@@ -1033,7 +1033,6 @@ namespace Characters
 			}
 		}
 
-		// EXCEPTION THROWN HERE
 		void RenderEnemy(AEGfxTexture* enemytexture, AEGfxVertexList* EnemyMesh)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -1041,6 +1040,16 @@ namespace Characters
 			AEGfxSetPosition(enemystats->positionX, enemystats->positionY);
 			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 			// No texture for object 1;
+			if (enemystats->EnemyType == ICE)
+			{
+				enemytexture = AEGfxTextureLoad("Frost turtle.png");
+				AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
+			}
+			if (enemystats->EnemyType == FIRE)
+			{
+				enemytexture = AEGfxTextureLoad("Fire turtle.png");
+				AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
+			}
 			AEGfxTextureSet(enemytexture, 1.0f, 1.0f);
 			AEGfxMeshDraw(EnemyMesh, AE_GFX_MDM_TRIANGLES);
 		}

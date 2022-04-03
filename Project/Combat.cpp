@@ -48,10 +48,8 @@ void Combat_Load()
 	playertexture = AEGfxTextureLoad("Fighting duck.png");
 	AE_ASSERT_MESG(playertexture, "cant create duck texture\n");
 
-	//enemytexture = AEGfxTextureLoad("Turtle.png");
 	enemytexture = AEGfxTextureLoad("Angry turtle.png");
 	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
-
 
 	staminapotion = AEGfxTextureLoad("staminapotion.png");
 	AE_ASSERT_MESG(staminapotion, "cant create stamina potion texture\n");
