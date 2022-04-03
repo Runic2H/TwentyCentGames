@@ -11,9 +11,8 @@ AEGfxVertexList* pMesh_MiniMapWindow = 0;
 AEGfxVertexList* pMesh_MiniMapChests = 0;
 AEGfxVertexList* pMesh_MiniMapMainChar = 0;
 AEGfxVertexList* pMesh_MiniMapEndPt = 0;
+float global_var_minimap_height;
 
-AEGfxVertexList* pMesh_Inv_Window = 0;
-AEGfxVertexList* pMesh_Inv_Box = 0;
 
 AEGfxTexture* path_art;
 AEGfxTexture* wall_art;
@@ -68,51 +67,26 @@ int maze_visibility[noOfRows][noOfCols];
 int maze_iswall_isnotwall[maxRows][maxCols];
 int maze_visibility[maxRows][maxCols];
 
-void Maze_Inventory_LoadMeshes()
+void Maze_Minimap_LoadMeshes(float &global_var_minimap_height)
 {
-	float window_height = Maze->specifications.cellHeight * 2;
-	AEGfxMeshStart();
-	AEGfxTriAdd(
-		0, 0, 0xFFFFFFFF, 0.0f, 1.0f,
-		0, window_height, 0xFFFFFFFF, 0.0f, 0.0f,
-		Maze->specifications.cellWidth, 0, 0xFFFFFFFF, 1.0f, 1.0f);
-	AEGfxTriAdd(
-		0, window_height, 0xFFFFFFFF, 0.0f, 0.0f,
-		Maze->specifications.cellWidth, window_height, 0xFFFFFFFF, 1.0f, 0.0f,
-		Maze->specifications.cellWidth, 0, 0xFFFFFFFF, 1.0f, 1.0f);
-	pMesh_Inv_Window = AEGfxMeshEnd();
-
-	AEGfxMeshStart();
-	AEGfxTriAdd(
-		0, 0, 0xFFFFFFFF, 0.0f, 1.0f,
-		0, window_height /3 -10, 0xFFFFFFFF, 0.0f, 0.0f,
-		Maze->specifications.cellWidth*0.8, 0, 0xFFFFFFFF, 1.0f, 1.0f);
-	AEGfxTriAdd(
-		0, window_height / 3 - 10, 0xFFFFFFFF, 0.0f, 0.0f,
-		Maze->specifications.cellWidth * 0.8, window_height / 3 - 10, 0xFFFFFFFF, 1.0f, 0.0f,
-		Maze->specifications.cellWidth * 0.8, 0, 0xFFFFFFFF, 1.0f, 1.0f);
-	pMesh_Inv_Box = AEGfxMeshEnd();
-
-}
-
-void Maze_Minimap_LoadMeshes()
-{
+	float window_height = AEGetWindowHeight()*0.75; 
+	global_var_minimap_height = window_height;
 	// This shape has 5 vertices
 	AEGfxMeshStart();
 	AEGfxTriAdd(
 		0, 0, 0xFFFFFFFF, 0.0f, 1.0f,
-		0, Maze->specifications.cellHeight, 0xFFFFFFFF, 0.0f, 0.0f,
-		Maze->specifications.cellWidth, 0, 0xFFFFFFFF, 1.0f, 1.0f);
+		0, window_height, 0xFFFFFFFF, 0.0f, 0.0f,
+		window_height, 0, 0xFFFFFFFF, 1.0f, 1.0f);
 	AEGfxTriAdd(
-		0, Maze->specifications.cellHeight, 0xFFFFFFFF, 0.0f, 0.0f,
-		Maze->specifications.cellWidth, Maze->specifications.cellHeight, 0xFFFFFFFF, 1.0f, 0.0f,
-		Maze->specifications.cellWidth, 0, 0xFFFFFFFF, 1.0f, 1.0f);
+		0, window_height, 0xFFFFFFFF, 0.0f, 0.0f,
+		window_height, window_height, 0xFFFFFFFF, 1.0f, 0.0f,
+		window_height, 0, 0xFFFFFFFF, 1.0f, 1.0f);
 	pMesh_MiniMapWindow = AEGfxMeshEnd();
 
 
 
-	float cells_size_x = (Maze->specifications.cellWidth) / noOfCols;
-	float cells_size_y = (Maze->specifications.cellHeight) / noOfCols;
+	float cells_size_x = window_height / noOfCols;
+	float cells_size_y = window_height / noOfRows;
 	// draw main char
 	AEGfxMeshStart();
 	// This shape has 5 vertices
@@ -151,6 +125,18 @@ void Maze_Minimap_LoadMeshes()
 	pMesh_MiniMapEndPt = AEGfxMeshEnd();
 }
 
+void Maze_LevelText_Draw()
+{
+
+	char strBuffer[100];
+	memset(strBuffer, 0, 100 * sizeof(char));
+	sprintf_s(strBuffer, "LEVEL %d",level_iter+1);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxPrint(fontLarge, strBuffer, -0.41, 0.7, 1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+
 void Maze_Minimap_Draw(float cam_x, float cam_y, float x_offset, float y_offset)
 {
 	float func_starting_x = cam_x + x_offset;
@@ -169,12 +155,16 @@ void Maze_Minimap_Draw(float cam_x, float cam_y, float x_offset, float y_offset)
 	{
 		for (int c = 0; c < Maze->specifications.noOfRows; c++)
 		{
+			//AEGfxSetPosition(func_starting_x, func_starting_y);
 
 			AEGfxSetPosition(
-				(func_starting_x + (r * (Maze->specifications.cellWidth / noOfCols)))
+				(func_starting_x + (r * (global_var_minimap_height / noOfCols)))
 				,
-				(func_starting_y + (c * (Maze->specifications.cellHeight) / noOfRows))
+				(func_starting_y + (c * (global_var_minimap_height) / noOfRows))
 			);
+			
+
+			
 
 			if (r == curr_X_GRIDposition && c == curr_Y_GRIDposition) // is wall
 			{
@@ -1067,7 +1057,7 @@ void Maze_Initialize()
 		MAZE_ReLOADCellVisibility(Maze);
 	}
 	
-	Maze_Minimap_LoadMeshes();
+	Maze_Minimap_LoadMeshes(global_var_minimap_height);
 	
 	MAZE_CreateMESH_MazeWindow2(pMeshMazeWindow, Maze, 0xFF0000);
 	MAZE_CreateMESH_CellOutline2(pMeshCellOutline, Maze, 0xFFFFFFFF);
@@ -1239,7 +1229,8 @@ void Maze_Draw()
 		//must draw
 		MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
 		MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
-    Maze_Minimap_Draw(cam_x, cam_y, -300.0f, -250.0f);
+		Maze_Minimap_Draw(cam_x, cam_y, -150.0f, -250.0f);
+		Maze_LevelText_Draw();
 		char strBuffer[100];
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -1267,7 +1258,7 @@ void Maze_Free()
 
 	AEGfxMeshFree(pMesh_MiniMapChests);
 	AEGfxMeshFree(pMesh_MiniMapMainChar);
-	AEGfxMeshFree(pMesh_MiniMapWindow);
+	//AEGfxMeshFree(pMesh_MiniMapWindow);
 	AEGfxMeshFree(pMesh_MiniMapEndPt);
 
 	delete(Maze);
