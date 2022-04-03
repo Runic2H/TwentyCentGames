@@ -33,8 +33,6 @@ namespace Characters
 		AEGfxVertexList* playermaxhealth = 0;	//PLAYER HEALTH MESH
 		AEGfxVertexList* playercurrhealth = 0;	//PLAYER HEALTH MESH
 		AEGfxVertexList* playerstamina = 0;		//PLAYER STAMINA MESH
-		int counter{ 10 };
-		float debuffcounter{0};
 
 		void CombatMesh(int RGBcounter)
 		{
@@ -526,7 +524,7 @@ namespace Characters
 			}
 			if (playerstats->status == FROZEN)
 			{
-				if (counter == 0)
+				if (playerstats->statuscounter == 0)
 				{
 					playerstats->status = NEUTRAL;
 				}
@@ -537,7 +535,7 @@ namespace Characters
 
 					if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_D))
 					{
-						--counter;
+						--playerstats->statuscounter;
 						//std::cout << counter << "\n";
 					}
 				}
@@ -551,21 +549,20 @@ namespace Characters
 
 		void CheckandUpdatePlayerStatus()
 		{
-			if (debuffcounter > 0)
+			if (playerstats->debuffcounter > 0)
 			{
-				debuffcounter -= DT;
+				playerstats->debuffcounter -= DT;
 			}
 			if (playerstats->status == FROSTED)
 			{
-				if (debuffcounter <= 0)
+				if (playerstats->debuffcounter <= 0)
 				{
 					playerstats->status = NEUTRAL;
 				}
 			}
 			if (playerstats->status == BURNING)
 			{
-				playerstats->is_dmgtaken -= DT;
-				if (debuffcounter <= 0 || next != COMBAT)
+				if (playerstats->debuffcounter <= 0)
 				{
 					playerstats->status = NEUTRAL;
 				}
@@ -582,7 +579,7 @@ namespace Characters
 
 		bool PlayerLevelUp()
 		{
-			if (playerstats->PlayerXP >= 100)
+			if (playerstats->PlayerXP >= playerstats->PlayerXPMax)
 			{
 				return true;
 			}
@@ -611,7 +608,14 @@ namespace Characters
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			// Set position for object 1
 			AEGfxSetPosition(playerstats->positionX, playerstats->positionY);
-			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+			if (playerstats->status == NEUTRAL)
+			{
+				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+			}
+			if (playerstats->is_dmgtaken >= 0)
+			{
+				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 0.3f);
+			}
 			AEGfxTextureSet(playertexture, 1.0f, 1.0f);
 
 			AEGfxMeshDraw(playermesh, AE_GFX_MDM_TRIANGLES);
@@ -662,6 +666,10 @@ namespace Characters
 			memset(strBufferLevel, 0, 100 * sizeof(char));
 			sprintf_s(strBufferLevel, "Level: %d", playerstats->PlayerLevel);
 
+			char strBufferXPLeft[100];
+			memset(strBufferXPLeft, 0, 100 * sizeof(char));
+			sprintf_s(strBufferXPLeft, "XP to next level: %d", playerstats->PlayerXPMax - playerstats->PlayerXP);
+
 			char strBufferStatus[100];
 			memset(strBufferStatus, 0, 100 * sizeof(char));
 
@@ -671,7 +679,7 @@ namespace Characters
 				sprintf_s(strBufferStatus, "Status: Frosted");
 				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.75f, 1.0f, 0.0f, 0.7f, 0.9f);
+				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.65f, 1.0f, 0.0f, 0.7f, 0.9f);
 				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
 
@@ -679,7 +687,7 @@ namespace Characters
 				sprintf_s(strBufferStatus, "Status: Frozen");
 				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.75f, 1.0f, 0.f, 0.7f, 0.6f);
+				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.65f, 1.0f, 0.f, 0.7f, 0.6f);
 				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
 
@@ -687,7 +695,7 @@ namespace Characters
 				sprintf_s(strBufferStatus, "Status: Burning");
          AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.75f, 1.0f, 0.7f, 0.0f, 0.6f);
+				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.65f, 1.0f, 0.7f, 0.0f, 0.2f);
 				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
 
@@ -695,7 +703,7 @@ namespace Characters
 				sprintf_s(strBufferStatus, "Status: Normal");
 				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
+				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.65f, 1.0f, 1.f, 1.f, 1.f);
 				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
 			}
@@ -732,6 +740,7 @@ namespace Characters
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			AEGfxPrint(fontId, strBufferHealth, -0.95f, -0.95f, 1.0f, 1.f, 1.f, 1.f);
 			AEGfxPrint(fontId, strBufferLevel, -0.95f, -0.85f, 1.0f, 1.f, 1.f, 1.f);
+			AEGfxPrint(fontId, strBufferXPLeft, -0.95f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
 			sprintf_s(strBuffer, "Stamina: %d", playerstats->staminacount);
 			AEGfxPrint(fontId, strBuffer, -0.10f, -0.80f, 1.14f, 1.0f, 1.0f, 1.0f);
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -770,12 +779,12 @@ namespace Characters
 					if (playerstats->status != FROZEN)
 					{
 						playerstats->status = FROSTED;
-						Character::debuffcounter = 5.0f;
+						playerstats->debuffcounter = 5.0f;
 					}
 					if (enemystats->DebuffCounter == 3)
 					{
 						playerstats->status = FROZEN;
-						Character::counter = 10;
+						playerstats->statuscounter = 10;
 						enemystats->DebuffCounter = 0;
 					}
 					break;
@@ -783,8 +792,7 @@ namespace Characters
 					if (playerstats->status != BURNING)
 					{
 						playerstats->status = BURNING;
-						Character::debuffcounter = 5.0f;
-						playerstats->is_dmgtaken = 0.5f;
+						playerstats->debuffcounter = 5.0f;
 					}
 					break;
 				case NORMAL:
@@ -812,6 +820,7 @@ namespace Characters
 						if (playerstats->positionID != playerstats->SAFEGRID)
 						{
 							playerstats->health -= (int)enemystats->damage;
+							playerstats->is_dmgtaken = 0.5f;
 							EnemyTypeCheckToApplyPlayerDebuff();
 						}
 
@@ -854,40 +863,40 @@ namespace Characters
 				switch ((int)RNG)
 				{
 				case 0:
+					enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
 					enemystats->EnemyType = NORMAL;
-					enemystats->health = 40;
-					enemystats->maxhealth = 40;
-					enemystats->enemytypedamage = 10;
+					enemystats->health = 40 + (5 * enemystats->EnemyLevel);
+					enemystats->maxhealth = 40 + (5 * enemystats->EnemyLevel);
+					enemystats->enemytypedamage = 5 * enemystats->EnemyLevel;
 					enemystats->damage = enemystats->enemytypedamage;
-					enemystats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
-					enemystats->EnemyXP = 20;
+					enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
+					enemystats->EnemyXP = 20 + (2 * enemystats->EnemyLevel);
 					break;
 
 				case 1:
+					enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
 					enemystats->EnemyType = ICE;
-					enemystats->health = 50;
-					enemystats->maxhealth = 50;
-					enemystats->enemytypedamage = 20;
+					enemystats->health = 50 + (5 * enemystats->EnemyLevel);
+					enemystats->maxhealth = 50 + (5 * enemystats->EnemyLevel);
+					enemystats->enemytypedamage = 20 + (2 * enemystats->EnemyLevel);
 					enemystats->damage = enemystats->enemytypedamage;
-					enemystats->damage = 25;
-					enemystats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
+					enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
 					enemystats->DebuffCounter = 0;
-					enemystats->EnemyXP = 50;
+					enemystats->EnemyXP = 50 + (2 * enemystats->EnemyLevel);
 					break;
 
 				case 2:
+					enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
 					enemystats->EnemyType = FIRE;
-					enemystats->health = 50;
-					enemystats->maxhealth = 50;
-					enemystats->enemytypedamage = 10;
+					enemystats->health = 50 + (5 * enemystats->EnemyLevel);
+					enemystats->maxhealth = 50 + (5 * enemystats->EnemyLevel);
+					enemystats->enemytypedamage = 10 + (1 * enemystats->EnemyLevel);
 					enemystats->damage = enemystats->enemytypedamage;
-					enemystats->EnemyCD = 3.0f;				//Cooldown till next enemy attack
+					enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
 					enemystats->DebuffCounter = 0;
-					enemystats->EnemyXP = 50;
+					enemystats->EnemyXP = 50 + (2 * enemystats->EnemyLevel);
 					break;
 				}
-
-
 			}
 
 		//Main Update loop for Idle and Attack States of Enemy

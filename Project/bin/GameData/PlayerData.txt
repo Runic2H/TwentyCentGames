@@ -5,7 +5,7 @@ maxhealth 		100
 positionID 		1
 safegrid 		1
 damage 		10
-staminaCD 		1.0
+staminaCD 		0.85
 staminacount 	0
 staminamax 		3
 staminaX 		-37.0
@@ -15,3 +15,5 @@ positionX 		0.0
 positionY 		0.0
 movementdt 		0.0
 Status 		0
+statuscounter 0
+debuffcounter 0

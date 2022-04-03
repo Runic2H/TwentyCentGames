@@ -204,8 +204,10 @@ void player_initialise() {
 	inFile >> str >> playerstats->positionY;
 	inFile >> str >> playerstats->movementdt;
 	inFile >> str >> playerstats->status;
+	inFile >> str >> playerstats->statuscounter;
+	inFile >> str >> playerstats->debuffcounter;
 	playerstats->resetCD = playerstats->staminaCD;		// Reset Cooldown for attack and movement
-
+	playerstats->PlayerXPMax = 100 + (25 * playerstats->PlayerLevel);
 	inFile.close();
 }
 
@@ -236,7 +238,6 @@ void enemy_initialise() {
 	inFile >> str >> enemystats->is_attacking;
 	inFile >> str >> enemystats->AttackCD;
 	inFile >> str >> enemystats->DamageCD;
-	inFile >> str >> enemystats->EnemyLevel;
 	
 	enemystats->EnemyGrid = (rand() % 3) + 1;	//Sets the safety grid for next attack
 

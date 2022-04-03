@@ -104,13 +104,25 @@ void Combat_Update()
 		CheckandUpdatePlayerStatus();
 		godmode();
 
+		playerstats->is_dmgtaken -= DT;
 
 		if (enemystats->health <= 0)
 		{
 			std::cout << "You Won!\n";
-			next = MAZE;
-			maze_init_flag = 1;
-			std::cout << "return to maze\n";
+			playerstats->debuffcounter = 0.0f;
+			playerstats->PlayerXP += enemystats->EnemyXP;
+			if (PlayerLevelUp())
+			{
+				playerstats->PlayerLevel += 1;
+				playerstats->PlayerXP = 0;
+				next = LEVELUP;
+			}
+			else
+			{
+				next = MAZE;
+				maze_init_flag = 1;
+				std::cout << "return to maze\n";
+			}
 		}
 
 		else if (playerstats->health <= 0) {
@@ -136,17 +148,6 @@ void Combat_Update()
 		}
 
 		UpdateEnemyState();
-
-		if (enemystats->health <= 0)
-		{
-			playerstats->PlayerXP += enemystats->EnemyXP;
-			if (PlayerLevelUp())
-			{
-				playerstats->PlayerLevel += 1;
-			  playerstats->PlayerXP = 0;
-			  next = LEVELUP;
-			}
-		}
 	}
 
 	// else paused
