@@ -104,6 +104,10 @@ void MAZE_ReLOADCellVisibility(Maze_Struct* maze_var);
 
 void Maze_Minimap_Draw(float cam_x, float cam_y, float x_offset, float y_offset);
 
+void Maze_Inventory_MeshUpdate(float camX, float camY);
+
+void Maze_Inventory_MeshRender();
+
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
 	Opens and reads required files, and assigns values to necessary variables.

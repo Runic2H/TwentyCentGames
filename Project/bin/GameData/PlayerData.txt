@@ -15,5 +15,5 @@ positionX 		0.0
 positionY 		0.0
 movementdt 		0.0
 Status 		0
-statuscounter 0
-debuffcounter 0
+statuscounter 	0
+debuffcounter 	0
