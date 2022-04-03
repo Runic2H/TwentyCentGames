@@ -1285,13 +1285,14 @@ void Maze_Update()
 */
 void Maze_Draw()
 {
-
 	//std::cout << "Maze:Draw" << std::endl;
 	if (systemsettings.paused == 0) {
 
 		if (AEInputCheckCurr(AEVK_TAB)) {
 			Maze_Inventory_MeshUpdate(cam_x, cam_y);
 			Maze_Inventory_MeshRender();
+			Maze_Minimap_Draw(cam_x, cam_y, -150.0f, -250.0f);
+			Maze_LevelText_Draw();
 		}
 
 		else {
@@ -1301,18 +1302,18 @@ void Maze_Draw()
 				Maze
 			);
 
-		//must draw
-		MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
-		MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
-		Maze_Minimap_Draw(cam_x, cam_y, -150.0f, -250.0f);
-		Maze_LevelText_Draw();
-		char strBuffer[100];
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetPosition(0.0f, 0.0f);
-		AEGfxTextureSet(NULL, 0, 0); // No texture for object
-		sprintf_s(strBuffer, "Press Q to go back to the main menu");
-		AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
+			//must draw
+			MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
+			MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
+			
+			char strBuffer[100];
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+			AEGfxSetPosition(0.0f, 0.0f);
+			AEGfxTextureSet(NULL, 0, 0); // No texture for object
+			sprintf_s(strBuffer, "Press TAB to view minimap and inventory");
+			AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
+		}
 	}
 }
 
