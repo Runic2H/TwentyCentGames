@@ -13,6 +13,10 @@ AEGfxVertexList* pMesh_MiniMapMainChar = 0;
 AEGfxVertexList* pMesh_MiniMapEndPt = 0;
 float global_var_minimap_height;
 
+AEGfxVertexList* pMesh_ChestText= 0;
+float chest_pickup_display_duration;
+int chestopened_flag = 0;
+std::string openchest_msg;
 
 AEGfxTexture* path_art;
 AEGfxTexture* wall_art;
@@ -68,6 +72,53 @@ int maze_visibility[noOfRows][noOfCols];
 */
 int maze_iswall_isnotwall[maxRows][maxCols];
 int maze_visibility[maxRows][maxCols];
+
+void Maze_LOAD_DisplayChestPickupItemMESH()
+{
+	float width = 220.0f;
+	float height = 20.0f;
+	// creating the mesh to put the text in   0xFFA500FF
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		0, 0, 0xFFA500FF, 0.0f, 1.0f,
+		0, height, 0xFFA500FF, 0.0f, 0.0f,
+		width, 0, 0xFFA500FF, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		0, height, 0xFFA500FF, 0.0f, 0.0f,
+		width, height, 0xFFA500FF, 1.0f, 0.0f,
+		width, 0, 0xFFA500FF, 1.0f, 1.0f);
+	pMesh_ChestText = AEGfxMeshEnd();
+}
+
+void Maze_ChestPickup_Draw(float cam_x, float cam_y, float x_offset, float y_offset)
+{
+	float func_starting_x = cam_x + x_offset;
+	float func_starting_y = cam_y + y_offset;
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
+	AEGfxSetPosition(func_starting_x, func_starting_y);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 0.8f);
+	AEGfxMeshDraw(pMesh_ChestText, AE_GFX_MDM_TRIANGLES);
+}
+
+void Maze_DisplayChestPickupItem(std::string msg)
+{
+
+	Maze_ChestPickup_Draw(cam_x, cam_y, -100, 0);
+	char strBuffer[100];
+	memset(strBuffer, 0, 100 * sizeof(char));
+	sprintf_s(strBuffer,"%s", msg.c_str());
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxPrint(fontId, strBuffer, -0.22, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+	
+
+	chest_pickup_display_duration -= DT;
+}
+
+
 
 void Maze_Minimap_LoadMeshes(float &global_var_minimap_height)
 {
@@ -927,21 +978,29 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
 	std::cout << "Player has opened chest" << std::endl;
 	
+	
+
 	int randindex;
 	srand(time(NULL));
 	randindex = ( rand() % 3 ) + 1;
 	if (randindex == 1)
 	{
 		playerinventory->healthpotion.itemcounter += 1;
+		openchest_msg = "You have picked up 1 health potion!";
 	}
 	else if (randindex == 2)
 	{
 		playerinventory->staminapotion.itemcounter += 1;
+		openchest_msg = "You have picked up 1 stamina potion!";
 	}
 	else if (randindex == 3)
 	{
 		playerinventory->defencepotion.itemcounter += 1;
+		openchest_msg = "You have picked up 1 defence potion!";
 	}
+
+	chest_pickup_display_duration = 1.5f;
+	chestopened_flag = 1;
 }
 
 
@@ -1128,7 +1187,7 @@ void Maze_Initialize()
 	}
 	
 	Maze_Minimap_LoadMeshes(global_var_minimap_height);
-	
+	Maze_LOAD_DisplayChestPickupItemMESH();
 	MAZE_CreateMESH_MazeWindow2(pMeshMazeWindow, Maze, 0xFF0000);
 	MAZE_CreateMESH_CellOutline2(pMeshCellOutline, Maze, 0xFFFFFFFF);
 	MAZE_CreateSolidCell2(pMeshSolidSquare_WALL, Maze, 0x000000);
@@ -1285,15 +1344,15 @@ void Maze_Update()
 */
 void Maze_Draw()
 {
-
 	//std::cout << "Maze:Draw" << std::endl;
 	if (systemsettings.paused == 0) {
 
 		if (AEInputCheckCurr(AEVK_TAB)) {
 			Maze_Inventory_MeshUpdate(cam_x, cam_y);
 			Maze_Inventory_MeshRender();
+			Maze_Minimap_Draw(cam_x, cam_y, -160.0f, -250.0f);
+			Maze_LevelText_Draw();
 		}
-
 		else {
 			MAZE_DrawMazeCellsandCellOutline2(pMeshSolidSquare_WALL,
 				pMeshSolidSquare_PATH,
@@ -1301,18 +1360,28 @@ void Maze_Draw()
 				Maze
 			);
 
-		//must draw
-		MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
-		MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
-		Maze_Minimap_Draw(cam_x, cam_y, -150.0f, -250.0f);
-		Maze_LevelText_Draw();
-		char strBuffer[100];
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetPosition(0.0f, 0.0f);
-		AEGfxTextureSet(NULL, 0, 0); // No texture for object
-		sprintf_s(strBuffer, "Press Q to go back to the main menu");
-		AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
+			//must draw
+			MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
+			MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
+			
+			char strBuffer[100];
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+			AEGfxSetPosition(0.0f, 0.0f);
+			AEGfxTextureSet(NULL, 0, 0); // No texture for object
+			sprintf_s(strBuffer, "Press TAB to view minimap and inventory");
+			AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
+
+
+			if (chest_pickup_display_duration > 0)
+			{
+				Maze_DisplayChestPickupItem(openchest_msg);
+			}
+			else
+			{
+				chest_pickup_display_duration = 0;
+			}
+		}
 	}
 }
 
