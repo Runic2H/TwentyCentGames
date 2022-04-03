@@ -109,6 +109,7 @@ void Combat_Update()
 		if (enemystats->health <= 0)
 		{
 			std::cout << "You Won!\n";
+			enemystats->health = 0;
 			playerstats->debuffcounter = 0.0f;
 			playerstats->PlayerXP += enemystats->EnemyXP;
 			if (PlayerLevelUp())
@@ -127,6 +128,7 @@ void Combat_Update()
 
 		else if (playerstats->health <= 0) {
 		  std::cout << "You Died!\n";
+		  playerstats->health = 0;
 		  next = GAMEOVER;
 		  maze_init_flag = 0;
 		}

@@ -228,6 +228,7 @@ namespace Characters
 
 		void FROZENbuttonrender() {
 
+			char str[35];
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -237,12 +238,19 @@ namespace Characters
 			AEGfxTextureSet(leftbutton->pTexture, 0, 0);
 			AEGfxMeshDraw(leftbutton->pMesh, AE_GFX_MDM_TRIANGLES);
 
+			sprintf_s(str, "A");
+			AEGfxPrint(fontLarge, str, -0.55f, 0.35f, 0.6f, 0.0f, 1.0f, 1.0f);
+
 			AEGfxSetTransform(rightbutton->transform.m);
 			AEGfxSetTransparency(rightbutton->itemcounter);
 			AEGfxTextureSet(rightbutton->pTexture, 0, 0);
 			AEGfxMeshDraw(rightbutton->pMesh, AE_GFX_MDM_TRIANGLES);
 
+			sprintf_s(str, "D");
+			AEGfxPrint(fontLarge, str, 0.49f, 0.35f, 0.6f, 0.0f, 1.0f, 1.0f);
+
 			char strBuffer[35];
+			char strBufferStatus[35];
 
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -250,7 +258,9 @@ namespace Characters
 			AEGfxSetTransparency(1.0f);
 
 			sprintf_s(strBuffer, "FROZEN");
+			sprintf_s(strBufferStatus, "%d", playerstats->statuscounter);
 			AEGfxPrint(fontLarge, strBuffer, -0.19f, 0.35f, 0.6f, 0.0f, 1.0f, 1.0f);
+			AEGfxPrint(fontLarge, strBufferStatus, -0.04f, 0.55f, 0.6f, 0.0f, 1.0f, 1.0f);
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
 		}
 
@@ -781,7 +791,7 @@ namespace Characters
 						playerstats->status = FROSTED;
 						playerstats->debuffcounter = 5.0f;
 					}
-					if (enemystats->DebuffCounter == 3)
+					if (playerstats->status == FROSTED && enemystats->DebuffCounter == 2)
 					{
 						playerstats->status = FROZEN;
 						playerstats->statuscounter = 10;
@@ -862,7 +872,7 @@ namespace Characters
 
 				switch ((int)RNG)
 				{
-				case 0:
+				case NORMAL:
 					enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
 					enemystats->EnemyType = NORMAL;
 					enemystats->health = 40 + (5 * enemystats->EnemyLevel);
@@ -873,19 +883,19 @@ namespace Characters
 					enemystats->EnemyXP = 20 + (2 * enemystats->EnemyLevel);
 					break;
 
-				case 1:
+				case ICE:
 					enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
 					enemystats->EnemyType = ICE;
 					enemystats->health = 50 + (5 * enemystats->EnemyLevel);
 					enemystats->maxhealth = 50 + (5 * enemystats->EnemyLevel);
-					enemystats->enemytypedamage = 20 + (2 * enemystats->EnemyLevel);
+					enemystats->enemytypedamage = 15 + (2 * enemystats->EnemyLevel);
 					enemystats->damage = enemystats->enemytypedamage;
 					enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
 					enemystats->DebuffCounter = 0;
 					enemystats->EnemyXP = 50 + (2 * enemystats->EnemyLevel);
 					break;
 
-				case 2:
+				case FIRE:
 					enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
 					enemystats->EnemyType = FIRE;
 					enemystats->health = 50 + (5 * enemystats->EnemyLevel);
