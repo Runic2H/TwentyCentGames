@@ -68,7 +68,7 @@ void Combat_Initialize()
 {
 	Audio_Init();
 	combat_background_Audio();	//JN: new code
-	initialise_pausemenu();
+	//initialise_pausemenu();
 	ChoosingEnemyType((rand() % 3) + 0);
 	MeshInit();		// Single init for the meshes that only need to be created once (NON RGB MESHES)
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
@@ -104,17 +104,31 @@ void Combat_Update()
 		CheckandUpdatePlayerStatus();
 		godmode();
 
+		playerstats->is_dmgtaken -= DT;
 
 		if (enemystats->health <= 0)
 		{
 			std::cout << "You Won!\n";
-			next = MAZE;
-			maze_init_flag = 1;
-			std::cout << "return to maze\n";
+			enemystats->health = 0;
+			playerstats->debuffcounter = 0.0f;
+			playerstats->PlayerXP += enemystats->EnemyXP;
+			if (PlayerLevelUp())
+			{
+				playerstats->PlayerLevel += 1;
+				playerstats->PlayerXP = 0;
+				next = LEVELUP;
+			}
+			else
+			{
+				next = MAZE;
+				maze_init_flag = 1;
+				std::cout << "return to maze\n";
+			}
 		}
 
 		else if (playerstats->health <= 0) {
 		  std::cout << "You Died!\n";
+		  playerstats->health = 0;
 		  next = GAMEOVER;
 		  maze_init_flag = 0;
 		}
@@ -136,17 +150,6 @@ void Combat_Update()
 		}
 
 		UpdateEnemyState();
-
-		if (enemystats->health <= 0)
-		{
-			playerstats->PlayerXP += enemystats->EnemyXP;
-			if (PlayerLevelUp())
-			{
-				playerstats->PlayerLevel += 1;
-			  playerstats->PlayerXP = 0;
-			  next = LEVELUP;
-			}
-		}
 	}
 
 	// else paused
@@ -189,7 +192,7 @@ void Combat_Free()
 	std::cout << "Combat:Free" << std::endl;
 	FreePlayerMesh();
 	FreeEnemyMesh();
-	unloadpausemenu();
+	//unloadpausemenu();
 }
 
 

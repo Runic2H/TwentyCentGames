@@ -48,7 +48,10 @@ typedef struct player_statsheet
 	float movementdt;
 	int status;
 	int PlayerXP;
+	int PlayerXPMax;
 	int PlayerLevel;
+	int statuscounter;
+	float debuffcounter;
 
 }player_statsheet;
 

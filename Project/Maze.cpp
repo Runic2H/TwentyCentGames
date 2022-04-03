@@ -1040,7 +1040,7 @@ void Maze_Initialize()
 {
 	Audio_Init();	//JN: new code
 	maze_background_Audio();	//JN: new code
-	initialise_pausemenu();
+	//initialise_pausemenu();
 
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
 
@@ -1263,7 +1263,7 @@ void Maze_Free()
 	AEGfxMeshFree(pMeshSolidSquare_WALL);
 	AEGfxMeshFree(pMesh_MainCharacter);
 	AEGfxMeshFree(pMeshChest);	//JN: new code
-	unloadpausemenu();
+	//unloadpausemenu();
 
 	AEGfxMeshFree(pMesh_MiniMapChests);
 	AEGfxMeshFree(pMesh_MiniMapMainChar);
