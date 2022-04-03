@@ -915,9 +915,10 @@ void MAZE_ReLOADCellVisibility(Maze_Struct* maze_var)
 
 void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
-	/*
+
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == BOSS)
 	{
+		enemystats->EnemyType = ENEMYBOSS;
 		next = COMBAT;
 		global_maze_cam_x = cam_x;
 		global_maze_cam_y = cam_y;
@@ -925,7 +926,6 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 
 		AEGfxSetCamPosition(0.0f, 0.0f);
 	}
-	*/
 
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == ENEMY)
 	{

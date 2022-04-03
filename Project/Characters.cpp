@@ -564,9 +564,11 @@ namespace Characters
 			}
 			if (playerstats->status == FROSTED)
 			{
+				playerstats->statuscounter = 10;
 				if (playerstats->debuffcounter <= 0)
 				{
 					playerstats->status = NEUTRAL;
+					playerstats->statuscounter = 0;
 				}
 			}
 			if (playerstats->status == BURNING)
@@ -582,6 +584,13 @@ namespace Characters
 						playerstats->health -= 2;
 						playerstats->is_dmgtaken = 0.5f;
 					}
+				}
+			}
+			if (playerstats->status == FROZEN)
+			{
+				if (playerstats->statuscounter == 0)
+				{
+					playerstats->status = NEUTRAL;
 				}
 			}
 		}
@@ -771,9 +780,6 @@ namespace Characters
 		AEGfxVertexList* Enemymaxhealth = 0;
 		AEGfxVertexList* Enemycurrhealth = 0;
 
-		//enum EnemyPos { IDLE, ATTACKING };
-		//enum ENEMY_TYPE { NORMAL, ICE, FIRE };
-
 
 		namespace
 		{
@@ -793,7 +799,6 @@ namespace Characters
 					if (playerstats->status == FROSTED && enemystats->DebuffCounter == 2)
 					{
 						playerstats->status = FROZEN;
-						playerstats->statuscounter = 10;
 						enemystats->DebuffCounter = 0;
 					}
 					break;
@@ -802,6 +807,14 @@ namespace Characters
 					{
 						playerstats->status = BURNING;
 						playerstats->debuffcounter = 5.0f;
+					}
+					break;
+				case ENEMYBOSS:
+					playerstats->status = (rand() % 3) + 1;
+					playerstats->debuffcounter = 5.0f;
+					if (playerstats->status == FROZEN)
+					{
+						playerstats->statuscounter = 10;
 					}
 					break;
 				case NORMAL:
@@ -867,46 +880,60 @@ namespace Characters
 				}
 			}
 		}
-			void ChoosingEnemyType(float RNG) {
 
-				switch ((int)RNG)
-				{
-				case NORMAL:
-					enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
-					enemystats->EnemyType = NORMAL;
-					enemystats->health = 40 + (5 * enemystats->EnemyLevel);
-					enemystats->maxhealth = 40 + (5 * enemystats->EnemyLevel);
-					enemystats->enemytypedamage = 5 * enemystats->EnemyLevel;
-					enemystats->damage = enemystats->enemytypedamage;
-					enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
-					enemystats->EnemyXP = 20 + (2 * enemystats->EnemyLevel);
-					break;
+		void ChoosingEnemyType(float RNG) {
 
-				case ICE:
-					enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
-					enemystats->EnemyType = ICE;
-					enemystats->health = 50 + (5 * enemystats->EnemyLevel);
-					enemystats->maxhealth = 50 + (5 * enemystats->EnemyLevel);
-					enemystats->enemytypedamage = 15 + (2 * enemystats->EnemyLevel);
-					enemystats->damage = enemystats->enemytypedamage;
-					enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
-					enemystats->DebuffCounter = 0;
-					enemystats->EnemyXP = 50 + (2 * enemystats->EnemyLevel);
-					break;
+			switch ((int)RNG)
+			{
+			case NORMAL:
+				enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
+				enemystats->EnemyType = NORMAL;
+				enemystats->health = 40 + (5 * enemystats->EnemyLevel);
+				enemystats->maxhealth = 40 + (5 * enemystats->EnemyLevel);
+				enemystats->enemytypedamage = 5 * enemystats->EnemyLevel;
+				enemystats->damage = enemystats->enemytypedamage;
+				enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
+				enemystats->EnemyXP = 20 + (2 * enemystats->EnemyLevel);
+				break;
 
-				case FIRE:
-					enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
-					enemystats->EnemyType = FIRE;
-					enemystats->health = 50 + (5 * enemystats->EnemyLevel);
-					enemystats->maxhealth = 50 + (5 * enemystats->EnemyLevel);
-					enemystats->enemytypedamage = 10 + (1 * enemystats->EnemyLevel);
-					enemystats->damage = enemystats->enemytypedamage;
-					enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
-					enemystats->DebuffCounter = 0;
-					enemystats->EnemyXP = 50 + (2 * enemystats->EnemyLevel);
-					break;
-				}
+			case ICE:
+				enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
+				enemystats->EnemyType = ICE;
+				enemystats->health = 50 + (5 * enemystats->EnemyLevel);
+				enemystats->maxhealth = 50 + (5 * enemystats->EnemyLevel);
+				enemystats->enemytypedamage = 15 + (2 * enemystats->EnemyLevel);
+				enemystats->damage = enemystats->enemytypedamage;
+				enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
+				enemystats->DebuffCounter = 0;
+				enemystats->EnemyXP = 50 + (2 * enemystats->EnemyLevel);
+				break;
+
+			case FIRE:
+				enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
+				enemystats->EnemyType = FIRE;
+				enemystats->health = 50 + (5 * enemystats->EnemyLevel);
+				enemystats->maxhealth = 50 + (5 * enemystats->EnemyLevel);
+				enemystats->enemytypedamage = 10 + (1 * enemystats->EnemyLevel);
+				enemystats->damage = enemystats->enemytypedamage;
+				enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
+				enemystats->DebuffCounter = 0;
+				enemystats->EnemyXP = 50 + (2 * enemystats->EnemyLevel);
+				break;
 			}
+		}
+
+		void SpawnBossEnemy()
+		{
+			enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
+			enemystats->EnemyType = ENEMYBOSS;
+			enemystats->health = 70 + (5 * enemystats->EnemyLevel);
+			enemystats->maxhealth = 70 + (5 * enemystats->EnemyLevel);
+			enemystats->enemytypedamage = 20 + (5 * enemystats->EnemyLevel);
+			enemystats->damage = enemystats->enemytypedamage;
+			enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
+			enemystats->DebuffCounter = 0;
+			enemystats->EnemyXP = 65 + (10 * enemystats->EnemyLevel);
+		}
 
 		//Main Update loop for Idle and Attack States of Enemy
 		void UpdateEnemyState()
@@ -1039,7 +1066,6 @@ namespace Characters
 				AEGfxPrint(fontId, strBufferType, 0.60f, -0.75f, 1.0f, 1.f, 1.f, 1.f);
 				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
-
 			case ICE:
 				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				sprintf_s(strBufferType, "Enemy Type: Frost");
@@ -1050,6 +1076,12 @@ namespace Characters
 				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				sprintf_s(strBufferType, "Enemy Type: Fire");
 				AEGfxPrint(fontId, strBufferType, 0.60f, -0.75f, 1.0f, 1.0f, 0.2f, 0.2f);
+				AEGfxSetBlendMode(AE_GFX_BM_NONE);
+				break;
+			case ENEMYBOSS:
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+				sprintf_s(strBufferType, "Enemy Type: BOSS");
+				AEGfxPrint(fontId, strBufferType, 0.60f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
 				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 				break;
 			}

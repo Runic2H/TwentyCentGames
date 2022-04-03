@@ -69,7 +69,14 @@ void Combat_Initialize()
 	Audio_Init();
 	combat_background_Audio();	//JN: new code
 	//initialise_pausemenu();
-	ChoosingEnemyType((rand() % 3) + 0);
+	if (enemystats->EnemyType != ENEMYBOSS)
+	{
+		ChoosingEnemyType((rand() % 3) + 0);
+	}
+	else
+	{
+		SpawnBossEnemy();
+	}
 	MeshInit();		// Single init for the meshes that only need to be created once (NON RGB MESHES)
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
 }

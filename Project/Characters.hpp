@@ -97,6 +97,8 @@ namespace Characters
 		void RenderEnemy(AEGfxTexture* enemytexture, AEGfxVertexList* EnemyMesh);
 
 		void RenderEnemyHealth();
+
+		void SpawnBossEnemy();
 	}
 }
 

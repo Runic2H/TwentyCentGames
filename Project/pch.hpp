@@ -52,7 +52,7 @@ void enemy_initialise();
 
 enum consumables { HEALTH, STAMINA, DEFENCE };
 enum EnemyPos { IDLE, ATTACKING };
-enum ENEMY_TYPE { NORMAL, ICE, FIRE };
+enum ENEMY_TYPE { NORMAL, ICE, FIRE, ENEMYBOSS };
 enum PlayerPos { ORIGIN, TOP, BACK, DOWN, ATTACK };
 enum PlayerStatus { NEUTRAL, FROSTED, FROZEN, BURNING };
 
