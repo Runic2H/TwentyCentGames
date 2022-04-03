@@ -23,7 +23,7 @@ enum MazeCellValue
 	WALL = 1,
 	CHEST = 3,
 	ENEMY = 9,
-	BOSS =5
+	BOSS = 5
 
 	
 };
