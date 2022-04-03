@@ -476,7 +476,6 @@ namespace Characters
 
 			AEGfxTextureUnload(rightbutton->pTexture);
 			AEGfxTextureUnload(leftbutton->pTexture);
-			unloadpausemenu();
 
 			delete rightbutton;
 			delete leftbutton;

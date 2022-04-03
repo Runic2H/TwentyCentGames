@@ -48,7 +48,6 @@ void initialise_pausemenu() {
 
 void logicpausemenu() {
 
-	// insert textures here
 	if (AEInputCheckTriggered(AEVK_Q)) {
 		next = GS_QUIT;
 	}
@@ -242,7 +241,6 @@ void enemy_initialise() {
 	enemystats->EnemyGrid = (rand() % 3) + 1;	//Sets the safety grid for next attack
 
 	inFile.close();
-
 }
 
 

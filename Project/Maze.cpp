@@ -18,6 +18,8 @@ AEGfxTexture* main_character_art;
 AEGfxTexture* chest_art;	//JN: new code
 AEGfxTexture* exit_art;		//JN: new code
 
+AEMtx33 defencepotiontransform, staminapotiontransform, healthpotiontransform;
+
 float MC_positionX;
 float MC_positionY;
 extern int curr_X_GRIDposition;
@@ -973,6 +975,74 @@ void Maze_CameraAdjustment(int direction)
 }
 
 
+
+void Maze_Inventory_MeshUpdate(float camX, float camY){
+	
+	AEMtx33 scale, rot, trans, buffer;
+
+	AEMtx33Scale(&scale, 50.0f, 50.0f);
+	AEMtx33Rot(&rot, 0.0f);
+	AEMtx33Concat(&buffer, &scale, &rot);
+
+	AEMtx33Trans(&trans, -300.0f + camX, 100.0f + camY);
+	AEMtx33Concat(&defencepotiontransform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, -300.0f + camX, 0.0f + camY);
+	AEMtx33Concat(&healthpotiontransform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, -300.0f + camX, -100.0f + camY);
+	AEMtx33Concat(&staminapotiontransform, &trans, &buffer);
+}
+
+void Maze_Inventory_MeshRender() {
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+	AEGfxSetTransform(defencepotiontransform.m);
+	AEGfxSetTransparency(1);
+	AEGfxTextureSet(playerinventory->defencepotion.pTexture, 0, 0);
+	AEGfxMeshDraw(playerinventory->defencepotion.pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(healthpotiontransform.m);
+	AEGfxSetTransparency(1);
+	AEGfxTextureSet(playerinventory->healthpotion.pTexture, 0, 0);
+	AEGfxMeshDraw(playerinventory->healthpotion.pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(staminapotiontransform.m);
+	AEGfxSetTransparency(1);
+	AEGfxTextureSet(playerinventory->staminapotion.pTexture, 0, 0);
+	AEGfxMeshDraw(playerinventory->staminapotion.pMesh, AE_GFX_MDM_TRIANGLES);
+
+	char strBuffer[35];
+
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetTransparency(1.0f);
+
+	sprintf_s(strBuffer, "Defence potion");
+	AEGfxPrint(fontId, strBuffer, -0.84f, 0.43f, 1.0f, 0.9f, 0.9f, 1.0f);
+
+	sprintf_s(strBuffer, "Health potion");
+	AEGfxPrint(fontId, strBuffer, -0.84f, 0.1f, 1.0f, 1.0f, 0.9f, 0.9f);
+
+	sprintf_s(strBuffer, "Stamina potion");
+	AEGfxPrint(fontId, strBuffer, -0.84f, -0.23f, 1.0f, 0.9f, 1.0f, 0.9f);
+
+	sprintf_s(strBuffer, "%0.0f", playerinventory->defencepotion.itemcounter);
+	AEGfxPrint(fontId, strBuffer, -0.68f, 0.25f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	sprintf_s(strBuffer, "%0.0f", playerinventory->healthpotion.itemcounter);
+	AEGfxPrint(fontId, strBuffer, -0.68f, -0.07f, 1.0f, 0.9f, 1.0f, 0.9f);
+
+	sprintf_s(strBuffer, "%0.0f", playerinventory->staminapotion.itemcounter);
+	AEGfxPrint(fontId, strBuffer, -0.68f, -0.4f, 1.0f, 0.9f, 1.0f, 0.9f);
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+}
+
+
 /*
 	Loads all assets in Level1. It should only be called once before the start of the level.
 	Opens and reads required files, and assigns values to necessary variables.
@@ -1053,8 +1123,6 @@ void Maze_Initialize()
 
 	MAZE_SetPosAsEmpty(Maze, curr_X_GRIDposition, curr_Y_GRIDposition);
 
-	
-	
 }
 
 
@@ -1066,7 +1134,7 @@ void Maze_Initialize()
 void Maze_Update()
 {
 	//std::cout << "Maze:Update" << std::endl;
-	Audio_Update();		//JN: new code 
+	Audio_Update();					//JN: new code 
 	//get_current_volume();
 	increase_master_fader();		//JN: new code
 	decrease_master_fader();		//JN: new code
@@ -1197,26 +1265,34 @@ void Maze_Update()
 */
 void Maze_Draw()
 {
+
 	//std::cout << "Maze:Draw" << std::endl;
 	if (systemsettings.paused == 0) {
 
-		MAZE_DrawMazeCellsandCellOutline2(pMeshSolidSquare_WALL,
-			pMeshSolidSquare_PATH,
-			pMeshCellOutline,
-			Maze
-		);
+		if (AEInputCheckCurr(AEVK_TAB)) {
+			Maze_Inventory_MeshUpdate(cam_x, cam_y);
+			Maze_Inventory_MeshRender();
+		}
 
-		//must draw
-		MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
-		MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
-    Maze_Minimap_Draw(cam_x, cam_y, -300.0f, -250.0f);
-		char strBuffer[100];
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetPosition(0.0f, 0.0f);
-		AEGfxTextureSet(NULL, 0, 0); // No texture for object
-		sprintf_s(strBuffer, "Press Q to go back to the main menu");
-		AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
+		else {
+			MAZE_DrawMazeCellsandCellOutline2(pMeshSolidSquare_WALL,
+				pMeshSolidSquare_PATH,
+				pMeshCellOutline,
+				Maze
+			);
+
+			//must draw
+			MAZE_DrawMazeOutline2(pMeshMazeWindow, Maze); //AEGFX MeshDrawMode MDM != AEGFX RenderMode RM
+			MAZE_DrawingMainCharacter(pMesh_MainCharacter, MC_positionX, MC_positionY);
+			Maze_Minimap_Draw(cam_x, cam_y, -300.0f, -250.0f);
+			char strBuffer[100];
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+			AEGfxSetPosition(0.0f, 0.0f);
+			AEGfxTextureSet(NULL, 0, 0); // No texture for object
+			sprintf_s(strBuffer, "Press TAB to show stats");
+			AEGfxPrint(fontId, strBuffer, -0.25f, -0.91f, 1.14f, 1.f, 1.f, 1.f);
+		}
 	}
 }
 
