@@ -41,13 +41,13 @@ void Menu_Load() {
 
 	AEGfxSetBackgroundColor(0.0f, 0.1f, 0.2f);
 
-	gamelogostruct.pTexture = AEGfxTextureLoad("ducktitle.png");
+	gamelogostruct.pTexture = AEGfxTextureLoad("Images/ducktitle.png");
 	AE_ASSERT_MESG(gamelogostruct.pTexture, "Failed to create gamelogotexture!\n");
 
-	ducktex = AEGfxTextureLoad("duck.png");
+	ducktex = AEGfxTextureLoad("Images/duck.png");
 	AE_ASSERT_MESG(ducktex, "Failed to create duck texture!\n");
 
-	duckdrooltex = AEGfxTextureLoad("duckdrool.png");
+	duckdrooltex = AEGfxTextureLoad("Images/duckdrool.png");
 	AE_ASSERT_MESG(duckdrooltex, "Failed to create duckdrool texture!\n");
 
 
@@ -99,10 +99,10 @@ void Menu_Load() {
 		= AEGfxMeshEnd();
 	AE_ASSERT_MESG(menututorialbutton.pMesh, "Failed to create pause meshes!!\n");
 
-	menustartbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\startbutton.png");
-	menututorialbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\tutorialbutton.png");
-	menuexitbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\exitbutton.png");
-	menucreditsbutton.pTexture = AEGfxTextureLoad("..\\Bin\\images\\creditsbutton.png");
+	menustartbutton.pTexture = AEGfxTextureLoad("Images/startbutton.png");
+	menututorialbutton.pTexture = AEGfxTextureLoad("Images/tutorialbutton.png");
+	menuexitbutton.pTexture = AEGfxTextureLoad("Images/exitbutton.png");
+	menucreditsbutton.pTexture = AEGfxTextureLoad("Images/creditsbutton.png");
 }
 
 void Menu_Init() {

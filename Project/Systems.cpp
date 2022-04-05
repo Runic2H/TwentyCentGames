@@ -40,9 +40,9 @@ void initialise_pausemenu() {
 	AE_ASSERT_MESG(menubutton->pMesh, "Failed to create pause meshes!!\n");
 
 
-	menubutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\mainmenubutton.png");
-	resumebutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\resumebutton.png");
-	exitbutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\exitbutton.png");
+	menubutton->pTexture = AEGfxTextureLoad("Images/mainmenubutton.png");
+	resumebutton->pTexture = AEGfxTextureLoad("Images/resumebutton.png");
+	exitbutton->pTexture = AEGfxTextureLoad("Images/exitbutton.png");
 }
 
 
@@ -119,7 +119,7 @@ void renderpausemenu() {
 	AEGfxSetTransparency(0.28f);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxMeshDraw(pausebackground->pMesh, AE_GFX_MDM_TRIANGLES);
-
+	
 	AEGfxSetTransform(menubutton->transform.m);
 	AEGfxSetTransparency(menubutton->itemcounter);
 	AEGfxTextureSet(menubutton->pTexture, 0, 0);
@@ -265,13 +265,13 @@ void inventory_initialise() {
 		= AEGfxMeshEnd();
 	AE_ASSERT_MESG(playerinventory->defencepotion.pMesh, "cannot create inventorymesh");
 
-	playerinventory->defencepotion.pTexture = AEGfxTextureLoad("defencepotion.png");
+	playerinventory->defencepotion.pTexture = AEGfxTextureLoad("Images/defencepotion.png");
 	AE_ASSERT_MESG(playerinventory->defencepotion.pTexture, "cant create defencepotion texture\n");
 
-	playerinventory->healthpotion.pTexture = AEGfxTextureLoad("healthpotion.png");
+	playerinventory->healthpotion.pTexture = AEGfxTextureLoad("Images/healthpotion.png");
 	AE_ASSERT_MESG(playerinventory->healthpotion.pTexture, "cant create healthpotion texture\n");
 
-	playerinventory->staminapotion.pTexture = AEGfxTextureLoad("staminapotioninv.png");
+	playerinventory->staminapotion.pTexture = AEGfxTextureLoad("Images/staminapotioninv.png");
 	AE_ASSERT_MESG(playerinventory->staminapotion.pTexture, "cant create staminapotion texture\n");
 
 

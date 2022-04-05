@@ -20,7 +20,7 @@ void victory_load() {
 	AE_ASSERT_MESG(coffeebutton->pMesh, "cannot create coffeebutton mesh!");
 
 
-	coffeebutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\coffeemug.png");
+	coffeebutton->pTexture = AEGfxTextureLoad("Images/coffeemug.png");
 	AE_ASSERT_MESG(coffeebutton->pTexture, "cannot create coffeebutton texture!");
 }
 

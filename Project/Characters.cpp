@@ -34,6 +34,7 @@ namespace Characters
 		AEGfxVertexList* playercurrhealth = 0;	//PLAYER HEALTH MESH
 		AEGfxVertexList* playerstamina = 0;		//PLAYER STAMINA MESH
 
+
 		void CombatMesh(int RGBcounter)
 		{
 			FreePlayerMeshOnUpdate();
@@ -138,8 +139,8 @@ namespace Characters
 			AE_ASSERT_MESG(rightbutton->pMesh, "Failed to create pause meshes!!\n");
 
 		
-			rightbutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\rightbutton.png");
-			leftbutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\leftbutton.png");
+			rightbutton->pTexture = AEGfxTextureLoad("Images/rightbutton.png");
+			leftbutton->pTexture = AEGfxTextureLoad("Images/leftbutton.png");
 	
 
 			//
@@ -1042,12 +1043,12 @@ namespace Characters
 			// No texture for object 1;
 			if (enemystats->EnemyType == ICE)
 			{
-				enemytexture = AEGfxTextureLoad("Frost turtle.png");
+				enemytexture = AEGfxTextureLoad("Images/Frost turtle.png");
 				AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
 			}
 			if (enemystats->EnemyType == FIRE)
 			{
-				enemytexture = AEGfxTextureLoad("Fire turtle.png");
+				enemytexture = AEGfxTextureLoad("Images/Fire turtle.png");
 				AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
 			}
 			AEGfxTextureSet(enemytexture, 1.0f, 1.0f);

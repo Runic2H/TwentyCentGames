@@ -568,43 +568,43 @@ void Tutorial_Load()
 	//AEGfxVertexAdd(0, -299, 0x00FFFF00, 0.0f, 0.0f);
 	//line = AEGfxMeshEnd();
 
-	maze_screenshot = AEGfxTextureLoad("maze_screenshot.png");
+	maze_screenshot = AEGfxTextureLoad("Images/maze_screenshot.png");
 	AE_ASSERT_MESG(maze_screenshot, "Failed to create MazeOverview texture!\n");
 
-	Chest = AEGfxTextureLoad("Chest.png");
+	Chest = AEGfxTextureLoad("Images/Chest.png");
 	AE_ASSERT_MESG(Chest, "Failed to create Chest texture!\n");
 
-	defence_potion = AEGfxTextureLoad("defencepotion.png");
+	defence_potion = AEGfxTextureLoad("Images/defencepotion.png");
 	AE_ASSERT_MESG(defence_potion, "Failed to create defencepotion texture!\n");
 
-	health_potion = AEGfxTextureLoad("healthpotion.png");
+	health_potion = AEGfxTextureLoad("Images/healthpotion.png");
 	AE_ASSERT_MESG(health_potion, "Failed to create healthpotion texture!\n");
 
-	stamina_potion = AEGfxTextureLoad("staminapotioninv.png");
+	stamina_potion = AEGfxTextureLoad("Images/staminapotioninv.png");
 	AE_ASSERT_MESG(stamina_potion, "Failed to create staminapotion texture!\n");
 
-	Whirlpool = AEGfxTextureLoad("Whirlpool.png");
+	Whirlpool = AEGfxTextureLoad("Images/Whirlpool.png");
 	AE_ASSERT_MESG(Whirlpool, "Failed to create Whirlpool texture!\n");
 
-	tutorial_tab_map = AEGfxTextureLoad("tutorial_tab_map.png");
+	tutorial_tab_map = AEGfxTextureLoad("Images/tutorial_tab_map.png");
 	AE_ASSERT_MESG(tutorial_tab_map, "Failed to create tutorial_tab_map texture!\n");
 
-	tutorial_potions = AEGfxTextureLoad("tutorial_potions.png");
+	tutorial_potions = AEGfxTextureLoad("Images/tutorial_potions.png");
 	AE_ASSERT_MESG(tutorial_potions, "Failed to create tutorial_potions texture!\n");
 
-	tutorialcombat1 = AEGfxTextureLoad("tutorialcombat1.png");
+	tutorialcombat1 = AEGfxTextureLoad("Images/tutorialcombat1.png");
 	AE_ASSERT_MESG(Whirlpool, "Failed to create tutorialcombat1 texture!\n");
 
-	dodging_attack = AEGfxTextureLoad("dodging_attack.png");
+	dodging_attack = AEGfxTextureLoad("Images/dodging_attack.png");
 	AE_ASSERT_MESG(dodging_attack, "Failed to create dodging_attack texture!\n");
 
-	normal_turtle = AEGfxTextureLoad("Angry turtle.png");
+	normal_turtle = AEGfxTextureLoad("Images/Angry turtle.png");
 	AE_ASSERT_MESG(normal_turtle, "Failed to create Angry turle texture!\n");
 
-	fire_turtle = AEGfxTextureLoad("Fire turtle.png");
+	fire_turtle = AEGfxTextureLoad("Images/Fire turtle.png");
 	AE_ASSERT_MESG(fire_turtle, "Failed to create Fire turle texture!\n");
 
-	frost_turtle = AEGfxTextureLoad("Frost turtle.png");
+	frost_turtle = AEGfxTextureLoad("Images/Frost turtle.png");
 	AE_ASSERT_MESG(frost_turtle, "Failed to create Frost turle texture!\n");
 }
 
