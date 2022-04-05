@@ -69,7 +69,7 @@ void Combat_Initialize()
 	//initialise_pausemenu();
 	if (enemystats->EnemyType != ENEMYBOSS)
 	{
-		ChoosingEnemyType((rand() % 3) + 0);
+		ChoosingEnemyType((f32)((rand() % 3) + 0));
 	}
 	else
 	{

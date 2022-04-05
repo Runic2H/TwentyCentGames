@@ -19,13 +19,13 @@ void LevelUp_Load()
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
-		-AEGetWindowWidth() / 3, AEGetWindowHeight() / 4, 0xFFFFFFFF, 0.0f, 0.0f,
-		-AEGetWindowWidth() / 3, -AEGetWindowHeight() / 4, 0xFFFFFFFF, 0.0f, 1.0f,
-		AEGetWindowWidth() / 3, AEGetWindowHeight() / 4, 0xFFFFFFFF, 1.0f, 0.0f);
+		-(f32)AEGetWindowWidth() / 3, (f32)AEGetWindowHeight() / 4, 0xFFFFFFFF, 0.0f, 0.0f,
+		-(f32)AEGetWindowWidth() / 3, -(f32)AEGetWindowHeight() / 4, 0xFFFFFFFF, 0.0f, 1.0f,
+		(f32)AEGetWindowWidth() / 3, (f32)AEGetWindowHeight() / 4, 0xFFFFFFFF, 1.0f, 0.0f);
 	AEGfxTriAdd(
-		AEGetWindowWidth() / 3, AEGetWindowHeight() / 4, 0xFFFFFFFF, 1.0f, 0.0f,
-		-AEGetWindowWidth() / 3, -AEGetWindowHeight() / 4, 0xFFFFFFFF, 0.0f, 1.0f,
-		AEGetWindowWidth() / 3, -AEGetWindowHeight() / 4, 0xFFFFFFFF, 1.0f, 1.0f);
+		(f32)AEGetWindowWidth() / 3, (f32)AEGetWindowHeight() / 4, 0xFFFFFFFF, 1.0f, 0.0f,
+		-(f32)AEGetWindowWidth() / 3, -(f32)AEGetWindowHeight() / 4, 0xFFFFFFFF, 0.0f, 1.0f,
+		(f32)AEGetWindowWidth() / 3, -(f32)AEGetWindowHeight() / 4, 0xFFFFFFFF, 1.0f, 1.0f);
 
 	LevelMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(LevelMesh, "Failed to create LevelMesh!\n");
@@ -33,13 +33,13 @@ void LevelUp_Load()
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
-		-AEGetWindowWidth() / 4, AEGetWindowHeight() / 18, 0xFFFF0000, 0.0f, 0.0f,
-		-AEGetWindowWidth() / 4, -AEGetWindowHeight() / 18, 0xFFFF0000, 0.0f, 1.0f,
-		AEGetWindowWidth() / 4, AEGetWindowHeight() / 18, 0xFFFF0000, 1.0f, 0.0f);
+		-(f32)AEGetWindowWidth() / 4, (f32)AEGetWindowHeight() / 18, 0xFFFF0000, 0.0f, 0.0f,
+		-(f32)AEGetWindowWidth() / 4, -(f32)AEGetWindowHeight() / 18, 0xFFFF0000, 0.0f, 1.0f,
+		(f32)AEGetWindowWidth() / 4, (f32)AEGetWindowHeight() / 18, 0xFFFF0000, 1.0f, 0.0f);
 	AEGfxTriAdd(
-		AEGetWindowWidth() / 4, AEGetWindowHeight() / 18, 0xFFFF0000, 1.0f, 0.0f,
-		-AEGetWindowWidth() / 4, -AEGetWindowHeight() / 18, 0xFFFF0000, 0.0f, 1.0f,
-		AEGetWindowWidth() / 4, -AEGetWindowHeight() / 18, 0xFFFF0000, 1.0f, 1.0f);
+		(f32)AEGetWindowWidth() / 4, (f32)AEGetWindowHeight() / 18, 0xFFFF0000, 1.0f, 0.0f,
+		-(f32)AEGetWindowWidth() / 4, -(f32)AEGetWindowHeight() / 18, 0xFFFF0000, 0.0f, 1.0f,
+		(f32)AEGetWindowWidth() / 4, -(f32)AEGetWindowHeight() / 18, 0xFFFF0000, 1.0f, 1.0f);
 
 	LevelButtons = AEGfxMeshEnd();
 	AE_ASSERT_MESG(LevelButtons, "Failed to create LevelMesh!\n");
@@ -47,9 +47,9 @@ void LevelUp_Load()
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
-		-AEGetWindowWidth() / 24, AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 0.0f,
-		-AEGetWindowWidth() / 24, -AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 1.0f,
-		AEGetWindowWidth() / 100, 1, 0xFFFF0000, 1.0f, 0.0f);
+		-(f32)AEGetWindowWidth() / 24, (f32)AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 0.0f,
+		-(f32)AEGetWindowWidth() / 24, -(f32)AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 1.0f,
+		(f32)AEGetWindowWidth() / 100, 1, 0xFFFF0000, 1.0f, 0.0f);
 
 	LevelTriRight = AEGfxMeshEnd();
 	AE_ASSERT_MESG(LevelTriRight, "Failed to create LevelMesh!\n");
@@ -57,9 +57,9 @@ void LevelUp_Load()
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
-		-AEGetWindowWidth() / 24, AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 0.0f,
-		-AEGetWindowWidth() / 24, -AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 1.0f,
-		-(AEGetWindowWidth()/11), -1, 0xFFFF0000, 1.0f, 0.0f);
+		-(f32)AEGetWindowWidth() / 24, (f32)AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 0.0f,
+		-(f32)AEGetWindowWidth() / 24, -(f32)AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 1.0f,
+		-((f32)AEGetWindowWidth()/11), -1, 0xFFFF0000, 1.0f, 0.0f);
 
 	LevelTriLeft = AEGfxMeshEnd();
 	AE_ASSERT_MESG(LevelTriLeft, "Failed to create LevelMesh!\n");
@@ -163,7 +163,7 @@ void LevelUp_Draw()
 	sprintf_s(strBuffer, "LEVEL UP !");
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxPrint(fontLarge, strBuffer, -0.41, 0.7, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontLarge, strBuffer, -0.41f, 0.7f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	sprintf_s(strBuffer, "Lv%d -> Lv%d", playerstats->PlayerLevel - 1, playerstats->PlayerLevel);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -180,7 +180,7 @@ void LevelUp_Draw()
 	if (selection == 0)
 	{
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetPosition(-w_wd / 4.55, w_ht / 6);
+		AEGfxSetPosition(-(f32)w_wd / 4.55f, (f32)w_ht / 6.0f);
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 		if (AEInputCheckTriggered(AEVK_A))
 		{
@@ -193,7 +193,7 @@ void LevelUp_Draw()
 		AEGfxMeshDraw(LevelTriLeft, AE_GFX_MDM_TRIANGLES);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetPosition(w_wd / 3.3, w_ht / 6);
+		AEGfxSetPosition((f32)w_wd / 3.3f, (f32)w_ht / 6.0f);
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 		if (AEInputCheckTriggered(AEVK_D))
 		{
@@ -207,7 +207,7 @@ void LevelUp_Draw()
 	}
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition(0.0f, w_ht / 6);
+	AEGfxSetPosition(0.0f, (f32)w_ht / 6.0f);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	if (selection == 0)
 	{
@@ -227,7 +227,7 @@ void LevelUp_Draw()
 	if (selection == 1)
 	{
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetPosition(-w_wd / 4.55, w_ht / 22);
+		AEGfxSetPosition(-(f32)w_wd / 4.55f, (f32)w_ht / 22);
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 		if (AEInputCheckTriggered(AEVK_A))
 		{
@@ -240,7 +240,7 @@ void LevelUp_Draw()
 		AEGfxMeshDraw(LevelTriLeft, AE_GFX_MDM_TRIANGLES);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetPosition(w_wd / 3.3, w_ht / 22);
+		AEGfxSetPosition((f32)w_wd / 3.3f, (f32)w_ht / 22);
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 		if (AEInputCheckTriggered(AEVK_D))
 		{
@@ -254,7 +254,7 @@ void LevelUp_Draw()
 	}
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition(0.0f, w_ht / 22);
+	AEGfxSetPosition(0.0f, (f32)w_ht / 22);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	if (selection == 1)
 	{
