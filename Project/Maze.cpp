@@ -244,8 +244,6 @@ void Maze_Minimap_Draw(float cam_x, float cam_y, float x_offset, float y_offset)
 			}
 			AEGfxTextureSet(NULL, 0.0f, 0.0f);
 
-
-
 		}
 	}
 }
@@ -977,8 +975,6 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
 	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
 	std::cout << "Player has opened chest" << std::endl;
-	
-	
 
 	int randindex;
 	srand(time(NULL));
@@ -1229,18 +1225,6 @@ void Maze_Update()
 
 		AEGfxGetCamPosition(&cam_x, &cam_y);
 
-		//if (AEInputCheckTriggered(AEVK_F11)) {		// R: added
-		//	if (systemsettings.fullscreen == 0) {	// FOR TESTING: TO BE REPLACED WITH PAUSE MENU BUTTON
-		//		systemsettings.fullscreen = 1;
-		//		AEToogleFullScreen(systemsettings.fullscreen);
-		//	}
-
-		//	else if (systemsettings.fullscreen == 1) {
-		//		systemsettings.fullscreen = 0;
-		//		AEToogleFullScreen(systemsettings.fullscreen);
-		//	}
-		//}
-
 	if (systemsettings.paused == 0) {
 		if (AEInputCheckTriggered(AEVK_W))
 		{
@@ -1398,11 +1382,12 @@ void Maze_Free()
 	AEGfxMeshFree(pMeshSolidSquare_WALL);
 	AEGfxMeshFree(pMesh_MainCharacter);
 	AEGfxMeshFree(pMeshChest);	//JN: new code
+	AEGfxMeshFree(pMesh_ChestText);
 	//unloadpausemenu();
 
 	AEGfxMeshFree(pMesh_MiniMapChests);
 	AEGfxMeshFree(pMesh_MiniMapMainChar);
-	//AEGfxMeshFree(pMesh_MiniMapWindow);
+	AEGfxMeshFree(pMesh_MiniMapWindow);
 	AEGfxMeshFree(pMesh_MiniMapEndPt);
 
 	delete(Maze);

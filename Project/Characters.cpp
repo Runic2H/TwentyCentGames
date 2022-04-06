@@ -691,7 +691,7 @@ namespace Characters
 
 			char strBufferStatus[100];
 			memset(strBufferStatus, 0, 100 * sizeof(char));
-
+			
 			switch (playerstats->status)
 			{
 			case FROSTED:
@@ -1037,20 +1037,20 @@ namespace Characters
 		void RenderEnemy(AEGfxTexture* enemytexture, AEGfxVertexList* EnemyMesh)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-			// Set position for object 1
 			AEGfxSetPosition(enemystats->positionX, enemystats->positionY);
 			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-			// No texture for object 1;
-			if (enemystats->EnemyType == ICE)
-			{
-				enemytexture = AEGfxTextureLoad("Images/Frost turtle.png");
-				AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
-			}
-			if (enemystats->EnemyType == FIRE)
-			{
-				enemytexture = AEGfxTextureLoad("Images/Fire turtle.png");
-				AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
-			}
+			//if (enemystats->EnemyType == ICE)
+			//{
+			//	AEGfxTextureUnload(enemytexture);
+			//	enemytexture = AEGfxTextureLoad("Images/Frost turtle.png");
+			//	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
+			//}
+			//if (enemystats->EnemyType == FIRE)
+			//{
+			//	AEGfxTextureUnload(enemytexture);
+			//	enemytexture = AEGfxTextureLoad("Images/Fire turtle.png");
+			//	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
+			//}
 			AEGfxTextureSet(enemytexture, 1.0f, 1.0f);
 			AEGfxMeshDraw(EnemyMesh, AE_GFX_MDM_TRIANGLES);
 		}

@@ -39,6 +39,7 @@ item		menuexitbutton;
 
 void Menu_Load() {
 
+	AEToogleFullScreen(systemsettings.fullscreen);
 	AEGfxSetBackgroundColor(0.0f, 0.1f, 0.2f);
 
 	gamelogostruct.pTexture = AEGfxTextureLoad("Images/ducktitle.png");

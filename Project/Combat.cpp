@@ -26,6 +26,8 @@ float	movementdt;
 
 AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
+AEGfxTexture* enemytexturefire;
+AEGfxTexture* enemytexturefrost;
 AEGfxTexture* staminapotion;
 
 
@@ -53,6 +55,12 @@ void Combat_Load()
 
 	staminapotion = AEGfxTextureLoad("Images/staminapotion.png");
 	AE_ASSERT_MESG(staminapotion, "cant create stamina potion texture\n");
+
+	enemytexturefrost = AEGfxTextureLoad("Images/Frost turtle.png");
+	AE_ASSERT_MESG(enemytexturefrost, "cant create enemy texture frost\n");
+
+	enemytexturefire = AEGfxTextureLoad("Images/Fire turtle.png");
+	AE_ASSERT_MESG(enemytexturefire, "cant create enemy texture fire\n");
 
 }
 
@@ -186,7 +194,18 @@ void Combat_Draw()
 		RenderEnemyGrid(EnemyGridAttack);
 	}
 
-	RenderEnemy(enemytexture, EnemyMesh);
+	if (enemystats->EnemyType == ICE)
+	{
+		RenderEnemy(enemytexturefrost, EnemyMesh);
+	}
+	if (enemystats->EnemyType == FIRE)
+	{
+		RenderEnemy(enemytexturefire, EnemyMesh);
+	}
+	else if (enemystats->EnemyType = NORMAL) {
+		RenderEnemy(enemytexture, EnemyMesh);
+	}
+
 }
 
 
@@ -211,5 +230,7 @@ void Combat_Unload()
 	AEGfxTextureUnload(playertexture);
 	AEGfxTextureUnload(enemytexture);
 	AEGfxTextureUnload(staminapotion);
+	AEGfxTextureUnload(enemytexturefrost);
+	AEGfxTextureUnload(enemytexturefire);
 	Audio_Unload();	//JN: new code
 }
