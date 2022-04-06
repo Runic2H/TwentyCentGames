@@ -34,6 +34,7 @@ namespace Characters
 		AEGfxVertexList* playercurrhealth = 0;	//PLAYER HEALTH MESH
 		AEGfxVertexList* playerstamina = 0;		//PLAYER STAMINA MESH
 
+
 		void CombatMesh(int RGBcounter)
 		{
 			FreePlayerMeshOnUpdate();
@@ -138,8 +139,8 @@ namespace Characters
 			AE_ASSERT_MESG(rightbutton->pMesh, "Failed to create pause meshes!!\n");
 
 		
-			rightbutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\rightbutton.png");
-			leftbutton->pTexture = AEGfxTextureLoad("..\\Bin\\images\\leftbutton.png");
+			rightbutton->pTexture = AEGfxTextureLoad("Images/rightbutton.png");
+			leftbutton->pTexture = AEGfxTextureLoad("Images/leftbutton.png");
 	
 
 			//
@@ -890,7 +891,7 @@ namespace Characters
 				enemystats->EnemyType = NORMAL;
 				enemystats->health = 40 + (5 * enemystats->EnemyLevel);
 				enemystats->maxhealth = 40 + (5 * enemystats->EnemyLevel);
-				enemystats->enemytypedamage = 5 * enemystats->EnemyLevel;
+				enemystats->enemytypedamage = (f32)(5 * enemystats->EnemyLevel);
 				enemystats->damage = enemystats->enemytypedamage;
 				enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
 				enemystats->EnemyXP = 20 + (2 * enemystats->EnemyLevel);
@@ -901,7 +902,7 @@ namespace Characters
 				enemystats->EnemyType = ICE;
 				enemystats->health = 50 + (5 * enemystats->EnemyLevel);
 				enemystats->maxhealth = 50 + (5 * enemystats->EnemyLevel);
-				enemystats->enemytypedamage = 15 + (2 * enemystats->EnemyLevel);
+				enemystats->enemytypedamage = 15.0f + (f32)(2 * enemystats->EnemyLevel);
 				enemystats->damage = enemystats->enemytypedamage;
 				enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
 				enemystats->DebuffCounter = 0;
@@ -913,7 +914,7 @@ namespace Characters
 				enemystats->EnemyType = FIRE;
 				enemystats->health = 50 + (5 * enemystats->EnemyLevel);
 				enemystats->maxhealth = 50 + (5 * enemystats->EnemyLevel);
-				enemystats->enemytypedamage = 10 + (1 * enemystats->EnemyLevel);
+				enemystats->enemytypedamage = 10.0f + (f32)(1 * enemystats->EnemyLevel);
 				enemystats->damage = enemystats->enemytypedamage;
 				enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
 				enemystats->DebuffCounter = 0;
@@ -928,7 +929,7 @@ namespace Characters
 			enemystats->EnemyType = ENEMYBOSS;
 			enemystats->health = 70 + (5 * enemystats->EnemyLevel);
 			enemystats->maxhealth = 70 + (5 * enemystats->EnemyLevel);
-			enemystats->enemytypedamage = 20 + (5 * enemystats->EnemyLevel);
+			enemystats->enemytypedamage = 20.0f + (f32)(5 * enemystats->EnemyLevel);
 			enemystats->damage = enemystats->enemytypedamage;
 			enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
 			enemystats->DebuffCounter = 0;
@@ -1042,12 +1043,12 @@ namespace Characters
 			// No texture for object 1;
 			if (enemystats->EnemyType == ICE)
 			{
-				enemytexture = AEGfxTextureLoad("Frost turtle.png");
+				enemytexture = AEGfxTextureLoad("Images/Frost turtle.png");
 				AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
 			}
 			if (enemystats->EnemyType == FIRE)
 			{
-				enemytexture = AEGfxTextureLoad("Fire turtle.png");
+				enemytexture = AEGfxTextureLoad("Images/Fire turtle.png");
 				AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
 			}
 			AEGfxTextureSet(enemytexture, 1.0f, 1.0f);

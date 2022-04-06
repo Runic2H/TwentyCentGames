@@ -1130,19 +1130,19 @@ void Maze_Load()
 {
 	std::cout << "Maze:Load" << std::endl;
 
-	wall_art = AEGfxTextureLoad("Wall.png");
+	wall_art = AEGfxTextureLoad("Images/Wall.png");
 	AE_ASSERT_MESG(wall_art, "Failed to create wall texture!\n");
 
-	path_art = AEGfxTextureLoad("Pond.png");
+	path_art = AEGfxTextureLoad("Images/Pond.png");
 	AE_ASSERT_MESG(path_art, "Failed to create path texture!\n");
 
-	main_character_art = AEGfxTextureLoad("Map duck.png");
+	main_character_art = AEGfxTextureLoad("Images/Map duck.png");
 	AE_ASSERT_MESG(main_character_art, "Failed to create path texture!\n");
 
-	chest_art = AEGfxTextureLoad("Chest.png");	//JN: new code
+	chest_art = AEGfxTextureLoad("Images/Chest.png");	//JN: new code
 	AE_ASSERT_MESG(chest_art, "Failed to create chest texture!\n");	//JN: new code
 
-	exit_art = AEGfxTextureLoad("Whirlpool.png");	//JN: new code
+	exit_art = AEGfxTextureLoad("Images/Whirlpool.png");	//JN: new code
 	AE_ASSERT_MESG(exit_art, "Failed to create chest texture!\n");	//JN: new code
 }
 

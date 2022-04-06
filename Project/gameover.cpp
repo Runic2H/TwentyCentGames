@@ -10,7 +10,7 @@ void GameOver_Load() {
 
 	AEGfxSetBackgroundColor(0.0f, 0.1f, 0.2f);
 
-	gameovertex = AEGfxTextureLoad("gameover.png");
+	gameovertex = AEGfxTextureLoad("Images/gameover.png");
 	AE_ASSERT_MESG(gameovertex, "Failed to create gameover texture!\n");
 
 
