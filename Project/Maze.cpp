@@ -376,6 +376,7 @@ void MazeGenAlgo_MakeMaze()
 			}
 		}
 	}
+	
 }
 
 void MazeGenAlgo_ChoosingStartingPos(int& startX, int& startY, int& endX, int& endY, int height, int width)
@@ -396,7 +397,7 @@ void MazeGenAlgo_ChoosingStartingPos(int& startX, int& startY, int& endX, int& e
 void MazeGenAlgo_Set_walls()
 {
 	//std::cout << initial_wallcells_count << std::endl;
-	srand(time(NULL));
+	//srand(time(NULL));
 
 
 	while (MazeOGWalls_XY.size() != 0)
@@ -532,6 +533,7 @@ bool MazeGenAlgo_PostGenCheck() // checks if the center col is not ALL PATH, ret
 
 void MazeGenAlgo()
 {
+	srand(time(NULL));
 	MazeGenAlgo_MakeMaze();
 	MazeGenAlgo_ChoosingStartingPos(start_x, start_y, end_x, end_y, noOfRows, noOfCols);
 	MazeGenAlgo_Set_walls();
