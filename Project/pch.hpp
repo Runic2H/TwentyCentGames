@@ -44,8 +44,11 @@ extern enemy_statsheet* enemystats;
 extern inv* playerinventory;
 extern sys systemsettings;
 extern bool is_focused;
+extern GameObjInst* ParticleInstList;
 
 void initialise_pausemenu();
+void LogicExit_Confirmation();
+void RenderExit_Confirmation();
 void logicpausemenu();
 void renderpausemenu();
 void unloadpausemenu();
@@ -55,12 +58,15 @@ void renderoptionmenu();
 void unloadoptionmenu();
 void player_initialise();
 void enemy_initialise();
+GameObjInst* particleInstCreate(float scale, float posX, float posY, int type);
+void particleInstDestroy(GameObjInst* pInst);
 
 enum consumables { HEALTH, STAMINA, DEFENCE };
 enum EnemyPos { IDLE, ATTACKING };
 enum ENEMY_TYPE { NORMAL, ICE, FIRE, ENEMYBOSS };
 enum PlayerPos { ORIGIN, TOP, BACK, DOWN, ATTACK };
 enum PlayerStatus { NEUTRAL, FROSTED, FROZEN, BURNING };
+enum ParticleTypes {particlePLAYER, particleENEMY, particleENEMYFROST, particleENEMYFIRE};
 
 
 #endif	//PCH.H

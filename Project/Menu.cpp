@@ -26,11 +26,6 @@ bool isTwentyLogo{ false };
 *		STRUCT / CLASS DEFINITIONS
 ***************************************************/
 
-struct GameObjInst {
-	AEGfxVertexList* pMesh;
-	AEGfxTexture*	pTexture;
-};
-
 GameObjInst digipenLogostruct; 
 GameObjInst TwentyCentGamesLogostruct; 
 GameObjInst ducklogostruct;
@@ -48,8 +43,14 @@ void Menu_Load() {
 	AEToogleFullScreen(systemsettings.fullscreen);
 	/*AEGfxSetBackgroundColor(0.0f, 0.1f, 0.2f);*/
 
-	gamelogostruct.pTexture = AEGfxTextureLoad("Images/ducktitle.png");
-	AE_ASSERT_MESG(gamelogostruct.pTexture, "Failed to create gamelogotexture!\n");
+	ducklogostruct.pObject = new item;
+	selectionstruct.pObject = new item;
+	gamelogostruct.pObject = new item;
+	TwentyCentGamesLogostruct.pObject = new item;
+	digipenLogostruct.pObject = new item;
+
+	gamelogostruct.pObject->pTexture = AEGfxTextureLoad("Images/ducktitle.png");
+	AE_ASSERT_MESG(gamelogostruct.pObject->pTexture, "Failed to create gamelogotexture!\n");
 
 	ducktex = AEGfxTextureLoad("Images/duck.png");
 	AE_ASSERT_MESG(ducktex, "Failed to create duck texture!\n");
@@ -57,29 +58,15 @@ void Menu_Load() {
 	duckdrooltex = AEGfxTextureLoad("Images/duckdrool.png");
 	AE_ASSERT_MESG(duckdrooltex, "Failed to create duckdrool texture!\n");
 
-	digipenLogostruct.pTexture = AEGfxTextureLoad("Images/digipenLogo.png");
-	AE_ASSERT_MESG(digipenLogostruct.pTexture, "Failed to create digipenLogo texture!\n"); 
+	digipenLogostruct.pObject->pTexture = AEGfxTextureLoad("Images/digipenLogo.png");
+	AE_ASSERT_MESG(digipenLogostruct.pObject->pTexture, "Failed to create digipenLogo texture!\n");
 
-	TwentyCentGamesLogostruct.pTexture = AEGfxTextureLoad("Images/TwentyCentGamesLogo.png");
-	AE_ASSERT_MESG(TwentyCentGamesLogostruct.pTexture, "Failed to create TwentyCentGamesLogo texture!\n");
+	TwentyCentGamesLogostruct.pObject->pTexture = AEGfxTextureLoad("Images/TwentyCentGamesLogo.png");
+	AE_ASSERT_MESG(TwentyCentGamesLogostruct.pObject->pTexture, "Failed to create TwentyCentGamesLogo texture!\n");
 
-	//digipenLogo mesh
-	AEGfxMeshStart();
+
 	
-	AEGfxTriAdd(
-		-400.0f, 250.0f, 0xFFFF0000, 0.0f, 0.0f,
-		-400.0f, -250.0f, 0xFFFF0000, 0.0f, 1.0f,
-		400.0f, 250.0f, 0xFFFFFFFF, 1.0f, 0.0f);
-
-	AEGfxTriAdd(
-		400.0f, 250.0f, 0xFFFF0000, 1.0f, 0.0f,
-		-400.0f, -250.0f, 0xFFFF0000, 0.0f, 1.0f,
-		400.0f, -250.0f, 0xFFFFFFFF, 1.0f, 1.0f);
-
-	digipenLogostruct.pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(digipenLogostruct.pMesh, "Failed to create digipenLogo!\n");
-	
-	//TwentyCentGamesLogo mesh
+	//TwentyCentGamesLogo and digipenlogo mesh
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
@@ -92,8 +79,10 @@ void Menu_Load() {
 		-400.0f, -250.0f, 0xFFFF0000, 0.0f, 1.0f,
 		400.0f, -250.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 
-	TwentyCentGamesLogostruct.pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(TwentyCentGamesLogostruct.pMesh, "Failed to create TwentyCentGamesLogo!\n");
+	digipenLogostruct.pObject->pMesh
+	= TwentyCentGamesLogostruct.pObject->pMesh
+	= AEGfxMeshEnd();
+	AE_ASSERT_MESG(TwentyCentGamesLogostruct.pObject->pMesh, "Failed to create TwentyCentGamesLogo!\n");
 
 	// title mesh
 	AEGfxMeshStart();
@@ -107,8 +96,8 @@ void Menu_Load() {
 		-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
 		150.0f, -50.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 
-	gamelogostruct.pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(gamelogostruct.pMesh, "Failed to create gamelogo!\n");
+	gamelogostruct.pObject->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(gamelogostruct.pObject->pMesh, "Failed to create gamelogo!\n");
 
 
 	// duck mesh
@@ -122,8 +111,8 @@ void Menu_Load() {
 		-50.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
 		50.0f, -50.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 
-	ducklogostruct.pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(ducklogostruct.pMesh, "Failed to create gamelogo!\n");
+	ducklogostruct.pObject->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(ducklogostruct.pObject->pMesh, "Failed to create gamelogo!\n");
 
 
 	//button mesh
@@ -180,10 +169,10 @@ void Menu_Update() {
 	flagg == 1 ? RGBcounter += 150 : RGBcounter -= 150;
 	
 
-	if (selectionstruct.pMesh != nullptr) {
-		AEGfxMeshFree(selectionstruct.pMesh);
-		selectionstruct.pMesh = nullptr;
-	}
+	//if (selectionstruct.pMesh != nullptr) {
+	//	AEGfxMeshFree(selectionstruct.pMesh);
+	//	selectionstruct.pMesh = nullptr;
+	//}
 
 	AEGfxMeshStart();
 	AEGfxVertexAdd(50.0f, -25.0f, RGBcounter, 0.0f, 1.0f);
@@ -191,19 +180,31 @@ void Menu_Update() {
 	AEGfxVertexAdd(150.0f, 25.0f, RGBcounter, 0.0f, 0.0f);				// for RGB
 	AEGfxVertexAdd(50.0f, 25.0f, RGBcounter, 1.0f, 0.0f);
 	AEGfxVertexAdd(50.0f, -25.0f, RGBcounter, 0.0f, 1.0f);
-	selectionstruct.pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(selectionstruct.pMesh, "failed to create Selection object");
+	selectionstruct.pObject->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(selectionstruct.pObject->pMesh, "failed to create Selection object");
 
-	if (isLogo == false && isTwentyLogo == false)
-	{
-     if (systemsettings.options == 0)
-    {
-      systemupdate();
-    }
-    else
-    {
-      logicoptionmenu();
-    }
+	// to skip loading page
+	if (AEInputCheckTriggered(AEVK_LCTRL)) {
+		systemsettings.digipenTimer = 0;
+		systemsettings.twentycentTimer = 0;
+		isLogo = false;
+		isTwentyLogo = false;
+	}
+
+
+	if (isLogo == false && isTwentyLogo == false){ 
+
+		 if (systemsettings.options == 0 && systemsettings.exit_confirmation == 0){
+			systemupdate();
+		 }
+
+		 else if (systemsettings.exit_confirmation == 1) {
+			 LogicExit_Confirmation();
+		 }
+
+		else if (systemsettings.options == 1) {
+		  logicoptionmenu();
+		}
 	}
 
 	AEMtx33Scale(&scale, 105.0f, 50.0f);
@@ -246,15 +247,48 @@ void Menu_Update() {
 		}
 	}
 
+	// particles //
 
-		
+	AEInputGetCursorPosition(&cursorx, &cursory);
+	particleInstCreate(AERandFloat() * 10, (f32)(cursorx-400), (f32)-(cursory-300), particlePLAYER);
+	
+
+	// particles update //
+	for (int i{ 0 }; i < 150; ++i) {
+
+		GameObjInst* pInst = ParticleInstList + i;
+
+		if (0 == (pInst->flag))
+			continue;
+
+		pInst->pObject->itemcounter -= DT;
+		if (pInst->pObject->itemcounter <= 0) {
+			particleInstDestroy(pInst);
+		}
+
+		AEMtx33 trans, rot, scale, mtxbuffer;
+		AEVec2 buffer;
+
+		// updating position from velocity //
+		float g_dt = DT;
+		AEVec2Scale(&buffer, &pInst->velCurr, g_dt);			// vel
+		AEVec2Add(&pInst->PosCurr, &buffer, &pInst->PosCurr);	// pos'
+
+		AEMtx33Scale(&scale, pInst->scale, pInst->scale);		// scale
+		AEMtx33Rot(&rot, pInst->dirCurr);						// dir
+		AEMtx33Concat(&mtxbuffer, &scale, &rot);				// scale x dir
+
+		AEMtx33Trans(&trans, pInst->PosCurr.x, pInst->PosCurr.y);
+		AEMtx33Concat(&pInst->pObject->transform, &trans, &mtxbuffer);
+	}
+
 }
 
 void Menu_Draw() {
 
 	if (isLogo == false && isTwentyLogo == false)
 	{
-		if (systemsettings.options == 0)
+		if (systemsettings.options == 0 && systemsettings.exit_confirmation == 0)
 		{
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -301,16 +335,16 @@ void Menu_Draw() {
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 			AEGfxSetPosition(posX, posY);
 			AEGfxTextureSet(NULL, 0, 0);
-			AEGfxMeshDraw(selectionstruct.pMesh, AE_GFX_MDM_LINES_STRIP);
+			AEGfxMeshDraw(selectionstruct.pObject->pMesh, AE_GFX_MDM_LINES_STRIP);
 
 			// texture
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 			AEGfxSetPosition(0.0f, 150.0f);
-			AEGfxTextureSet(gamelogostruct.pTexture, 0.0f, 0.0f);
+			AEGfxTextureSet(gamelogostruct.pObject->pTexture, 0.0f, 0.0f);
 			AEGfxSetTintColor(1, 1, 1, 1);
 			AEGfxSetTransparency(1);
-			AEGfxMeshDraw(gamelogostruct.pMesh, AE_GFX_MDM_TRIANGLES);
+			AEGfxMeshDraw(gamelogostruct.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 
 			++texcounter;
 			if (texcounter < 120) {
@@ -327,17 +361,21 @@ void Menu_Draw() {
 			AEGfxSetPosition(250.0f, 150.0f);
 			AEGfxSetTintColor(1, 1, 1, 1);
 			AEGfxSetTransparency(1);
-			AEGfxMeshDraw(ducklogostruct.pMesh, AE_GFX_MDM_TRIANGLES);
+			AEGfxMeshDraw(ducklogostruct.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 
 			AEGfxSetPosition(-250.0f, 150.0f);
 			AEGfxSetTintColor(1, 1, 1, 1);
 			AEGfxSetTransparency(1);
-			AEGfxMeshDraw(ducklogostruct.pMesh, AE_GFX_MDM_TRIANGLES);
+			AEGfxMeshDraw(ducklogostruct.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 
 			AEGfxSetBlendMode(AE_GFX_BM_NONE);
 		}
-		else
-		{
+
+		else if (systemsettings.exit_confirmation == 1) {
+			RenderExit_Confirmation();
+		}
+
+		else {
 			renderoptionmenu();
 		}
 	}
@@ -349,10 +387,10 @@ void Menu_Draw() {
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxSetPosition(-20.0f, 0.0f);
-		AEGfxTextureSet(digipenLogostruct.pTexture, 0.0f, 0.0f);
+		AEGfxTextureSet(digipenLogostruct.pObject->pTexture, 0.0f, 0.0f);
 		AEGfxSetTintColor(1, 1, 1, 1);
 		AEGfxSetTransparency(systemsettings.digipenTimer);
-		AEGfxMeshDraw(digipenLogostruct.pMesh, AE_GFX_MDM_TRIANGLES);
+		AEGfxMeshDraw(digipenLogostruct.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 	}
 
 	else if (isLogo == false && isTwentyLogo == true)
@@ -361,28 +399,50 @@ void Menu_Draw() {
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxSetPosition(-20.0f, 0.0f);
-		AEGfxTextureSet(TwentyCentGamesLogostruct.pTexture, 0.0f, 0.0f);
+		AEGfxTextureSet(TwentyCentGamesLogostruct.pObject->pTexture, 0.0f, 0.0f);
 		AEGfxSetTintColor(1, 1, 1, 1);
 		AEGfxSetTransparency(systemsettings.twentycentTimer);
-		AEGfxMeshDraw(TwentyCentGamesLogostruct.pMesh, AE_GFX_MDM_TRIANGLES);
+		AEGfxMeshDraw(TwentyCentGamesLogostruct.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
+	}
+
+	AEGfxMeshFree(selectionstruct.pObject->pMesh);
+
+	for (int i{ 0 }; i < 150; ++i) {
+		GameObjInst* pInst = ParticleInstList + i;
+
+		if (0 == (pInst->flag))
+			continue;
+
+		AEGfxSetTransform(pInst->pObject->transform.m);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(pInst->pObject->itemcounter);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		if (pInst->type == particleENEMY) {
+			AEGfxSetTintColor(0.0f, 0.7f, 0.7f, 1.0f);
+		}
+		else if (pInst->type == particlePLAYER) {
+			AEGfxSetTintColor(0.9f, 0.7f, 0.04f, 1.0f);
+		}
+
+		AEGfxMeshDraw(pInst->pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 	}
 }
 
 void Menu_Free() {
 
-	if (selectionstruct.pMesh != nullptr) {
+	/*if (selectionstruct.pMesh != nullptr) {
 		AEGfxMeshFree(selectionstruct.pMesh);
 		selectionstruct.pMesh = nullptr;
+	}*/
+
+	if (ducklogostruct.pObject->pMesh != nullptr) {
+		AEGfxMeshFree(ducklogostruct.pObject->pMesh);
+		ducklogostruct.pObject->pMesh = nullptr;
 	}
 
-	if (ducklogostruct.pMesh != nullptr) {
-		AEGfxMeshFree(ducklogostruct.pMesh);
-		ducklogostruct.pMesh = nullptr;
-	}
-
-	if (gamelogostruct.pMesh != nullptr) {
-		AEGfxMeshFree(gamelogostruct.pMesh);
-		gamelogostruct.pMesh = nullptr;
+	if (gamelogostruct.pObject->pMesh != nullptr) {
+		AEGfxMeshFree(gamelogostruct.pObject->pMesh);
+		gamelogostruct.pObject->pMesh = nullptr;
 	}
 
 	if (menustartbutton.pMesh != nullptr) {
@@ -390,37 +450,38 @@ void Menu_Free() {
 		menustartbutton.pMesh = nullptr;
 	}
 
-	if (digipenLogostruct.pMesh != nullptr) {
-		AEGfxMeshFree(digipenLogostruct.pMesh);
-		digipenLogostruct.pMesh = nullptr;
-	}
-
-	if (TwentyCentGamesLogostruct.pMesh != nullptr) {
-		AEGfxMeshFree(TwentyCentGamesLogostruct.pMesh);
-		TwentyCentGamesLogostruct.pMesh = nullptr;
+	if (digipenLogostruct.pObject->pMesh != nullptr) {
+		AEGfxMeshFree(digipenLogostruct.pObject->pMesh);
+		digipenLogostruct.pObject->pMesh = nullptr;
 	}
 }
 
 void Menu_Unload() {
 
-	AEGfxTextureUnload(gamelogostruct.pTexture);
+	AEGfxTextureUnload(gamelogostruct.pObject->pTexture);
 	AEGfxTextureUnload(ducktex);
 	AEGfxTextureUnload(duckdrooltex);
 	AEGfxTextureUnload(menustartbutton.pTexture);
 	AEGfxTextureUnload(menucreditsbutton.pTexture);
 	AEGfxTextureUnload(menututorialbutton.pTexture);
 	AEGfxTextureUnload(menuexitbutton.pTexture);
-	AEGfxTextureUnload(digipenLogostruct.pTexture);
-	AEGfxTextureUnload(TwentyCentGamesLogostruct.pTexture);
+	AEGfxTextureUnload(digipenLogostruct.pObject->pTexture);
+	AEGfxTextureUnload(TwentyCentGamesLogostruct.pObject->pTexture);
 	AEGfxTextureUnload(menuoptionbutton.pTexture);
 	Audio_Unload();		//JN: new code
+
+	delete gamelogostruct.pObject;
+	delete selectionstruct.pObject;
+	delete ducklogostruct.pObject;
+	delete TwentyCentGamesLogostruct.pObject;
+	delete digipenLogostruct.pObject;
 }
 
 
 void systemupdate() {
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
-		next = GS_QUIT;
+		systemsettings.exit_confirmation = 1;
 	}
 
 	if (cursorx >= 106 && cursorx <= 210 && cursory >= 344 && cursory <= 391) {
@@ -450,7 +511,7 @@ void systemupdate() {
 			next = CREDITS;
 		}
 		else if (cursorx >= 557 && cursorx <= 661 && cursory >= 344 && cursory <= 391) {
-			next = GS_QUIT;
+			systemsettings.exit_confirmation = 1;
 		}
 		else if (cursorx >= 643 && cursorx <= 747 && cursory >= 527 && cursory <= 574) {
 			systemsettings.options == 0 ? systemsettings.options = 1 : systemsettings.options = 0;
@@ -508,7 +569,7 @@ void systemupdate() {
 			break;
 		case 2: next = CREDITS;
 			break;
-		case 3: next = GS_QUIT;
+		case 3: systemsettings.exit_confirmation = 1;
 			break;
 		case 4:
 			systemsettings.options == 0 ? systemsettings.options = 1 : systemsettings.options = 0;

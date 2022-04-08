@@ -7,6 +7,7 @@
 sys systemsettings;			
 player_statsheet* playerstats;
 enemy_statsheet* enemystats;
+GameObjInst* ParticleInstList;
 inv* playerinventory;
 item* menubutton;
 item* exitbutton;
@@ -15,7 +16,144 @@ item* pausebackground;
 item* optionbutton;
 item* mutebutton;
 item* fullscreenbutton;
+item* yesbutton;
+item* nobutton;
 
+/********************************************************************
+			SYSTEM LEVEL FUNCTION DEFINITIONS
+*********************************************************************/
+GameObjInst* particleInstCreate(float scale, float posX, float posY, int type) {
+
+	AEVec2 zero;
+	AEVec2Zero(&zero);
+
+	for (unsigned int i{ 0 }; i < 150; ++i) {
+		GameObjInst* pInst = ParticleInstList + i;
+
+		if (pInst->flag == 0) {
+			pInst->pObject->pMesh = menubutton->pMesh;	//hijacking menubutton's mesh
+			pInst->flag = 1;
+			pInst->PosCurr.x = posX;
+			pInst->PosCurr.y = posY;
+			pInst->dirCurr = AERandFloat() * 20;
+			pInst->pObject->itemcounter = 1.0f;
+			pInst->scale = scale;
+			pInst->type = type;
+
+			int count = AERandFloat() * 10;
+
+			if (count >= 0 && count <= 2) {
+				pInst->velCurr.x = AERandFloat() * 300;
+				pInst->velCurr.y = AERandFloat() * 300;
+			}
+
+			else if (count > 2 && count <= 4) {
+				pInst->velCurr.x = AERandFloat() * 300;
+				pInst->velCurr.y = -(AERandFloat() * 300);
+			}
+
+			else if (count > 4 && count <= 7) {
+				pInst->velCurr.x = -(AERandFloat() * 300);
+				pInst->velCurr.y = -(AERandFloat() * 300);
+			}
+
+			else {
+				pInst->velCurr.x = -(AERandFloat() * 300);
+				pInst->velCurr.y = (AERandFloat() * 300);
+			}
+
+			return pInst;
+		}
+	}
+
+	return 0;
+}
+
+void particleInstDestroy(GameObjInst* pInst) {
+
+	if (pInst->flag == 0) {
+		return;
+	}
+
+	pInst->flag = 0;
+}
+
+void LogicExit_Confirmation() {
+
+	yesbutton->itemcounter = nobutton->itemcounter = 0.5f;
+	AEMtx33 scale, rot, trans, buffer;
+
+	AEInputGetCursorPosition(&cursorx, &cursory);
+	//std::cout << "x: " << cursorx << "  y: " << cursory << std::endl;
+
+	AEMtx33Scale(&scale, 150.0f, 50.0f);
+	AEMtx33Rot(&rot, 0.0f);
+	AEMtx33Concat(&buffer, &scale, &rot);
+
+	AEMtx33Trans(&trans, 100.0f, -120.0f);
+	AEMtx33Concat(&yesbutton->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, -100.0f, -120.0f);
+	AEMtx33Concat(&nobutton->transform, &trans, &buffer);
+
+	if (cursorx >= 226 && cursorx <= 374 && cursory >= 396 && cursory <= 443) {
+		nobutton->itemcounter = 1.0f;
+	}
+
+	if (cursorx >= 428 && cursorx <= 575 && cursory >= 396 && cursory <= 443) {
+		yesbutton->itemcounter = 1.0f;
+	}
+
+	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+		if (cursorx >= 226 && cursorx <= 374 && cursory >= 396 && cursory <= 443) {
+			systemsettings.paused = 0;
+			systemsettings.exit_confirmation = 0;
+		}
+
+		if (cursorx >= 428 && cursorx <= 575 && cursory >= 396 && cursory <= 443) {
+			next = GS_QUIT;
+		}
+	}
+
+	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
+		systemsettings.paused = 0;
+		systemsettings.exit_confirmation = 0;
+	}
+}
+
+void RenderExit_Confirmation() {
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+	AEGfxSetTransform(pausebackground->transform.m);
+	AEGfxSetTransparency(0.70f);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxMeshDraw(pausebackground->pMesh, AE_GFX_MDM_TRIANGLES);
+
+
+	AEGfxSetTransform(yesbutton->transform.m);
+	AEGfxSetTransparency(yesbutton->itemcounter);
+	AEGfxTextureSet(yesbutton->pTexture, 0, 0);
+	AEGfxMeshDraw(yesbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(nobutton->transform.m);
+	AEGfxSetTransparency(nobutton->itemcounter);
+	AEGfxTextureSet(nobutton->pTexture, 0, 0);
+	AEGfxMeshDraw(nobutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetTransparency(1.0f);
+
+	char strBuffer[50];
+
+	sprintf_s(strBuffer, "Confirm Exit?");
+	AEGfxPrint(fontLarge, strBuffer, -0.19f, 0.07f, 0.35f, 0.7f, 0.6f, 0.6f);
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+}
 
 void initialise_pausemenu() {
 
@@ -24,6 +162,8 @@ void initialise_pausemenu() {
 	resumebutton = new item;
 	pausebackground = new item;
 	optionbutton = new item;
+	yesbutton = new item;
+	nobutton = new item;
 
 
 	AEGfxMeshStart();
@@ -41,6 +181,8 @@ void initialise_pausemenu() {
 		= exitbutton->pMesh
 		= resumebutton->pMesh
 		= optionbutton->pMesh
+		= yesbutton->pMesh
+		= nobutton->pMesh
 		= AEGfxMeshEnd();
 	AE_ASSERT_MESG(menubutton->pMesh, "Failed to create pause meshes!!\n");
 
@@ -49,6 +191,8 @@ void initialise_pausemenu() {
 	resumebutton->pTexture = AEGfxTextureLoad("Images/resumebutton.png");
 	exitbutton->pTexture = AEGfxTextureLoad("Images/exitbutton.png");
 	optionbutton->pTexture = AEGfxTextureLoad("Images/optionbutton.png");
+	yesbutton->pTexture = AEGfxTextureLoad("Images/exitbutton.png");
+	nobutton->pTexture = AEGfxTextureLoad("Images/resumebutton.png");
 }
 
 void initialise_optionmenu()
@@ -208,7 +352,7 @@ void logicpausemenu() {
 			exitbutton->itemcounter = 1.0f;
 			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 				systemsettings.paused = 0;
-				next = GS_QUIT;
+				systemsettings.exit_confirmation = 1;
 			}
 		}
 
@@ -446,14 +590,22 @@ void System_Initialise() {
 /******************************************************************
 *		FONTS AND SYSTEM SETTINGS
 ******************************************************************/
+	ParticleInstList = (GameObjInst*)calloc(150, sizeof(GameObjInst));
+
 	fontId = AEGfxCreateFont("Roboto-Regular.ttf", 12);
 	fontLarge = AEGfxCreateFont("Roboto-Regular.ttf", 67);
 	systemsettings.fullscreen = 1;
 	systemsettings.paused = 0;
+	systemsettings.exit_confirmation = 0;
 	systemsettings.mute = 0;
 	systemsettings.options = 0;
 	systemsettings.digipenTimer = 3.0f;
 	systemsettings.twentycentTimer = 3.0f;
+
+	for (int i{ 0 }; i < 150; ++i) {
+		GameObjInst* pInst = ParticleInstList + i;
+		pInst->pObject = new item;
+	}
 
 /******************************************************************
 *		PLAYER INVENTORY CONSUMABLES
@@ -486,6 +638,8 @@ void System_Exit() {
 	AEGfxTextureUnload(optionbutton->pTexture);
 	AEGfxTextureUnload(fullscreenbutton->pTexture);
 	AEGfxTextureUnload(mutebutton->pTexture);
+	AEGfxTextureUnload(yesbutton->pTexture);
+	AEGfxTextureUnload(nobutton->pTexture);
 	AEGfxMeshFree(playerinventory->defencepotion.pMesh);
 	delete playerstats;
 	delete enemystats;
@@ -497,4 +651,13 @@ void System_Exit() {
 	delete optionbutton;
 	delete mutebutton;
 	delete fullscreenbutton;
+	delete yesbutton;
+	delete nobutton;
+
+		for (int i{ 0 }; i < 150; ++i) {
+			GameObjInst* pInst = ParticleInstList + i;
+			delete pInst->pObject;
+		}
+
+	free(ParticleInstList);
 }
