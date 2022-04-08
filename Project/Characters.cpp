@@ -504,7 +504,7 @@ namespace Characters
 					playerstats->positionY = 0.0f;
 					playerstats->is_attacking = true;
 					keypressed = 1;
-					slashing2_Audio();	//JN: new code
+					slashing2_Audio();
 					break;
 
 				case TOP:
@@ -857,7 +857,7 @@ namespace Characters
 						enemystats->EnemyCD = static_cast<float>((rand() % 4) + 1);
 						enemystats->EnemyGrid = (rand() % 3) + 1;
 						enemystats->DamageCD = 1.0f;
-						slashing1_Audio();	//JN: new code
+						slashing1_Audio();
 					}
 				}
 			}

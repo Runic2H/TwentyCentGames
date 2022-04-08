@@ -13,11 +13,17 @@ void Credits_Load()
 
 void Credits_Init()
 {
-
+	
 }
 
 void Credits_Update()
 {
+	Audio_Update();			//JN: new code
+	increase_bgm_fader();	//JN: new code
+	decrease_bgm_fader();	//JN: new code
+	mute_master_fader();	//JN: new code
+	unmute_master_fader();	//JN: new code
+
 	//go back to MENU
 	if (AEInputCheckTriggered(AEVK_Q))
 	{

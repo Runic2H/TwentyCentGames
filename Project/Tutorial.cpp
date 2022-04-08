@@ -640,15 +640,18 @@ void Tutorial_Load()
 
 void Tutorial_Init()
 {
-	Audio_Init();	//JN: new code 
 	page = 1;
 }
 
 void Tutorial_Update()
 {
-	Audio_Update();	//JN: new code 
-	increase_master_fader();		//JN: new code
-	decrease_master_fader();		//JN: new code
+	Audio_Update();
+	increase_bgm_fader();	//JN: new code
+	decrease_bgm_fader();	//JN: new code
+	increase_sfx_fader();	//JN: new code
+	decrease_sfx_fader();	//JN: new code
+	mute_master_fader();	//JN: new code
+	unmute_master_fader();	//JN: new code
 
 	//go back to MENU
 	if (AEInputCheckTriggered(AEVK_Q)) 
@@ -658,7 +661,7 @@ void Tutorial_Update()
 
 	if (AEInputCheckTriggered(AEVK_A))
 	{
-		if (--page) page_flip1_Audio();	//JN: new code
+		if (--page) page_flip1_Audio();
 		if (page < 1)
 		{
 			page = 1;
@@ -667,7 +670,7 @@ void Tutorial_Update()
 
 	if (AEInputCheckTriggered(AEVK_D))
 	{
-		if (++page) page_flip2_Audio();	//JN: new code
+		if (++page) page_flip2_Audio();
 
 		if (page > 7)
 		{
@@ -746,7 +749,6 @@ void Tutorial_Free()
 
 void Tutorial_Unload()
 {
-	Audio_Unload();	//JN: new code
 	std::cout << "Tutorial:Unload" << std::endl;
 	AEGfxTextureUnload(ducktitle);
 	AEGfxTextureUnload(maze_screenshot);

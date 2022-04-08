@@ -5,7 +5,7 @@ AEGfxVertexList* pMeshMazeWindow = 0;
 AEGfxVertexList* pMeshSolidSquare_PATH = 0;
 AEGfxVertexList* pMeshSolidSquare_WALL = 0;
 AEGfxVertexList* pMesh_MainCharacter = 0;
-AEGfxVertexList* pMeshChest = 0;	//JN: new code
+AEGfxVertexList* pMeshChest = 0;
 
 AEGfxVertexList* pMesh_MiniMapWindow = 0;
 AEGfxVertexList* pMesh_MiniMapChests = 0;
@@ -21,8 +21,8 @@ std::string openchest_msg;
 AEGfxTexture* path_art;
 AEGfxTexture* wall_art;
 AEGfxTexture* main_character_art;
-AEGfxTexture* chest_art;	//JN: new code
-AEGfxTexture* exit_art;		//JN: new code
+AEGfxTexture* chest_art;
+AEGfxTexture* exit_art;
 
 AEMtx33 defencepotiontransform, staminapotiontransform, healthpotiontransform;
 
@@ -685,7 +685,6 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 					AEGfxMeshDraw(PATHCellMesh, AE_GFX_MDM_TRIANGLES);
 				}
 
-				//JN: new code (the entire if (..... == CHEST))
 				if (Maze->grid[r][c].value == CHEST)
 				{
 					AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -699,7 +698,6 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 					AEGfxMeshDraw(pMeshChest, AE_GFX_MDM_TRIANGLES);
 				}
 
-				//JN: new code (the entire if statement)
 				if (r == (end_x) && c == (end_y))
 				{
 					AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -760,7 +758,6 @@ void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_
 	AE_ASSERT_MESG(pMesh_MainCharacter, "Failed to create main character!!");
 }
 
-//JN: new code
 void MAZE_CreateMESH_Chests(AEGfxVertexList*& pMeshChest, float cell_height, float cell_width)
 {
 	AEGfxMeshStart();
@@ -967,6 +964,7 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == CHEST)
 	{
+		chest_open_Audio();	//JN: new code
 		std::cout << "player is on chest" << std::endl;
 		MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);				
 	}
@@ -1137,11 +1135,11 @@ void Maze_Load()
 	main_character_art = AEGfxTextureLoad("Images/Map duck sprite.png");
 	AE_ASSERT_MESG(main_character_art, "Failed to create path texture!\n");
 
-	chest_art = AEGfxTextureLoad("Images/Chest.png");	//JN: new code
-	AE_ASSERT_MESG(chest_art, "Failed to create chest texture!\n");	//JN: new code
+	chest_art = AEGfxTextureLoad("Images/Chest.png");
+	AE_ASSERT_MESG(chest_art, "Failed to create chest texture!\n");
 
-	exit_art = AEGfxTextureLoad("Images/Whirlpool.png");	//JN: new code
-	AE_ASSERT_MESG(exit_art, "Failed to create chest texture!\n");	//JN: new code
+	exit_art = AEGfxTextureLoad("Images/Whirlpool.png");
+	AE_ASSERT_MESG(exit_art, "Failed to create chest texture!\n");
 }
 
 
@@ -1155,8 +1153,8 @@ void Maze_Load()
 */
 void Maze_Initialize()
 {
-	Audio_Init();	//JN: new code
-	maze_background_Audio();	//JN: new code
+	stop_Audio(); //JN: new code
+	maze_background_Audio();
 	//initialise_pausemenu();
 
 	AEToogleFullScreen(systemsettings.fullscreen); // R: added
@@ -1191,7 +1189,7 @@ void Maze_Initialize()
 	MAZE_CreateSolidCell2(pMeshSolidSquare_WALL, Maze, 0x000000);
 	MAZE_CreateSolidCell2(pMeshSolidSquare_PATH, Maze, 0x808080);
 	MAZE_CreateMainCharacter(pMesh_MainCharacter, Maze->specifications.cellHeight, Maze->specifications.cellWidth);
-	MAZE_CreateMESH_Chests(pMeshChest, Maze->specifications.cellHeight, Maze->specifications.cellWidth);	//JN: new code
+	MAZE_CreateMESH_Chests(pMeshChest, Maze->specifications.cellHeight, Maze->specifications.cellWidth);
 
 	MC_positionX = Maze->specifications.MazeWindowStart_X + (Maze->specifications.cellWidth / 2) + (curr_X_GRIDposition * Maze->specifications.cellWidth);
 
@@ -1211,16 +1209,21 @@ void Maze_Initialize()
 void Maze_Update()
 {
 	//std::cout << "Maze:Update" << std::endl;
-	Audio_Update();					//JN: new code 
-	//get_current_volume();
-	increase_master_fader();		//JN: new code
-	decrease_master_fader();		//JN: new code
+	Audio_Update();
+	increase_bgm_fader();	//JN: new code
+	decrease_bgm_fader();	//JN: new code
+	increase_sfx_fader();	//JN: new code
+	decrease_sfx_fader();	//JN: new code
+	mute_master_fader();	//JN: new code
+	unmute_master_fader();	//JN: new code
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
+		click_Audio();	//JN: new code
 		systemsettings.paused = 1;
 	}
 
 	else if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 1) {
+		click_Audio();	//JN: new code
 		systemsettings.paused = 0;
 	}
 
@@ -1239,11 +1242,15 @@ void Maze_Update()
 
 				Maze_CameraAdjustment(1);
 				//AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
-
-				swimming_Audio();		//JN: new code 
+			
+				//JN: new code (if statement)
+				if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == EMPTY_PATH)
+				{
+					swimming_Audio();
+				}
 			}
 
-			else wall_hit_Audio();		//JN: new code 
+			else wall_hit_Audio();
 		}
 
 		if (AEInputCheckTriggered(AEVK_S))
@@ -1258,11 +1265,15 @@ void Maze_Update()
 
 				Maze_CameraAdjustment(3);
 				//AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
-
-				swimming_Audio();		//JN: new code 
+			
+				//JN: new code (if statement)
+				if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == EMPTY_PATH)
+				{
+					swimming_Audio();
+				}
 			}
 
-			else wall_hit_Audio();		//JN: new code 
+			else wall_hit_Audio();
 		}
 
 
@@ -1279,11 +1290,15 @@ void Maze_Update()
 
 				Maze_CameraAdjustment(2);
 				//AEGfxSetCamPosition(cam_x- Maze->specifications.cellWidth, cam_y);
-
-				swimming_Audio();		//JN: new code 
+			
+				//JN: new code (if statement)
+				if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == EMPTY_PATH)
+				{
+					swimming_Audio();
+				}
 			}
 
-			else wall_hit_Audio();		//JN: new code 
+			else wall_hit_Audio();
 		}
 
 		if (AEInputCheckTriggered(AEVK_D))
@@ -1298,11 +1313,15 @@ void Maze_Update()
 
 				Maze_CameraAdjustment(4);
 				//AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
-
-				swimming_Audio();		//JN: new code 
+			
+				//JN: new code (if statement)
+				if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == EMPTY_PATH)
+				{
+					swimming_Audio();
+				}
 			}
 
-			else wall_hit_Audio();		//JN: new code 
+			else wall_hit_Audio();
 		}
 
 		MAZE_FogOfWar(curr_X_GRIDposition, curr_Y_GRIDposition);
@@ -1387,7 +1406,7 @@ void Maze_Free()
 	AEGfxMeshFree(pMeshSolidSquare_PATH);
 	AEGfxMeshFree(pMeshSolidSquare_WALL);
 	AEGfxMeshFree(pMesh_MainCharacter);
-	AEGfxMeshFree(pMeshChest);	//JN: new code
+	AEGfxMeshFree(pMeshChest);
 	AEGfxMeshFree(pMesh_ChestText);
 	//unloadpausemenu();
 
@@ -1409,7 +1428,6 @@ void Maze_Unload()
 	AEGfxTextureUnload(wall_art);
 	AEGfxTextureUnload(path_art);
 	AEGfxTextureUnload(main_character_art);
-	AEGfxTextureUnload(chest_art);	//JN: new code
-	AEGfxTextureUnload(exit_art);	//JN: new code
-	Audio_Unload();		//JN: new code
+	AEGfxTextureUnload(chest_art);
+	AEGfxTextureUnload(exit_art);
 }

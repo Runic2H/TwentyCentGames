@@ -30,14 +30,21 @@ void GameOver_Load() {
 }
 
 void GameOver_Init() {
-	Audio_Init();	//JN: new code
-	lose_screen_background_Audio();	//JN: new code
+	Audio_Init();
+	stop_Audio();	//JN: new code
+	lose_screen_background_Audio();
 	player_initialise();			// reinitialises the player stats
 	enemy_initialise();				// reinitialises the enemy stats
 }
 
 void GameOver_Update() {
-	Audio_Update();	//JN: new code
+	Audio_Update();
+	increase_bgm_fader();	//JN: new code
+	decrease_bgm_fader();	//JN: new code
+	increase_sfx_fader();	//JN: new code
+	decrease_sfx_fader();	//JN: new code
+	mute_master_fader();	//JN: new code
+	unmute_master_fader();	//JN: new code
 
 	if (AEInputCheckTriggered(AEVK_R)) {
 		// QUESTION: is there a maze restart?
@@ -111,5 +118,4 @@ void GameOver_Free() {
 void GameOver_Unload() {
 
 	AEGfxTextureUnload(gameovertex);
-	Audio_Unload();	//JN: new code
 }

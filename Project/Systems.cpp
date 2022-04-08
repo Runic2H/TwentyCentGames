@@ -104,6 +104,7 @@ void logicoptionmenu()
 		if (AEInputCheckTriggered(AEVK_LBUTTON)) 
 		{
 			systemsettings.fullscreen == 1 ? systemsettings.fullscreen = 0 : systemsettings.fullscreen = 1;
+			click_Audio();	//JN: new code
 			AEToogleFullScreen(systemsettings.fullscreen);
 		}
 	}
@@ -112,6 +113,7 @@ void logicoptionmenu()
 		mutebutton->itemcounter = 1.0f;
 		if (AEInputCheckTriggered(AEVK_LBUTTON)) 
 		{
+			click_Audio();	//JN: new code
 			std::cout << "Sound Muted" << std::endl;
 		}
 	}
@@ -194,6 +196,7 @@ void logicpausemenu() {
 			resumebutton->itemcounter = 1.0f;
 			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 				systemsettings.paused = 0;
+				click_Audio();	//JN: new code
 			}
 		}
 
@@ -201,6 +204,7 @@ void logicpausemenu() {
 			optionbutton->itemcounter = 1.0f;
 			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 				systemsettings.options == 0 ? systemsettings.options = 1 : systemsettings.options = 0;
+				click_Audio();	//JN: new code
 			}
 		}
 
@@ -208,6 +212,7 @@ void logicpausemenu() {
 			exitbutton->itemcounter = 1.0f;
 			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 				systemsettings.paused = 0;
+				click_Audio();	//JN: new code
 				next = GS_QUIT;
 			}
 		}
@@ -216,6 +221,7 @@ void logicpausemenu() {
 			menubutton->itemcounter = 1.0f;
 			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 				systemsettings.paused = 0;
+				click_Audio();	//JN: new code
 				player_initialise();
 				enemy_initialise();
 				next = MENU;

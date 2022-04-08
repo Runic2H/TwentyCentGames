@@ -50,6 +50,7 @@
 
 		GSM_Initialize(current);
 
+		Audio_Init();	//JN: new code
 		
 
 		// Game Loop
@@ -116,6 +117,7 @@
 
 
 		// free the system
+		Audio_Unload();	//JN: new code
 		System_Exit();
 		AESysExit();
 	}

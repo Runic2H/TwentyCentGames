@@ -72,8 +72,8 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
-	Audio_Init();
-	combat_background_Audio();	//JN: new code
+	stop_Audio();	//JN: new code
+	combat_background_Audio();
 	//initialise_pausemenu();
 	if (enemystats->EnemyType != ENEMYBOSS)
 	{
@@ -95,9 +95,13 @@ void Combat_Initialize()
 */
 void Combat_Update()
 {
-	Audio_Update();	//JN: new code
-	increase_master_fader();		//JN: new code
-	decrease_master_fader();		//JN: new code
+	Audio_Update();
+	increase_bgm_fader();	//JN: new code
+	decrease_bgm_fader();	//JN: new code
+	increase_sfx_fader();	//JN: new code
+	decrease_sfx_fader();	//JN: new code
+	mute_master_fader();	//JN: new code
+	unmute_master_fader();	//JN: new code
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
 		systemsettings.paused = 1;
@@ -237,5 +241,4 @@ void Combat_Unload()
 	AEGfxTextureUnload(staminapotion);
 	AEGfxTextureUnload(enemytexturefrost);
 	AEGfxTextureUnload(enemytexturefire);
-	Audio_Unload();	//JN: new code
 }
