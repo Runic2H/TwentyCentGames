@@ -540,6 +540,10 @@ namespace Characters
 				}
 				else
 				{
+					for (int i{ 0 }; i < 20; ++i) {
+						particleInstCreate(AERandFloat() * 10, playerstats->positionX - 190, playerstats->positionY - 20, particleENEMYFROST);
+					}
+
 					FROZENbuttonlogic();
 					FROZENbuttonrender();
 
@@ -581,6 +585,9 @@ namespace Characters
 				{
 					if (playerstats->is_dmgtaken <= 0)
 					{
+							for (int i{ 0 }; i < 14; ++i) {
+							particleInstCreate(AERandFloat() * 10, playerstats->positionX - 190, playerstats->positionY - 20, particlePLAYER);
+							}
 						playerstats->health -= 2;
 						playerstats->is_dmgtaken = 0.5f;
 						if (playerstats->health < 2)
@@ -845,6 +852,9 @@ namespace Characters
 					{
 						if (playerstats->positionID != playerstats->SAFEGRID)
 						{
+							for (int i{ 0 }; i < 20; ++i) {
+								particleInstCreate(AERandFloat() * 10, playerstats->positionX - 190, playerstats->positionY - 20, particlePLAYER);
+							}
 							playerstats->health -= (int)enemystats->damage;
 							playerstats->is_dmgtaken = 0.5f;
 							EnemyTypeCheckToApplyPlayerDebuff();
@@ -878,6 +888,13 @@ namespace Characters
 					//Check for Player Damage
 					if (playerstats->is_attacking == true && enemystats->DamageCD <= 0.0f)
 					{
+						int type = particleENEMY;
+						enemystats->EnemyType == ICE ? type = particleENEMYFROST : type = type;
+						enemystats->EnemyType == FIRE ? type = particleENEMYFIRE : type = type;
+
+						for (int i{ 0 }; i < 20; ++i) {
+							particleInstCreate(AERandFloat() * 10, enemystats->positionX+100, enemystats->positionY+1, type);
+						}
 						enemystats->health -= playerstats->damage;
 						playerstats->is_attacking = false;
 					}

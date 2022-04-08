@@ -112,7 +112,7 @@ void Combat_Update()
 	}
 
 	// if not paused
-	if (systemsettings.paused == 0)
+	if (systemsettings.paused == 0 && systemsettings.exit_confirmation == 0)
 	{
 		RGBloop(RGBcounter);
 		CombatMesh(RGBcounter);
@@ -170,12 +170,49 @@ void Combat_Update()
 		UpdateEnemyState();
 	}
 
-	// else paused
+	else if (systemsettings.exit_confirmation == 1) {
+		LogicExit_Confirmation();
+	}
+
+	// else paused == 1 and exitconf == 0
 	else {
-		//render pause menu here
 		logicpausemenu();
-		renderpausemenu();
-		}	
+	}
+
+
+	// particles //
+	if (AEInputCheckCurr(AEVK_P)) {
+		particleInstCreate(AERandFloat() * 10, playerstats->positionX-190, playerstats->positionY-20, particleENEMY);
+	}
+
+	// particles update //
+	for (int i{ 0 }; i < 150; ++i) {
+
+		GameObjInst* pInst = ParticleInstList + i;
+
+		if (0 == (pInst->flag))
+			continue;
+
+		pInst->pObject->itemcounter -= DT;
+		if (pInst->pObject->itemcounter <= 0) {
+			particleInstDestroy(pInst);
+		}
+
+		AEMtx33 trans, rot, scale, mtxbuffer;
+		AEVec2 buffer;
+
+		// updating position from velocity //
+		float g_dt = DT;
+		AEVec2Scale(&buffer, &pInst->velCurr, g_dt);			// vel
+		AEVec2Add(&pInst->PosCurr, &buffer, &pInst->PosCurr);	// pos'
+
+		AEMtx33Scale(&scale, pInst->scale, pInst->scale);		// scale
+		AEMtx33Rot(&rot, pInst->dirCurr);						// dir
+		AEMtx33Concat(&mtxbuffer, &scale, &rot);				// scale x dir
+
+		AEMtx33Trans(&trans, pInst->PosCurr.x, pInst->PosCurr.y);
+		AEMtx33Concat(&pInst->pObject->transform, &trans, &mtxbuffer);
+	}
   
   }
 
@@ -214,7 +251,38 @@ void Combat_Draw()
 		RenderEnemy(enemytexture, EnemyMesh);
 	}
 
+	if (systemsettings.paused == 1) {
+		renderpausemenu();
+	}
+	if (systemsettings.exit_confirmation == 1) {
+		RenderExit_Confirmation();
+	}
 
+	for (int i{ 0 }; i < 150; ++i) {
+		GameObjInst* pInst = ParticleInstList + i;
+
+		if (0 == (pInst->flag))
+			continue;
+
+		AEGfxSetTransform(pInst->pObject->transform.m);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(pInst->pObject->itemcounter);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		if (pInst->type == particleENEMY) {
+			AEGfxSetTintColor(0.0f, 0.7f, 0.7f, 1.0f);
+			}
+		else if (pInst->type == particlePLAYER) {
+			AEGfxSetTintColor(0.9f, 0.6f, 0.04f, 1.0f);
+		}
+		else if (pInst->type == particleENEMYFIRE) {
+			AEGfxSetTintColor(1.0f, 0.1f, 0.1f, 1.0f);
+		}
+		else if (pInst->type == particleENEMYFROST) {
+			AEGfxSetTintColor(0.1f, 0.8f, 1.0f, 1.0f);
+		}
+
+		AEGfxMeshDraw(pInst->pObject->pMesh, AE_GFX_MDM_TRIANGLES);
+	}
 }
 
 
