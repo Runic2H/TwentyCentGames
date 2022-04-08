@@ -147,11 +147,11 @@ void Maze_Minimap_LoadMeshes(float &global_var_minimap_height)
 	AEGfxTriAdd(
 		0, 0, 0xFFFF0000, 0.0f, 1.0f,
 		0, cells_size_y, 0xFFFF0000, 0.0f, 0.0f,
-		cells_size_x, 0, 0xFFFF0000, 1.0f, 1.0f);
+		cells_size_x, 0, 0xFFFF0000, 0.25f, 1.0f);
 	AEGfxTriAdd(
 		0, cells_size_y, 0xFFFF0000, 0.0f, 0.0f,
-		cells_size_x, cells_size_y, 0xFFFF0000, 1.0f, 0.0f,
-		cells_size_x, 0, 0xFFFF0000, 1.0f, 1.0f);
+		cells_size_x, cells_size_y, 0xFFFF0000, 0.25f, 0.0f,
+		cells_size_x, 0, 0xFFFF0000, 0.25f, 1.0f);
 	pMesh_MiniMapMainChar = AEGfxMeshEnd();
 
 	AEGfxMeshStart();
@@ -224,7 +224,7 @@ void Maze_Minimap_Draw(float cam_x, float cam_y, float x_offset, float y_offset)
 			{
 
 				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 0.5f);
-				//AEGfxTextureSet(main_character_art, 0.5f, 0.0f);
+				AEGfxTextureSet(main_character_art, (float)(duck_dir * 0.25f), 0.0f);
 				AEGfxMeshDraw(pMesh_MiniMapMainChar, AE_GFX_MDM_TRIANGLES);
 			}
 			else if (r == end_x && c == end_y)
