@@ -641,6 +641,7 @@ void Tutorial_Load()
 void Tutorial_Init()
 {
 	Audio_Init();	//JN: new code 
+	page = 1;
 }
 
 void Tutorial_Update()
