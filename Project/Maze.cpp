@@ -112,7 +112,7 @@ void Maze_DisplayChestPickupItem(std::string msg)
 	sprintf_s(strBuffer,"%s", msg.c_str());
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxPrint(fontId, strBuffer, -0.22f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontId, strBuffer, -0.22, 0, 1.0f, 1.0f, 1.0f, 1.0f);
 	
 
 	chest_pickup_display_duration -= DT;
@@ -122,7 +122,7 @@ void Maze_DisplayChestPickupItem(std::string msg)
 
 void Maze_Minimap_LoadMeshes(float &global_var_minimap_height)
 {
-	float window_height = (f32)AEGetWindowHeight()*0.75; 
+	float window_height = AEGetWindowHeight()*0.75; 
 	global_var_minimap_height = window_height;
 	// This shape has 5 vertices
 	AEGfxMeshStart();
@@ -186,7 +186,7 @@ void Maze_LevelText_Draw()
 	sprintf_s(strBuffer, "LEVEL %d",level_iter+1);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxPrint(fontLarge, strBuffer, -0.41f, 0.7f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontLarge, strBuffer, -0.41, 0.7, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 
@@ -1225,7 +1225,7 @@ void Maze_Update()
 
 		AEGfxGetCamPosition(&cam_x, &cam_y);
 
-	if (systemsettings.paused == 0 && systemsettings.exit_confirmation == 0) {
+	if (systemsettings.paused == 0) {
 		if (AEInputCheckTriggered(AEVK_W))
 		{
 			if (MAZE_CharMoveCHECK_NEXT_POS(1, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
@@ -1315,11 +1315,9 @@ void Maze_Update()
 		AEGfxGetCamPosition(&cam_x, &cam_y);
 	}
 
-	else if (systemsettings.exit_confirmation == 1) {
-		LogicExit_Confirmation();
-	}
 	else {
 		logicpausemenu();
+		renderpausemenu();
 	}
 }
 
@@ -1369,14 +1367,6 @@ void Maze_Draw()
 			}
 		}
 	}
-
-		if (systemsettings.paused == 1) {
-			renderpausemenu();
-		}
-
-		if (systemsettings.exit_confirmation == 1) {
-			RenderExit_Confirmation();
-		}
 }
 
 

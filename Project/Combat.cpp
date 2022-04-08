@@ -46,6 +46,7 @@ using namespace Characters::Character;
 void Combat_Load()
 {
 	std::cout << "Combat:Load" << std::endl;
+	//playertexture = AEGfxTextureLoad("ducky.jpg");
 	playertexture = AEGfxTextureLoad("Images/Fighting duck.png");
 	AE_ASSERT_MESG(playertexture, "cant create duck texture\n");
 
@@ -107,7 +108,7 @@ void Combat_Update()
 	}
 
 	// if not paused
-	if (systemsettings.paused == 0 && systemsettings.exit_confirmation == 0)
+	if (systemsettings.paused == 0)
 	{
 		RGBloop(RGBcounter);
 		CombatMesh(RGBcounter);
@@ -165,48 +166,13 @@ void Combat_Update()
 		UpdateEnemyState();
 	}
 
-		else if (systemsettings.exit_confirmation == 1) {
-			LogicExit_Confirmation();
-		}
-
-		// else paused == 1 and exitconf == 0
-		else {
-			logicpausemenu();
+	// else paused
+	else {
+		//render pause menu here
+		logicpausemenu();
+		renderpausemenu();
 		}	
   
-
-	// particles //
-		if (AEInputCheckCurr(AEVK_P)) {
-			AEVec2 particleVel;
-			AEVec2Set(&particleVel, 10.0f, 15.0f);
-			particleInstCreate(AERandFloat() * 25);
-			particleInstCreate(AERandFloat() * 20);
-			particleInstCreate(AERandFloat() * 15);
-		}
-
-			for (int i{ 0 }; i < 150; ++i) {
-			
-				GameObjInst* pInst = ParticleInstList + i;
-
-				if (0 == (pInst->flag))
-					continue;
-
-				pInst->pObject->itemcounter -= DT;
-				if (pInst->pObject->itemcounter <= 0) {
-					particleInstDestroy(pInst);
-				}
-
-				AEMtx33 trans;
-				AEVec2 buffer;
-
-				float g_dt = DT;
-				AEVec2Scale(&buffer, &pInst->velCurr, g_dt);
-				AEVec2Add(&pInst->PosCurr, &buffer, &pInst->PosCurr);
-
-				AEMtx33Trans(&trans, pInst->PosCurr.x, pInst->PosCurr.y);
-
-				AEMtx33Concat(&pInst->pObject->transform, &trans, &pInst->pObject->transform);
-			}
   }
 
 
@@ -216,7 +182,6 @@ void Combat_Update()
 */
 void Combat_Draw()
 {
-
 	StaminaRender(staminapotion);
 	inventoryrender();
 	RenderEnemyHealth();
@@ -237,30 +202,10 @@ void Combat_Draw()
 	{
 		RenderEnemy(enemytexturefire, EnemyMesh);
 	}
-	else if (enemystats->EnemyType == NORMAL) {
+	else if (enemystats->EnemyType = NORMAL) {
 		RenderEnemy(enemytexture, EnemyMesh);
 	}
 
-		if (systemsettings.paused == 1) {
-			renderpausemenu();
-		}
-		if (systemsettings.exit_confirmation == 1) {
-			RenderExit_Confirmation();
-		}
-	
-		for (int i{ 0 }; i < 150; ++i) {
-			GameObjInst* pInst = ParticleInstList + i;
-
-			if (0 == (pInst->flag))
-				continue;
-
-			AEGfxSetTransform(pInst->pObject->transform.m);
-			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-			AEGfxSetTransparency(pInst->pObject->itemcounter);
-			AEGfxSetTintColor(1, 1, 1, 1);
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxMeshDraw(pInst->pObject->pMesh, AE_GFX_MDM_TRIANGLES);
-		}
 }
 
 

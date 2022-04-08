@@ -402,6 +402,7 @@ void page_seven_code()
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18);
 	DrawingTextureOnMesh(Mesh_maze_overview, frost_turtle, -210.0f, -100.0f);
+	meshfree();
 
 	sprintf_s(strBuffer, "Normal Turtle");
 	AEGfxPrint(fontLarge, strBuffer, -0.35f, 0.28f, .25f, 0.0f, 1.0f, 0.0f);
@@ -620,7 +621,7 @@ void Tutorial_Update()
 	decrease_master_fader();		//JN: new code
 
 	//go back to MENU
-	if (AEInputCheckTriggered(AEVK_Q) || AEInputCheckTriggered(AEVK_ESCAPE))
+	if (AEInputCheckTriggered(AEVK_Q)) 
 	{
 		next = MENU;
 	}
@@ -707,8 +708,7 @@ void Tutorial_Free()
 	AEGfxMeshFree(fake_window_box);
 	AEGfxMeshFree(button_box);
 	AEGfxMeshFree(large_button_box);
-	meshfree();
-	//AEGfxMeshFree(Mesh_maze_overview);
+	AEGfxMeshFree(Mesh_maze_overview);
 }
 
 void Tutorial_Unload()

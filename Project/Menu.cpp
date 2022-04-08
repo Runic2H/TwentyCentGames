@@ -23,10 +23,10 @@ AEMtx33 scale, rot, trans, buffer;
 *		STRUCT / CLASS DEFINITIONS
 ***************************************************/
 
-//struct GameObjInst {
-//	AEGfxVertexList* pMesh;
-//	AEGfxTexture*	pTexture;
-//};
+struct GameObjInst {
+	AEGfxVertexList* pMesh;
+	AEGfxTexture*	pTexture;
+};
 
 GameObjInst ducklogostruct;
 GameObjInst selectionstruct;
@@ -42,12 +42,8 @@ void Menu_Load() {
 	AEToogleFullScreen(systemsettings.fullscreen);
 	AEGfxSetBackgroundColor(0.0f, 0.1f, 0.2f);
 
-	ducklogostruct.pObject = new item;
-	selectionstruct.pObject = new item;
-	gamelogostruct.pObject = new item;
-
-	gamelogostruct.pObject->pTexture = AEGfxTextureLoad("Images/ducktitle.png");
-	AE_ASSERT_MESG(gamelogostruct.pObject->pTexture, "Failed to create gamelogotexture!\n");
+	gamelogostruct.pTexture = AEGfxTextureLoad("Images/ducktitle.png");
+	AE_ASSERT_MESG(gamelogostruct.pTexture, "Failed to create gamelogotexture!\n");
 
 	ducktex = AEGfxTextureLoad("Images/duck.png");
 	AE_ASSERT_MESG(ducktex, "Failed to create duck texture!\n");
@@ -68,8 +64,8 @@ void Menu_Load() {
 		-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
 		150.0f, -50.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 
-	gamelogostruct.pObject->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(gamelogostruct.pObject->pMesh , "Failed to create gamelogo!\n");
+	gamelogostruct.pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(gamelogostruct.pMesh, "Failed to create gamelogo!\n");
 
 
 	// duck mesh
@@ -83,8 +79,8 @@ void Menu_Load() {
 		-50.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
 		50.0f, -50.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 
-	ducklogostruct.pObject->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(ducklogostruct.pObject->pMesh , "Failed to create gamelogo!\n");
+	ducklogostruct.pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(ducklogostruct.pMesh, "Failed to create gamelogo!\n");
 
 
 	AEGfxMeshStart();
@@ -116,7 +112,6 @@ void Menu_Init() {
 }
 
 void Menu_Update() {
-
 	Audio_Update();		//JN: new code
 	increase_master_fader();		//JN: new code
 	decrease_master_fader();		//JN: new code
@@ -135,10 +130,10 @@ void Menu_Update() {
 	flagg == 1 ? RGBcounter += 150 : RGBcounter -= 150;
 	
 
-	//if (selectionstruct.pObject->pMesh != nullptr) {
-	//	AEGfxMeshFree(selectionstruct.pObject->pMesh);
-	//	selectionstruct.pObject->pMesh = nullptr;
-	//}
+	if (selectionstruct.pMesh != nullptr) {
+		AEGfxMeshFree(selectionstruct.pMesh);
+		selectionstruct.pMesh = nullptr;
+	}
 
 	AEGfxMeshStart();
 	AEGfxVertexAdd(50.0f, -25.0f, RGBcounter, 0.0f, 1.0f);
@@ -146,9 +141,10 @@ void Menu_Update() {
 	AEGfxVertexAdd(150.0f, 25.0f, RGBcounter, 0.0f, 0.0f);				// for RGB
 	AEGfxVertexAdd(50.0f, 25.0f, RGBcounter, 1.0f, 0.0f);
 	AEGfxVertexAdd(50.0f, -25.0f, RGBcounter, 0.0f, 1.0f);
-	selectionstruct.pObject->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(selectionstruct.pObject->pMesh, "failed to create Selection object");
+	selectionstruct.pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(selectionstruct.pMesh, "failed to create Selection object");
 
+	systemupdate();
 
 	AEMtx33Scale(&scale, 105.0f, 50.0f);
 	AEMtx33Rot(&rot, 0.0f);
@@ -165,89 +161,80 @@ void Menu_Update() {
 
 	AEMtx33Trans(&trans,  209.0f, -70.0f);
 	AEMtx33Concat(&menuexitbutton.transform, &trans, &buffer);
-
-	if (systemsettings.exit_confirmation == 0) {
-		systemupdate();
-	}
-	else if (systemsettings.exit_confirmation == 1) {
-		LogicExit_Confirmation();
-		//RenderExit_Confirmation();
-	}
 }
 
 void Menu_Draw() {
 
-	if (systemsettings.exit_confirmation == 0) {
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxSetTintColor(1, 1, 1, 1);
-		AEGfxSetTransparency(1);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1, 1, 1, 1);
+	AEGfxSetTransparency(1);
 
-		AEGfxSetTransform(menustartbutton.transform.m);
-		AEGfxSetTransparency(menustartbutton.itemcounter);
-		AEGfxTextureSet(menustartbutton.pTexture, 0, 0);
-		AEGfxMeshDraw(menustartbutton.pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTransform(menustartbutton.transform.m);
+	AEGfxSetTransparency(menustartbutton.itemcounter);
+	AEGfxTextureSet(menustartbutton.pTexture,0,0);
+	AEGfxMeshDraw(menustartbutton.pMesh, AE_GFX_MDM_TRIANGLES);
 
-		AEGfxSetTransform(menututorialbutton.transform.m);
-		AEGfxSetTransparency(menututorialbutton.itemcounter);
-		AEGfxTextureSet(menututorialbutton.pTexture, 0, 0);
-		AEGfxMeshDraw(menututorialbutton.pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTransform(menututorialbutton.transform.m);
+	AEGfxSetTransparency(menututorialbutton.itemcounter);
+	AEGfxTextureSet(menututorialbutton.pTexture, 0, 0);
+	AEGfxMeshDraw(menututorialbutton.pMesh, AE_GFX_MDM_TRIANGLES);
 
-		AEGfxSetTransform(menucreditsbutton.transform.m);
-		AEGfxSetTransparency(menucreditsbutton.itemcounter);
-		AEGfxTextureSet(menucreditsbutton.pTexture, 0, 0);
-		AEGfxMeshDraw(menucreditsbutton.pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTransform(menucreditsbutton.transform.m);
+	AEGfxSetTransparency(menucreditsbutton.itemcounter);
+	AEGfxTextureSet(menucreditsbutton.pTexture, 0, 0);
+	AEGfxMeshDraw(menucreditsbutton.pMesh, AE_GFX_MDM_TRIANGLES);
 
-		AEGfxSetTransform(menuexitbutton.transform.m);
-		AEGfxSetTransparency(menuexitbutton.itemcounter);
-		AEGfxTextureSet(menuexitbutton.pTexture, 0, 0);
-		AEGfxMeshDraw(menuexitbutton.pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTransform(menuexitbutton.transform.m);
+	AEGfxSetTransparency(menuexitbutton.itemcounter);
+	AEGfxTextureSet(menuexitbutton.pTexture, 0, 0);
+	AEGfxMeshDraw(menuexitbutton.pMesh, AE_GFX_MDM_TRIANGLES);
 
-		char strBuffer[35];
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	char strBuffer[35];
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
-		sprintf_s(strBuffer, "Press SPACEBAR to select");
-		AEGfxPrint(fontId, strBuffer, -0.2f, 0.08f, 1.14f, 1.0f, 0.5f, 0.5f);
+	sprintf_s(strBuffer, "Press SPACEBAR to select");
+	AEGfxPrint(fontId, strBuffer, -0.2f, 0.08f, 1.14f, 1.0f, 0.5f, 0.5f);
 
-		sprintf_s(strBuffer, "WASD for movement");
-		AEGfxPrint(fontId, strBuffer, -0.16f, 0.01f, 1.14f, 1.0f, 0.5f, 0.5f);
+	sprintf_s(strBuffer, "WASD for movement");
+	AEGfxPrint(fontId, strBuffer, -0.16f, 0.01f, 1.14f, 1.0f, 0.5f, 0.5f);
 
-		if (systemsettings.fullscreen == 0) {
-			sprintf_s(strBuffer, "Windowed");
-			AEGfxPrint(fontId, strBuffer, 0.65f, -0.85f, 1.14f, 0.1f, 0.7f, 0.6f);
-			if (cursorx >= 660 && cursorx <= 720 && cursory >= 543 && cursory <= 555) {
-				AEGfxSetBlendMode(AE_GFX_BM_NONE);
-				AEGfxSetPosition(195.0f, -250.0f);
-				AEGfxMeshDraw(selectionstruct.pObject->pMesh, AE_GFX_MDM_LINES_STRIP);
-			}
-		}
-
-		if (systemsettings.fullscreen == 1) {
-			sprintf_s(strBuffer, "Full Screen");
-			AEGfxPrint(fontId, strBuffer, 0.65f, -0.85f, 1.07f, 0.1f, 0.7f, 0.6f);
-			if (cursorx >= 660 && cursorx <= 720 && cursory >= 543 && cursory <= 555) {
-				AEGfxSetBlendMode(AE_GFX_BM_NONE);
-				AEGfxSetPosition(195.0f, -250.0f);
-				AEGfxMeshDraw(selectionstruct.pObject->pMesh, AE_GFX_MDM_LINES_STRIP);
-			}
-		}
-
-		// Selection grid
-		AEGfxSetBlendMode(AE_GFX_BM_NONE);
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetPosition(posX, posY);
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxMeshDraw(selectionstruct.pObject->pMesh, AE_GFX_MDM_LINES_STRIP);
+	if (systemsettings.fullscreen == 0) {
+		sprintf_s(strBuffer, "Windowed");
+		AEGfxPrint(fontId, strBuffer, 0.65f, -0.85f, 1.14f, 0.1f, 0.7f, 0.6f);
+		if (cursorx >= 660 && cursorx <= 720 && cursory >= 543 && cursory <= 555) {
+			AEGfxSetBlendMode(AE_GFX_BM_NONE);
+			AEGfxSetPosition(195.0f, -250.0f);
+			AEGfxMeshDraw(selectionstruct.pMesh, AE_GFX_MDM_LINES_STRIP);
+		} 
 	}
+
+	if (systemsettings.fullscreen == 1) {
+		sprintf_s(strBuffer, "Full Screen");
+		AEGfxPrint(fontId, strBuffer, 0.65f, -0.85f, 1.07f, 0.1f, 0.7f, 0.6f);
+		if (cursorx >= 660 && cursorx <= 720 && cursory >= 543 && cursory <= 555) {
+			AEGfxSetBlendMode(AE_GFX_BM_NONE);
+			AEGfxSetPosition(195.0f, -250.0f);
+			AEGfxMeshDraw(selectionstruct.pMesh, AE_GFX_MDM_LINES_STRIP);
+		} 
+	}
+	
+	// Selection grid
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetPosition(posX, posY);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxMeshDraw(selectionstruct.pMesh, AE_GFX_MDM_LINES_STRIP);
+
 	// texture
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetPosition(0.0f, 150.0f);
-	AEGfxTextureSet(gamelogostruct.pObject->pTexture, 0.0f, 0.0f);
+	AEGfxTextureSet(gamelogostruct.pTexture, 0.0f, 0.0f);
 	AEGfxSetTintColor(1, 1, 1, 1);
 	AEGfxSetTransparency(1);
-	AEGfxMeshDraw(gamelogostruct.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxMeshDraw(gamelogostruct.pMesh, AE_GFX_MDM_TRIANGLES);
 
 
 	++texcounter;
@@ -265,37 +252,31 @@ void Menu_Draw() {
 	AEGfxSetPosition(250.0f, 150.0f);
 	AEGfxSetTintColor(1, 1, 1, 1);
 	AEGfxSetTransparency(1);
-	AEGfxMeshDraw(ducklogostruct.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxMeshDraw(ducklogostruct.pMesh, AE_GFX_MDM_TRIANGLES);
 
 	AEGfxSetPosition(-250.0f, 150.0f);
 	AEGfxSetTintColor(1, 1, 1, 1);
 	AEGfxSetTransparency(1);
-	AEGfxMeshDraw(ducklogostruct.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxMeshDraw(ducklogostruct.pMesh, AE_GFX_MDM_TRIANGLES);
 
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
-
-	if (systemsettings.exit_confirmation == 1) {
-		//LogicExit_Confirmation();
-		RenderExit_Confirmation();
-	}
-	AEGfxMeshFree(selectionstruct.pObject->pMesh);
 }
 
 void Menu_Free() {
 
-	//if (selectionstruct.pObject->pMesh != nullptr) {
-	//	AEGfxMeshFree(selectionstruct.pObject->pMesh);
-	//	selectionstruct.pObject->pMesh = nullptr;
-	//}
-
-	if (ducklogostruct.pObject->pMesh != nullptr) {
-		AEGfxMeshFree(ducklogostruct.pObject->pMesh);
-		ducklogostruct.pObject->pMesh = nullptr;
+	if (selectionstruct.pMesh != nullptr) {
+		AEGfxMeshFree(selectionstruct.pMesh);
+		selectionstruct.pMesh = nullptr;
 	}
 
-	if (gamelogostruct.pObject->pMesh != nullptr) {
-		AEGfxMeshFree(gamelogostruct.pObject->pMesh);
-		gamelogostruct.pObject->pMesh = nullptr;
+	if (ducklogostruct.pMesh != nullptr) {
+		AEGfxMeshFree(ducklogostruct.pMesh);
+		ducklogostruct.pMesh = nullptr;
+	}
+
+	if (gamelogostruct.pMesh != nullptr) {
+		AEGfxMeshFree(gamelogostruct.pMesh);
+		gamelogostruct.pMesh = nullptr;
 	}
 
 	if (menustartbutton.pMesh != nullptr) {
@@ -306,16 +287,13 @@ void Menu_Free() {
 
 void Menu_Unload() {
 
-	AEGfxTextureUnload(gamelogostruct.pObject->pTexture);
+	AEGfxTextureUnload(gamelogostruct.pTexture);
 	AEGfxTextureUnload(ducktex);
 	AEGfxTextureUnload(duckdrooltex);
 	AEGfxTextureUnload(menustartbutton.pTexture);
 	AEGfxTextureUnload(menucreditsbutton.pTexture);
 	AEGfxTextureUnload(menututorialbutton.pTexture);
 	AEGfxTextureUnload(menuexitbutton.pTexture);
-	delete gamelogostruct.pObject;
-	delete selectionstruct.pObject;
-	delete ducklogostruct.pObject;
 	Audio_Unload();		//JN: new code
 }
 
@@ -363,7 +341,7 @@ void systemupdate() {
 			next = CREDITS;
 		}
 		else if (cursorx >= 557 && cursorx <= 661 && cursory >= 344 && cursory <= 391) {
-			systemsettings.exit_confirmation = 1;
+			next = GS_QUIT;
 		}
 	}
 
@@ -413,7 +391,7 @@ void systemupdate() {
 			break;
 		case 2: next = CREDITS;
 			break;
-		case 3: systemsettings.exit_confirmation = 1;
+		case 3: next = GS_QUIT;
 			break;
 		case 4:
 			systemsettings.fullscreen == 0 ? systemsettings.fullscreen = 1 : systemsettings.fullscreen = 0;
