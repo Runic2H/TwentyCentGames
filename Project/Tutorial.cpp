@@ -641,7 +641,6 @@ void Tutorial_Load()
 void Tutorial_Init()
 {
 	Audio_Init();	//JN: new code 
-	AEToogleFullScreen(systemsettings.fullscreen);
 }
 
 void Tutorial_Update()
@@ -726,10 +725,10 @@ void Tutorial_Draw()
 	//MUST HAVE print tutorial
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	sprintf_s(strBuffer, "Tutorial :D");
-	AEGfxPrint(fontId, strBuffer, -0.08f, 0.72f, 1.0f, 1.f, 1.f, 1.f);
+	AEGfxPrint(fontLarge, strBuffer, -0.08f, 0.71f, 0.25f, 1.f, 1.f, 1.f);
 
-	sprintf_s(strBuffer, "Press Q to go back to the main menu");
-	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
+	sprintf_s(strBuffer, "Press [Q] to go back to the main menu");
+	AEGfxPrint(fontLarge, strBuffer, -0.32f, -0.9f, 0.25f, 1.f, 1.f, 1.f);
 }
 
 void Tutorial_Free()

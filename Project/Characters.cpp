@@ -189,7 +189,7 @@ namespace Characters
 
 					if (playerstats->status == FROSTED)
 					{
-						playerstats->staminaCD = 1.25f;
+						playerstats->staminaCD = 1.35f;
 					}
 					else
 					{
@@ -219,10 +219,10 @@ namespace Characters
 			AEMtx33Trans(&trans, 150.0f, 120.0f);
 			AEMtx33Concat(&rightbutton->transform, &trans, &buffer);
 
-			if (AEInputCheckTriggered(AEVK_D)) {
+			if (AEInputCheckTriggered(AEVK_Q)) {
 				rightbutton->itemcounter = 1.0f;
 			}
-			if (AEInputCheckTriggered(AEVK_A)) {
+			if (AEInputCheckTriggered(AEVK_E)) {
 				leftbutton->itemcounter = 1.0f;
 			}
 		}
@@ -239,7 +239,7 @@ namespace Characters
 			AEGfxTextureSet(leftbutton->pTexture, 0, 0);
 			AEGfxMeshDraw(leftbutton->pMesh, AE_GFX_MDM_TRIANGLES);
 
-			sprintf_s(str, "A");
+			sprintf_s(str, "Q");
 			AEGfxPrint(fontLarge, str, -0.55f, 0.35f, 0.6f, 0.0f, 1.0f, 1.0f);
 
 			AEGfxSetTransform(rightbutton->transform.m);
@@ -247,7 +247,7 @@ namespace Characters
 			AEGfxTextureSet(rightbutton->pTexture, 0, 0);
 			AEGfxMeshDraw(rightbutton->pMesh, AE_GFX_MDM_TRIANGLES);
 
-			sprintf_s(str, "D");
+			sprintf_s(str, "E");
 			AEGfxPrint(fontLarge, str, 0.49f, 0.35f, 0.6f, 0.0f, 1.0f, 1.0f);
 
 			char strBuffer[35];
@@ -543,10 +543,9 @@ namespace Characters
 					FROZENbuttonlogic();
 					FROZENbuttonrender();
 
-					if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_D))
+					if (AEInputCheckTriggered(AEVK_Q) || AEInputCheckTriggered(AEVK_E))
 					{
 						--playerstats->statuscounter;
-						//std::cout << counter << "\n";
 					}
 				}
 			}
@@ -584,6 +583,10 @@ namespace Characters
 					{
 						playerstats->health -= 2;
 						playerstats->is_dmgtaken = 0.5f;
+						if (playerstats->health < 2)
+						{
+							playerstats->health = 1;
+						}
 					}
 				}
 			}
@@ -807,7 +810,7 @@ namespace Characters
 					if (playerstats->status != BURNING)
 					{
 						playerstats->status = BURNING;
-						playerstats->debuffcounter = 5.0f;
+						playerstats->debuffcounter = 3.0f;
 					}
 					break;
 				case ENEMYBOSS:
@@ -894,7 +897,7 @@ namespace Characters
 				enemystats->enemytypedamage = (f32)(5 * enemystats->EnemyLevel);
 				enemystats->damage = enemystats->enemytypedamage;
 				enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
-				enemystats->EnemyXP = 20 + (2 * enemystats->EnemyLevel);
+				enemystats->EnemyXP = 20 + (10 * enemystats->EnemyLevel);
 				break;
 
 			case ICE:
@@ -906,7 +909,7 @@ namespace Characters
 				enemystats->damage = enemystats->enemytypedamage;
 				enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
 				enemystats->DebuffCounter = 0;
-				enemystats->EnemyXP = 50 + (2 * enemystats->EnemyLevel);
+				enemystats->EnemyXP = 50 + (10 * enemystats->EnemyLevel);
 				break;
 
 			case FIRE:
@@ -918,14 +921,14 @@ namespace Characters
 				enemystats->damage = enemystats->enemytypedamage;
 				enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
 				enemystats->DebuffCounter = 0;
-				enemystats->EnemyXP = 50 + (2 * enemystats->EnemyLevel);
+				enemystats->EnemyXP = 50 + (10 * enemystats->EnemyLevel);
 				break;
 			}
 		}
 
 		void SpawnBossEnemy()
 		{
-			enemystats->EnemyLevel = playerstats->PlayerLevel + ((rand() % 2));
+			enemystats->EnemyLevel = playerstats->PlayerLevel;
 			enemystats->EnemyType = ENEMYBOSS;
 			enemystats->health = 70 + (5 * enemystats->EnemyLevel);
 			enemystats->maxhealth = 70 + (5 * enemystats->EnemyLevel);
@@ -933,7 +936,7 @@ namespace Characters
 			enemystats->damage = enemystats->enemytypedamage;
 			enemystats->EnemyCD = 2.0f;				//Cooldown till next enemy attack
 			enemystats->DebuffCounter = 0;
-			enemystats->EnemyXP = 65 + (10 * enemystats->EnemyLevel);
+			enemystats->EnemyXP = 65 + (20 * enemystats->EnemyLevel);
 		}
 
 		//Main Update loop for Idle and Attack States of Enemy
