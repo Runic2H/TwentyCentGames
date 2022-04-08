@@ -6,7 +6,7 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
-#include <fmod.hpp>		//JN: new code
+#include <fmod.hpp>
 #include <windowsx.h>
 #include "AEEngine.h"
 #include "Systems.hpp"
@@ -22,7 +22,7 @@
 #include "gameover.hpp"
 #include "LevelUp.hpp"
 #include "victoryscreen.hpp"
-#include "AudioManager.h"	//JN: new code
+#include "AudioManager.h"
 
 
 #define GRID_NUM 5;

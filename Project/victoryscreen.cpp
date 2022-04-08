@@ -25,14 +25,18 @@ void victory_load() {
 }
 
 void victory_init() {
-	Audio_Init();
+	stop_Audio();	//JN: new code
 	win_screen_background_Audio();
 }
 
 void victory_update() {
 	Audio_Update();
-	increase_master_fader();
-	decrease_master_fader();
+	increase_bgm_fader();	//JN: new code
+	decrease_bgm_fader();	//JN: new code
+	increase_sfx_fader();	//JN: new code
+	decrease_sfx_fader();	//JN: new code
+	mute_master_fader();	//JN: new code
+	unmute_master_fader();	//JN: new code
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
 		next = GS_QUIT;
@@ -97,6 +101,4 @@ void victory_free() {
 void victory_unload() {
 	AEGfxTextureUnload(coffeebutton->pTexture);
 	delete coffeebutton;
-
-	Audio_Unload();
 }
