@@ -27,21 +27,32 @@ AEGfxTexture* fire_turtle;
 AEGfxTexture* frost_turtle;
 AEGfxTexture* tutorial_tab_map;
 AEGfxTexture* tutorial_potions;
+AEGfxTexture* ducktitle;
+AEGfxTexture* fightingduck;
+
+/*
+	sprintf_s(strBufferStatus, "Status: Frosted");
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.65f, 1.0f, 0.0f, 0.7f, 0.9f);
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+*/
 
 void page_one_code()
 {
 	char strBuffer[1000];
 
-	// PAGE 1 
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(strBuffer, "Welcome to Project D.U.C.K!");
-	AEGfxPrint(fontLarge, strBuffer, -0.55f, 0.20f, 0.50f, 1.f, 1.f, 1.f);
+	meshfree();
+	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth()*2 / 4, (float)AEGetWindowHeight()); //drawing ducktitle
+	DrawingTextureOnMesh(Mesh_maze_overview, ducktitle, 0.0f, 30.0f); 
 
-	//sprintf_s(strBuffer, "Hello! I am sergeant Ducky and it is my job to prepare you for battle!");
-	//AEGfxPrint(fontId, strBuffer, -0.20f, 0.10f, 1.0f, 1.f, 1.f, 1.f);
+	meshfree();
+	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth() / 3, (float)AEGetWindowHeight() / 3); //drawing fighting duck
+	DrawingTextureOnMesh(Mesh_maze_overview, fightingduck, -220.0f, 20.0f);
 
-	//sprintf_s(strBuffer, "Look over there, that's the enemy. Turtle! They think they are so cute. We'll show them");
-	//AEGfxPrint(fontId, strBuffer, -0.20f, 0.10f, 1.0f, 1.f, 1.f, 1.f);
+	meshfree();
+	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth() / 3, (float)AEGetWindowHeight() / 3); //drawing angry turtle
+	DrawingTextureOnMesh(Mesh_maze_overview, normal_turtle, 220.0f, 20.0f);
 
 	//drawing next page button boxes (right)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -51,27 +62,19 @@ void page_one_code()
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
 	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
 
+
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	sprintf_s(strBuffer, "Press D for next page");
 	AEGfxPrint(fontId, strBuffer, 0.465f, -0.65f, 1.0f, 1.f, 1.f, 1.f);
+	
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 
 }
 
 void page_two_code()
 {
 	char strBuffer[1000];
-
-	sprintf_s(strBuffer, "Explore");
-	AEGfxPrint(fontLarge, strBuffer, -0.55f, 0.40f, 0.50f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "Navigate the maze and battle enemies");
-	AEGfxPrint(fontId, strBuffer, -0.65f, 0.20f, 1.0f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "Movement");
-	AEGfxPrint(fontLarge, strBuffer, 0.15f, 0.40f, 0.50f, 1.f, 1.f, 1.f);
-
-	//sprintf_s(strBuffer, "Move through the maze using the WASD keys.");
-	//AEGfxPrint(fontId, strBuffer, 0.08f, 0.30f, 1.0f, 1.f, 1.f, 1.f);
 
 	//draw W
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -80,11 +83,7 @@ void page_two_code()
 	AEGfxTextureSet(NULL, 0, 0); // No texture for object
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
 	AEGfxMeshDraw(button_box, AE_GFX_MDM_LINES_STRIP);
-
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(strBuffer, "W");
-	AEGfxPrint(fontId, strBuffer, 0.36f, 0.045f, 1.0f, 1.f, 1.f, 1.f);
-
+	
 	//draw A
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -92,11 +91,7 @@ void page_two_code()
 	AEGfxTextureSet(NULL, 0, 0); // No texture for object
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
 	AEGfxMeshDraw(button_box, AE_GFX_MDM_LINES_STRIP);
-
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(strBuffer, "A");
-	AEGfxPrint(fontId, strBuffer, 0.24f, -0.13f, 1.0f, 1.f, 1.f, 1.f);
-
+	
 	//draw S
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -104,11 +99,6 @@ void page_two_code()
 	AEGfxTextureSet(NULL, 0, 0); // No texture for object
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
 	AEGfxMeshDraw(button_box, AE_GFX_MDM_LINES_STRIP);
-
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(strBuffer, "S");
-	AEGfxPrint(fontId, strBuffer, 0.365f, -0.13f, 1.0f, 1.f, 1.f, 1.f);
-
 
 	//draw D
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -118,10 +108,49 @@ void page_two_code()
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
 	AEGfxMeshDraw(button_box, AE_GFX_MDM_LINES_STRIP);
 
+	//drawing next page button boxes (right)
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetPosition((float)(AEGetWindowHeight() * 0.475), (float)-(AEGetWindowHeight() * 21 / 60));
+	AEGfxTextureSet(NULL, 0, 0); // No texture for object
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
+	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
+
+	meshfree();
+	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth() * 5 / 9, (float)AEGetWindowHeight() * 5 / 9);
+	DrawingTextureOnMesh(Mesh_maze_overview, maze_screenshot, -160.0f, -60.0f); //drawing maze screenshot
+
+	//drawing previous page box (left)
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetPosition(-(float)(AEGetWindowHeight() * 0.335), (float)-(AEGetWindowHeight() * 21 / 60));
+	AEGfxTextureSet(NULL, 0, 0); // No texture for object
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
+	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
+	
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	
+	sprintf_s(strBuffer, "Explore");
+	AEGfxPrint(fontLarge, strBuffer, -0.55f, 0.40f, 0.50f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Navigate the maze and battle enemies");
+	AEGfxPrint(fontId, strBuffer, -0.65f, 0.20f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Movement");
+	AEGfxPrint(fontLarge, strBuffer, 0.18f, 0.40f, 0.50f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "W");
+	AEGfxPrint(fontId, strBuffer, 0.36f, 0.045f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "A");
+	AEGfxPrint(fontId, strBuffer, 0.24f, -0.13f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "S");
+	AEGfxPrint(fontId, strBuffer, 0.365f, -0.13f, 1.0f, 1.f, 1.f, 1.f);
+
 	sprintf_s(strBuffer, "D");
 	AEGfxPrint(fontId, strBuffer, 0.490f, -0.13f, 1.0f, 1.f, 1.f, 1.f);
-
 
 	sprintf_s(strBuffer, "Move Up");
 	AEGfxPrint(fontId, strBuffer, 0.32f, 0.20f, 1.0f, 1.f, 1.f, 1.f); // "move up" text
@@ -135,61 +164,18 @@ void page_two_code()
 	sprintf_s(strBuffer, "Attack");
 	AEGfxPrint(fontId, strBuffer, 0.60f, -0.13f, 1.0f, 1.f, 1.f, 1.f); // "move right" text
 
-	//drawing next page button boxes (right)
-	AEGfxSetBlendMode(AE_GFX_BM_NONE);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition((float)(AEGetWindowHeight() * 0.475), (float)-(AEGetWindowHeight() * 21 / 60));
-	AEGfxTextureSet(NULL, 0, 0); // No texture for object
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
-	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
-
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	sprintf_s(strBuffer, "Press D for next page");
 	AEGfxPrint(fontId, strBuffer, 0.465f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
 
-	meshfree();
-	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth() * 5 / 9, (float)AEGetWindowHeight() * 5 / 9);
-	DrawingTextureOnMesh(Mesh_maze_overview, maze_screenshot, -160.0f, -60.0f); //drawing maze screenshot
-
-	//drawing previous page box (left)
-	AEGfxSetBlendMode(AE_GFX_BM_NONE);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition(-(float)(AEGetWindowHeight() * 0.335), (float)-(AEGetWindowHeight() * 21 / 60));
-	AEGfxTextureSet(NULL, 0, 0); // No texture for object
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
-	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
-
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	sprintf_s(strBuffer, "Press A for last page");
 	AEGfxPrint(fontId, strBuffer, -0.745f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
+	
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 }
 
 void page_three_code()
 {
 	char strBuffer[1000];
-	sprintf_s(strBuffer, "Objective");
-	AEGfxPrint(fontLarge, strBuffer, -0.58f, 0.45f, 0.50f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "Chests");
-	AEGfxPrint(fontLarge, strBuffer, 0.20f, 0.45f, 0.50f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "Find the exit of the maze to escape!");
-	AEGfxPrint(fontId, strBuffer, -0.65f, 0.31f, 1.f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "Find chests to get items that can help you");
-	AEGfxPrint(fontId, strBuffer, 0.05f, 0.31f, 1.0f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "Defence");
-	AEGfxPrint(fontId, strBuffer, 0.05f, -0.15f, 1.0f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "Health");
-	AEGfxPrint(fontId, strBuffer, 0.28f, -0.15f, 1.0f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "Stamina");
-	AEGfxPrint(fontId, strBuffer, 0.485f, -0.15f, 1.0f, 1.f, 1.f, 1.f);
-
-	//sprintf_s(strBuffer, "At any point you may run into an enemy, the turtles!");
-	//AEGfxPrint(fontId, strBuffer, 0.0f, -0.30f, 1.0f, 1.f, 1.f, 1.f);
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 9, (float)AEGetWindowHeight() * 5 / 9);
@@ -220,10 +206,6 @@ void page_three_code()
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
 	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
 
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(strBuffer, "Press D for next page");
-	AEGfxPrint(fontId, strBuffer, 0.465f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
-
 	//drawing previous page box (left)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -233,26 +215,48 @@ void page_three_code()
 	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
 
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
+	sprintf_s(strBuffer, "Objective");
+	AEGfxPrint(fontLarge, strBuffer, -0.58f, 0.45f, 0.50f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Chests");
+	AEGfxPrint(fontLarge, strBuffer, 0.20f, 0.45f, 0.50f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Find the exit of the maze to escape!");
+	AEGfxPrint(fontId, strBuffer, -0.65f, 0.31f, 1.f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Find chests to get items that can help you");
+	AEGfxPrint(fontId, strBuffer, 0.05f, 0.31f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Defence");
+	AEGfxPrint(fontId, strBuffer, 0.05f, -0.15f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Health");
+	AEGfxPrint(fontId, strBuffer, 0.28f, -0.15f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Stamina");
+	AEGfxPrint(fontId, strBuffer, 0.485f, -0.15f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Press D for next page");
+	AEGfxPrint(fontId, strBuffer, 0.465f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
+
 	sprintf_s(strBuffer, "Press A for last page");
 	AEGfxPrint(fontId, strBuffer, -0.745f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
+	
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 }
 
 void page_four_code()
 {
 	char strBuffer[1000];
 
-	sprintf_s(strBuffer, "Inventory Tab");
-	AEGfxPrint(fontLarge, strBuffer, -0.25f, 0.50f, 0.50f, 1.f, 1.f, 1.f);
-
-	sprintf_s(strBuffer, "Hold tab to access the minimap and your item inventory");
-	AEGfxPrint(fontId, strBuffer, -0.35f, 0.40f, 1.0f, 1.f, 1.f, 1.f);
-
 	meshfree();
-	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 0.9f, (float)AEGetWindowWidth() * 0.9f);
+	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 0.9f, (float)AEGetWindowWidth() * 0.9f); //drawing tutorial tab map
 	DrawingTextureOnMesh(Mesh_maze_overview, tutorial_tab_map, 80.0f, -40.0f);
 
 	meshfree();
-	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth() * 0.7f, (float)AEGetWindowHeight() * 0.7f);
+	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth() * 0.7f, (float)AEGetWindowHeight() * 0.7f); //drawing tutorial potions
 	DrawingTextureOnMesh(Mesh_maze_overview, tutorial_potions, -200.0f, -40.0f);
 
 	//drawing next page button boxes (right)
@@ -263,10 +267,6 @@ void page_four_code()
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
 	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
 
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(strBuffer, "Press D for next page");
-	AEGfxPrint(fontId, strBuffer, 0.465f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
-
 	//drawing previous page box (left)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -276,20 +276,52 @@ void page_four_code()
 	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
 
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
+	sprintf_s(strBuffer, "Inventory Tab");
+	AEGfxPrint(fontLarge, strBuffer, -0.25f, 0.50f, 0.50f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Hold tab to access the minimap and your item inventory");
+	AEGfxPrint(fontId, strBuffer, -0.35f, 0.40f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Press D for next page");
+	AEGfxPrint(fontId, strBuffer, 0.465f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
+
 	sprintf_s(strBuffer, "Press A for last page");
 	AEGfxPrint(fontId, strBuffer, -0.745f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
+	
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 }
 
 void page_five_code()
 {
 	char strBuffer[1000];
 
-	sprintf_s(strBuffer, "Combat");
-	AEGfxPrint(fontLarge, strBuffer, -0.17f, 0.45f, 0.50f, 1.f, 1.f, 1.f);
-
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight(), (float)AEGetWindowWidth() * 1.35f);
 	DrawingTextureOnMesh(Mesh_maze_overview, tutorialcombat1, 18.0f, -20.0f); //Drawing tutorial combat Image
+
+	//drawing button boxes (right)
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetPosition((float)(AEGetWindowHeight() * 0.475), (float)-(AEGetWindowHeight() * 21 / 60));
+	AEGfxTextureSet(NULL, 0, 0); // No texture for object
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
+	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
+
+	//drawing button boxes (left)
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetPosition(-(float)(AEGetWindowHeight() * 0.335), (float)-(AEGetWindowHeight() * 21 / 60));
+	AEGfxTextureSet(NULL, 0, 0); // No texture for object
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
+	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
+	
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
+	sprintf_s(strBuffer, "Combat");
+	AEGfxPrint(fontLarge, strBuffer, -0.17f, 0.45f, 0.50f, 1.f, 1.f, 1.f);
 
 	sprintf_s(strBuffer, "Move up, down or left to avoid attacks!");
 	AEGfxPrint(fontId, strBuffer, 0.0f, 0.20f, 1.0f, 1.f, 1.f, 1.f);
@@ -309,41 +341,22 @@ void page_five_code()
 	sprintf_s(strBuffer, "D");
 	AEGfxPrint(fontLarge, strBuffer, -0.06f, 0.0f, 0.40f, 1.f, 1.f, 1.f);
 
-	//drawing button boxes (right)
-	AEGfxSetBlendMode(AE_GFX_BM_NONE);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition((float)(AEGetWindowHeight() * 0.475), (float)-(AEGetWindowHeight() * 21 / 60));
-	AEGfxTextureSet(NULL, 0, 0); // No texture for object
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
-	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
-
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	sprintf_s(strBuffer, "Press D for next page");
 	AEGfxPrint(fontId, strBuffer, 0.465f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
 
-	//drawing button boxes (left)
-	AEGfxSetBlendMode(AE_GFX_BM_NONE);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition(-(float)(AEGetWindowHeight() * 0.335), (float)-(AEGetWindowHeight() * 21 / 60));
-	AEGfxTextureSet(NULL, 0, 0); // No texture for object
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
-	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
-
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	sprintf_s(strBuffer, "Press A for last page");
 	AEGfxPrint(fontId, strBuffer, -0.745f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
+
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 }
 
 void page_six_code()
 {
 	char strBuffer[1000];
 
-	sprintf_s(strBuffer, "Time you movement to move into the unlit grid to avoid getting hit.");
-	AEGfxPrint(fontId, strBuffer, -0.45f, 0.50f, 1.0f, 1.f, 1.f, 1.f);
-
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight(), (float)AEGetWindowWidth());
-	DrawingTextureOnMesh(Mesh_maze_overview, dodging_attack, 0.0f, -20.0f);
+	DrawingTextureOnMesh(Mesh_maze_overview, dodging_attack, 0.0f, -20.0f); //drawing dodging attacks image
 
 	//drawing button boxes (right)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -353,9 +366,51 @@ void page_six_code()
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
 	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
 
+	//drawing button boxes (left)
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetPosition(-(float)(AEGetWindowHeight() * 0.335), (float)-(AEGetWindowHeight() * 21 / 60));
+	AEGfxTextureSet(NULL, 0, 0); // No texture for object
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
+	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
+
+	
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
+	sprintf_s(strBuffer, "Time you movement to move into the unlit grid to avoid getting hit!");
+	AEGfxPrint(fontLarge, strBuffer, -0.75f, 0.50f, 0.3f, 1.f, 1.f, 1.f);
+
 	sprintf_s(strBuffer, "Press D for next page");
 	AEGfxPrint(fontId, strBuffer, 0.465f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Press A for last page");
+	AEGfxPrint(fontId, strBuffer, -0.745f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
+
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+}
+
+void page_seven_code()
+{
+	char strBuffer[1000];
+
+	meshfree();
+	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18); //drawing stamina potion
+	DrawingTextureOnMesh(Mesh_maze_overview, stamina_potion, 180.0f, 80.0f); 
+
+	meshfree();
+	//create mesh using height * height to get square shape
+	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18); //drawing angry turtle
+	DrawingTextureOnMesh(Mesh_maze_overview, normal_turtle, -210.0f, 80.0f);
+
+	meshfree();
+	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18); // drawing fire turtle
+	DrawingTextureOnMesh(Mesh_maze_overview, fire_turtle, -210.0f, -10.0f);
+
+	meshfree();
+	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18); // drawing from turtle
+	DrawingTextureOnMesh(Mesh_maze_overview, frost_turtle, -210.0f, -100.0f);
+	meshfree();
 
 	//drawing button boxes (left)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -366,13 +421,7 @@ void page_six_code()
 	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
 
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(strBuffer, "Press A for last page");
-	AEGfxPrint(fontId, strBuffer, -0.745f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
-}
-
-void page_seven_code()
-{
-	char strBuffer[1000];
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 
 	sprintf_s(strBuffer, "Enemies");
 	AEGfxPrint(fontLarge, strBuffer, -0.50f, 0.50f, 0.45f, 1.f, 1.f, 1.f);
@@ -385,24 +434,6 @@ void page_seven_code()
 
 	sprintf_s(strBuffer, "so move wisely!");
 	AEGfxPrint(fontId, strBuffer, 0.35f, 0.0f, 1.f, 1.0f, 1.0f, 1.0f);
-
-	meshfree();
-	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18);
-	DrawingTextureOnMesh(Mesh_maze_overview, stamina_potion, 180.0f, 80.0f);
-
-	meshfree();
-	//create mesh using height * height to get square shape
-	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18);
-	DrawingTextureOnMesh(Mesh_maze_overview, normal_turtle, -210.0f, 80.0f);
-
-	meshfree();
-	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18);
-	DrawingTextureOnMesh(Mesh_maze_overview, fire_turtle, -210.0f, -10.0f);
-
-	meshfree();
-	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18);
-	DrawingTextureOnMesh(Mesh_maze_overview, frost_turtle, -210.0f, -100.0f);
-	meshfree();
 
 	sprintf_s(strBuffer, "Normal Turtle");
 	AEGfxPrint(fontLarge, strBuffer, -0.35f, 0.28f, .25f, 0.0f, 1.0f, 0.0f);
@@ -431,17 +462,10 @@ void page_seven_code()
 	sprintf_s(strBuffer, "for the next few seconds");
 	AEGfxPrint(fontId, strBuffer, -0.35f, -0.45f, 1.f, 1.0f, 1.0f, 1.0f);
 
-	//drawing button boxes (left)
-	AEGfxSetBlendMode(AE_GFX_BM_NONE);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition(-(float)(AEGetWindowHeight() * 0.335), (float)-(AEGetWindowHeight() * 21 / 60));
-	AEGfxTextureSet(NULL, 0, 0); // No texture for object
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
-	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
-
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	sprintf_s(strBuffer, "Press A for last page");
 	AEGfxPrint(fontId, strBuffer, -0.745f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
+
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 }
 
 void CreatingMazeOverview(AEGfxVertexList*& pMesh_MainCharacter, float cell_height, float cell_width)
@@ -567,6 +591,12 @@ void Tutorial_Load()
 	//AEGfxVertexAdd(0, 299, 0x00FF00FF, 0.0f, 0.0f);
 	//AEGfxVertexAdd(0, -299, 0x00FFFF00, 0.0f, 0.0f);
 	//line = AEGfxMeshEnd();
+
+	ducktitle = AEGfxTextureLoad("Images/ducktitle.png");
+	AE_ASSERT_MESG(ducktitle, "Failed to create MazeOverview texture!\n");
+
+	fightingduck = AEGfxTextureLoad("Images/Fighting duck.png");
+	AE_ASSERT_MESG(fightingduck, "Failed to create MazeOverview texture!\n");
 
 	maze_screenshot = AEGfxTextureLoad("Images/maze_screenshot.png");
 	AE_ASSERT_MESG(maze_screenshot, "Failed to create MazeOverview texture!\n");
@@ -708,13 +738,17 @@ void Tutorial_Free()
 	AEGfxMeshFree(fake_window_box);
 	AEGfxMeshFree(button_box);
 	AEGfxMeshFree(large_button_box);
-	AEGfxMeshFree(Mesh_maze_overview);
+	if (Mesh_maze_overview != nullptr) {
+		AEGfxMeshFree(Mesh_maze_overview);
+		Mesh_maze_overview = nullptr;
+	}
 }
 
 void Tutorial_Unload()
 {
 	Audio_Unload();	//JN: new code
 	std::cout << "Tutorial:Unload" << std::endl;
+	AEGfxTextureUnload(ducktitle);
 	AEGfxTextureUnload(maze_screenshot);
 	AEGfxTextureUnload(Whirlpool);
 	AEGfxTextureUnload(dodging_attack);
@@ -728,4 +762,5 @@ void Tutorial_Unload()
 	AEGfxTextureUnload(frost_turtle);
 	AEGfxTextureUnload(tutorial_tab_map);
 	AEGfxTextureUnload(tutorial_potions);
+	AEGfxTextureUnload(fightingduck);
 }
