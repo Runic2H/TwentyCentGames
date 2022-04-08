@@ -12,6 +12,9 @@ item* menubutton;
 item* exitbutton;
 item* resumebutton;
 item* pausebackground;
+item* optionbutton;
+item* mutebutton;
+item* fullscreenbutton;
 
 
 void initialise_pausemenu() {
@@ -20,6 +23,7 @@ void initialise_pausemenu() {
 	exitbutton = new item;
 	resumebutton = new item;
 	pausebackground = new item;
+	optionbutton = new item;
 
 
 	AEGfxMeshStart();
@@ -36,6 +40,7 @@ void initialise_pausemenu() {
 		= menubutton->pMesh
 		= exitbutton->pMesh
 		= resumebutton->pMesh
+		= optionbutton->pMesh
 		= AEGfxMeshEnd();
 	AE_ASSERT_MESG(menubutton->pMesh, "Failed to create pause meshes!!\n");
 
@@ -43,16 +48,38 @@ void initialise_pausemenu() {
 	menubutton->pTexture = AEGfxTextureLoad("Images/mainmenubutton.png");
 	resumebutton->pTexture = AEGfxTextureLoad("Images/resumebutton.png");
 	exitbutton->pTexture = AEGfxTextureLoad("Images/exitbutton.png");
+	optionbutton->pTexture = AEGfxTextureLoad("Images/optionbutton.png");
 }
 
+void initialise_optionmenu()
+{
+	mutebutton = new item;
+	fullscreenbutton = new item;
 
-void logicpausemenu() {
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 
-	if (AEInputCheckTriggered(AEVK_Q)) {
-		next = GS_QUIT;
-	}
+	pausebackground->pMesh
+		= mutebutton->pMesh
+		= fullscreenbutton->pMesh
+		= AEGfxMeshEnd();
 
-	menubutton->itemcounter = resumebutton->itemcounter = exitbutton->itemcounter = 0.5f;
+	AE_ASSERT_MESG(mutebutton->pMesh, "Failed to create pause meshes!!\n");
+
+	fullscreenbutton->pTexture = AEGfxTextureLoad("Images/mainmenubutton.png");
+	mutebutton->pTexture = AEGfxTextureLoad("Images/resumebutton.png");
+}
+
+void logicoptionmenu()
+{
+	fullscreenbutton->itemcounter = mutebutton->itemcounter = 0.5f;
 	AEMtx33 scale, rot, trans, buffer;
 
 	AEInputGetCursorPosition(&cursorx, &cursory);
@@ -61,79 +88,59 @@ void logicpausemenu() {
 	AEMtx33Rot(&rot, 0.0f);
 	AEMtx33Concat(&buffer, &scale, &rot);
 
-	AEMtx33Trans(&trans, -250.0f, -100.0f);
-	AEMtx33Concat(&menubutton->transform, &trans, &buffer);
+	AEMtx33Trans(&trans, 0.0f, 0.0f);
+	AEMtx33Concat(&fullscreenbutton->transform, &trans, &buffer);
 
 	AEMtx33Trans(&trans, 0.0f, -100.0f);
-	AEMtx33Concat(&resumebutton->transform, &trans, &buffer);
-
-	AEMtx33Trans(&trans, 250.0f, -100.0f);
-	AEMtx33Concat(&exitbutton->transform, &trans, &buffer);
+	AEMtx33Concat(&mutebutton->transform, &trans, &buffer);
 
 	AEMtx33Scale(&scale, 1000.0f, 1000.0f);
 	AEMtx33Concat(&buffer, &scale, &rot);
 	AEMtx33Trans(&trans, 0.0f, 0.0f);
 	AEMtx33Concat(&pausebackground->transform, &trans, &buffer);
 
-
-	if (cursorx >= 76 && cursorx <= 224 && cursory >= 375 && cursory <= 420) {
-		menubutton->itemcounter = 1.0f;
-		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-			systemsettings.paused = 0;
-			player_initialise();
-			enemy_initialise();
-			next = MENU;
+	if (cursorx >= 326 && cursorx <= 474 && cursory >= 275 && cursory <= 320) {
+		fullscreenbutton->itemcounter = 1.0f;
+		if (AEInputCheckTriggered(AEVK_LBUTTON)) 
+		{
+			systemsettings.fullscreen == 1 ? systemsettings.fullscreen = 0 : systemsettings.fullscreen = 1;
+			AEToogleFullScreen(systemsettings.fullscreen);
 		}
 	}
 
 	if (cursorx >= 326 && cursorx <= 474 && cursory >= 375 && cursory <= 420) {
-		resumebutton->itemcounter = 1.0f;
-		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-			systemsettings.paused = 0;
+		mutebutton->itemcounter = 1.0f;
+		if (AEInputCheckTriggered(AEVK_LBUTTON)) 
+		{
+			std::cout << "Sound Muted" << std::endl;
 		}
 	}
 
-	if (cursorx >= 577 && cursorx <= 726 && cursory >= 375 && cursory <= 420) {
-		exitbutton->itemcounter = 1.0f;
-		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-			systemsettings.paused = 0;
-			next = GS_QUIT;
-		}
-	}
-
-	if (AEInputCheckTriggered(AEVK_F11)) {
-		systemsettings.fullscreen == 1 ? systemsettings.fullscreen = 0 : systemsettings.fullscreen = 1;
-		AEToogleFullScreen(systemsettings.fullscreen);
+	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
+		systemsettings.options == 1 ? systemsettings.options = 0 : systemsettings.options = 1;
 	}
 }
 
-void renderpausemenu() {
-
-	// draw my buttons and meshes
+void renderoptionmenu()
+{
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-
 
 	AEGfxSetTransform(pausebackground->transform.m);
 	AEGfxSetTransparency(0.28f);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxMeshDraw(pausebackground->pMesh, AE_GFX_MDM_TRIANGLES);
-	
-	AEGfxSetTransform(menubutton->transform.m);
-	AEGfxSetTransparency(menubutton->itemcounter);
-	AEGfxTextureSet(menubutton->pTexture, 0, 0);
-	AEGfxMeshDraw(menubutton->pMesh, AE_GFX_MDM_TRIANGLES);
 
-	AEGfxSetTransform(resumebutton->transform.m);
-	AEGfxSetTransparency(resumebutton->itemcounter);
-	AEGfxTextureSet(resumebutton->pTexture, 0, 0);
-	AEGfxMeshDraw(resumebutton->pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTransform(fullscreenbutton->transform.m);
+	AEGfxSetTransparency(fullscreenbutton->itemcounter);
+	AEGfxTextureSet(fullscreenbutton->pTexture, 0, 0);
+	AEGfxMeshDraw(fullscreenbutton->pMesh, AE_GFX_MDM_TRIANGLES);
 
-	AEGfxSetTransform(exitbutton->transform.m);
-	AEGfxSetTransparency(exitbutton->itemcounter);
-	AEGfxTextureSet(exitbutton->pTexture, 0, 0);
-	AEGfxMeshDraw(exitbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTransform(mutebutton->transform.m);
+	AEGfxSetTransparency(mutebutton->itemcounter);
+	AEGfxTextureSet(mutebutton->pTexture, 0, 0);
+	AEGfxMeshDraw(mutebutton->pMesh, AE_GFX_MDM_TRIANGLES);
 
 	char strBuffer[35];
 
@@ -142,12 +149,144 @@ void renderpausemenu() {
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetTransparency(1.0f);
 
-	sprintf_s(strBuffer, "PAUSED");
-	AEGfxPrint(fontId, strBuffer, -0.12f, 0.35f, 2.0f, 1.0f, 0.0f, 0.0f);
+	sprintf_s(strBuffer, "OPTIONS");
+	AEGfxPrint(fontLarge, strBuffer, -0.34f, 0.35f, 1.0f, 1.0f, 0.0f, 0.0f);
 
-	sprintf_s(strBuffer, "Press F11 to toggle fullscreen!");
-	AEGfxPrint(fontId, strBuffer, -0.23f, 0.3f, 1.14f, 0.5f, 0.5f, 0.5f);
-	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	sprintf_s(strBuffer, "Press [esc] to exit");
+	AEGfxPrint(fontLarge, strBuffer, -0.16f, 0.25f, 0.25f, 1.0f, 0.0f, 0.0f);
+}
+
+void logicpausemenu() {
+
+	//if (AEInputCheckTriggered(AEVK_Q)) {
+	//	next = GS_QUIT;
+	//}
+
+	menubutton->itemcounter = resumebutton->itemcounter = optionbutton->itemcounter = exitbutton->itemcounter = 0.5f;
+	AEMtx33 scale, rot, trans, buffer;
+
+	AEInputGetCursorPosition(&cursorx, &cursory);
+
+	AEMtx33Scale(&scale, 150.0f, 50.0f);
+	AEMtx33Rot(&rot, 0.0f);
+	AEMtx33Concat(&buffer, &scale, &rot);
+
+	AEMtx33Trans(&trans, -250.0f, 0.0f);
+	AEMtx33Concat(&resumebutton->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, 0.0f, 0.0f);
+	AEMtx33Concat(&optionbutton->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, 0.0f, -100.0f);
+	AEMtx33Concat(&exitbutton->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, 250.0f, 0.0f);
+	AEMtx33Concat(&menubutton->transform, &trans, &buffer);
+
+	AEMtx33Scale(&scale, 1000.0f, 1000.0f);
+	AEMtx33Concat(&buffer, &scale, &rot);
+	AEMtx33Trans(&trans, 0.0f, 0.0f);
+	AEMtx33Concat(&pausebackground->transform, &trans, &buffer);
+
+	if (systemsettings.options == 0)
+	{
+		if (cursorx >= 76 && cursorx <= 224 && cursory >= 275 && cursory <= 320) {
+			resumebutton->itemcounter = 1.0f;
+			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+				systemsettings.paused = 0;
+			}
+		}
+
+		if (cursorx >= 326 && cursorx <= 474 && cursory >= 275 && cursory <= 320) {
+			optionbutton->itemcounter = 1.0f;
+			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+				systemsettings.options == 0 ? systemsettings.options = 1 : systemsettings.options = 0;
+			}
+		}
+
+		if (cursorx >= 326 && cursorx <= 474 && cursory >= 375 && cursory <= 420) {
+			exitbutton->itemcounter = 1.0f;
+			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+				systemsettings.paused = 0;
+				next = GS_QUIT;
+			}
+		}
+
+		if (cursorx >= 577 && cursorx <= 726 && cursory >= 275 && cursory <= 320) {
+			menubutton->itemcounter = 1.0f;
+			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+				systemsettings.paused = 0;
+				player_initialise();
+				enemy_initialise();
+				next = MENU;
+			}
+		}
+	}
+	else
+	{
+		logicoptionmenu();
+	}
+
+	//if (AEInputCheckTriggered(AEVK_F11)) {
+	//	systemsettings.fullscreen == 1 ? systemsettings.fullscreen = 0 : systemsettings.fullscreen = 1;
+	//	AEToogleFullScreen(systemsettings.fullscreen);
+	//}
+}
+
+void renderpausemenu() {
+
+	if (systemsettings.options == 0)
+	{
+		// draw my buttons and meshes
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+
+		AEGfxSetTransform(pausebackground->transform.m);
+		AEGfxSetTransparency(0.28f);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxMeshDraw(pausebackground->pMesh, AE_GFX_MDM_TRIANGLES);
+	
+		AEGfxSetTransform(menubutton->transform.m);
+		AEGfxSetTransparency(menubutton->itemcounter);
+		AEGfxTextureSet(menubutton->pTexture, 0, 0);
+		AEGfxMeshDraw(menubutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetTransform(resumebutton->transform.m);
+		AEGfxSetTransparency(resumebutton->itemcounter);
+		AEGfxTextureSet(resumebutton->pTexture, 0, 0);
+		AEGfxMeshDraw(resumebutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetTransform(exitbutton->transform.m);
+		AEGfxSetTransparency(exitbutton->itemcounter);
+		AEGfxTextureSet(exitbutton->pTexture, 0, 0);
+		AEGfxMeshDraw(exitbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetTransform(optionbutton->transform.m);
+		AEGfxSetTransparency(optionbutton->itemcounter);
+		AEGfxTextureSet(optionbutton->pTexture, 0, 0);
+		AEGfxMeshDraw(optionbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+
+		char strBuffer[35];
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetTransparency(1.0f);
+
+		sprintf_s(strBuffer, "PAUSED");
+		AEGfxPrint(fontLarge, strBuffer, -0.30f, 0.35f, 1.0f, 1.0f, 0.0f, 0.0f);
+	}
+	else
+	{
+		renderoptionmenu();
+	}
+
+
+	//sprintf_s(strBuffer, "Press F11 to toggle fullscreen!");
+	//AEGfxPrint(fontId, strBuffer, -0.23f, 0.3f, 1.14f, 0.5f, 0.5f, 0.5f);
+	//AEGfxSetBlendMode(AE_GFX_BM_NONE);
 }
 
 void unloadpausemenu() {
@@ -155,6 +294,14 @@ void unloadpausemenu() {
 	if (menubutton->pMesh != nullptr) {
 		AEGfxMeshFree(menubutton->pMesh);			// 1 MESH FREES ALL 3 MESHES
 		menubutton->pMesh = nullptr;
+	}
+}
+
+void unloadoptionmenu() {
+
+	if (mutebutton->pMesh != nullptr) {
+		AEGfxMeshFree(mutebutton->pMesh);			// 1 MESH FREES ALL 3 MESHES
+		mutebutton->pMesh = nullptr;
 	}
 }
 
@@ -301,8 +448,10 @@ void System_Initialise() {
 ******************************************************************/
 	fontId = AEGfxCreateFont("Roboto-Regular.ttf", 12);
 	fontLarge = AEGfxCreateFont("Roboto-Regular.ttf", 67);
-	systemsettings.fullscreen = 0;
+	systemsettings.fullscreen = 1;
 	systemsettings.paused = 0;
+	systemsettings.mute = 0;
+	systemsettings.options = 0;
 	systemsettings.digipenTimer = 3.0f;
 
 
@@ -319,11 +468,13 @@ void System_Initialise() {
 	enemy_initialise();
 
 	initialise_pausemenu();
+	initialise_optionmenu();
 }
 
 
 void System_Exit() {
 	unloadpausemenu();
+	unloadoptionmenu();
 	AEGfxDestroyFont(fontId);
 	AEGfxDestroyFont(fontLarge);
 	AEGfxTextureUnload(playerinventory->defencepotion.pTexture);
@@ -332,6 +483,9 @@ void System_Exit() {
 	AEGfxTextureUnload(menubutton->pTexture);
 	AEGfxTextureUnload(exitbutton->pTexture);
 	AEGfxTextureUnload(resumebutton->pTexture);
+	AEGfxTextureUnload(optionbutton->pTexture);
+	AEGfxTextureUnload(fullscreenbutton->pTexture);
+	AEGfxTextureUnload(mutebutton->pTexture);
 	AEGfxMeshFree(playerinventory->defencepotion.pMesh);
 	delete playerstats;
 	delete enemystats;
@@ -340,4 +494,7 @@ void System_Exit() {
 	delete exitbutton;
 	delete resumebutton;
 	delete pausebackground;
+	delete optionbutton;
+	delete mutebutton;
+	delete fullscreenbutton;
 }

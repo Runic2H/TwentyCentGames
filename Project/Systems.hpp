@@ -10,6 +10,8 @@ typedef struct sys
 {
 	int fullscreen;
 	int paused;
+	int mute;
+	int options;
 	float digipenTimer;
 } sys;
 

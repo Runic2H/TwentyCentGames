@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iomanip>
 #include <fmod.hpp>		//JN: new code
+#include <windowsx.h>
 #include "AEEngine.h"
 #include "Systems.hpp"
 #include "Input.hpp"
@@ -42,11 +43,16 @@ extern player_statsheet* playerstats;
 extern enemy_statsheet* enemystats;
 extern inv* playerinventory;
 extern sys systemsettings;
+extern bool is_focused;
 
 void initialise_pausemenu();
 void logicpausemenu();
 void renderpausemenu();
 void unloadpausemenu();
+void initialise_optionmenu();
+void logicoptionmenu();
+void renderoptionmenu();
+void unloadoptionmenu();
 void player_initialise();
 void enemy_initialise();
 

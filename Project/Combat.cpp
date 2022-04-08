@@ -189,7 +189,7 @@ void Combat_Draw()
 	GridCheck(enemystats->is_attacking, enemystats->AttackCD, playerstats->SAFEGRID);
 	playerrender(playertexture, Character::PlayerMesh);
 
-	if (enemystats->AttackCD <= 0.40f)
+	if (enemystats->AttackCD <= 0.60f)
 	{
 		RenderEnemyGrid(EnemyGridAttack);
 	}
@@ -202,9 +202,14 @@ void Combat_Draw()
 	{
 		RenderEnemy(enemytexturefire, EnemyMesh);
 	}
-	else if (enemystats->EnemyType = NORMAL) {
+	if (enemystats->EnemyType == NORMAL) {
 		RenderEnemy(enemytexture, EnemyMesh);
 	}
+	if (enemystats->EnemyType == ENEMYBOSS)
+	{
+		RenderEnemy(enemytexture, EnemyMesh);
+	}
+
 
 }
 
