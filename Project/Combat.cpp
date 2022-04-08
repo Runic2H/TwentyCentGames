@@ -202,7 +202,7 @@ void Combat_Draw()
 	{
 		RenderEnemy(enemytexturefire, EnemyMesh);
 	}
-	else if (enemystats->EnemyType = NORMAL) {
+	else if (enemystats->EnemyType == NORMAL) {
 		RenderEnemy(enemytexture, EnemyMesh);
 	}
 

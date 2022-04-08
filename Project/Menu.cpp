@@ -20,6 +20,7 @@ s32 cursorx, cursory;
 AEMtx33 scale, rot, trans, buffer;
 
 bool isLogo{ false };
+bool isTwentyLogo{ false };
 
 /**************************************************
 *		STRUCT / CLASS DEFINITIONS
@@ -30,7 +31,8 @@ struct GameObjInst {
 	AEGfxTexture*	pTexture;
 };
 
-GameObjInst digipenLogostruct; //matt
+GameObjInst digipenLogostruct; 
+GameObjInst TwentyCentGamesLogostruct; 
 GameObjInst ducklogostruct;
 GameObjInst selectionstruct;
 GameObjInst gamelogostruct;
@@ -43,7 +45,7 @@ item		menuexitbutton;
 void Menu_Load() {
 
 	AEToogleFullScreen(systemsettings.fullscreen);
-	AEGfxSetBackgroundColor(0.0f, 0.1f, 0.2f);
+	/*AEGfxSetBackgroundColor(0.0f, 0.1f, 0.2f);*/
 
 	gamelogostruct.pTexture = AEGfxTextureLoad("Images/ducktitle.png");
 	AE_ASSERT_MESG(gamelogostruct.pTexture, "Failed to create gamelogotexture!\n");
@@ -55,24 +57,43 @@ void Menu_Load() {
 	AE_ASSERT_MESG(duckdrooltex, "Failed to create duckdrool texture!\n");
 
 	digipenLogostruct.pTexture = AEGfxTextureLoad("Images/digipenLogo.png");
-	AE_ASSERT_MESG(digipenLogostruct.pTexture, "Failed to create digipenLogo texture!\n"); //matt
+	AE_ASSERT_MESG(digipenLogostruct.pTexture, "Failed to create digipenLogo texture!\n"); 
 
-	//digipenLogo mes
+	TwentyCentGamesLogostruct.pTexture = AEGfxTextureLoad("Images/TwentyCentGamesLogo.png");
+	AE_ASSERT_MESG(TwentyCentGamesLogostruct.pTexture, "Failed to create TwentyCentGamesLogo texture!\n");
+
+	//digipenLogo mesh
 	AEGfxMeshStart();
-	// AEGfxSetTransform()
+	
 	AEGfxTriAdd(
-		-150.0f, 50.0f, 0xFFFF0000, 0.0f, 0.0f,
-		-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
-		150.0f, 50.0f, 0xFFFFFFFF, 1.0f, 0.0f);
+		-400.0f, 250.0f, 0xFFFF0000, 0.0f, 0.0f,
+		-400.0f, -250.0f, 0xFFFF0000, 0.0f, 1.0f,
+		400.0f, 250.0f, 0xFFFFFFFF, 1.0f, 0.0f);
 
 	AEGfxTriAdd(
-		150.0f, 50.0f, 0xFFFF0000, 1.0f, 0.0f,
-		-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
-		150.0f, -50.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		400.0f, 250.0f, 0xFFFF0000, 1.0f, 0.0f,
+		-400.0f, -250.0f, 0xFFFF0000, 0.0f, 1.0f,
+		400.0f, -250.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 
 	digipenLogostruct.pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(digipenLogostruct.pMesh, "Failed to create digipenLogo!\n");
-		
+	
+	//TwentyCentGamesLogo mesh
+	AEGfxMeshStart();
+
+	AEGfxTriAdd(
+		-400.0f, 250.0f, 0xFFFF0000, 0.0f, 0.0f,
+		-400.0f, -250.0f, 0xFFFF0000, 0.0f, 1.0f,
+		400.0f, 250.0f, 0xFFFFFFFF, 1.0f, 0.0f);
+
+	AEGfxTriAdd(
+		400.0f, 250.0f, 0xFFFF0000, 1.0f, 0.0f,
+		-400.0f, -250.0f, 0xFFFF0000, 0.0f, 1.0f,
+		400.0f, -250.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+
+	TwentyCentGamesLogostruct.pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(TwentyCentGamesLogostruct.pMesh, "Failed to create TwentyCentGamesLogo!\n");
+
 	// title mesh
 	AEGfxMeshStart();
 	
@@ -169,7 +190,10 @@ void Menu_Update() {
 	selectionstruct.pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(selectionstruct.pMesh, "failed to create Selection object");
 
-	systemupdate();
+	if (isLogo == false && isTwentyLogo == false)
+	{
+		systemupdate();
+	}
 
 	AEMtx33Scale(&scale, 105.0f, 50.0f);
 	AEMtx33Rot(&rot, 0.0f);
@@ -195,14 +219,28 @@ void Menu_Update() {
 	else
 	{
 		isLogo = false;
+		
+		systemsettings.twentycentTimer -= DT;
+		
+		if (systemsettings.twentycentTimer > 0)
+		{
+			isTwentyLogo = true;
+		}
+		else
+		{
+			isTwentyLogo = false;
+		}
 	}
+
+
 		
 }
 
 void Menu_Draw() {
 
-	if (isLogo == false)
+	if (isLogo == false && isTwentyLogo == false)
 	{
+		AEGfxSetBackgroundColor(0.0f, 0.1f, 0.2f);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxSetTintColor(1, 1, 1, 1);
@@ -298,9 +336,10 @@ void Menu_Draw() {
 
 		AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	}
-	else
+	else if(isLogo == true && isTwentyLogo == false)
 	{
 		//digipenLogo
+		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxSetPosition(-20.0f, 0.0f);
@@ -308,6 +347,18 @@ void Menu_Draw() {
 		AEGfxSetTintColor(1, 1, 1, 1);
 		AEGfxSetTransparency(systemsettings.digipenTimer);
 		AEGfxMeshDraw(digipenLogostruct.pMesh, AE_GFX_MDM_TRIANGLES);
+	}
+
+	else if (isLogo == false && isTwentyLogo == true)
+	{
+		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		AEGfxSetPosition(-20.0f, 0.0f);
+		AEGfxTextureSet(TwentyCentGamesLogostruct.pTexture, 0.0f, 0.0f);
+		AEGfxSetTintColor(1, 1, 1, 1);
+		AEGfxSetTransparency(systemsettings.twentycentTimer);
+		AEGfxMeshDraw(TwentyCentGamesLogostruct.pMesh, AE_GFX_MDM_TRIANGLES);
 	}
 }
 
@@ -337,6 +388,11 @@ void Menu_Free() {
 		AEGfxMeshFree(digipenLogostruct.pMesh);
 		digipenLogostruct.pMesh = nullptr;
 	}
+
+	if (TwentyCentGamesLogostruct.pMesh != nullptr) {
+		AEGfxMeshFree(TwentyCentGamesLogostruct.pMesh);
+		TwentyCentGamesLogostruct.pMesh = nullptr;
+	}
 }
 
 void Menu_Unload() {
@@ -349,6 +405,7 @@ void Menu_Unload() {
 	AEGfxTextureUnload(menututorialbutton.pTexture);
 	AEGfxTextureUnload(menuexitbutton.pTexture);
 	AEGfxTextureUnload(digipenLogostruct.pTexture);
+	AEGfxTextureUnload(TwentyCentGamesLogostruct.pTexture);
 	Audio_Unload();		//JN: new code
 }
 

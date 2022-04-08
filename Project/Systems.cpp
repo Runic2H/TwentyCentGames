@@ -304,7 +304,7 @@ void System_Initialise() {
 	systemsettings.fullscreen = 0;
 	systemsettings.paused = 0;
 	systemsettings.digipenTimer = 3.0f;
-
+	systemsettings.twentycentTimer = 3.0f;
 
 /******************************************************************
 *		PLAYER INVENTORY CONSUMABLES
