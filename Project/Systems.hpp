@@ -14,6 +14,7 @@ typedef struct sys
 	int options;
 	float digipenTimer;
 	float twentycentTimer;
+	int exit_confirmation;
 } sys;
 
 
@@ -31,6 +32,16 @@ typedef struct inv {
 	item defencepotion;
 }inv;
 
+typedef struct GameObjInst {
+	unsigned int flag;
+	unsigned int type;
+	item* pObject;
+	AEVec2 PosCurr;
+	AEVec2 velCurr;
+	float dirCurr;
+	float scale;
+
+}GameObjInst;
 
 typedef struct player_statsheet
 {

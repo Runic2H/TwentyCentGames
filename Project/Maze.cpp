@@ -1227,7 +1227,7 @@ void Maze_Update()
 
 		AEGfxGetCamPosition(&cam_x, &cam_y);
 
-	if (systemsettings.paused == 0) {
+	if (systemsettings.paused == 0 && systemsettings.exit_confirmation == 0) {
 		if (AEInputCheckTriggered(AEVK_W))
 		{
 			duck_dir = DD_UP;
@@ -1321,9 +1321,11 @@ void Maze_Update()
 		AEGfxGetCamPosition(&cam_x, &cam_y);
 	}
 
+	else if (systemsettings.exit_confirmation == 1) {
+		LogicExit_Confirmation();
+	}
 	else {
 		logicpausemenu();
-		renderpausemenu();
 	}
 }
 
@@ -1335,7 +1337,7 @@ void Maze_Update()
 void Maze_Draw()
 {
 	//std::cout << "Maze:Draw" << std::endl;
-	if (systemsettings.paused == 0) {
+	if (systemsettings.paused == 0 && systemsettings.exit_confirmation == 0) {
 
 		if (AEInputCheckCurr(AEVK_TAB)) {
 			Maze_Inventory_MeshUpdate(cam_x, cam_y);
@@ -1372,6 +1374,14 @@ void Maze_Draw()
 				chest_pickup_display_duration = 0;
 			}
 		}
+	}
+
+	if (systemsettings.paused == 1) {
+		renderpausemenu();
+	}
+
+	else if (systemsettings.exit_confirmation == 1) {
+		RenderExit_Confirmation();
 	}
 }
 
