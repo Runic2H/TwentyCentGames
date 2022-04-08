@@ -13,6 +13,7 @@ typedef struct sys
 	int mute;
 	int options;
 	float digipenTimer;
+	float twentycentTimer;
 } sys;
 
 

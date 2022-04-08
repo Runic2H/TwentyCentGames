@@ -453,7 +453,7 @@ void System_Initialise() {
 	systemsettings.mute = 0;
 	systemsettings.options = 0;
 	systemsettings.digipenTimer = 3.0f;
-
+	systemsettings.twentycentTimer = 3.0f;
 
 /******************************************************************
 *		PLAYER INVENTORY CONSUMABLES

@@ -378,7 +378,7 @@ void page_six_code()
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 
-	sprintf_s(strBuffer, "Time you movement to move into the unlit grid to avoid getting hit!");
+	sprintf_s(strBuffer, "Time your movement to move into the unlit grid to avoid getting hit!");
 	AEGfxPrint(fontLarge, strBuffer, -0.75f, 0.50f, 0.3f, 1.f, 1.f, 1.f);
 
 	sprintf_s(strBuffer, "Press D for next page");
