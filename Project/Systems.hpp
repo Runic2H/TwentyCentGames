@@ -10,6 +10,7 @@ typedef struct sys
 {
 	int fullscreen;
 	int paused;
+	int exit_confirmation;
 } sys;
 
 
@@ -20,6 +21,13 @@ typedef struct item {
 	float			 itemcounter;
 }item;
 
+typedef struct GameObjInst {
+	unsigned int flag;
+	item* pObject;
+	AEVec2 PosCurr;
+	AEVec2 velCurr;
+	float dirCurr;
+}GameObjInst;
 
 typedef struct inv {
 	item healthpotion;

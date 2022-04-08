@@ -42,13 +42,18 @@ extern player_statsheet* playerstats;
 extern enemy_statsheet* enemystats;
 extern inv* playerinventory;
 extern sys systemsettings;
+extern GameObjInst* ParticleInstList;
 
 void initialise_pausemenu();
+void LogicExit_Confirmation();
+void RenderExit_Confirmation();
 void logicpausemenu();
 void renderpausemenu();
 void unloadpausemenu();
 void player_initialise();
 void enemy_initialise();
+GameObjInst* particleInstCreate(float scale);
+void particleInstDestroy(GameObjInst* pInst);
 
 enum consumables { HEALTH, STAMINA, DEFENCE };
 enum EnemyPos { IDLE, ATTACKING };
