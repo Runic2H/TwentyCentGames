@@ -138,15 +138,15 @@ void LevelUp_Update()
 		{
 			if (selection == 0)
 			{
-				playerstats->maxhealth += skillselected[0] * 10;
+				playerstats->maxhealth += skillselected[0] * 15;
 			}
 			if (selection == 1)
 			{
-				playerstats->damage += skillselected[1] * 1;
+				playerstats->damage += skillselected[1] * 2;
 			}
 			if (playerstats->health < playerstats->maxhealth / 2)
 			{
-				playerstats->health = playerstats->maxhealth/2;
+				playerstats->health = playerstats->maxhealth / 2;
 			}
 			next = MAZE;
 		}
@@ -219,7 +219,7 @@ void LevelUp_Draw()
 	}
 	AEGfxMeshDraw(LevelButtons, AE_GFX_MDM_TRIANGLES);
 
-	sprintf_s(strBuffer, "Health %d |+%d %d", playerstats->maxhealth,skillselected[0], maxhealth + skillselected[0]*10);
+	sprintf_s(strBuffer, "Health %d |+%d %d", playerstats->maxhealth,skillselected[0], maxhealth + skillselected[0]*15);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxPrint(fontLarge, strBuffer, -0.35f, 0.29f, 0.5f, 0.0f, 0.0f, 0.0f);
@@ -266,7 +266,7 @@ void LevelUp_Draw()
 	}
 	AEGfxMeshDraw(LevelButtons, AE_GFX_MDM_TRIANGLES);
 
-	sprintf_s(strBuffer, "Damage %d |+%d %d", playerstats->damage, skillselected[1], damage + skillselected[1]*1);
+	sprintf_s(strBuffer, "Damage %d |+%d %d", playerstats->damage, skillselected[1], damage + skillselected[1]*2);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxPrint(fontLarge, strBuffer, -0.35f, 0.05f, 0.5f, 0.0f, 0.0f, 0.0f);

@@ -24,10 +24,15 @@ enum MazeCellValue
 	CHEST = 3,
 	ENEMY = 9,
 	BOSS = 5
-
-	
 };
 
+enum duck_direction
+{
+	DD_RIGHT =0,
+	DD_UP,
+	DD_LEFT,
+	DD_DOWN
+};
  
 struct MazeCells
 {
