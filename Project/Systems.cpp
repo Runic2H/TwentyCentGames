@@ -303,6 +303,7 @@ void System_Initialise() {
 	fontLarge = AEGfxCreateFont("Roboto-Regular.ttf", 67);
 	systemsettings.fullscreen = 0;
 	systemsettings.paused = 0;
+	systemsettings.digipenTimer = 3.0f;
 
 
 /******************************************************************
