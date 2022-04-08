@@ -12,6 +12,7 @@ int curr_X_GRIDposition;
 int curr_Y_GRIDposition;
 float global_maze_cam_x;
 float global_maze_cam_y;
+int duck_dir = DD_UP;;
 
 // test bench
 int level_iter;

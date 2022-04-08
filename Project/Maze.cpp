@@ -31,6 +31,7 @@ float MC_positionY;
 extern int curr_X_GRIDposition;
 extern int curr_Y_GRIDposition;
 extern sys systemsettings;
+extern int duck_dir;
 
 
 float contact_rate = 0.2f;
@@ -223,7 +224,7 @@ void Maze_Minimap_Draw(float cam_x, float cam_y, float x_offset, float y_offset)
 			{
 
 				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 0.5f);
-				AEGfxTextureSet(main_character_art, 0.0f, 0.0f);
+				//AEGfxTextureSet(main_character_art, 0.5f, 0.0f);
 				AEGfxMeshDraw(pMesh_MiniMapMainChar, AE_GFX_MDM_TRIANGLES);
 			}
 			else if (r == end_x && c == end_y)
@@ -695,7 +696,7 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 					);
 					AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 					AEGfxTextureSet(chest_art, 0, 0);
-					AEGfxMeshDraw(pMesh_MainCharacter, AE_GFX_MDM_TRIANGLES);
+					AEGfxMeshDraw(pMeshChest, AE_GFX_MDM_TRIANGLES);
 				}
 
 				//JN: new code (the entire if statement)
@@ -743,20 +744,19 @@ void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_
 	AEGfxTriAdd( //This triangle is colorful, blends 3 colours wowza
 		//-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink 
 		-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 0.0f, 1.0f, //pink 
-		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
+		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 0.25f, 1.0f, //white
 		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
 		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
 
 
 	AEGfxTriAdd(
-		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
+		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 0.25f, 1.0f, //white
 		//(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink
-		(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 0.0f, //pink
+		(cell_width / 4), (cell_height / 4), 0x00FF00FF, 0.25f, 0.0f, //pink
 		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
 		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
 
-	pMesh_MainCharacter
-	= AEGfxMeshEnd();
+	pMesh_MainCharacter= AEGfxMeshEnd();
 	AE_ASSERT_MESG(pMesh_MainCharacter, "Failed to create main character!!");
 }
 
@@ -783,7 +783,7 @@ void MAZE_DrawingMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float MC_p
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetPosition(MC_positionX, MC_positionY);
-	AEGfxTextureSet(main_character_art, 0, 0);
+	AEGfxTextureSet(main_character_art, (float)(duck_dir*0.25f), 0.0f);
 	AEGfxMeshDraw(pMesh_MainCharacter, AE_GFX_MDM_TRIANGLES);
 }
 
@@ -1134,7 +1134,7 @@ void Maze_Load()
 	path_art = AEGfxTextureLoad("Images/Pond.png");
 	AE_ASSERT_MESG(path_art, "Failed to create path texture!\n");
 
-	main_character_art = AEGfxTextureLoad("Images/Map duck.png");
+	main_character_art = AEGfxTextureLoad("Images/Map duck sprite.png");
 	AE_ASSERT_MESG(main_character_art, "Failed to create path texture!\n");
 
 	chest_art = AEGfxTextureLoad("Images/Chest.png");	//JN: new code
@@ -1230,6 +1230,7 @@ void Maze_Update()
 	if (systemsettings.paused == 0) {
 		if (AEInputCheckTriggered(AEVK_W))
 		{
+			duck_dir = DD_UP;
 			if (MAZE_CharMoveCHECK_NEXT_POS(1, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 			{
 				MC_positionY += Maze->specifications.cellHeight;
@@ -1247,6 +1248,7 @@ void Maze_Update()
 
 		if (AEInputCheckTriggered(AEVK_S))
 		{
+			duck_dir = DD_DOWN;
 			if (MAZE_CharMoveCHECK_NEXT_POS(3, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 			{
 				MC_positionY -= Maze->specifications.cellHeight;
@@ -1266,6 +1268,7 @@ void Maze_Update()
 
 		if (AEInputCheckTriggered(AEVK_A))
 		{
+			duck_dir = DD_LEFT;
 			if (MAZE_CharMoveCHECK_NEXT_POS(2, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 			{
 
@@ -1285,6 +1288,7 @@ void Maze_Update()
 
 		if (AEInputCheckTriggered(AEVK_D))
 		{
+			duck_dir = DD_RIGHT;
 			if (MAZE_CharMoveCHECK_NEXT_POS(4, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 			{
 
