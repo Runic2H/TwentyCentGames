@@ -17,4 +17,5 @@ void Input_Handle() {
 			AEToogleFullScreen(systemsettings.fullscreen);
 		}
 	}
+
 }

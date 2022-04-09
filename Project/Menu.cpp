@@ -65,7 +65,6 @@ void Menu_Load() {
 	TwentyCentGamesLogostruct.pObject->pTexture = AEGfxTextureLoad("Images/TwentyCentGamesLogo.png");
 	AE_ASSERT_MESG(TwentyCentGamesLogostruct.pObject->pTexture, "Failed to create TwentyCentGamesLogo texture!\n");
 
-
 	
 	//TwentyCentGamesLogo and digipenlogo mesh
 	AEGfxMeshStart();
@@ -275,14 +274,15 @@ void Menu_Update() {
 	
 
 	// particles update //
-	for (int i{ 0 }; i < 150; ++i) {
+	for (int i{ 0 }; i < 50; ++i) {
 
 		GameObjInst* pInst = ParticleInstList + i;
 
 		if (0 == (pInst->flag))
 			continue;
 
-		pInst->pObject->itemcounter -= DT;
+		float dt = DT;
+		pInst->pObject->itemcounter -= (dt*2.5f);
 		if (pInst->pObject->itemcounter <= 0) {
 			particleInstDestroy(pInst);
 		}
@@ -302,7 +302,6 @@ void Menu_Update() {
 		AEMtx33Trans(&trans, pInst->PosCurr.x, pInst->PosCurr.y);
 		AEMtx33Concat(&pInst->pObject->transform, &trans, &mtxbuffer);
 	}
-
 }
 
 void Menu_Draw() {
@@ -428,7 +427,7 @@ void Menu_Draw() {
 
 	AEGfxMeshFree(selectionstruct.pObject->pMesh);
 
-	for (int i{ 0 }; i < 150; ++i) {
+	for (int i{ 0 }; i < 50; ++i) {
 		GameObjInst* pInst = ParticleInstList + i;
 
 		if (0 == (pInst->flag))
