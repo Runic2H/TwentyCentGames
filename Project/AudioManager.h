@@ -28,22 +28,22 @@ void swimming_Audio();
 
 void portion_Audio();
 
-void chest_open_Audio();	//JN: new code
+void chest_open_Audio();
 
-void click_Audio();			//JN: new code
+void click_Audio();
 
-void coin_drop_Audio();		//JN: new code
+void coin_drop_Audio();
 
-void stop_Audio();			//JN: new code
+void stop_Audio();
 
-void increase_bgm_fader();	//JN: new code
+void increase_bgm_fader();
 
-void decrease_bgm_fader();	//JN: new code
+void decrease_bgm_fader();
 
-void increase_sfx_fader();	//JN: new code
+void increase_sfx_fader();
 
-void decrease_sfx_fader();	//JN: new code
+void decrease_sfx_fader();
 
-void mute_master_fader();	//JN: new code
+void mute_master_fader();
 
-void unmute_master_fader();	//JN: new code
+void unmute_master_fader();

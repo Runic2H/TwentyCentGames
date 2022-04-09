@@ -383,7 +383,7 @@ void logicoptionmenu()
 		if (AEInputCheckTriggered(AEVK_LBUTTON))
 		{
 			systemsettings.fullscreen == 1 ? systemsettings.fullscreen = 0 : systemsettings.fullscreen = 1;
-			click_Audio();	//JN: new code
+			click_Audio();
 			AEToogleFullScreen(systemsettings.fullscreen);
 		}
 	}
@@ -575,7 +575,7 @@ void logicpausemenu() {
 			resumebutton->itemcounter = 1.0f;
 			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 				systemsettings.paused = 0;
-				click_Audio();	//JN: new code
+				click_Audio();
 			}
 		}
 
@@ -583,7 +583,7 @@ void logicpausemenu() {
 			optionbutton->itemcounter = 1.0f;
 			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 				systemsettings.options == 0 ? systemsettings.options = 1 : systemsettings.options = 0;
-				click_Audio();	//JN: new code
+				click_Audio();
 			}
 		}
 
@@ -591,7 +591,7 @@ void logicpausemenu() {
 			exitbutton->itemcounter = 1.0f;
 			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 				systemsettings.paused = 0;
-				click_Audio();	//JN: new code
+				click_Audio();
 				systemsettings.exit_confirmation = 1;
 			}
 		}
@@ -600,7 +600,7 @@ void logicpausemenu() {
 			menubutton->itemcounter = 1.0f;
 			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 				systemsettings.paused = 0;
-				click_Audio();	//JN: new code
+				click_Audio();
 				player_initialise();
 				enemy_initialise();
 				next = MENU;

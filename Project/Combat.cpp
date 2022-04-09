@@ -76,7 +76,7 @@ void Combat_Load()
 */
 void Combat_Initialize()
 {
-	stop_Audio();	//JN: new code
+	stop_Audio();
 	combat_background_Audio();
 	//initialise_pausemenu();
 	if (enemystats->EnemyType != ENEMYBOSS)

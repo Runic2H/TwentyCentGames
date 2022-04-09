@@ -25,7 +25,7 @@ void victory_load() {
 }
 
 void victory_init() {
-	stop_Audio();	//JN: new code
+	stop_Audio();
 	win_screen_background_Audio();
 }
 

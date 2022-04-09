@@ -1,14 +1,14 @@
 #include "pch.hpp"
 
-//AEGfxVertexList* line;
+AEGfxVertexList* line;
 
 void Credits_Load()
 {
-	////middle line
-	//AEGfxMeshStart();
-	//AEGfxVertexAdd(-200, 299, 0x00FF00FF, 0.0f, 0.0f);
-	//AEGfxVertexAdd(-200, -299, 0x00FFFF00, 0.0f, 0.0f);
-	//line = AEGfxMeshEnd();
+	//middle line
+	AEGfxMeshStart();
+	AEGfxVertexAdd(-200, 299, 0x00FF00FF, 0.0f, 0.0f);
+	AEGfxVertexAdd(-200, -299, 0x00FFFF00, 0.0f, 0.0f);
+	line = AEGfxMeshEnd();
 }
 
 void Credits_Init()
@@ -18,7 +18,8 @@ void Credits_Init()
 
 void Credits_Update()
 {
-	Audio_Update();			//JN: new code
+
+	Audio_Update();
 
 	//go back to MENU
 	if (AEInputCheckTriggered(AEVK_Q))
@@ -39,7 +40,7 @@ void Credits_Draw()
 	sprintf_s(strBuffer, "Press Q to go back to the main menu");
 	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
 
-	sprintf_s(strBuffer, "All content © 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
+	sprintf_s(strBuffer, "All content Â© 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
 	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 1.f, 1.f);
 
 	sprintf_s(strBuffer, "Team members");

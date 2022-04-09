@@ -32,7 +32,7 @@ void GameOver_Load() {
 
 void GameOver_Init() {
 	Audio_Init();
-	stop_Audio();	//JN: new code
+	stop_Audio();
 	lose_screen_background_Audio();
 	player_initialise();			// reinitialises the player stats
 	enemy_initialise();				// reinitialises the enemy stats
