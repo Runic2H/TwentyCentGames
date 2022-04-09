@@ -5,6 +5,7 @@
 // float camX, camY;
 AEGfxVertexList* gamemesh = 0;
 AEGfxTexture* gameovertex;
+extern int level_iter;
 
 void GameOver_Load() {
 
@@ -49,6 +50,7 @@ void GameOver_Update() {
 	if (AEInputCheckTriggered(AEVK_R)) {
 		// QUESTION: is there a maze restart?
 		maze_init_flag = 0;
+		level_iter = 0;
 		next = MAZE;
 	}
 
