@@ -18,6 +18,14 @@ item* mutebutton;
 item* fullscreenbutton;
 item* yesbutton;
 item* nobutton;
+item* nofullscreenbutton;
+item* nomutebutton;
+item* sliderbgm;
+item* slidersfx;
+item* slidertriangleleftbgm;
+item* slidertrianglerightbgm;
+item* slidertriangleleftsfx;
+item* slidertrianglerightsfx;
 
 /********************************************************************
 			SYSTEM LEVEL FUNCTION DEFINITIONS
@@ -84,7 +92,6 @@ void LogicExit_Confirmation() {
 	AEMtx33 scale, rot, trans, buffer;
 
 	AEInputGetCursorPosition(&cursorx, &cursory);
-	//std::cout << "x: " << cursorx << "  y: " << cursory << std::endl;
 
 	AEMtx33Scale(&scale, 150.0f, 50.0f);
 	AEMtx33Rot(&rot, 0.0f);
@@ -132,7 +139,6 @@ void RenderExit_Confirmation() {
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxMeshDraw(pausebackground->pMesh, AE_GFX_MDM_TRIANGLES);
 
-
 	AEGfxSetTransform(yesbutton->transform.m);
 	AEGfxSetTransparency(yesbutton->itemcounter);
 	AEGfxTextureSet(yesbutton->pTexture, 0, 0);
@@ -153,6 +159,47 @@ void RenderExit_Confirmation() {
 	sprintf_s(strBuffer, "Confirm Exit?");
 	AEGfxPrint(fontLarge, strBuffer, -0.19f, 0.07f, 0.35f, 0.7f, 0.6f, 0.6f);
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+}
+
+
+void slidermeshupdate()
+{
+
+	if (sliderbgm->pMesh != nullptr)
+	{
+		AEGfxMeshFree(sliderbgm->pMesh);
+		sliderbgm->pMesh = nullptr;
+	}
+
+	if (slidersfx->pMesh != nullptr)
+	{
+		AEGfxMeshFree(slidersfx->pMesh);
+		slidersfx->pMesh = nullptr;
+	}
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.2f, 0xFFFFFFFF, 0.0f, 1.0f,
+		bgm_volume-0.5f, -0.2f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-0.5f, 0.2f, 0xFFFFFFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		bgm_volume-0.5f, -0.2f, 0xFFFFFFFF, 1.0f, 1.0f,
+		bgm_volume-0.5f, 0.2f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-0.5f, 0.2f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+	sliderbgm->pMesh = AEGfxMeshEnd();
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.2f, 0xFFFFFFFF, 0.0f, 1.0f,
+		sfx_volume - 0.5f, -0.2f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-0.5f, 0.2f, 0xFFFFFFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		sfx_volume - 0.5f, -0.2f, 0xFFFFFFFF, 1.0f, 1.0f,
+		sfx_volume - 0.5f, 0.2f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-0.5f, 0.2f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+	slidersfx->pMesh = AEGfxMeshEnd();
 }
 
 void initialise_pausemenu() {
@@ -199,6 +246,15 @@ void initialise_optionmenu()
 {
 	mutebutton = new item;
 	fullscreenbutton = new item;
+	nomutebutton = new item;
+	nofullscreenbutton = new item;
+	sliderbgm = new item;
+	slidersfx = new item;
+	slidertriangleleftbgm = new item;
+	slidertrianglerightbgm = new item;
+	slidertriangleleftsfx = new item;
+	slidertrianglerightsfx = new item;
+
 
 	AEGfxMeshStart();
 	AEGfxTriAdd(
@@ -210,20 +266,74 @@ void initialise_optionmenu()
 		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
 		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 
-	pausebackground->pMesh
-		= mutebutton->pMesh
+		mutebutton->pMesh
 		= fullscreenbutton->pMesh
+		= nofullscreenbutton->pMesh
+		= nomutebutton->pMesh
 		= AEGfxMeshEnd();
+	
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.2f, 0xFFFFFFFF, 0.0f, 1.0f,
+		bgm_volume - 0.5f, -0.2f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-0.5f, 0.2f, 0xFFFFFFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		bgm_volume - 0.5f, -0.2f, 0xFFFFFFFF, 1.0f, 1.0f,
+		bgm_volume - 0.5f, 0.2f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-0.5f, 0.2f, 0xFFFFFFFF, 0.0f, 0.0f);
 
-	AE_ASSERT_MESG(mutebutton->pMesh, "Failed to create pause meshes!!\n");
+	sliderbgm->pMesh = AEGfxMeshEnd();
 
-	fullscreenbutton->pTexture = AEGfxTextureLoad("Images/mainmenubutton.png");
-	mutebutton->pTexture = AEGfxTextureLoad("Images/resumebutton.png");
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.2f, 0xFFFFFFFF, 0.0f, 1.0f,
+		sfx_volume - 0.5f, -0.2f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-0.5f, 0.2f, 0xFFFFFFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		sfx_volume - 0.5f, -0.2f, 0xFFFFFFFF, 1.0f, 1.0f,
+		sfx_volume - 0.5f, 0.2f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-0.5f, 0.2f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+	slidersfx->pMesh = AEGfxMeshEnd();
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		0.1f, -0.1f, 0xFFFFFFFF, 1.0f, 1.0f,
+		0.1f, 0.1f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-0.0f, 0.0f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+	slidertriangleleftbgm->pMesh = slidertriangleleftsfx->pMesh = AEGfxMeshEnd();
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.1f, 0.1f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-0.1f, -0.1f, 0xFFFFFFFF, 1.0f, 0.0f,
+		0.0f, -0.0f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+	slidertrianglerightbgm->pMesh = slidertrianglerightsfx->pMesh = AEGfxMeshEnd();
+
+	fullscreenbutton->pTexture = AEGfxTextureLoad("Images/fullscreenbuttonyes.png");
+	AE_ASSERT_MESG(fullscreenbutton->pMesh, "Failed to create option meshes!!\n");
+
+	nofullscreenbutton->pTexture = AEGfxTextureLoad("Images/fullscreenbuttonno.png");
+	AE_ASSERT_MESG(nofullscreenbutton->pMesh, "Failed to create option meshes!!\n");
+
+	mutebutton->pTexture = AEGfxTextureLoad("Images/mutebuttonyes.png");
+	AE_ASSERT_MESG(mutebutton->pMesh, "Failed to create option meshes!!\n");
+
+	nomutebutton->pTexture = AEGfxTextureLoad("Images/mutebuttonno.png");
+	AE_ASSERT_MESG(nomutebutton->pMesh, "Failed to create option meshes!!\n");
 }
+
+
 
 void logicoptionmenu()
 {
-	fullscreenbutton->itemcounter = mutebutton->itemcounter = 0.5f;
+	fullscreenbutton->itemcounter = mutebutton->itemcounter = 
+	nomutebutton->itemcounter = nofullscreenbutton->itemcounter =
+	slidertriangleleftbgm->itemcounter = slidertrianglerightbgm->itemcounter =
+	slidertriangleleftsfx->itemcounter = slidertrianglerightsfx->itemcounter = 0.5f;
+
 	AEMtx33 scale, rot, trans, buffer;
 
 	AEInputGetCursorPosition(&cursorx, &cursory);
@@ -238,6 +348,30 @@ void logicoptionmenu()
 	AEMtx33Trans(&trans, 0.0f, -100.0f);
 	AEMtx33Concat(&mutebutton->transform, &trans, &buffer);
 
+	AEMtx33Trans(&trans, 0.0f, 0.0f);
+	AEMtx33Concat(&nofullscreenbutton->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, 0.0f, -100.0f);
+	AEMtx33Concat(&nomutebutton->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, 25.0f, -170.0f);
+	AEMtx33Concat(&sliderbgm->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, 25.0f, -230.0f);
+	AEMtx33Concat(&slidersfx->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, -75.0f, -170.0f);
+	AEMtx33Concat(&slidertriangleleftbgm->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, 50.0f, -170.0f);
+	AEMtx33Concat(&slidertrianglerightbgm->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, -75.0f, -230.0f);
+	AEMtx33Concat(&slidertriangleleftsfx->transform, &trans, &buffer);
+
+	AEMtx33Trans(&trans, 50.0f, -230.0f);
+	AEMtx33Concat(&slidertrianglerightsfx->transform, &trans, &buffer);
+
 	AEMtx33Scale(&scale, 1000.0f, 1000.0f);
 	AEMtx33Concat(&buffer, &scale, &rot);
 	AEMtx33Trans(&trans, 0.0f, 0.0f);
@@ -245,7 +379,8 @@ void logicoptionmenu()
 
 	if (cursorx >= 326 && cursorx <= 474 && cursory >= 275 && cursory <= 320) {
 		fullscreenbutton->itemcounter = 1.0f;
-		if (AEInputCheckTriggered(AEVK_LBUTTON)) 
+		nofullscreenbutton->itemcounter = 1.0f;
+		if (AEInputCheckTriggered(AEVK_LBUTTON))
 		{
 			systemsettings.fullscreen == 1 ? systemsettings.fullscreen = 0 : systemsettings.fullscreen = 1;
 			click_Audio();	//JN: new code
@@ -255,10 +390,55 @@ void logicoptionmenu()
 
 	if (cursorx >= 326 && cursorx <= 474 && cursory >= 375 && cursory <= 420) {
 		mutebutton->itemcounter = 1.0f;
-		if (AEInputCheckTriggered(AEVK_LBUTTON)) 
+		nomutebutton->itemcounter = 1.0f;
+		if (AEInputCheckTriggered(AEVK_LBUTTON))
 		{
 			click_Audio();	//JN: new code
-			std::cout << "Sound Muted" << std::endl;
+			systemsettings.mute == 1 ? systemsettings.mute = 0 : systemsettings.mute = 1;
+			if (systemsettings.mute == 1)
+			{
+				mute_master_fader();
+			}
+			else if (systemsettings.mute == 0)
+			{
+				unmute_master_fader();
+			}
+		}
+	}
+
+	if (cursorx >= 325 && cursorx <= 340 && cursory >= 465 && cursory <= 475) {
+		slidertriangleleftbgm->itemcounter = 1.0f;
+		if (AEInputCheckTriggered(AEVK_LBUTTON))
+		{
+			click_Audio();
+			decrease_bgm_fader();
+		}
+	}
+
+	if (cursorx >= 435 && cursorx <= 450 && cursory >= 465 && cursory <= 475) {
+		slidertrianglerightbgm->itemcounter = 1.0f;
+		if (AEInputCheckTriggered(AEVK_LBUTTON))
+		{
+			click_Audio();
+			increase_bgm_fader();
+		}
+	}
+
+	if (cursorx >= 325 && cursorx <= 340 && cursory >= 520 && cursory <= 535) {
+		slidertriangleleftsfx->itemcounter = 1.0f;
+		if (AEInputCheckTriggered(AEVK_LBUTTON))
+		{
+			click_Audio();
+			decrease_sfx_fader();
+		}
+	}
+
+	if (cursorx >= 435 && cursorx <= 450 && cursory >= 520 && cursory <= 535) {
+		slidertrianglerightsfx->itemcounter = 1.0f;
+		if (AEInputCheckTriggered(AEVK_LBUTTON))
+		{
+			click_Audio();
+			increase_sfx_fader();
 		}
 	}
 
@@ -269,24 +449,77 @@ void logicoptionmenu()
 
 void renderoptionmenu()
 {
+	slidermeshupdate();
+
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetTransform(sliderbgm->transform.m);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxMeshDraw(sliderbgm->pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(slidersfx->transform.m);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxMeshDraw(slidersfx->pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(slidertriangleleftbgm->transform.m);
+	AEGfxSetTransparency(slidertriangleleftbgm->itemcounter);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxMeshDraw(slidertriangleleftbgm->pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(slidertrianglerightbgm->transform.m);
+	AEGfxSetTransparency(slidertrianglerightbgm->itemcounter);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxMeshDraw(slidertrianglerightbgm->pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(slidertriangleleftsfx->transform.m);
+	AEGfxSetTransparency(slidertriangleleftsfx->itemcounter);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxMeshDraw(slidertriangleleftsfx->pMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetTransform(slidertrianglerightsfx->transform.m);
+	AEGfxSetTransparency(slidertrianglerightsfx->itemcounter);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxMeshDraw(slidertrianglerightsfx->pMesh, AE_GFX_MDM_TRIANGLES);
+
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-
+	
 	AEGfxSetTransform(pausebackground->transform.m);
 	AEGfxSetTransparency(0.28f);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxMeshDraw(pausebackground->pMesh, AE_GFX_MDM_TRIANGLES);
 
-	AEGfxSetTransform(fullscreenbutton->transform.m);
-	AEGfxSetTransparency(fullscreenbutton->itemcounter);
-	AEGfxTextureSet(fullscreenbutton->pTexture, 0, 0);
-	AEGfxMeshDraw(fullscreenbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+	if (systemsettings.fullscreen == 1)
+	{
+		AEGfxSetTransform(fullscreenbutton->transform.m);
+		AEGfxSetTransparency(fullscreenbutton->itemcounter);
+		AEGfxTextureSet(fullscreenbutton->pTexture, 0, 0);
+		AEGfxMeshDraw(fullscreenbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+	}
+	else
+	{
+		AEGfxSetTransform(nofullscreenbutton->transform.m);
+		AEGfxSetTransparency(nofullscreenbutton->itemcounter);
+		AEGfxTextureSet(nofullscreenbutton->pTexture, 0, 0);
+		AEGfxMeshDraw(nofullscreenbutton->pMesh, AE_GFX_MDM_TRIANGLES);
+	}
 
-	AEGfxSetTransform(mutebutton->transform.m);
-	AEGfxSetTransparency(mutebutton->itemcounter);
-	AEGfxTextureSet(mutebutton->pTexture, 0, 0);
-	AEGfxMeshDraw(mutebutton->pMesh, AE_GFX_MDM_TRIANGLES);
+	if (systemsettings.mute == 1)
+	{
+		AEGfxSetTransform(mutebutton->transform.m);
+		AEGfxSetTransparency(mutebutton->itemcounter);
+		AEGfxTextureSet(mutebutton->pTexture, 0, 0);
+		AEGfxMeshDraw(mutebutton->pMesh, AE_GFX_MDM_TRIANGLES);
+	}
+	else
+	{
+		AEGfxSetTransform(nomutebutton->transform.m);
+		AEGfxSetTransparency(nomutebutton->itemcounter);
+		AEGfxTextureSet(nomutebutton->pTexture, 0, 0);
+		AEGfxMeshDraw(nomutebutton->pMesh, AE_GFX_MDM_TRIANGLES);
+	}
 
 	char strBuffer[35];
 
@@ -296,17 +529,19 @@ void renderoptionmenu()
 	AEGfxSetTransparency(1.0f);
 
 	sprintf_s(strBuffer, "OPTIONS");
-	AEGfxPrint(fontLarge, strBuffer, -0.34f, 0.35f, 1.0f, 1.0f, 0.0f, 0.0f);
+	AEGfxPrint(fontLarge, strBuffer, -0.34f, 0.35f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	sprintf_s(strBuffer, "Press [esc] to exit");
-	AEGfxPrint(fontLarge, strBuffer, -0.16f, 0.25f, 0.25f, 1.0f, 0.0f, 0.0f);
+	AEGfxPrint(fontLarge, strBuffer, -0.16f, 0.25f, 0.25f, 1.0f, 1.0f, 1.0f);
+
+	sprintf_s(strBuffer, "BGM");
+	AEGfxPrint(fontLarge, strBuffer, -0.12f, -0.52f, 0.25f, 1.0f, 1.0f, 1.0f);
+
+	sprintf_s(strBuffer, "SFX");
+	AEGfxPrint(fontLarge, strBuffer, -0.12f, -0.72f, 0.25f, 1.0f, 1.0f, 1.0f);
 }
 
 void logicpausemenu() {
-
-	//if (AEInputCheckTriggered(AEVK_Q)) {
-	//	next = GS_QUIT;
-	//}
 
 	menubutton->itemcounter = resumebutton->itemcounter = optionbutton->itemcounter = exitbutton->itemcounter = 0.5f;
 	AEMtx33 scale, rot, trans, buffer;
@@ -357,7 +592,6 @@ void logicpausemenu() {
 			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 				systemsettings.paused = 0;
 				click_Audio();	//JN: new code
-				next = GS_QUIT;
 				systemsettings.exit_confirmation = 1;
 			}
 		}
@@ -377,11 +611,6 @@ void logicpausemenu() {
 	{
 		logicoptionmenu();
 	}
-
-	//if (AEInputCheckTriggered(AEVK_F11)) {
-	//	systemsettings.fullscreen == 1 ? systemsettings.fullscreen = 0 : systemsettings.fullscreen = 1;
-	//	AEToogleFullScreen(systemsettings.fullscreen);
-	//}
 }
 
 void renderpausemenu() {
@@ -392,7 +621,6 @@ void renderpausemenu() {
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-
 
 		AEGfxSetTransform(pausebackground->transform.m);
 		AEGfxSetTransparency(0.28f);
@@ -433,11 +661,6 @@ void renderpausemenu() {
 	{
 		renderoptionmenu();
 	}
-
-
-	//sprintf_s(strBuffer, "Press F11 to toggle fullscreen!");
-	//AEGfxPrint(fontId, strBuffer, -0.23f, 0.3f, 1.14f, 0.5f, 0.5f, 0.5f);
-	//AEGfxSetBlendMode(AE_GFX_BM_NONE);
 }
 
 void unloadpausemenu() {
@@ -454,6 +677,30 @@ void unloadoptionmenu() {
 		AEGfxMeshFree(mutebutton->pMesh);			// 1 MESH FREES ALL 3 MESHES
 		mutebutton->pMesh = nullptr;
 	}
+
+	if (slidertriangleleftbgm->pMesh != nullptr)
+	{
+		AEGfxMeshFree(slidertriangleleftbgm->pMesh);			// 1 MESH FREES ALL 3 MESHES
+		slidertriangleleftbgm->pMesh = nullptr;
+	}
+
+	if (slidertrianglerightbgm->pMesh != nullptr)
+	{
+		AEGfxMeshFree(slidertrianglerightbgm->pMesh);			// 1 MESH FREES ALL 3 MESHES
+		slidertrianglerightbgm->pMesh = nullptr;
+	}
+
+	if (sliderbgm->pMesh != nullptr)
+	{
+		AEGfxMeshFree(sliderbgm->pMesh);
+		sliderbgm->pMesh = nullptr;
+	}
+
+	if (slidersfx->pMesh != nullptr)
+	{
+		AEGfxMeshFree(slidersfx->pMesh);
+		slidersfx->pMesh = nullptr;
+	}
 }
 
 void player_initialise() {
@@ -461,25 +708,6 @@ void player_initialise() {
 /******************************************************************
 *		PLAYER STRUCT DEFINITION
 ******************************************************************/
-	//playerstats->PlayerLevel = 1;
-	//playerstats->PlayerXP = 0;
-	//playerstats->health = 100;							//health
-	//playerstats->maxhealth = 100;
-	//playerstats->positionID = 1;						//starting grid
-	//playerstats->SAFEGRID = 1;							//starting SAFEGRID pos
-	//playerstats->damage = 10;							//damage
-	//playerstats->staminaCD = 1.0f;						// Cooldown for attack and movement
-	//playerstats->resetCD = playerstats->staminaCD;		// Reset Cooldown for attack and movement
-	//playerstats->staminacount = 0;						// Character stamina count
-	//playerstats->staminamax = 3;						// Character stamina max
-	//playerstats->staminaX = -37.0f;						// X position of stamina
-	//playerstats->is_dmgtaken = 0.0f;					//to implement visual animations in future
-	//playerstats->is_attacking = false;					//for enemy damage checks
-	//playerstats->positionX = 0.0f;
-	//playerstats->positionY = 0.0f;
-	//playerstats->movementdt = 0.0f;
-	//playerstats->status = NEUTRAL;
-
 	std::string str;
 	std::ifstream inFile;
 	inFile.open("..\\Bin\\GameData\\PlayerData.txt");
@@ -488,15 +716,15 @@ void player_initialise() {
 	inFile >> str >> playerstats->PlayerXP;
 	inFile >> str >> playerstats->health;
 	inFile >> str >> playerstats->maxhealth;
-	inFile >> str >> playerstats->positionID;
-	inFile >> str >> playerstats->SAFEGRID;
+	inFile >> str >> playerstats->positionID;		//starting grid
+	inFile >> str >> playerstats->SAFEGRID;			//starting SAFEGRID pos
 	inFile >> str >> playerstats->damage;
-	inFile >> str >> playerstats->staminaCD;
-	inFile >> str >> playerstats->staminacount;
-	inFile >> str >> playerstats->staminamax;
-	inFile >> str >> playerstats->staminaX;
-	inFile >> str >> playerstats->is_dmgtaken;
-	inFile >> str >> playerstats->is_attacking;
+	inFile >> str >> playerstats->staminaCD;		// Cooldown for attack and movement
+	inFile >> str >> playerstats->staminacount;		// Character stamina count
+	inFile >> str >> playerstats->staminamax;		// Character stamina max
+	inFile >> str >> playerstats->staminaX;			// X position of stamina
+	inFile >> str >> playerstats->is_dmgtaken;		// CD for player damage
+	inFile >> str >> playerstats->is_attacking;		//for enemy damage checks
 	inFile >> str >> playerstats->positionX;
 	inFile >> str >> playerstats->positionY;
 	inFile >> str >> playerstats->movementdt;
@@ -514,29 +742,19 @@ void enemy_initialise() {
 /******************************************************************
 *		ENEMY STRUCT DEFINITION
 ******************************************************************/
-	//enemystats->EnemyType = NORMAL;
-	//enemystats->EnemyState = IDLE;					//Current Enemy State
-	//enemystats->positionX = 0.0f;
-	//enemystats->positionY = 0.0f;
-	//enemystats->is_attacking = false;			//Check for enemy attacking, used for check when player can attack
-	//enemystats->AttackCD = 0.60f;				//Delay timer before enemy attack during attack phase
-	//enemystats->EnemyGrid = (rand() % 3) + 1;	//Sets the safety grid for next attack
-	//enemystats->DamageCD = 0.0f;				//Damage Cooldown after enemy attack phase, for players to not deal phantom damage
-	//enemystats->EnemyLevel = 1;
-
 	std::string str;
 	std::ifstream inFile;
 	inFile.open("..\\Bin\\GameData\\EnemyData.txt");
 
-	inFile >> str >> enemystats->EnemyType;
-	inFile >> str >> enemystats->EnemyState;
+	inFile >> str >> enemystats->EnemyType;			//Enemy Type
+	inFile >> str >> enemystats->EnemyState;		//State of the enemy
 	inFile >> str >> enemystats->positionX;
 	inFile >> str >> enemystats->positionY;
-	inFile >> str >> enemystats->is_attacking;
-	inFile >> str >> enemystats->AttackCD;
-	inFile >> str >> enemystats->DamageCD;
+	inFile >> str >> enemystats->is_attacking;		//Check for enemy attacking, used for check when player can attack
+	inFile >> str >> enemystats->AttackCD;			//Delay timer before enemy attack during attack phase
+	inFile >> str >> enemystats->DamageCD;			//Damage Cooldown after enemy attack phase, for players to not deal phantom damage
 	
-	enemystats->EnemyGrid = (rand() % 3) + 1;	//Sets the safety grid for next attack
+	enemystats->EnemyGrid = (rand() % 3) + 1;		//Sets the safety grid for next attack
 
 	inFile.close();
 }
@@ -561,6 +779,7 @@ void inventory_initialise() {
 		= playerinventory->healthpotion.pMesh
 		= playerinventory->staminapotion.pMesh
 		= AEGfxMeshEnd();
+
 	AE_ASSERT_MESG(playerinventory->defencepotion.pMesh, "cannot create inventorymesh");
 
 	playerinventory->defencepotion.pTexture = AEGfxTextureLoad("Images/defencepotion.png");
@@ -645,6 +864,8 @@ void System_Exit() {
 	AEGfxTextureUnload(optionbutton->pTexture);
 	AEGfxTextureUnload(fullscreenbutton->pTexture);
 	AEGfxTextureUnload(mutebutton->pTexture);
+	AEGfxTextureUnload(nomutebutton->pTexture);
+	AEGfxTextureUnload(nofullscreenbutton->pTexture);
 	AEGfxTextureUnload(yesbutton->pTexture);
 	AEGfxTextureUnload(nobutton->pTexture);
 	AEGfxMeshFree(playerinventory->defencepotion.pMesh);
@@ -658,8 +879,16 @@ void System_Exit() {
 	delete optionbutton;
 	delete mutebutton;
 	delete fullscreenbutton;
+	delete nomutebutton;
+	delete nofullscreenbutton;
 	delete yesbutton;
 	delete nobutton;
+	delete sliderbgm;
+	delete slidersfx;
+	delete slidertriangleleftbgm;
+	delete slidertrianglerightbgm;
+	delete slidertriangleleftsfx;
+	delete slidertrianglerightsfx;
 
 		for (int i{ 0 }; i < 150; ++i) {
 			GameObjInst* pInst = ParticleInstList + i;

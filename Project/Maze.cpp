@@ -1214,12 +1214,6 @@ void Maze_Update()
 {
 	//std::cout << "Maze:Update" << std::endl;
 	Audio_Update();
-	increase_bgm_fader();	//JN: new code
-	decrease_bgm_fader();	//JN: new code
-	increase_sfx_fader();	//JN: new code
-	decrease_sfx_fader();	//JN: new code
-	mute_master_fader();	//JN: new code
-	unmute_master_fader();	//JN: new code
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
 		click_Audio();	//JN: new code

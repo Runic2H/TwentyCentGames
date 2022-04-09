@@ -65,7 +65,6 @@ void Menu_Load() {
 	TwentyCentGamesLogostruct.pObject->pTexture = AEGfxTextureLoad("Images/TwentyCentGamesLogo.png");
 	AE_ASSERT_MESG(TwentyCentGamesLogostruct.pObject->pTexture, "Failed to create TwentyCentGamesLogo texture!\n");
 
-
 	
 	//TwentyCentGamesLogo and digipenlogo mesh
 	AEGfxMeshStart();
@@ -159,12 +158,6 @@ void Menu_Init() {
 
 void Menu_Update() {
 	Audio_Update();
-	increase_bgm_fader();	//JN: new code
-	decrease_bgm_fader();	//JN: new code
-	increase_sfx_fader();	//JN: new code
-	decrease_sfx_fader();	//JN: new code
-	mute_master_fader();	//JN: new code
-	unmute_master_fader();	//JN: new code
 
 	AEInputGetCursorPosition(&cursorx, &cursory);
 
@@ -275,14 +268,15 @@ void Menu_Update() {
 	
 
 	// particles update //
-	for (int i{ 0 }; i < 150; ++i) {
+	for (int i{ 0 }; i < 50; ++i) {
 
 		GameObjInst* pInst = ParticleInstList + i;
 
 		if (0 == (pInst->flag))
 			continue;
 
-		pInst->pObject->itemcounter -= DT;
+		float dt = DT;
+		pInst->pObject->itemcounter -= (dt*2.5f);
 		if (pInst->pObject->itemcounter <= 0) {
 			particleInstDestroy(pInst);
 		}
@@ -302,7 +296,6 @@ void Menu_Update() {
 		AEMtx33Trans(&trans, pInst->PosCurr.x, pInst->PosCurr.y);
 		AEMtx33Concat(&pInst->pObject->transform, &trans, &mtxbuffer);
 	}
-
 }
 
 void Menu_Draw() {
@@ -428,7 +421,7 @@ void Menu_Draw() {
 
 	AEGfxMeshFree(selectionstruct.pObject->pMesh);
 
-	for (int i{ 0 }; i < 150; ++i) {
+	for (int i{ 0 }; i < 50; ++i) {
 		GameObjInst* pInst = ParticleInstList + i;
 
 		if (0 == (pInst->flag))
@@ -489,7 +482,6 @@ void Menu_Unload() {
 	AEGfxTextureUnload(digipenLogostruct.pObject->pTexture);
 	AEGfxTextureUnload(TwentyCentGamesLogostruct.pObject->pTexture);
 	AEGfxTextureUnload(menuoptionbutton.pTexture);
-
 	delete gamelogostruct.pObject;
 	delete selectionstruct.pObject;
 	delete ducklogostruct.pObject;
@@ -536,7 +528,7 @@ void systemupdate() {
 		else if (cursorx >= 557 && cursorx <= 661 && cursory >= 344 && cursory <= 391) {
 
 			click_Audio();	//JN: new code
-			next = GS_QUIT;
+			systemsettings.exit_confirmation = 1;
 
 			systemsettings.exit_confirmation = 1;
 		}

@@ -40,12 +40,6 @@ void GameOver_Init() {
 
 void GameOver_Update() {
 	Audio_Update();
-	increase_bgm_fader();	//JN: new code
-	decrease_bgm_fader();	//JN: new code
-	increase_sfx_fader();	//JN: new code
-	decrease_sfx_fader();	//JN: new code
-	mute_master_fader();	//JN: new code
-	unmute_master_fader();	//JN: new code
 
 	if (AEInputCheckTriggered(AEVK_R)) {
 		// QUESTION: is there a maze restart?
