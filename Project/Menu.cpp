@@ -490,8 +490,6 @@ void Menu_Unload() {
 	AEGfxTextureUnload(TwentyCentGamesLogostruct.pObject->pTexture);
 	AEGfxTextureUnload(menuoptionbutton.pTexture);
 
-	Audio_Unload();		//JN: new code
-
 	delete gamelogostruct.pObject;
 	delete selectionstruct.pObject;
 	delete ducklogostruct.pObject;
