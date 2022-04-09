@@ -18,11 +18,8 @@ void Credits_Init()
 
 void Credits_Update()
 {
+
 	Audio_Update();
-	increase_bgm_fader();
-	decrease_bgm_fader();
-	mute_master_fader();
-	unmute_master_fader();
 
 	//go back to MENU
 	if (AEInputCheckTriggered(AEVK_Q))
@@ -43,7 +40,7 @@ void Credits_Draw()
 	sprintf_s(strBuffer, "Press Q to go back to the main menu");
 	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 1.f, 1.f);
 
-	sprintf_s(strBuffer, "All content © 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
+	sprintf_s(strBuffer, "All content Â© 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
 	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 1.f, 1.f);
 
 	sprintf_s(strBuffer, "Team members");

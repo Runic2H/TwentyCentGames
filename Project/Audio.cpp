@@ -29,8 +29,11 @@ extern FMOD::ChannelGroup* bgm_group;		//group for bgm
 extern FMOD::ChannelGroup* sfx_group;		//group for effects
 extern FMOD::ChannelGroup* master_fader;	//controls all volume
 
-float bgm_volume{ 0.5f };
-float sfx_volume{ 0.5f };
+
+float bgm_volume{ 0.5f };					//JN: new code
+float sfx_volume{ 0.5f };					//JN: new code
+float bgm_volume_max{ 0.5 };
+float sfx_volume_max{ 0.5 };
 
 //Initialise audio
 void Audio_Init()
@@ -237,66 +240,39 @@ void stop_Audio()
 
 void increase_bgm_fader()
 {
-	if (AEInputCheckTriggered(AEVK_UP))
-	{
-		bgm_volume += 0.1f;
-
-		if (bgm_volume >= 1) bgm_volume = 1.f;
-	}
-
+	bgm_volume += 0.1f;
+	if (bgm_volume >= 0.5f) bgm_volume = 0.5f;
 	bgm_group->setVolume(bgm_volume);
 }
 
 void decrease_bgm_fader()
 {
-	if (AEInputCheckTriggered(AEVK_DOWN))
-	{
-		bgm_volume -= 0.1f;
-
-		if (bgm_volume <= 0) bgm_volume = 0.f;
-	}
-
+	bgm_volume -= 0.1f;
+	if (bgm_volume <= 0) bgm_volume = 0.0f;
 	bgm_group->setVolume(bgm_volume);
 }
 
 void increase_sfx_fader()
 {
-	if (AEInputCheckTriggered(AEVK_LEFT))
-	{
-		sfx_volume += 0.1f;
-
-		if (sfx_volume >= 1) sfx_volume = 1.f;
-	}
-
+	sfx_volume += 0.1f;
+	if (sfx_volume >= 0.5f) sfx_volume = 0.5f;
 	sfx_group->setVolume(sfx_volume);
-	//Master_Fader->setVolume(volume);
 }
 
 void decrease_sfx_fader()
 {
-	if (AEInputCheckTriggered(AEVK_RIGHT))
-	{
-		sfx_volume -= 0.1f;
-
-		if (sfx_volume <= 0) sfx_volume = 0.f;
-	}
-
+	sfx_volume -= 0.1f;
+	if (sfx_volume <= 0) sfx_volume = 0.0f;
 	sfx_group->setVolume(sfx_volume);
 	//Master_Fader->setVolume(volume);
 }
 
 void mute_master_fader()
 {
-	if (AEInputCheckTriggered(AEVK_M))
-	{
-		master_fader->setMute(true);
-	}
+	master_fader->setMute(true);
 }
 
 void unmute_master_fader()
 {
-	if (AEInputCheckTriggered(AEVK_N))
-	{
-		master_fader->setMute(false);
-	}
+	master_fader->setMute(false);
 }
