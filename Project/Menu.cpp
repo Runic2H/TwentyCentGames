@@ -158,12 +158,6 @@ void Menu_Init() {
 
 void Menu_Update() {
 	Audio_Update();
-	increase_bgm_fader();	//JN: new code
-	decrease_bgm_fader();	//JN: new code
-	increase_sfx_fader();	//JN: new code
-	decrease_sfx_fader();	//JN: new code
-	mute_master_fader();	//JN: new code
-	unmute_master_fader();	//JN: new code
 
 	AEInputGetCursorPosition(&cursorx, &cursory);
 
@@ -488,9 +482,6 @@ void Menu_Unload() {
 	AEGfxTextureUnload(digipenLogostruct.pObject->pTexture);
 	AEGfxTextureUnload(TwentyCentGamesLogostruct.pObject->pTexture);
 	AEGfxTextureUnload(menuoptionbutton.pTexture);
-
-	//Audio_Unload();		//JN: new code
-
 	delete gamelogostruct.pObject;
 	delete selectionstruct.pObject;
 	delete ducklogostruct.pObject;

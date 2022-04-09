@@ -617,9 +617,9 @@ namespace Characters
 				{
 					if (playerstats->is_dmgtaken <= 0)
 					{
-							for (int i{ 0 }; i < 14; ++i) {
-							particleInstCreate(AERandFloat() * 10, playerstats->positionX - 190, playerstats->positionY - 20, particlePLAYER);
-							}
+						for (int i{ 0 }; i < 14; ++i) {
+						particleInstCreate(AERandFloat() * 10, playerstats->positionX - 190, playerstats->positionY - 20, particlePLAYER);
+						}
 						playerstats->health -= 2;
 						playerstats->is_dmgtaken = 0.5f;
 						if (playerstats->health < 2)
@@ -887,7 +887,18 @@ namespace Characters
 							for (int i{ 0 }; i < 20; ++i) {
 								particleInstCreate(AERandFloat() * 10, playerstats->positionX - 190, playerstats->positionY - 20, particlePLAYER);
 							}
-							playerstats->health -= (int)enemystats->damage;
+							if (playerstats->health == playerstats->maxhealth)
+							{
+								if (enemystats->damage >= playerstats->health)
+								{
+									playerstats->health = 1;
+								}
+							}
+							else
+							{
+								playerstats->health -= (int)enemystats->damage;
+							}
+
 							playerstats->is_dmgtaken = 0.5f;
 							EnemyTypeCheckToApplyPlayerDebuff();
 						}

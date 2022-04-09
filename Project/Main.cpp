@@ -81,7 +81,6 @@
 				
 				AESysFrameStart();							// Informing the system about the loop's start
 				AEInputUpdate();							// Handling Input
-				
 				Input_Handle();								//Handles the input from mouse and keyboard devices
 				fpUpdate();									//Within GSM_Update, updates the gamestate according to the current value
 				fpDraw();									//Within GSM_Update, draws the current gamestate according to the current value.

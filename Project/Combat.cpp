@@ -28,6 +28,7 @@ AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
 AEGfxTexture* enemytexturefire;
 AEGfxTexture* enemytexturefrost;
+AEGfxTexture* enemytextureBoss;
 AEGfxTexture* staminapotion;
 
 
@@ -61,6 +62,10 @@ void Combat_Load()
 
 	enemytexturefire = AEGfxTextureLoad("Images/Fire turtle.png");
 	AE_ASSERT_MESG(enemytexturefire, "cant create enemy texture fire\n");
+
+	enemytextureBoss = AEGfxTextureLoad("Images/Boss_turtle.png");
+	AE_ASSERT_MESG(enemytextureBoss, "cant create enemy texture boss\n");
+
 }
 
 
@@ -95,12 +100,6 @@ void Combat_Initialize()
 void Combat_Update()
 {
 	Audio_Update();
-	increase_bgm_fader();	//JN: new code
-	decrease_bgm_fader();	//JN: new code
-	increase_sfx_fader();	//JN: new code
-	decrease_sfx_fader();	//JN: new code
-	mute_master_fader();	//JN: new code
-	unmute_master_fader();	//JN: new code
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
 		systemsettings.paused = 1;
@@ -249,7 +248,7 @@ void Combat_Draw()
 	}
 	if (enemystats->EnemyType == ENEMYBOSS)
 	{
-		RenderEnemy(enemytexture, EnemyMesh);
+		RenderEnemy(enemytextureBoss, EnemyMesh);
 	}
 
 	if (systemsettings.paused == 1) {
@@ -310,5 +309,5 @@ void Combat_Unload()
 	AEGfxTextureUnload(staminapotion);
 	AEGfxTextureUnload(enemytexturefrost);
 	AEGfxTextureUnload(enemytexturefire);
-
+	AEGfxTextureUnload(enemytextureBoss);
 }
