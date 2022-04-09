@@ -490,7 +490,7 @@ void Menu_Unload() {
 	AEGfxTextureUnload(TwentyCentGamesLogostruct.pObject->pTexture);
 	AEGfxTextureUnload(menuoptionbutton.pTexture);
 
-	Audio_Unload();		//JN: new code
+	//Audio_Unload();		//JN: new code
 
 	delete gamelogostruct.pObject;
 	delete selectionstruct.pObject;
@@ -538,7 +538,7 @@ void systemupdate() {
 		else if (cursorx >= 557 && cursorx <= 661 && cursory >= 344 && cursory <= 391) {
 
 			click_Audio();	//JN: new code
-			next = GS_QUIT;
+			systemsettings.exit_confirmation = 1;
 
 			systemsettings.exit_confirmation = 1;
 		}

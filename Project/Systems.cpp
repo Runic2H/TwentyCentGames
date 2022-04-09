@@ -357,7 +357,6 @@ void logicpausemenu() {
 			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 				systemsettings.paused = 0;
 				click_Audio();	//JN: new code
-				next = GS_QUIT;
 				systemsettings.exit_confirmation = 1;
 			}
 		}
