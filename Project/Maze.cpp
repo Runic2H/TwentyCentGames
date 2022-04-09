@@ -964,7 +964,7 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == CHEST)
 	{
-		chest_open_Audio();	//JN: new code
+		chest_open_Audio();
 		std::cout << "player is on chest" << std::endl;
 		MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);				
 	}
@@ -1153,7 +1153,7 @@ void Maze_Load()
 */
 void Maze_Initialize()
 {
-	stop_Audio(); //JN: new code
+	stop_Audio();
 	maze_background_Audio();
 	//initialise_pausemenu();
 
@@ -1210,20 +1210,20 @@ void Maze_Update()
 {
 	//std::cout << "Maze:Update" << std::endl;
 	Audio_Update();
-	increase_bgm_fader();	//JN: new code
-	decrease_bgm_fader();	//JN: new code
-	increase_sfx_fader();	//JN: new code
-	decrease_sfx_fader();	//JN: new code
-	mute_master_fader();	//JN: new code
-	unmute_master_fader();	//JN: new code
+	increase_bgm_fader();
+	decrease_bgm_fader();
+	increase_sfx_fader();
+	decrease_sfx_fader();
+	mute_master_fader();
+	unmute_master_fader();
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
-		click_Audio();	//JN: new code
+		click_Audio();
 		systemsettings.paused = 1;
 	}
 
 	else if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 1) {
-		click_Audio();	//JN: new code
+		click_Audio();
 		systemsettings.paused = 0;
 	}
 
@@ -1242,8 +1242,7 @@ void Maze_Update()
 
 				Maze_CameraAdjustment(1);
 				//AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
-			
-				//JN: new code (if statement)
+
 				if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == EMPTY_PATH)
 				{
 					swimming_Audio();
@@ -1265,8 +1264,7 @@ void Maze_Update()
 
 				Maze_CameraAdjustment(3);
 				//AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
-			
-				//JN: new code (if statement)
+
 				if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == EMPTY_PATH)
 				{
 					swimming_Audio();
@@ -1291,7 +1289,6 @@ void Maze_Update()
 				Maze_CameraAdjustment(2);
 				//AEGfxSetCamPosition(cam_x- Maze->specifications.cellWidth, cam_y);
 			
-				//JN: new code (if statement)
 				if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == EMPTY_PATH)
 				{
 					swimming_Audio();
@@ -1314,7 +1311,6 @@ void Maze_Update()
 				Maze_CameraAdjustment(4);
 				//AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
 			
-				//JN: new code (if statement)
 				if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == EMPTY_PATH)
 				{
 					swimming_Audio();

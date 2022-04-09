@@ -1,14 +1,14 @@
 #include "pch.hpp"
 
-//AEGfxVertexList* line;
+AEGfxVertexList* line;
 
 void Credits_Load()
 {
-	////middle line
-	//AEGfxMeshStart();
-	//AEGfxVertexAdd(-200, 299, 0x00FF00FF, 0.0f, 0.0f);
-	//AEGfxVertexAdd(-200, -299, 0x00FFFF00, 0.0f, 0.0f);
-	//line = AEGfxMeshEnd();
+	//middle line
+	AEGfxMeshStart();
+	AEGfxVertexAdd(-200, 299, 0x00FF00FF, 0.0f, 0.0f);
+	AEGfxVertexAdd(-200, -299, 0x00FFFF00, 0.0f, 0.0f);
+	line = AEGfxMeshEnd();
 }
 
 void Credits_Init()
@@ -18,11 +18,11 @@ void Credits_Init()
 
 void Credits_Update()
 {
-	Audio_Update();			//JN: new code
-	increase_bgm_fader();	//JN: new code
-	decrease_bgm_fader();	//JN: new code
-	mute_master_fader();	//JN: new code
-	unmute_master_fader();	//JN: new code
+	Audio_Update();
+	increase_bgm_fader();
+	decrease_bgm_fader();
+	mute_master_fader();
+	unmute_master_fader();
 
 	//go back to MENU
 	if (AEInputCheckTriggered(AEVK_Q))

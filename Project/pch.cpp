@@ -15,11 +15,11 @@ float global_maze_cam_y;
 int duck_dir = DD_UP;
 bool is_focused;
 
-FMOD::Channel* bgm_channel;			//JN: new code
-FMOD::Channel* sfx_channel;			//JN: new code
-FMOD::ChannelGroup* bgm_group;		//JN: new code
-FMOD::ChannelGroup* sfx_group;		//JN: new code
-FMOD::ChannelGroup* master_fader;	//JN: new code
+FMOD::Channel* bgm_channel;
+FMOD::Channel* sfx_channel;
+FMOD::ChannelGroup* bgm_group;
+FMOD::ChannelGroup* sfx_group;
+FMOD::ChannelGroup* master_fader;
 
 // test bench
 int level_iter;

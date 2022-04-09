@@ -646,12 +646,12 @@ void Tutorial_Init()
 void Tutorial_Update()
 {
 	Audio_Update();
-	increase_bgm_fader();	//JN: new code
-	decrease_bgm_fader();	//JN: new code
-	increase_sfx_fader();	//JN: new code
-	decrease_sfx_fader();	//JN: new code
-	mute_master_fader();	//JN: new code
-	unmute_master_fader();	//JN: new code
+	increase_bgm_fader();
+	decrease_bgm_fader();
+	increase_sfx_fader();
+	decrease_sfx_fader();
+	mute_master_fader();
+	unmute_master_fader();
 
 	//go back to MENU
 	if (AEInputCheckTriggered(AEVK_Q)) 

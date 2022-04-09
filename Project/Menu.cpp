@@ -144,10 +144,9 @@ void Menu_Load() {
 }
 
 void Menu_Init() {
-	//JN: new if statement
 	if (previous != CREDITS && previous != TUTORIAL)
 	{
-		stop_Audio();	//JN: new code
+		stop_Audio();
 		menu_background_Audio();
 	}
 
@@ -159,12 +158,12 @@ void Menu_Init() {
 
 void Menu_Update() {
 	Audio_Update();
-	increase_bgm_fader();	//JN: new code
-	decrease_bgm_fader();	//JN: new code
-	increase_sfx_fader();	//JN: new code
-	decrease_sfx_fader();	//JN: new code
-	mute_master_fader();	//JN: new code
-	unmute_master_fader();	//JN: new code
+	increase_bgm_fader();
+	decrease_bgm_fader();
+	increase_sfx_fader();
+	decrease_sfx_fader();
+	mute_master_fader();
+	unmute_master_fader();
 
 	AEInputGetCursorPosition(&cursorx, &cursory);
 
@@ -252,7 +251,6 @@ void Menu_Update() {
 		
 		if (systemsettings.twentycentTimer > 0)
 		{
-			//JN: new if statement
 			if (is_playing == true)
 			{
 				coin_drop_Audio();
@@ -490,8 +488,6 @@ void Menu_Unload() {
 	AEGfxTextureUnload(TwentyCentGamesLogostruct.pObject->pTexture);
 	AEGfxTextureUnload(menuoptionbutton.pTexture);
 
-	Audio_Unload();		//JN: new code
-
 	delete gamelogostruct.pObject;
 	delete selectionstruct.pObject;
 	delete ducklogostruct.pObject;
@@ -524,26 +520,26 @@ void systemupdate() {
 
 	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 		if (cursorx >= 106 && cursorx <= 210 && cursory >= 344 && cursory <= 391) {
-			click_Audio();	//JN: new code
+			click_Audio();
 			next = MAZE;
 		}
 		else if (cursorx >= 256 && cursorx <= 360 && cursory >= 344 && cursory <= 391) {
-			click_Audio();	//JN: new code
+			click_Audio();
 			next = TUTORIAL;
 		}
 		else if (cursorx >= 405 && cursorx <= 509 && cursory >= 344 && cursory <= 391) {
-			click_Audio();	//JN: new code
+			click_Audio();
 			next = CREDITS;
 		}
 		else if (cursorx >= 557 && cursorx <= 661 && cursory >= 344 && cursory <= 391) {
 
-			click_Audio();	//JN: new code
+			click_Audio();
 			next = GS_QUIT;
 
 			systemsettings.exit_confirmation = 1;
 		}
 		else if (cursorx >= 643 && cursorx <= 747 && cursory >= 527 && cursory <= 574) {
-			click_Audio();	//JN: new code
+			click_Audio();
 			systemsettings.options == 0 ? systemsettings.options = 1 : systemsettings.options = 0;
 		}
 	}
@@ -552,7 +548,6 @@ void systemupdate() {
 	{
 		if (AEInputCheckTriggered(AEVK_D)) {
 			if (!(posX >= 110.0f)) {
-				click_Audio();	//JN: new code
 				posX += 150.0f;
 				++choice;
 			}
@@ -560,7 +555,6 @@ void systemupdate() {
 
 		if (AEInputCheckTriggered(AEVK_A)) {
 			if (!(posX <= -340.0f)) {
-				click_Audio();	//JN: new code
 				posX -= 150.0f;
 				--choice;
 			}
@@ -568,14 +562,12 @@ void systemupdate() {
 	}
 
 	if (AEInputCheckTriggered(AEVK_S)) {
-		click_Audio();	//JN: new code
 		posX = 195.0f;
 		posY = -250.0f;
 		choice = 4;
 	}
 
 	if (AEInputCheckTriggered(AEVK_W)) {
-		click_Audio();	//JN: new code
 		posX = -340.0f;
 		posY = -70.0f;
 		choice = 0;
@@ -595,6 +587,7 @@ void systemupdate() {
 	}
 
 	if (AEInputCheckTriggered(AEVK_SPACE)) {
+		click_Audio();
 
 		switch (choice) {
 		case 0: next = MAZE;

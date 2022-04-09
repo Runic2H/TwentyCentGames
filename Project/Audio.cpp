@@ -19,18 +19,18 @@ FMOD::Sound* slashing_sound1 = nullptr;
 FMOD::Sound* slashing_sound2 = nullptr;
 FMOD::Sound* swimming_sound = nullptr;
 FMOD::Sound* portion_sound = nullptr;
-FMOD::Sound* chest_open_sound = nullptr;	//JN: new code
-FMOD::Sound* click_sound = nullptr;			//JN: new code
-FMOD::Sound* coin_drop_sound = nullptr;		//JN: new code
+FMOD::Sound* chest_open_sound = nullptr;
+FMOD::Sound* click_sound = nullptr;
+FMOD::Sound* coin_drop_sound = nullptr;
 
-extern FMOD::Channel* bgm_channel;			//individual channels for bgm				JN: new code
-extern FMOD::Channel* sfx_channel;			//individual channels for effects			JN: new code
-extern FMOD::ChannelGroup* bgm_group;		//group for bgm								JN: new code
-extern FMOD::ChannelGroup* sfx_group;		//group for effects							JN: new code
-extern FMOD::ChannelGroup* master_fader;	//controls all volume						JN: new code
+extern FMOD::Channel* bgm_channel;			//individual channels for bgm
+extern FMOD::Channel* sfx_channel;			//individual channels for effects
+extern FMOD::ChannelGroup* bgm_group;		//group for bgm
+extern FMOD::ChannelGroup* sfx_group;		//group for effects
+extern FMOD::ChannelGroup* master_fader;	//controls all volume
 
-float bgm_volume{ 0.5f };					//JN: new code
-float sfx_volume{ 0.5f };					//JN: new code
+float bgm_volume{ 0.5f };
+float sfx_volume{ 0.5f };
 
 //Initialise audio
 void Audio_Init()
@@ -41,12 +41,12 @@ void Audio_Init()
 	result = audio_system->init(MAX_CHANNELS, FMOD_INIT_NORMAL, nullptr);
 	
 	//create 3 channel groups
-	audio_system->createChannelGroup("master_fader", &master_fader);	//JN: new code
-	audio_system->createChannelGroup("Music", &bgm_group);				//JN: new code
-	audio_system->createChannelGroup("SFX", &sfx_group);				//JN: new code
+	audio_system->createChannelGroup("master_fader", &master_fader);
+	audio_system->createChannelGroup("Music", &bgm_group);
+	audio_system->createChannelGroup("SFX", &sfx_group);
 	//add the 2 groups into Master_Fader (controls all volumes)
-	master_fader->addGroup(bgm_group);									//JN: new code
-	master_fader->addGroup(sfx_group);									//JN: new code
+	master_fader->addGroup(bgm_group);
+	master_fader->addGroup(sfx_group);
 
 	//**		BGM		**//
 	//maze background
@@ -76,11 +76,11 @@ void Audio_Init()
 	//portion drinking
 	audio_system->createSound("Music/ICE-GLASS_GEN-HDF-15591.wav", FMOD_DEFAULT, nullptr, &portion_sound);
 	//chest open
-	audio_system->createSound("Music/DOOR-COMPARTMENT_GEN-HDF-09514.wav", FMOD_LOOP_OFF, nullptr, &chest_open_sound);	//JN: new code
+	audio_system->createSound("Music/DOOR-COMPARTMENT_GEN-HDF-09514.wav", FMOD_LOOP_OFF, nullptr, &chest_open_sound);
 	//click
-	audio_system->createSound("Music/THERMOSTAT_GEN-HDF-23295.wav", FMOD_LOOP_OFF, nullptr, &click_sound);				//JN: new code
+	audio_system->createSound("Music/THERMOSTAT_GEN-HDF-23295.wav", FMOD_LOOP_OFF, nullptr, &click_sound);
 	//coin drop
-	audio_system->createSound("Music/CoinDrop_CTE01_46.1.ogg", FMOD_LOOP_OFF, nullptr, &coin_drop_sound);			//JN: new code
+	audio_system->createSound("Music/CoinDrop_CTE01_46.1.ogg", FMOD_LOOP_OFF, nullptr, &coin_drop_sound);
 }
 
 //Update audio
@@ -107,9 +107,9 @@ void Audio_Unload()
 	slashing_sound2->release();
 	swimming_sound->release();
 	portion_sound->release();
-	chest_open_sound->release();	//JN: new code
-	click_sound->release();			//JN: new code
-	coin_drop_sound->release();		//JN: new code
+	chest_open_sound->release();
+	click_sound->release();
+	coin_drop_sound->release();
 }
 
 //seperate audio functions
@@ -117,8 +117,8 @@ void Audio_Unload()
 void maze_background_Audio()
 {
 	// Play the sound.
-	result = audio_system->playSound(maze_bgm, nullptr, false, &bgm_channel);	//JN: edited
-	bgm_channel->setChannelGroup(bgm_group);									//JN: new code
+	result = audio_system->playSound(maze_bgm, nullptr, false, &bgm_channel);
+	bgm_channel->setChannelGroup(bgm_group);
 	std::cout << "maze background sound audio\n\n";
 
 	//adjusting_master_fader();
@@ -131,29 +131,29 @@ void maze_background_Audio()
 
 void win_screen_background_Audio()
 {
-	result = audio_system->playSound(win_screen_bgm, nullptr, false, &bgm_channel);	//JN: edited
-	bgm_channel->setChannelGroup(bgm_group);										//JN: new code
+	result = audio_system->playSound(win_screen_bgm, nullptr, false, &bgm_channel);
+	bgm_channel->setChannelGroup(bgm_group);
 	std::cout << "Win screen audio\n\n";
 }
 
 void lose_screen_background_Audio()
 {
-	result = audio_system->playSound(lose_screen_bgm, nullptr, false, &bgm_channel);	//JN: edited
-	bgm_channel->setChannelGroup(bgm_group);											//JN: new code
+	result = audio_system->playSound(lose_screen_bgm, nullptr, false, &bgm_channel);
+	bgm_channel->setChannelGroup(bgm_group);
 	std::cout << "Lose screen audio\n\n";
 }
 
 void menu_background_Audio()
 {
-	result = audio_system->playSound(menu_bgm, nullptr, false, &bgm_channel);	//JN: edited
-	bgm_channel->setChannelGroup(bgm_group);									//JN: new code
+	result = audio_system->playSound(menu_bgm, nullptr, false, &bgm_channel);
+	bgm_channel->setChannelGroup(bgm_group);
 	std::cout << "menu background sound audio\n\n";
 }
 
 void combat_background_Audio()
 {
-	result = audio_system->playSound(combat_bgm, nullptr, false, &bgm_channel);	//JN: edited
-	bgm_channel->setChannelGroup(bgm_group);									//JN: new code
+	result = audio_system->playSound(combat_bgm, nullptr, false, &bgm_channel);
+	bgm_channel->setChannelGroup(bgm_group);
 	std::cout << "menu background sound audio\n\n";
 }
 
@@ -161,54 +161,53 @@ void combat_background_Audio()
 //**		effects		**//
 void wall_hit_Audio()
 {
-	result = audio_system->playSound(wall_sound, nullptr, false, &sfx_channel);	//JN: edited
-	sfx_channel->setChannelGroup(sfx_group);									//JN: new code
+	result = audio_system->playSound(wall_sound, nullptr, false, &sfx_channel);
+	sfx_channel->setChannelGroup(sfx_group);
 	std::cout << "Hit wall audio\n\n";
 }
 
 void page_flip1_Audio()
 {
-	result = audio_system->playSound(page_flip_sound1, nullptr, false, &sfx_channel);	//JN: edited
-	sfx_channel->setChannelGroup(sfx_group);											//JN: new code
+	result = audio_system->playSound(page_flip_sound1, nullptr, false, &sfx_channel);
+	sfx_channel->setChannelGroup(sfx_group);
 	std::cout << "Page flip 1 audio\n\n";
 }
 
 void page_flip2_Audio()
 {
-	result = audio_system->playSound(page_flip_sound2, nullptr, false, &sfx_channel);	//JN: edited
-	sfx_channel->setChannelGroup(sfx_group);											//JN: new code
+	result = audio_system->playSound(page_flip_sound2, nullptr, false, &sfx_channel);
+	sfx_channel->setChannelGroup(sfx_group);
 	std::cout << "Page flip 2 audio\n\n";
 }
 
 void slashing1_Audio()
 {
-	result = audio_system->playSound(slashing_sound1, nullptr, false, &sfx_channel);	//JN: edited
-	sfx_channel->setChannelGroup(sfx_group);											//JN: new code
+	result = audio_system->playSound(slashing_sound1, nullptr, false, &sfx_channel);
+	sfx_channel->setChannelGroup(sfx_group);
 	std::cout << "Slashing 1 audio\n\n";
 }
 
 void slashing2_Audio()
 {
-	result = audio_system->playSound(slashing_sound2, nullptr, false, &sfx_channel);	//JN: edited
-	sfx_channel->setChannelGroup(sfx_group);											//JN: new code
+	result = audio_system->playSound(slashing_sound2, nullptr, false, &sfx_channel);
+	sfx_channel->setChannelGroup(sfx_group);
 	std::cout << "Slashing 2 audio\n\n";
 }
 
 void swimming_Audio()
 {
-	result = audio_system->playSound(swimming_sound, nullptr, false, &sfx_channel);	//JN: edited
-	sfx_channel->setChannelGroup(sfx_group);										//JN: new code
+	result = audio_system->playSound(swimming_sound, nullptr, false, &sfx_channel);
+	sfx_channel->setChannelGroup(sfx_group);
 	std::cout << "swim audio\n\n";
 }
 
 void portion_Audio()
 {
-	result = audio_system->playSound(portion_sound, nullptr, false, &sfx_channel);	//JN: edited
-	sfx_channel->setChannelGroup(sfx_group);										//JN: new code
+	result = audio_system->playSound(portion_sound, nullptr, false, &sfx_channel);
+	sfx_channel->setChannelGroup(sfx_group);
 	std::cout << "drinking portion audio\n\n";
 }
 
-//JN: new code from here onwards
 void chest_open_Audio()
 {
 	result = audio_system->playSound(chest_open_sound, nullptr, false, &sfx_channel);
