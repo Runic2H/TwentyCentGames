@@ -46,6 +46,11 @@ extern sys systemsettings;
 extern bool is_focused;
 extern GameObjInst* ParticleInstList;
 
+extern float bgm_volume;					//JN: new code
+extern float sfx_volume;					//JN: new code
+extern float sfx_volume_max;
+extern float bgm_volume_max;
+
 void initialise_pausemenu();
 void LogicExit_Confirmation();
 void RenderExit_Confirmation();
