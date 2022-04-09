@@ -22,6 +22,7 @@ namespace Characters
 		************************************************************/
 		item* rightbutton;
 		item* leftbutton;
+		item* combat_bg;
 		
 		AEGfxVertexList* Player1Grid = 0;	//ORIGN
 		AEGfxVertexList* Player2Grid = 0;	//TOP
@@ -109,6 +110,7 @@ namespace Characters
 
 			rightbutton = new item;
 			leftbutton = new item;
+			combat_bg = new item;
 
 			// THE MAX PLAYER HEALTH
 			AEGfxMeshStart();
@@ -135,14 +137,15 @@ namespace Characters
 
 			rightbutton->pMesh
 				= leftbutton->pMesh
+				= combat_bg->pMesh
 				= AEGfxMeshEnd();
 			AE_ASSERT_MESG(rightbutton->pMesh, "Failed to create pause meshes!!\n");
 
 		
 			rightbutton->pTexture = AEGfxTextureLoad("Images/rightbutton.png");
 			leftbutton->pTexture = AEGfxTextureLoad("Images/leftbutton.png");
+			combat_bg->pTexture = AEGfxTextureLoad("Images/combatbackground.png");
 	
-
 			//
 
 			//CHARACTER OBJECT
@@ -202,6 +205,30 @@ namespace Characters
 			if (keypressed == 1) {
 				--playerstats->staminacount;
 			}
+		}
+
+		void Backgroundupdate() {
+
+			AEMtx33 scale, rot, trans, buffer;
+
+			AEMtx33Scale(&scale, 950.0f, 600.0f);
+			AEMtx33Rot(&rot, 0.0f);
+			AEMtx33Concat(&buffer, &scale, &rot);
+
+			AEMtx33Trans(&trans, 0.0f, 0.0f);
+			AEMtx33Concat(&combat_bg->transform, &trans, &buffer);
+		}
+
+		void Backgroundrender() {
+
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+			AEGfxSetTransform(combat_bg->transform.m);
+			AEGfxSetTransparency(0.5f);
+			AEGfxTextureSet(combat_bg->pTexture, 0, 0);
+			AEGfxMeshDraw(combat_bg->pMesh, AE_GFX_MDM_TRIANGLES);
 		}
 
 		void FROZENbuttonlogic() {
@@ -322,14 +349,17 @@ namespace Characters
 
 			AEGfxSetTransform(playerinventory->defencepotion.transform.m);
 			AEGfxTextureSet(playerinventory->defencepotion.pTexture, 0, 0);
+			AEGfxSetTransparency(1);
 			AEGfxMeshDraw(playerinventory->defencepotion.pMesh, AE_GFX_MDM_TRIANGLES);
 
 			AEGfxSetTransform(playerinventory->healthpotion.transform.m);
 			AEGfxTextureSet(playerinventory->healthpotion.pTexture, 0, 0);
+			AEGfxSetTransparency(1);
 			AEGfxMeshDraw(playerinventory->healthpotion.pMesh, AE_GFX_MDM_TRIANGLES);
 
 			AEGfxSetTransform(playerinventory->staminapotion.transform.m);
 			AEGfxTextureSet(playerinventory->staminapotion.pTexture, 0, 0);
+			AEGfxSetTransparency(1);
 			AEGfxMeshDraw(playerinventory->staminapotion.pMesh, AE_GFX_MDM_TRIANGLES);
 
 
@@ -477,9 +507,11 @@ namespace Characters
 
 			AEGfxTextureUnload(rightbutton->pTexture);
 			AEGfxTextureUnload(leftbutton->pTexture);
+			AEGfxTextureUnload(combat_bg->pTexture);
 
 			delete rightbutton;
 			delete leftbutton;
+			delete combat_bg;
 		}
 
 		// returns an int. any movement sets the int flag to 1

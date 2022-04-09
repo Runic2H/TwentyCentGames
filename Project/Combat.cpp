@@ -47,7 +47,7 @@ using namespace Characters::Character;
 void Combat_Load()
 {
 	std::cout << "Combat:Load" << std::endl;
-	//playertexture = AEGfxTextureLoad("ducky.jpg");
+
 	playertexture = AEGfxTextureLoad("Images/Fighting duck.png");
 	AE_ASSERT_MESG(playertexture, "cant create duck texture\n");
 
@@ -117,6 +117,7 @@ void Combat_Update()
 		EnemyCombatMesh();
 		inventorylogic();
 		CheckandUpdatePlayerStatus();
+		Backgroundupdate();
 		godmode();
 
 		playerstats->is_dmgtaken -= DT;
@@ -221,6 +222,7 @@ void Combat_Update()
 */
 void Combat_Draw()
 {
+	Backgroundrender();
 	StaminaRender(staminapotion);
 	inventoryrender();
 	RenderEnemyHealth();

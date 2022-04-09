@@ -69,6 +69,10 @@ namespace Characters
 		void FROZENbuttonrender();
 
 		void unloadtextures();
+
+		void Backgroundupdate();
+
+		void Backgroundrender();
 	}
 
 	/******************************************************
