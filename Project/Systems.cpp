@@ -825,8 +825,9 @@ void System_Initialise() {
 	systemsettings.exit_confirmation = 0;
 	systemsettings.mute = 0;
 	systemsettings.options = 0;
-	systemsettings.digipenTimer = 3.0f;
-	systemsettings.twentycentTimer = 3.0f;
+	systemsettings.digipenTimer = 2.5f;
+	systemsettings.twentycentTimer = 2.5f;
+	systemsettings.fmodTimer = 2.5f;
 
 	for (int i{ 0 }; i < 150; ++i) {
 		GameObjInst* pInst = ParticleInstList + i;
