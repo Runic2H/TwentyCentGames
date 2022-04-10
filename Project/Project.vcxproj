@@ -106,7 +106,7 @@
     <ClCompile Include="victoryscreen.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="AudioManager.hpp" />
     <ClInclude Include="Characters.hpp" />
     <ClInclude Include="Combat.hpp" />
     <ClInclude Include="Credits.hpp" />

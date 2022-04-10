@@ -1,7 +1,8 @@
 /**************************************************************************
  * 	File name	:	Systems.cpp
  * 	Project name:	Project D.U.C.K
- * 	Author(s)	:	Richmond Choo Tze Yong	(PRIMARY AUTHOR - 98%)
+ * 	Author(s)	:	Richmond Choo Tze Yong	(PRIMARY AUTHOR - 68%)
+ *					Elton Teo Zhe Wei		(SECONDARY AUTHOR - 30%)
  *					Hu Jun Ning				(SECONDARY AUTHOR - 1%)
  *					Matthew Cheung Jun Yin	(SECONDARY AUTHOR - 1%)
  *
@@ -64,7 +65,7 @@ GameObjInst* particleInstCreate(float scale, float posX, float posY, int type) {
 			pInst->scale = scale;
 			pInst->type = type;
 
-			int count = AERandFloat() * 10;
+			int count = (int)(AERandFloat() * 10);
 
 			if (count >= 0 && count <= 2) {
 				pInst->velCurr.x = AERandFloat() * 300;

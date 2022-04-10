@@ -83,7 +83,7 @@ void victory_update() {
 	float particleX{}, particleY{};
 	int count{};
 
-	count = AERandFloat() * 10;
+	count = (int)(AERandFloat() * 10);
 
 	if (count >= 0 && count <= 2) {
 		particleX = AERandFloat() * 400;

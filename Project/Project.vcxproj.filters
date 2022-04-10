@@ -104,7 +104,7 @@
     <ClInclude Include="victoryscreen.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioManager.h">
+    <ClInclude Include="AudioManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Extern\FMOD\inc\fmod.h">

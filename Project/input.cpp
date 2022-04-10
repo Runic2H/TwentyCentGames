@@ -9,7 +9,7 @@
 #include "pch.hpp"
 
 /**************************************************************
-*	for alt tabbing capability
+*	for alt tabbing window in fullscreen mode
 ***************************************************************/
 void Input_Handle() {
 

@@ -186,7 +186,7 @@ void Maze_DisplayChestPickupItem(std::string msg)
 
 void Maze_Minimap_LoadMeshes(float &global_var_minimap_height)
 {
-	float window_height = AEGetWindowHeight()*0.75; 
+	float window_height = (float)(AEGetWindowHeight()*0.75); 
 	global_var_minimap_height = window_height;
 	// This shape has 5 vertices
 	AEGfxMeshStart();
@@ -258,7 +258,7 @@ void Maze_LevelText_Draw()
 	sprintf_s(strBuffer, "LEVEL %d",level_iter+1);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxPrint(fontLarge, strBuffer, -0.41, 0.7, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontLarge, strBuffer, -0.41f, 0.7f, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /******************************************************************************/
@@ -384,7 +384,7 @@ void Maze_EnemySpawn(float contact_rate)
 
 	int rand_index;
 
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	while (no_of_battles > 0)
 	{
 		rand_index = rand() % path_x.size();
@@ -442,7 +442,7 @@ void Maze_ChestSpawn(float spawn_rate)
 
 	int rand_index = 0;
 
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	while (no_of_chests > 0)
 	{
 		int rand_index = rand() % path_x.size();
@@ -699,7 +699,7 @@ bool MazeGenAlgo_PostGenCheck() // checks if the center col is not ALL PATH, ret
 /******************************************************************************/
 void MazeGenAlgo()
 {
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	MazeGenAlgo_MakeMaze();
 	MazeGenAlgo_ChoosingStartingPos(start_x, start_y, end_x, end_y, noOfRows, noOfCols);
 	MazeGenAlgo_Set_walls();
@@ -1235,16 +1235,14 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 
 		else {
 			next = VICTORY;
-			level_iter += 1;
-			//noOfCols = level[level_iter];
-			noOfRows = level[level_iter];
-			noOfCols = noOfRows;
 			maze_init_flag = 0;
 			MAZE_ResetCellVisibility(Maze);
 			global_maze_cam_x = cam_x;
 			global_maze_cam_y = cam_y;
 			AEGfxSetCamPosition(0.0f, 0.0f);
 			level_iter = 0;
+			noOfRows = level[level_iter];
+			noOfCols = noOfRows;
 		}
 	}
 
@@ -1272,7 +1270,7 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	std::cout << "Player has opened chest" << std::endl;
 
 	int randindex;
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	randindex = ( rand() % 3 ) + 1;
 	if (randindex == 1)
 	{

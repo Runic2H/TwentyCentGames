@@ -224,6 +224,10 @@ void Menu_Init() {
 		menu_background_Audio();
 	}
 
+	playerinventory->defencepotion.itemcounter = 0;
+	playerinventory->healthpotion.itemcounter = 0;
+	playerinventory->staminapotion.itemcounter = 0;
+
 	/*if (current == current)
 	{
 		stop_Audio();
