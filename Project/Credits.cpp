@@ -3,7 +3,7 @@
  * 	Project name:	Project D.U.C.K
  * 	Author(s)	:	Hu Jun Ning	(PRIMARY AUTHOR - 100%)
  *
- * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+ * All content � 2022 DigiPen Institute of Technology Singapore. All rights reserved.
 **************************************************************************/
 
 #include "pch.hpp"
@@ -11,7 +11,7 @@
 //variables
 /* Define */
 int credits_page{ 1 };
-enum credits_pages { credits_page_1 = 1, credits_page_2, credits_page_3, credits_page_4, credits_page_5, credits_page_6, credits_page_7 };
+enum credits_pages { credits_page_1 = 1, credits_page_2, credits_page_3, credits_page_4};
 
 //extern sys systemsettings;
 
@@ -20,11 +20,14 @@ AEGfxVertexList* team_logo;
 AEGfxVertexList* audacity_and_sketchbook_mesh;
 AEGfxVertexList* fmod_mesh;
 AEGfxVertexList* button_box_at_credits;
+AEGfxVertexList* copyright_logo_mesh;
 
 AEGfxTexture* team_logo_art;
 AEGfxTexture* sketchbook_logo_art;
 AEGfxTexture* audacity_logo_art;
 AEGfxTexture* fmod_logo_art;
+AEGfxTexture* copyright_logo_art;
+AEGfxTexture* copyright_logo_art2;
 
 
 /**************************************************************
@@ -55,6 +58,16 @@ void Draw_right_button_box()
 	AEGfxMeshDraw(button_box_at_credits, AE_GFX_MDM_LINES_STRIP);
 }
 
+void Draw_copyright_logo()
+{
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetPosition(-(float)(AEGetWindowWidth()* 0.192375), -(float)(AEGetWindowHeight()* 0.4735));
+	//AEGfxSetPosition(-153.9, -284.1);
+	AEGfxTextureSet(copyright_logo_art, 0, 0);
+	AEGfxMeshDraw(copyright_logo_mesh, AE_GFX_MDM_TRIANGLES);
+}
+
 /**************************************************************
 *	code for credits screen page 1
 ***************************************************************/
@@ -63,14 +76,16 @@ void credits_page_one_code()
 	//Draw team logo
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	//AEGfxSetPosition(-10.0f, 50.0f);
 	AEGfxSetPosition((float)-(AEGetWindowWidth() * 0.0125), (float)(AEGetWindowHeight() *1/12));
 	AEGfxTextureSet(team_logo_art, 0, 0);
 	AEGfxSetTintColor(1, 1, 1, 1);
 	AEGfxSetTransparency(1);
 	AEGfxMeshDraw(team_logo, AE_GFX_MDM_TRIANGLES);
 
+
 	Draw_right_button_box();
+	Draw_copyright_logo();
+
 
 	char strBuffer[1000];
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -104,8 +119,8 @@ void credits_page_one_code()
 	sprintf_s(strBuffer, "Press Q to go back to the main menu");
 	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 0.831f, 0.36f);
 
-	sprintf_s(strBuffer, "All content © 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
-	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
+	sprintf_s(strBuffer, "All content     2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
+	AEGfxPrint(fontId, strBuffer, -0.55f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 
 
@@ -116,7 +131,7 @@ void credits_page_two_code()
 {
 	Draw_left_button_box();
 	Draw_right_button_box();
-
+	Draw_copyright_logo();
 
 
 	char strBuffer[1000];
@@ -220,8 +235,8 @@ void credits_page_two_code()
 	sprintf_s(strBuffer, "Press Q to go back to the main menu");
 	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 0.831f, 0.36f);
 
-	sprintf_s(strBuffer, "All content © 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
-	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
+	sprintf_s(strBuffer, "All content     2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
+	AEGfxPrint(fontId, strBuffer, -0.55f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 
 
@@ -232,7 +247,7 @@ void credits_page_three_code()
 {
 	Draw_left_button_box();
 	Draw_right_button_box();
-
+	Draw_copyright_logo();
 
 
 	char strBuffer[1000];
@@ -307,8 +322,8 @@ void credits_page_three_code()
 	sprintf_s(strBuffer, "Press Q to go back to the main menu");
 	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 0.831f, 0.36f);
 
-	sprintf_s(strBuffer, "All content © 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
-	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
+	sprintf_s(strBuffer, "All content     2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
+	AEGfxPrint(fontId, strBuffer, -0.55f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 
 
@@ -345,8 +360,17 @@ void credits_page_four_code()
 	AEGfxSetTransparency(1);
 	AEGfxMeshDraw(fmod_mesh, AE_GFX_MDM_TRIANGLES);
 
-	Draw_left_button_box();
+	//Draw copyright logo
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetPosition(-(float)(AEGetWindowWidth()*0.07875), -(float)(AEGetWindowHeight() * 1763/6000));
+	//AEGfxSetPosition(-63, -176.3);
+	AEGfxSetTintColor(1.f, 1.f, 1.f, 1.f);
+	AEGfxTextureSet(copyright_logo_art2, 0, 0);
+	AEGfxMeshDraw(copyright_logo_mesh, AE_GFX_MDM_TRIANGLES);
 
+	Draw_left_button_box();
+	Draw_copyright_logo();
 
 
 	char strBuffer[1000];
@@ -356,8 +380,8 @@ void credits_page_four_code()
 	sprintf_s(strBuffer, "Apps used");
 	AEGfxPrint(fontLarge, strBuffer, -0.2f, 0.65f, 0.50f, 0.678f, 0.847f, 0.902f);
 
-	sprintf_s(strBuffer, "FMOD Sound System by FireLight Technologies Pty Ltd (1998 - 2022)");
-	AEGfxPrint(fontId, strBuffer, -0.469f, -0.6f, 1.0f, 1.f, 1.f, 1.f);
+	sprintf_s(strBuffer, "FMOD Sound System    FireLight Technologies Pte Ltd (1998 - 2022)");
+	AEGfxPrint(fontId, strBuffer, -0.458f, -0.6f, 1.0f, 1.f, 1.f, 1.f);
 
 	sprintf_s(strBuffer, "Audacity");
 	AEGfxPrint(fontId, strBuffer, 0.2f, -0.05f, 1.0f, 1.f, 1.f, 1.f);
@@ -375,8 +399,8 @@ void credits_page_four_code()
 	sprintf_s(strBuffer, "Press Q to go back to the main menu");
 	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 0.831f, 0.36f);
 
-	sprintf_s(strBuffer, "All content © 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
-	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
+	sprintf_s(strBuffer, "All content     2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
+	AEGfxPrint(fontId, strBuffer, -0.55f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 
 
@@ -400,6 +424,7 @@ void Credits_Load()
 	team_logo = AEGfxMeshEnd();
 	AE_ASSERT_MESG(team_logo, "Failed to create team logo!!");
 
+
 	//audacity and sketckbook mesh
 	AEGfxMeshStart();
 	AEGfxTriAdd(
@@ -415,6 +440,7 @@ void Credits_Load()
 	audacity_and_sketchbook_mesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(audacity_and_sketchbook_mesh, "Failed to create audacity and sketchbook mesh!!");
 
+
 	//fmod mesh
 	AEGfxMeshStart();
 	AEGfxTriAdd(
@@ -429,6 +455,23 @@ void Credits_Load()
 
 	fmod_mesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(fmod_mesh, "Failed to create fmod mesh!!");
+
+
+	//copyright logo
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-5.f, -5.f, 0x00FF00FF, 0.f, 1.f,
+		-5.f, 5.f, 0x00FFFFFF, 0.f, 0.f,
+		5.f, 5.f, 0x0000FFFF, 1.f, 0.f);
+
+	AEGfxTriAdd(
+		-5.f, -5.f, 0x00FFFFFF, 0.f, 1.f,
+		5.f, 5.f, 0x00FF00FF, 1.f, 0.f,
+		5.f, -5.f, 0x0000FFFF, 1.f, 1.f);
+
+	copyright_logo_mesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(copyright_logo_mesh, "Failed to create copyright logo!!");
+
 
 	//new button box
 	AEGfxMeshStart();
@@ -453,6 +496,12 @@ void Credits_Load()
 
 	sketchbook_logo_art = AEGfxTextureLoad("Images/Sketchbook logo.png");
 	AE_ASSERT_MESG(sketchbook_logo_art, "Failed to create sketchbook logo texture!\n");
+
+	copyright_logo_art = AEGfxTextureLoad("Images/copyright logo.png");
+	AE_ASSERT_MESG(sketchbook_logo_art, "Failed to create copyright logo texture!\n");
+
+	copyright_logo_art2 = AEGfxTextureLoad("Images/copyright logo 2.png");
+	AE_ASSERT_MESG(sketchbook_logo_art, "Failed to create copyright logo texture!\n");
 }
 
 /**************************************************************
@@ -471,15 +520,16 @@ void Credits_Init()
 void Credits_Update()
 {
 	Audio_Update();
-	increase_bgm_fader();
-	decrease_bgm_fader();
-	//mute_master_fader();
-	//unmute_master_fader();
 
 	//go back to MENU
 	if (AEInputCheckTriggered(AEVK_Q))
 	{
 		next = MENU;
+	}
+
+	if (AEInputCheckTriggered(AEVK_ESCAPE))
+	{
+		next = GS_QUIT;
 	}
 
 	if (AEInputCheckTriggered(AEVK_A))
@@ -535,6 +585,12 @@ void Credits_Free()
 	AEGfxMeshFree(audacity_and_sketchbook_mesh);
 	AEGfxMeshFree(fmod_mesh);
 	AEGfxMeshFree(button_box_at_credits);
+	AEGfxMeshFree(copyright_logo_mesh);
+
+	//if (Mesh_maze_overview != nullptr) {
+	//	AEGfxMeshFree(Mesh_maze_overview);
+	//	Mesh_maze_overview = nullptr;
+	//}
 }
 
 /**************************************************************
@@ -546,4 +602,6 @@ void Credits_Unload()
 	AEGfxTextureUnload(fmod_logo_art);
 	AEGfxTextureUnload(audacity_logo_art);
 	AEGfxTextureUnload(sketchbook_logo_art);
+	AEGfxTextureUnload(copyright_logo_art);
+	AEGfxTextureUnload(copyright_logo_art2);
 }
