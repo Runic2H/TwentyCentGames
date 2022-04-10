@@ -1,3 +1,12 @@
+/**************************************************************************
+ * 	File name	:	Maze.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Louis Mineo				(PRIMARY AUTHOR - 80%)
+ *					Hu Jun Ning				(SECONDARY AUTHOR - 20%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
 
 #pragma once

@@ -1,7 +1,16 @@
+/**************************************************************************
+ * 	File name	:	input.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Elton Teo Zhe Wei		(PRIMARY CONTRIBUTOR - 100%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
 
-
-
+/**************************************************************
+*	for alt tabbing capability
+***************************************************************/
 void Input_Handle() {
 
 	is_focused = AESysGetWindowHandle() == GetFocus();

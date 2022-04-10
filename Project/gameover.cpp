@@ -1,12 +1,22 @@
+/**************************************************************************
+ * 	File name	:	gameover.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Richmond Choo Tze Yong	(PRIMARY AUTHOR - 90%)
+ *					Louis Mineo				(SECONDARY AUTHOR - 5%)
+ *					Hu Jun Ning				(SECONDARY AUTHOR - 5%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
 
-//	gameover.cpp
-
-// float camX, camY;
 AEGfxVertexList* gamemesh = 0;
 AEGfxTexture* gameovertex;
 extern int level_iter;
 
+/**************************************************************
+*	load function for gameover state
+***************************************************************/
 void GameOver_Load() {
 
 	AEGfxSetBackgroundColor(0.0f, 0.1f, 0.2f);
@@ -30,6 +40,9 @@ void GameOver_Load() {
 	AE_ASSERT_MESG(gamemesh, "Failed to create gamelogo!\n");
 }
 
+/**************************************************************
+*	init function for gameover state
+***************************************************************/
 void GameOver_Init() {
 	Audio_Init();
 	stop_Audio();
@@ -38,6 +51,10 @@ void GameOver_Init() {
 	enemy_initialise();				// reinitialises the enemy stats
 }
 
+
+/**************************************************************
+*	update function for gameover state
+***************************************************************/
 void GameOver_Update() {
 	Audio_Update();
 
@@ -57,23 +74,13 @@ void GameOver_Update() {
 		next = GS_QUIT;
 	}
 
-	//AEGfxGetCamPosition(&camX, &camY);			// cam position for debugging
-	//if (AEInputCheckCurr(AEVK_W))
-	//	AEGfxSetCamPosition(camX, camY + 10);
-	//else if (AEInputCheckCurr(AEVK_S))
-	//	AEGfxSetCamPosition(camX, camY - 10);
-
-	//AEGfxGetCamPosition(&camX, &camY);
-	//if (AEInputCheckCurr(AEVK_A))
-	//	AEGfxSetCamPosition(camX - 10, camY);
-	//else if (AEInputCheckCurr(AEVK_D))
-	//	AEGfxSetCamPosition(camX + 10, camY);
 }
 
-void GameOver_Draw() {
 
-	float w_ht = (float)AEGetWindowHeight();
-	float w_wd = (float)AEGetWindowWidth();
+/**************************************************************
+*	draw function for gameover state
+***************************************************************/
+void GameOver_Draw() {
 
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -102,6 +109,9 @@ void GameOver_Draw() {
 	
 }
 
+/**************************************************************
+*	free function for gameover state
+***************************************************************/
 void GameOver_Free() {
 
 	if (gamemesh != nullptr) {
@@ -111,6 +121,10 @@ void GameOver_Free() {
 
 }
 
+
+/**************************************************************
+*	unload function for gameover state
+***************************************************************/
 void GameOver_Unload() {
 
 	AEGfxTextureUnload(gameovertex);

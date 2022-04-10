@@ -1,3 +1,13 @@
+/**************************************************************************
+ * 	File name	:	Systems.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Richmond Choo Tze Yong	(PRIMARY AUTHOR - 98%)
+ *					Hu Jun Ning				(SECONDARY AUTHOR - 1%)
+ *					Matthew Cheung Jun Yin	(SECONDARY AUTHOR - 1%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
 
 
@@ -32,6 +42,10 @@ extern int level_iter;
 /********************************************************************
 			SYSTEM LEVEL FUNCTION DEFINITIONS
 *********************************************************************/
+
+/**************************************************************
+*	creates the particle game object instance
+***************************************************************/
 GameObjInst* particleInstCreate(float scale, float posX, float posY, int type) {
 
 	AEVec2 zero;
@@ -79,6 +93,10 @@ GameObjInst* particleInstCreate(float scale, float posX, float posY, int type) {
 	return 0;
 }
 
+
+/**************************************************************
+*	destroys the particle game object instances
+***************************************************************/
 void particleInstDestroy(GameObjInst* pInst) {
 
 	if (pInst->flag == 0) {
@@ -88,6 +106,9 @@ void particleInstDestroy(GameObjInst* pInst) {
 	pInst->flag = 0;
 }
 
+/**************************************************************
+*	the exit confirmation update loop
+***************************************************************/
 void LogicExit_Confirmation() {
 
 	yesbutton->itemcounter = nobutton->itemcounter = 0.5f;
@@ -130,6 +151,10 @@ void LogicExit_Confirmation() {
 	}
 }
 
+
+/**************************************************************
+*	renders the exit confirmation
+***************************************************************/
 void RenderExit_Confirmation() {
 
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -164,6 +189,9 @@ void RenderExit_Confirmation() {
 }
 
 
+/**************************************************************
+*	slider mesh update
+***************************************************************/
 void slidermeshupdate()
 {
 
@@ -204,6 +232,10 @@ void slidermeshupdate()
 	slidersfx->pMesh = AEGfxMeshEnd();
 }
 
+
+/**************************************************************
+*	initialises the meshes and textures for the pausemenu
+***************************************************************/
 void initialise_pausemenu() {
 
 	menubutton = new item;
@@ -244,6 +276,10 @@ void initialise_pausemenu() {
 	nobutton->pTexture = AEGfxTextureLoad("Images/resumebutton.png");
 }
 
+
+/**************************************************************
+*	initialises the optionmenu
+***************************************************************/
 void initialise_optionmenu()
 {
 	mutebutton = new item;
@@ -328,7 +364,9 @@ void initialise_optionmenu()
 }
 
 
-
+/**************************************************************
+*	the logic for the options menu
+***************************************************************/
 void logicoptionmenu()
 {
 	fullscreenbutton->itemcounter = mutebutton->itemcounter = 
@@ -449,6 +487,9 @@ void logicoptionmenu()
 	}
 }
 
+/**************************************************************
+*	draws the options menu
+***************************************************************/
 void renderoptionmenu()
 {
 	slidermeshupdate();
@@ -543,6 +584,9 @@ void renderoptionmenu()
 	AEGfxPrint(fontLarge, strBuffer, -0.12f, -0.72f, 0.25f, 1.0f, 1.0f, 1.0f);
 }
 
+/**************************************************************
+*	the pause menu update loop
+***************************************************************/
 void logicpausemenu() {
 
 	menubutton->itemcounter = resumebutton->itemcounter = optionbutton->itemcounter = exitbutton->itemcounter = 0.5f;
@@ -617,6 +661,9 @@ void logicpausemenu() {
 	}
 }
 
+/**************************************************************
+*	draw pause menu
+***************************************************************/
 void renderpausemenu() {
 
 	if (systemsettings.options == 0)
@@ -667,6 +714,9 @@ void renderpausemenu() {
 	}
 }
 
+/**************************************************************
+*	unloads the pause menu meshes
+***************************************************************/
 void unloadpausemenu() {
 	
 	if (menubutton->pMesh != nullptr) {
@@ -675,6 +725,9 @@ void unloadpausemenu() {
 	}
 }
 
+/**************************************************************
+*	unloads the options menu mesh
+***************************************************************/
 void unloadoptionmenu() {
 
 	if (mutebutton->pMesh != nullptr) {
@@ -707,6 +760,10 @@ void unloadoptionmenu() {
 	}
 }
 
+
+/**************************************************************
+*	initialises the player stats from file
+***************************************************************/
 void player_initialise() {
 
 /******************************************************************
@@ -741,6 +798,9 @@ void player_initialise() {
 }
 
 
+/**************************************************************
+*	initialises the enemy stats from file
+***************************************************************/
 void enemy_initialise() {
 
 /******************************************************************
@@ -763,7 +823,9 @@ void enemy_initialise() {
 	inFile.close();
 }
 
-
+/**************************************************************
+*	Initialises what the inventory
+***************************************************************/
 void inventory_initialise() {
 	playerinventory->defencepotion.itemcounter = 0.0f;
 	playerinventory->healthpotion.itemcounter = 0.0f;
@@ -814,7 +876,9 @@ void inventory_initialise() {
 }
 
 
-
+/**************************************************************
+*	Initialises what is needed by the program
+***************************************************************/
 void System_Initialise() {
 
 /******************************************************************
@@ -855,6 +919,10 @@ void System_Initialise() {
 }
 
 
+/**************************************************************
+*	Unloads all the meshes and textures and fonts at system
+*	exit
+***************************************************************/
 void System_Exit() {
 	unloadpausemenu();
 	unloadoptionmenu();

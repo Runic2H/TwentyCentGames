@@ -1,3 +1,15 @@
+/**************************************************************************
+ * 	File name	:	Maze.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Louis Mineo				(PRIMARY AUTHOR - 80%)
+ *					Hu Jun Ning				(SECONDARY AUTHOR - 15%)
+ *					Matthew Cheung Jun Yin	(SECONDARY AUTHOR - 4%)
+ *					Richmond Choo Tze Yong	(TERTIARY AUTHOR  - 0.5%)
+ *					Elton Teo Zhe Wei		(TERTIARY AUTHOR  - 0.5%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
 
 AEGfxVertexList* pMeshCellOutline = 0;
