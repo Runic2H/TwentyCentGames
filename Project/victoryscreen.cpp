@@ -31,12 +31,6 @@ void victory_init() {
 
 void victory_update() {
 	Audio_Update();
-	increase_bgm_fader();
-	decrease_bgm_fader();
-	increase_sfx_fader();
-	decrease_sfx_fader();
-	mute_master_fader();
-	unmute_master_fader();
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE)) {
 		next = GS_QUIT;
@@ -87,10 +81,10 @@ void victory_draw() {
 	AEGfxPrint(fontLarge, strBuffer, -0.6f, 0.8f, 0.8f, 0.9f, 0.21f, 0.21f);
 
 	sprintf_s(strBuffer, "You have managed to escape the maze");
-	AEGfxPrint(fontLarge, strBuffer, -0.2f, 0.65f, 0.3f, 0.5f, 0.21f, 0.21f);
+	AEGfxPrint(fontLarge, strBuffer, -0.4f, 0.65f, 0.3f, 0.5f, 0.21f, 0.21f);
 
-	sprintf_s(strBuffer, "You can finally rest");
-	AEGfxPrint(fontId, strBuffer, -0.12f, -0.5f, 1.63f, 0.2f, 0.5f, 0.5f);
+	sprintf_s(strBuffer, "Come claim your coffee break");
+	AEGfxPrint(fontId, strBuffer, -0.32f, -0.5f, 1.63f, 0.2f, 0.5f, 0.5f);
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 }
 

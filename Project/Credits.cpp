@@ -88,7 +88,7 @@ void credits_page_one_code()
 	sprintf_s(strBuffer, "Press Q to go back to the main menu");
 	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 0.831f, 0.36f);
 
-	sprintf_s(strBuffer, "All content © 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
+	sprintf_s(strBuffer, "All content Â© 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
 	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 
@@ -200,7 +200,7 @@ void credits_page_two_code()
 	sprintf_s(strBuffer, "Press Q to go back to the main menu");
 	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 0.831f, 0.36f);
 
-	sprintf_s(strBuffer, "All content © 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
+	sprintf_s(strBuffer, "All content Â© 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
 	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 
@@ -283,7 +283,7 @@ void credits_page_three_code()
 	sprintf_s(strBuffer, "Press Q to go back to the main menu");
 	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 0.831f, 0.36f);
 
-	sprintf_s(strBuffer, "All content © 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
+	sprintf_s(strBuffer, "All content Â© 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
 	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 
@@ -346,7 +346,7 @@ void credits_page_four_code()
 	sprintf_s(strBuffer, "Press Q to go back to the main menu");
 	AEGfxPrint(fontId, strBuffer, -0.25f, -0.9f, 1.0f, 1.f, 0.831f, 0.36f);
 
-	sprintf_s(strBuffer, "All content © 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
+	sprintf_s(strBuffer, "All content Â© 2022 DigiPen Institute of Technology Singapore. All Rights Reserved");
 	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 

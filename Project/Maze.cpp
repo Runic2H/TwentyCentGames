@@ -34,8 +34,7 @@ extern sys systemsettings;
 extern int duck_dir;
 
 
-float contact_rate = 0.001f;
-//float contact_rate = 0.2f;
+float contact_rate = 0.2f;
 float chest_spawn_rate = 0.2f;
 
 float x_scaling = 1; //noOfRows/2.0f;
@@ -114,7 +113,7 @@ void Maze_DisplayChestPickupItem(std::string msg)
 	sprintf_s(strBuffer,"%s", msg.c_str());
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxPrint(fontId, strBuffer, -0.22, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontId, strBuffer, -0.22f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
 	
 
 	chest_pickup_display_duration -= DT;
@@ -334,7 +333,7 @@ void Maze_ChestSpawn(float spawn_rate)
 	int no_of_chests = (int)(path_x.size() * spawn_rate);					
 	std::cout << no_of_chests << "out of " << path_x.size() << std::endl;
 
-	int rand_index;
+	int rand_index = 0;
 
 	srand(time(NULL));
 	while (no_of_chests > 0)
@@ -471,9 +470,9 @@ void MazeGenAlgo_Set_walls()
 		}
 
 		// if path is surrounded by walls, block out that path
-		for (int r = 0; r < noOfRows; r++)
+		for (int r = 1; r < noOfRows-1; r++)
 		{
-			for (int c = 0; c < noOfCols; c++)
+			for (int c = 1; c < noOfCols-1; c++)
 			{
 				if (
 					maze_iswall_isnotwall[r][c] == EMPTY_PATH // centre cell
@@ -952,8 +951,9 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 		else {
 			next = VICTORY;
 			level_iter += 1;
-			noOfCols = level[level_iter];
+			//noOfCols = level[level_iter];
 			noOfRows = level[level_iter];
+			noOfCols = noOfRows;
 			maze_init_flag = 0;
 			MAZE_ResetCellVisibility(Maze);
 			global_maze_cam_x = cam_x;
@@ -1198,6 +1198,9 @@ void Maze_Initialize()
 	std::cout << "X : " << MC_positionX << " --- Y : " << MC_positionY << std::endl;
 
 	MAZE_SetPosAsEmpty(Maze, curr_X_GRIDposition, curr_Y_GRIDposition);
+	
+	maze_init_flag = 1; // make sure the game does not re-init after
+						// exiting combat state
 
 }
 
@@ -1211,12 +1214,6 @@ void Maze_Update()
 {
 	//std::cout << "Maze:Update" << std::endl;
 	Audio_Update();
-	increase_bgm_fader();
-	decrease_bgm_fader();
-	increase_sfx_fader();
-	decrease_sfx_fader();
-	mute_master_fader();
-	unmute_master_fader();
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
 		click_Audio();

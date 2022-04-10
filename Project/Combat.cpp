@@ -28,6 +28,7 @@ AEGfxTexture* playertexture;
 AEGfxTexture* enemytexture;
 AEGfxTexture* enemytexturefire;
 AEGfxTexture* enemytexturefrost;
+AEGfxTexture* enemytextureBoss;
 AEGfxTexture* staminapotion;
 
 
@@ -46,7 +47,7 @@ using namespace Characters::Character;
 void Combat_Load()
 {
 	std::cout << "Combat:Load" << std::endl;
-	//playertexture = AEGfxTextureLoad("ducky.jpg");
+
 	playertexture = AEGfxTextureLoad("Images/Fighting duck.png");
 	AE_ASSERT_MESG(playertexture, "cant create duck texture\n");
 
@@ -61,6 +62,9 @@ void Combat_Load()
 
 	enemytexturefire = AEGfxTextureLoad("Images/Fire turtle.png");
 	AE_ASSERT_MESG(enemytexturefire, "cant create enemy texture fire\n");
+
+	enemytextureBoss = AEGfxTextureLoad("Images/Boss_turtle.png");
+	AE_ASSERT_MESG(enemytextureBoss, "cant create enemy texture boss\n");
 
 }
 
@@ -96,12 +100,6 @@ void Combat_Initialize()
 void Combat_Update()
 {
 	Audio_Update();
-	increase_bgm_fader();
-	decrease_bgm_fader();
-	increase_sfx_fader();
-	decrease_sfx_fader();
-	mute_master_fader();
-	unmute_master_fader();
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
 		systemsettings.paused = 1;
@@ -119,6 +117,7 @@ void Combat_Update()
 		EnemyCombatMesh();
 		inventorylogic();
 		CheckandUpdatePlayerStatus();
+		Backgroundupdate();
 		godmode();
 
 		playerstats->is_dmgtaken -= DT;
@@ -223,6 +222,7 @@ void Combat_Update()
 */
 void Combat_Draw()
 {
+	Backgroundrender();
 	StaminaRender(staminapotion);
 	inventoryrender();
 	RenderEnemyHealth();
@@ -248,7 +248,7 @@ void Combat_Draw()
 	}
 	if (enemystats->EnemyType == ENEMYBOSS)
 	{
-		RenderEnemy(enemytexture, EnemyMesh);
+		RenderEnemy(enemytextureBoss, EnemyMesh);
 	}
 
 	if (systemsettings.paused == 1) {
@@ -309,4 +309,5 @@ void Combat_Unload()
 	AEGfxTextureUnload(staminapotion);
 	AEGfxTextureUnload(enemytexturefrost);
 	AEGfxTextureUnload(enemytexturefire);
+	AEGfxTextureUnload(enemytextureBoss);
 }
