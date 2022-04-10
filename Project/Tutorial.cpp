@@ -175,7 +175,7 @@ void page_two_code()
 
 void page_three_code()
 {
-	char strBuffer[1000];
+	char strBuffer[1500];
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 9, (float)AEGetWindowHeight() * 5 / 9);
@@ -232,11 +232,38 @@ void page_three_code()
 	sprintf_s(strBuffer, "Defence");
 	AEGfxPrint(fontId, strBuffer, 0.05f, -0.15f, 1.0f, 1.f, 1.f, 1.f);
 
+	sprintf_s(strBuffer, "Press 1");
+	AEGfxPrint(fontId, strBuffer, 0.0440f, -0.50f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Reduces damage");
+	AEGfxPrint(fontId, strBuffer, -0.020f, -0.55f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "taken by 30%%");
+	AEGfxPrint(fontId, strBuffer, 0.010f, -0.60f, 1.0f, 1.f, 1.f, 1.f);
+
 	sprintf_s(strBuffer, "Health");
 	AEGfxPrint(fontId, strBuffer, 0.28f, -0.15f, 1.0f, 1.f, 1.f, 1.f);
 
+	sprintf_s(strBuffer, "Press 2");
+	AEGfxPrint(fontId, strBuffer, 0.275f, -0.50f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Recovers");
+	AEGfxPrint(fontId, strBuffer, 0.265f, -0.55f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "50 hp");
+	AEGfxPrint(fontId, strBuffer, 0.285f, -0.60f, 1.0f, 1.f, 1.f, 1.f);
+
 	sprintf_s(strBuffer, "Stamina");
 	AEGfxPrint(fontId, strBuffer, 0.485f, -0.15f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Press 3");
+	AEGfxPrint(fontId, strBuffer, 0.50f, -0.50f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Increases stamina");
+	AEGfxPrint(fontId, strBuffer, 0.43f, -0.55f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "recovery");
+	AEGfxPrint(fontId, strBuffer, 0.49f, -0.60f, 1.0f, 1.f, 1.f, 1.f);
 
 	sprintf_s(strBuffer, "Press D for next page");
 	AEGfxPrint(fontId, strBuffer, 0.465f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
