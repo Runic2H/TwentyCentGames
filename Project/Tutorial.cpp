@@ -57,7 +57,7 @@ void page_one_code()
 	//drawing next page button boxes (right)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetPosition((float)(AEGetWindowHeight() * 0.475), (float)-(AEGetWindowHeight() * 19 / 60));
+	AEGfxSetPosition((float)(AEGetWindowHeight() * 0.475), (float)-(AEGetWindowHeight() * 21 / 60));
 	AEGfxTextureSet(NULL, 0, 0); // No texture for object
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
 	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
@@ -66,7 +66,7 @@ void page_one_code()
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	sprintf_s(strBuffer, "Press D for next page");
-	AEGfxPrint(fontId, strBuffer, 0.465f, -0.65f, 1.0f, 1.f, 1.f, 1.f);
+	AEGfxPrint(fontId, strBuffer, 0.465f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
 	
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 
@@ -664,7 +664,11 @@ void Tutorial_Update()
 
 	if (AEInputCheckTriggered(AEVK_D))
 	{
-		if (++page) page_flip2_Audio();
+		++page;
+
+		if (page <= 7) {
+			page_flip2_Audio();
+		}
 
 		if (page > 7)
 		{

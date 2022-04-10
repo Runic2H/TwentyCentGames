@@ -264,7 +264,6 @@ void decrease_sfx_fader()
 	sfx_volume -= 0.1f;
 	if (sfx_volume <= 0) sfx_volume = 0.0f;
 	sfx_group->setVolume(sfx_volume);
-	//Master_Fader->setVolume(volume);
 }
 
 void mute_master_fader()

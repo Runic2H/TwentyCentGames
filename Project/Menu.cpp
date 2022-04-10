@@ -578,7 +578,7 @@ void systemupdate() {
 	}
 
 	if (AEInputCheckTriggered(AEVK_SPACE)) {
-		click_Audio();
+		click_Audio();	//JN: new code
 
 		switch (choice) {
 		case 0: next = MAZE;
