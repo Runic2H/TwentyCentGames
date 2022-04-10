@@ -34,7 +34,8 @@ extern sys systemsettings;
 extern int duck_dir;
 
 
-float contact_rate = 0.2f;
+float contact_rate = 0.001f;
+//float contact_rate = 0.2f;
 float chest_spawn_rate = 0.2f;
 
 float x_scaling = 1; //noOfRows/2.0f;
