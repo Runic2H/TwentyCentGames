@@ -1218,11 +1218,17 @@ void Maze_Update()
 	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
 		click_Audio();
 		systemsettings.paused = 1;
+		global_maze_cam_x = cam_x;
+		global_maze_cam_y = cam_y;
+		AEGfxSetCamPosition(0.0f, 0.0f);
 	}
 
 	else if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 1) {
 		click_Audio();
 		systemsettings.paused = 0;
+		//global_maze_cam_x = cam_x;
+		//global_maze_cam_y = cam_y;
+		AEGfxSetCamPosition(global_maze_cam_x, global_maze_cam_y);
 	}
 
 
@@ -1328,6 +1334,7 @@ void Maze_Update()
 			next = MENU;
 			curr_X_GRIDposition = start_x;
 			curr_Y_GRIDposition = start_y;
+
 		}
 
 		MAZE_StepOntoSpecialCell(curr_X_GRIDposition, curr_Y_GRIDposition);
