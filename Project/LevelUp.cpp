@@ -33,13 +33,13 @@ void LevelUp_Load()
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
-		-(f32)AEGetWindowWidth() / 4, (f32)AEGetWindowHeight() / 18, 0xFFFF0000, 0.0f, 0.0f,
-		-(f32)AEGetWindowWidth() / 4, -(f32)AEGetWindowHeight() / 18, 0xFFFF0000, 0.0f, 1.0f,
-		(f32)AEGetWindowWidth() / 4, (f32)AEGetWindowHeight() / 18, 0xFFFF0000, 1.0f, 0.0f);
+		-(f32)AEGetWindowWidth() / 4, (f32)AEGetWindowHeight() / 18, 0xFFFFFFFF, 0.0f, 0.0f,
+		-(f32)AEGetWindowWidth() / 4, -(f32)AEGetWindowHeight() / 18, 0xFFFFFFFF, 0.0f, 1.0f,
+		(f32)AEGetWindowWidth() / 4, (f32)AEGetWindowHeight() / 18, 0xFFFFFFFF, 1.0f, 0.0f);
 	AEGfxTriAdd(
-		(f32)AEGetWindowWidth() / 4, (f32)AEGetWindowHeight() / 18, 0xFFFF0000, 1.0f, 0.0f,
-		-(f32)AEGetWindowWidth() / 4, -(f32)AEGetWindowHeight() / 18, 0xFFFF0000, 0.0f, 1.0f,
-		(f32)AEGetWindowWidth() / 4, -(f32)AEGetWindowHeight() / 18, 0xFFFF0000, 1.0f, 1.0f);
+		(f32)AEGetWindowWidth() / 4, (f32)AEGetWindowHeight() / 18, 0xFFFFFFFF, 1.0f, 0.0f,
+		-(f32)AEGetWindowWidth() / 4, -(f32)AEGetWindowHeight() / 18, 0xFFFFFFFF, 0.0f, 1.0f,
+		(f32)AEGetWindowWidth() / 4, -(f32)AEGetWindowHeight() / 18, 0xFFFFFFFF, 1.0f, 1.0f);
 
 	LevelButtons = AEGfxMeshEnd();
 	AE_ASSERT_MESG(LevelButtons, "Failed to create LevelMesh!\n");
@@ -47,9 +47,9 @@ void LevelUp_Load()
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
-		-(f32)AEGetWindowWidth() / 24, (f32)AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 0.0f,
-		-(f32)AEGetWindowWidth() / 24, -(f32)AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 1.0f,
-		(f32)AEGetWindowWidth() / 100, 1, 0xFFFF0000, 1.0f, 0.0f);
+		-(f32)AEGetWindowWidth() / 24, (f32)AEGetWindowHeight() / 24, 0xFFFFFFFF, 0.0f, 0.0f,
+		-(f32)AEGetWindowWidth() / 24, -(f32)AEGetWindowHeight() / 24, 0xFFFFFFFF, 0.0f, 1.0f,
+		(f32)AEGetWindowWidth() / 100, 1, 0xFFFFFFFF, 1.0f, 0.0f);
 
 	LevelTriRight = AEGfxMeshEnd();
 	AE_ASSERT_MESG(LevelTriRight, "Failed to create LevelMesh!\n");
@@ -57,9 +57,9 @@ void LevelUp_Load()
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
-		-(f32)AEGetWindowWidth() / 24, (f32)AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 0.0f,
-		-(f32)AEGetWindowWidth() / 24, -(f32)AEGetWindowHeight() / 24, 0xFFFF0000, 0.0f, 1.0f,
-		-((f32)AEGetWindowWidth()/11), -1, 0xFFFF0000, 1.0f, 0.0f);
+		-(f32)AEGetWindowWidth() / 24, (f32)AEGetWindowHeight() / 24, 0xFFFFFFFF, 0.0f, 0.0f,
+		-(f32)AEGetWindowWidth() / 24, -(f32)AEGetWindowHeight() / 24, 0xFFFFFFFF, 0.0f, 1.0f,
+		-((f32)AEGetWindowWidth()/11), -1, 0xFFFFFFFF, 1.0f, 0.0f);
 
 	LevelTriLeft = AEGfxMeshEnd();
 	AE_ASSERT_MESG(LevelTriLeft, "Failed to create LevelMesh!\n");
@@ -158,20 +158,17 @@ void LevelUp_Draw()
 	float w_ht = (float)AEGetWindowHeight();
 	float w_wd = (float)AEGetWindowWidth();
 
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
 	char strBuffer[100];
 	memset(strBuffer, 0, 100 * sizeof(char)); 
 	sprintf_s(strBuffer, "LEVEL UP !");
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxPrint(fontLarge, strBuffer, -0.41f, 0.7f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	sprintf_s(strBuffer, "Lv%d -> Lv%d", playerstats->PlayerLevel - 1, playerstats->PlayerLevel);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxPrint(fontLarge, strBuffer, -0.18f, 0.55f, 0.5f, 1.0f, 1.0f, 1.0f);
 
-
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetPosition(0.0f, 0.0f);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.0f);
@@ -179,9 +176,8 @@ void LevelUp_Draw()
 
 	if (selection == 0)
 	{
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxSetPosition(-(f32)w_wd / 4.55f, (f32)w_ht / 6.0f);
-		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxSetTintColor(0.9f, 0.7f, 0.04f, 1.0f);
 		if (AEInputCheckTriggered(AEVK_A))
 		{
 			AEGfxSetTransparency(1.0f);
@@ -192,9 +188,8 @@ void LevelUp_Draw()
 		}
 		AEGfxMeshDraw(LevelTriLeft, AE_GFX_MDM_TRIANGLES);
 
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxSetPosition((f32)w_wd / 3.3f, (f32)w_ht / 6.0f);
-		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxSetTintColor(0.9f, 0.7f, 0.04f, 1.0f);
 		if (AEInputCheckTriggered(AEVK_D))
 		{
 			AEGfxSetTransparency(1.0f);
@@ -206,9 +201,8 @@ void LevelUp_Draw()
 		AEGfxMeshDraw(LevelTriRight, AE_GFX_MDM_TRIANGLES);
 	}
 
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetPosition(0.0f, (f32)w_ht / 6.0f);
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetTintColor(0.9f, 0.7f, 0.04f, 1.0f);
 	if (selection == 0)
 	{
 		AEGfxSetTransparency(0.5f);
@@ -226,9 +220,8 @@ void LevelUp_Draw()
 
 	if (selection == 1)
 	{
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxSetPosition(-(f32)w_wd / 4.55f, (f32)w_ht / 22);
-		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxSetTintColor(0.9f, 0.7f, 0.04f, 1.0f);
 		if (AEInputCheckTriggered(AEVK_A))
 		{
 			AEGfxSetTransparency(1.0f);
@@ -239,9 +232,8 @@ void LevelUp_Draw()
 		}
 		AEGfxMeshDraw(LevelTriLeft, AE_GFX_MDM_TRIANGLES);
 
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxSetPosition((f32)w_wd / 3.3f, (f32)w_ht / 22);
-		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxSetTintColor(0.9f, 0.7f, 0.04f, 1.0f);
 		if (AEInputCheckTriggered(AEVK_D))
 		{
 			AEGfxSetTransparency(1.0f);
@@ -253,9 +245,8 @@ void LevelUp_Draw()
 		AEGfxMeshDraw(LevelTriRight, AE_GFX_MDM_TRIANGLES);
 	}
 
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetPosition(0.0f, (f32)w_ht / 22);
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetTintColor(0.9f, 0.7f, 0.04f, 1.0f);
 	if (selection == 1)
 	{
 		AEGfxSetTransparency(0.5f);
@@ -267,8 +258,6 @@ void LevelUp_Draw()
 	AEGfxMeshDraw(LevelButtons, AE_GFX_MDM_TRIANGLES);
 
 	sprintf_s(strBuffer, "Damage %d |+%d %d", playerstats->damage, skillselected[1], damage + skillselected[1]*2);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxPrint(fontLarge, strBuffer, -0.35f, 0.05f, 0.5f, 0.0f, 0.0f, 0.0f);
 
 	if (skillpoints != 0)
@@ -279,27 +268,40 @@ void LevelUp_Draw()
 	{
 		sprintf_s(strBuffer, "Press [Space] to confirm");
 	}
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxPrint(fontLarge, strBuffer, -0.35f, -0.20f, 0.40f, 0.0f, 0.0f, 0.0f);
 
 	sprintf_s(strBuffer, "%d", skillpoints);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxPrint(fontLarge, strBuffer, -0.02f, -0.42f, 0.5f, 0.0f, 0.0f, 1.0f);
+	AEGfxPrint(fontLarge, strBuffer, -0.02f, -0.42f, 1.0f, 0.9f, 0.7f, 0.04f);
 }
 
 void LevelUp_Free()
 {
+	if (LevelMesh != nullptr)
+	{
+		AEGfxMeshFree(LevelMesh);
+		LevelMesh = nullptr;
+	}
+
+	if (LevelButtons != nullptr)
+	{
+		AEGfxMeshFree(LevelButtons);
+		LevelButtons = nullptr;
+	}
+
+	if (LevelTriLeft != nullptr)
+	{
+		AEGfxMeshFree(LevelTriLeft);
+		LevelTriLeft = nullptr;
+	}
+
+	if (LevelTriRight != nullptr)
+	{
+		AEGfxMeshFree(LevelTriRight);
+		LevelTriRight = nullptr;
+	}
 }
 
 void LevelUp_Unload()
 {
-	AEGfxMeshFree(LevelMesh);
 
-	AEGfxMeshFree(LevelButtons);
-
-	AEGfxMeshFree(LevelTriLeft);
-
-	AEGfxMeshFree(LevelTriRight);
 }

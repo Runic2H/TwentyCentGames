@@ -9,7 +9,7 @@ void Input_Handle() {
 	{
 		ShowWindow(AESysGetWindowHandle(), SW_MINIMIZE);
 	}
-	if (AEInputCheckTriggered(AEVK_LALT) || AEInputCheckTriggered(AEVK_RALT))
+	if (AEInputCheckCurr(AEVK_LALT) || AEInputCheckCurr(AEVK_RALT))
 	{
 		if (AEInputCheckTriggered(AEVK_RETURN))
 		{

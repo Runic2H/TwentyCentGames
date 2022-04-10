@@ -47,6 +47,10 @@ namespace Characters
 			AEGfxVertexAdd(-140.0f, -60.0f, RGBcounter, 1.0f, 1.0f);			//PLAYERGRID 4 BOTTOM
 			AEGfxVertexAdd(-240.0f, -60.0f, RGBcounter, 1.0f, 1.0f);
 			AEGfxVertexAdd(-240.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-240.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-140.0f, -60.0f, RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-240.0f, -60.0f, RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-140.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
 
 			Player4Grid = AEGfxMeshEnd();
 			AE_ASSERT_MESG(Player4Grid, "Failed to create playermesh4!!");
@@ -60,6 +64,10 @@ namespace Characters
 			AEGfxVertexAdd(-250.0f, 50.0f, RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 3 BACK
 			AEGfxVertexAdd(-350.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
 			AEGfxVertexAdd(-350.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-350.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-250.0f, 50.0f, RGBcounter, 0.0f, 0.0f);
+			AEGfxVertexAdd(-350.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(-250.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
 
 			Player3Grid = AEGfxMeshEnd();
 			AE_ASSERT_MESG(Player3Grid, "Failed to create playermesh3!!");
@@ -73,6 +81,10 @@ namespace Characters
 			AEGfxVertexAdd(-140.0f, 60.0f, RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 2 TOP
 			AEGfxVertexAdd(-240.0f, 60.0f, RGBcounter, 1.0f, 0.0f);
 			AEGfxVertexAdd(-240.0f, 160.0f, RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-240.0f, 160.0f, RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-140.0f, 60.0f, RGBcounter, 0.0f, 0.0f);
+			AEGfxVertexAdd(-240.0f, 60.0f, RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(-140.0f, 160.0f, RGBcounter, 1.0f, 1.0f);
 
 			Player2Grid = AEGfxMeshEnd();
 			AE_ASSERT_MESG(Player2Grid, "Failed to create playermesh2!!");
@@ -86,6 +98,10 @@ namespace Characters
 			AEGfxVertexAdd(-140.0f, 50.0f, RGBcounter, 0.0f, 0.0f);                //PLAYERGRID 1 MIDDLE
 			AEGfxVertexAdd(-240.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
 			AEGfxVertexAdd(-240.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-240.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-140.0f, 50.0f, RGBcounter, 0.0f, 0.0f);
+			AEGfxVertexAdd(-240.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(-140.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
 
 			Player1Grid = AEGfxMeshEnd();
 			AE_ASSERT_MESG(Player1Grid, "Failed to create playermesh1!!");
@@ -99,6 +115,10 @@ namespace Characters
 			AEGfxVertexAdd(-100.0f, 50.0f, RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 5 ATTACK
 			AEGfxVertexAdd(0.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
 			AEGfxVertexAdd(0.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(0.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-100.0f, 50.0f, RGBcounter, 0.0f, 0.0f);
+			AEGfxVertexAdd(0.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(-100.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
 
 			Player5Grid = AEGfxMeshEnd();
 			AE_ASSERT_MESG(Player2Grid, "Failed to create playermesh2!!");
@@ -413,7 +433,6 @@ namespace Characters
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 			AEGfxSetPosition(0.0f, 0.0f);
 			AEGfxTextureSet(NULL, 0, 0);
-
 			AEGfxMeshDraw(PlayerMesh, AE_GFX_MDM_LINES_STRIP);
 		}
 
@@ -713,6 +732,13 @@ namespace Characters
 					Character::RenderPlayerGrid(Character::Player5Grid);
 					break;
 				}
+				char strBufferWarning[100];
+				memset(strBufferWarning, 0, 100 * sizeof(char));
+				sprintf_s(strBufferWarning, "D A N G E R !");
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+				AEGfxPrint(fontLarge, strBufferWarning, -0.25f, -0.45f, 0.50f, 1.0f, 0.1f, 0.1f);
+				AEGfxSetBlendMode(AE_GFX_BM_NONE);
 			}
 		}
 
@@ -892,6 +918,10 @@ namespace Characters
 								if (enemystats->damage >= playerstats->health)
 								{
 									playerstats->health = 1;
+								}
+								else
+								{
+									playerstats->health -= (int)enemystats->damage;
 								}
 							}
 							else

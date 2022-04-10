@@ -454,6 +454,7 @@ void renderoptionmenu()
 	slidermeshupdate();
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetTintColor(0.9f, 0.7f, 0.04f, 1.0f);
 	AEGfxSetTransform(sliderbgm->transform.m);
 	AEGfxSetTransparency(1.0f);
 	AEGfxTextureSet(NULL, 0, 0);
@@ -528,6 +529,7 @@ void renderoptionmenu()
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.0f);
 
 	sprintf_s(strBuffer, "OPTIONS");
