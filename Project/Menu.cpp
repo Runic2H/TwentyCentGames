@@ -1,3 +1,13 @@
+/**************************************************************************
+ * 	File name	:	Menu.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Richmond Choo Tze Yong	(PRIMARY AUTHOR - 80%)
+ *					Hu Jun Ning				(SECONDARY AUTHOR - 10%)
+ *					Matthew Cheung Jun Yin	(SECONDARY AUTHOR - 10%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
 
 /**************************************************
@@ -41,6 +51,9 @@ item		menuexitbutton;
 item		menuoptionbutton;
 
 
+/**************************************************************	
+*	load function for menu
+***************************************************************/
 void Menu_Load() {
 
 	AEToogleFullScreen(systemsettings.fullscreen);
@@ -163,6 +176,10 @@ void Menu_Load() {
 
 }
 
+
+/**************************************************************
+*	init function for menu
+***************************************************************/
 void Menu_Init() {
 	if (previous != CREDITS && previous != TUTORIAL)
 	{
@@ -176,6 +193,10 @@ void Menu_Init() {
 	}*/
 }
 
+
+/**************************************************************
+*	update function for menu
+***************************************************************/
 void Menu_Update() {
 	Audio_Update();
 
@@ -295,67 +316,6 @@ void Menu_Update() {
 		}
 	}
 
-	//else if (systemsettings.digipenTimer <= 0)
-	//{
-	//	isLogo = false;
-
-	//	systemsettings.twentycentTimer -= DT;
-
-	//	if (systemsettings.twentycentTimer > 0)
-	//	{
-	//		if (is_playing == true)
-	//		{
-	//			coin_drop_Audio();
-	//			is_playing = false;
-	//		}
-
-	//		isTwentyLogo = true;
-	//	}
-
-
-	//	else if (systemsettings.twentycentTimer <= 0)
-	//	{
-	//		isTwentyLogo = false;
-
-	//		systemsettings.fmodTimer -= DT;
-
-	//		if (systemsettings.fmodTimer > 0)
-	//		{
-	//			isFmodLogo = true;
-	//		}
-
-	//		else
-	//		{
-	//			isFmodLogo = false;
-	//		}
-	//	}
-	//}
-
-	//else
-	//{
-	//	isLogo = false;
-	//	
-	//	systemsettings.twentycentTimer -= DT;
-
-	//	if (systemsettings.twentycentTimer > 0)
-	//	{
-	//		if (is_playing == true)
-	//		{
-	//			coin_drop_Audio();
-	//			is_playing = false;
-	//		}
-
-	//		isTwentyLogo = true;
-	//		//isFmodLogo = true;
-
-	//	}
-	//	else
-	//	{
-	//		isTwentyLogo = false;
-	//		//isFmodLogo = false;
-	//	}
-	//}
-
 	// particles //
 
 	AEInputGetCursorPosition(&cursorx, &cursory);
@@ -393,6 +353,9 @@ void Menu_Update() {
 	}
 }
 
+/**************************************************************
+*	draw function for the menu
+***************************************************************/
 void Menu_Draw() {
 
 	if (isLogo == false && isTwentyLogo == false && isFmodLogo == false)
@@ -549,6 +512,10 @@ void Menu_Draw() {
 	}
 }
 
+
+/**************************************************************
+*	free function for the menu
+***************************************************************/
 void Menu_Free() {
 
 	/*if (selectionstruct.pMesh != nullptr) {
@@ -582,6 +549,10 @@ void Menu_Free() {
 	}
 }
 
+
+/**************************************************************
+*	unload function for menu
+***************************************************************/
 void Menu_Unload() {
 
 	AEGfxTextureUnload(gamelogostruct.pObject->pTexture);
@@ -604,6 +575,9 @@ void Menu_Unload() {
 }
 
 
+/**************************************************************
+*	update function for my meshes logic in menu
+***************************************************************/
 void systemupdate() {
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE)) {

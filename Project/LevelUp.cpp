@@ -1,6 +1,12 @@
+/**************************************************************************
+ * 	File name	:	LevelUp.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Elton Teo Zhe Wei (PRIMARY AUTHOR - 100%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
-
-
 
 namespace {
 	AEGfxVertexList* LevelMesh = 0;
@@ -14,6 +20,9 @@ namespace {
 	int maxhealth;
 }
 
+/**************************************************************
+*	load function for levelup
+***************************************************************/
 void LevelUp_Load()
 {
 	AEGfxMeshStart();
@@ -65,6 +74,9 @@ void LevelUp_Load()
 	AE_ASSERT_MESG(LevelTriLeft, "Failed to create LevelMesh!\n");
 }
 
+/**************************************************************
+*	init function for levelup
+***************************************************************/
 void LevelUp_Init()
 {
 	selection = 1;
@@ -77,6 +89,10 @@ void LevelUp_Init()
 	damage = playerstats->damage;
 }
 
+
+/**************************************************************
+*	update fucntion for levelup
+***************************************************************/
 void LevelUp_Update()
 {
 	if (AEInputCheckTriggered(AEVK_W))
@@ -153,6 +169,10 @@ void LevelUp_Update()
 	}
 }
 
+
+/**************************************************************
+*	draw function for levelup
+***************************************************************/
 void LevelUp_Draw()
 {
 	float w_ht = (float)AEGetWindowHeight();
@@ -274,6 +294,9 @@ void LevelUp_Draw()
 	AEGfxPrint(fontLarge, strBuffer, -0.02f, -0.42f, 1.0f, 0.9f, 0.7f, 0.04f);
 }
 
+/**************************************************************
+*	free function for levelup
+***************************************************************/
 void LevelUp_Free()
 {
 	if (LevelMesh != nullptr)
@@ -301,6 +324,10 @@ void LevelUp_Free()
 	}
 }
 
+
+/**************************************************************
+*	unload function for levelup
+***************************************************************/
 void LevelUp_Unload()
 {
 

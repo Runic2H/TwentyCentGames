@@ -1,3 +1,11 @@
+/**************************************************************************
+ * 	File name	:	Audio.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Hu Jun Ning (PRIMARY AUTHOR - 100%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
 
 constexpr auto MAX_CHANNELS = 64;
@@ -132,6 +140,7 @@ void maze_background_Audio()
 	//channel->setMute(1);
 }
 
+// background audio for the winscreen
 void win_screen_background_Audio()
 {
 	result = audio_system->playSound(win_screen_bgm, nullptr, false, &bgm_channel);
@@ -139,6 +148,7 @@ void win_screen_background_Audio()
 	std::cout << "Win screen audio\n\n";
 }
 
+// background audio for the lose screen
 void lose_screen_background_Audio()
 {
 	result = audio_system->playSound(lose_screen_bgm, nullptr, false, &bgm_channel);
@@ -146,6 +156,7 @@ void lose_screen_background_Audio()
 	std::cout << "Lose screen audio\n\n";
 }
 
+// background audio for the menu
 void menu_background_Audio()
 {
 	result = audio_system->playSound(menu_bgm, nullptr, false, &bgm_channel);
@@ -153,6 +164,7 @@ void menu_background_Audio()
 	std::cout << "menu background sound audio\n\n";
 }
 
+// background audio for the combat
 void combat_background_Audio()
 {
 	result = audio_system->playSound(combat_bgm, nullptr, false, &bgm_channel);
@@ -162,6 +174,8 @@ void combat_background_Audio()
 
 
 //**		effects		**//
+
+// SFX audio for hitting the wall
 void wall_hit_Audio()
 {
 	result = audio_system->playSound(wall_sound, nullptr, false, &sfx_channel);
@@ -169,6 +183,7 @@ void wall_hit_Audio()
 	std::cout << "Hit wall audio\n\n";
 }
 
+// SFX audio #1 for flipping the pages
 void page_flip1_Audio()
 {
 	result = audio_system->playSound(page_flip_sound1, nullptr, false, &sfx_channel);
@@ -176,6 +191,7 @@ void page_flip1_Audio()
 	std::cout << "Page flip 1 audio\n\n";
 }
 
+// SFX audio #2 for flipping the pages
 void page_flip2_Audio()
 {
 	result = audio_system->playSound(page_flip_sound2, nullptr, false, &sfx_channel);
@@ -183,6 +199,7 @@ void page_flip2_Audio()
 	std::cout << "Page flip 2 audio\n\n";
 }
 
+// SFX audio #1 for slashing audio
 void slashing1_Audio()
 {
 	result = audio_system->playSound(slashing_sound1, nullptr, false, &sfx_channel);
@@ -190,6 +207,7 @@ void slashing1_Audio()
 	std::cout << "Slashing 1 audio\n\n";
 }
 
+// SFX audio #2 slashing audio
 void slashing2_Audio()
 {
 	result = audio_system->playSound(slashing_sound2, nullptr, false, &sfx_channel);
@@ -197,6 +215,7 @@ void slashing2_Audio()
 	std::cout << "Slashing 2 audio\n\n";
 }
 
+// SFX audio for swimming movement in the maze
 void swimming_Audio()
 {
 	result = audio_system->playSound(swimming_sound, nullptr, false, &sfx_channel);
@@ -204,6 +223,7 @@ void swimming_Audio()
 	std::cout << "swim audio\n\n";
 }
 
+// SFX audio for drinking potions in combat
 void portion_Audio()
 {
 	result = audio_system->playSound(portion_sound, nullptr, false, &sfx_channel);
@@ -211,6 +231,7 @@ void portion_Audio()
 	std::cout << "drinking portion audio\n\n";
 }
 
+// SFX audio for opening chests in the maze
 void chest_open_Audio()
 {
 	result = audio_system->playSound(chest_open_sound, nullptr, false, &sfx_channel);
@@ -218,6 +239,7 @@ void chest_open_Audio()
 	std::cout << "chest open audio\n\n";
 }
 
+// SFX audio for clicking any buttons
 void click_Audio()
 {
 	result = audio_system->playSound(click_sound, nullptr, false, &sfx_channel);
@@ -225,6 +247,7 @@ void click_Audio()
 	std::cout << "click audio\n\n";
 }
 
+// SFX audio for our game name logo intro page
 void coin_drop_Audio()
 {
 	result = audio_system->playSound(coin_drop_sound, nullptr, false, &sfx_channel);
@@ -232,12 +255,14 @@ void coin_drop_Audio()
 	std::cout << "coin audio\n\n";
 }
 
+// stops the audio for both BGM and SFX
 void stop_Audio()
 {
 	bgm_channel->stop();
 	sfx_channel->stop();
 }
 
+// increases bgm audio level
 void increase_bgm_fader()
 {
 	bgm_volume += 0.1f;
@@ -245,6 +270,7 @@ void increase_bgm_fader()
 	bgm_group->setVolume(bgm_volume);
 }
 
+// decreases bgm audio level
 void decrease_bgm_fader()
 {
 	bgm_volume -= 0.1f;
@@ -252,6 +278,7 @@ void decrease_bgm_fader()
 	bgm_group->setVolume(bgm_volume);
 }
 
+// increases sfx audio level
 void increase_sfx_fader()
 {
 	sfx_volume += 0.1f;
@@ -259,6 +286,7 @@ void increase_sfx_fader()
 	sfx_group->setVolume(sfx_volume);
 }
 
+// decreases sfq audio level
 void decrease_sfx_fader()
 {
 	sfx_volume -= 0.1f;
@@ -266,11 +294,13 @@ void decrease_sfx_fader()
 	sfx_group->setVolume(sfx_volume);
 }
 
+// mute all sounds
 void mute_master_fader()
 {
 	master_fader->setMute(true);
 }
 
+// unmute all sounds
 void unmute_master_fader()
 {
 	master_fader->setMute(false);

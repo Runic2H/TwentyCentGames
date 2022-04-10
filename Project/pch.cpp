@@ -1,5 +1,16 @@
-#include "pch.hpp"
+/**************************************************************************
+ * 	File name	:	pch.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Matthew Cheung Jun Yin	(SECONDARY AUTHOR - 20%)
+					Hu Jun Ning				(SECONDARY AUTHOR - 20%)
+					Elton Teo Zhe Wei		(SECONDARY AUTHOR - 20%)
+					Louis Mineo				(SECONDARY AUTHOR - 20%)
+					Richmond Choo Tze Yong	(SECONDARY AUTHOR - 20%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
 
+#include "pch.hpp"
 
 s8 fontId = -1;
 
