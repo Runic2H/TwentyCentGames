@@ -3,7 +3,7 @@
 //variables
 /* Define */
 int page{ 1 };
-enum pages { page_1 = 1, page_2, page_3, page_4, page_5, page_6, page_7 };
+enum pages { page_1 = 1, page_2, page_3, page_4, page_5, page_6, page_7, page_8 };
 
 extern sys systemsettings;
 
@@ -29,6 +29,7 @@ AEGfxTexture* tutorial_tab_map;
 AEGfxTexture* tutorial_potions;
 AEGfxTexture* ducktitle;
 AEGfxTexture* fightingduck;
+AEGfxTexture* LevelUpPic;
 
 /*
 	sprintf_s(strBufferStatus, "Status: Frosted");
@@ -439,6 +440,14 @@ void page_seven_code()
 	DrawingTextureOnMesh(Mesh_maze_overview, frost_turtle, -210.0f, -100.0f);
 	meshfree();
 
+	//drawing button boxes (right)
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetPosition((float)(AEGetWindowHeight() * 0.475), (float)-(AEGetWindowHeight() * 21 / 60));
+	AEGfxTextureSet(NULL, 0, 0); // No texture for object
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
+	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
+
 	//drawing button boxes (left)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -488,6 +497,40 @@ void page_seven_code()
 
 	sprintf_s(strBuffer, "for the next few seconds");
 	AEGfxPrint(fontId, strBuffer, -0.35f, -0.45f, 1.f, 1.0f, 1.0f, 1.0f);
+
+	sprintf_s(strBuffer, "Press A for last page");
+	AEGfxPrint(fontId, strBuffer, -0.745f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Press D for next page");
+	AEGfxPrint(fontId, strBuffer, 0.465f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
+
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+}
+
+void page_eight_code()
+{
+	char strBuffer[1000];
+
+	meshfree();
+	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight(), (float)AEGetWindowWidth() * 1.35f);
+	DrawingTextureOnMesh(Mesh_maze_overview, LevelUpPic, 13.0f, 30.0f); //Drawing levelup Image
+
+	//drawing button boxes (left)
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetPosition(-(float)(AEGetWindowHeight() * 0.335), (float)-(AEGetWindowHeight() * 21 / 60));
+	AEGfxTextureSet(NULL, 0, 0); // No texture for object
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f); // No tint
+	AEGfxMeshDraw(large_button_box, AE_GFX_MDM_LINES_STRIP);
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
+	sprintf_s(strBuffer, "Increase your level by defeating enemies.");
+	AEGfxPrint(fontLarge, strBuffer, -0.36f, -0.30f, 0.25f, 1.f, 1.f, 1.f);
+
+	sprintf_s(strBuffer, "Select between increasing your health or damage.");
+	AEGfxPrint(fontLarge, strBuffer, -0.44f, -0.45f, 0.25f, 1.f, 1.f, 1.f);
 
 	sprintf_s(strBuffer, "Press A for last page");
 	AEGfxPrint(fontId, strBuffer, -0.745f, -0.720f, 1.0f, 1.f, 1.f, 1.f);
@@ -663,6 +706,9 @@ void Tutorial_Load()
 
 	frost_turtle = AEGfxTextureLoad("Images/Frost turtle.png");
 	AE_ASSERT_MESG(frost_turtle, "Failed to create Frost turle texture!\n");
+
+	LevelUpPic = AEGfxTextureLoad("Images/LevelUp.png");
+	AE_ASSERT_MESG(LevelUpPic, "Failed to create LevelUp texture!\n");
 }
 
 void Tutorial_Init()
@@ -693,13 +739,13 @@ void Tutorial_Update()
 	{
 		++page;
 
-		if (page <= 7) {
+		if (page <= 8) {
 			page_flip2_Audio();
 		}
 
-		if (page > 7)
+		if (page > 8)
 		{
-			page = 7;
+			page = 8;
 		}
 	}
 
@@ -724,6 +770,9 @@ void Tutorial_Update()
 		break;
 
 	case page_7: page_seven_code();
+		break;
+	
+	case page_8: page_eight_code();
 		break;
 	}
 }
@@ -790,4 +839,5 @@ void Tutorial_Unload()
 	AEGfxTextureUnload(tutorial_tab_map);
 	AEGfxTextureUnload(tutorial_potions);
 	AEGfxTextureUnload(fightingduck);
+	AEGfxTextureUnload(LevelUpPic);
 }
