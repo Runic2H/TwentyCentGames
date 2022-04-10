@@ -126,7 +126,10 @@ void Combat_Update()
 		{
 			std::cout << "You Won!\n";
 			enemystats->health = 0;
-			enemystats->EnemyType = 0;
+			if (enemystats->EnemyType == ENEMYBOSS)
+			{
+				enemystats->EnemyType = 0;
+			}
 			playerstats->debuffcounter = 0.0f;
 			playerstats->PlayerXP += enemystats->EnemyXP;
 			if (PlayerLevelUp())
