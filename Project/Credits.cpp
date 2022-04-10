@@ -1,3 +1,11 @@
+/**************************************************************************
+ * 	File name	:	Credits.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Hu Jun Ning	(PRIMARY AUTHOR - 100%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
 
 //variables
@@ -5,7 +13,7 @@
 int credits_page{ 1 };
 enum credits_pages { credits_page_1 = 1, credits_page_2, credits_page_3, credits_page_4, credits_page_5, credits_page_6, credits_page_7 };
 
-extern sys systemsettings;
+//extern sys systemsettings;
 
 /*	Objects	*/
 AEGfxVertexList* team_logo;
@@ -18,6 +26,10 @@ AEGfxTexture* sketchbook_logo_art;
 AEGfxTexture* audacity_logo_art;
 AEGfxTexture* fmod_logo_art;
 
+
+/**************************************************************
+*	draws the left button box
+***************************************************************/
 void Draw_left_button_box()
 {
 	//drawing previous page box (left)
@@ -29,6 +41,9 @@ void Draw_left_button_box()
 	AEGfxMeshDraw(button_box_at_credits, AE_GFX_MDM_LINES_STRIP);
 }
 
+/**************************************************************
+*	draws the right button box
+***************************************************************/
 void Draw_right_button_box()
 {
 	//drawing next page button boxes (right)
@@ -40,6 +55,9 @@ void Draw_right_button_box()
 	AEGfxMeshDraw(button_box_at_credits, AE_GFX_MDM_LINES_STRIP);
 }
 
+/**************************************************************
+*	code for credits screen page 1
+***************************************************************/
 void credits_page_one_code()
 {
 	//Draw team logo
@@ -53,8 +71,6 @@ void credits_page_one_code()
 	AEGfxMeshDraw(team_logo, AE_GFX_MDM_TRIANGLES);
 
 	Draw_right_button_box();
-
-
 
 	char strBuffer[1000];
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -92,6 +108,10 @@ void credits_page_one_code()
 	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 
+
+/**************************************************************
+*	code for credits screen page 2
+***************************************************************/
 void credits_page_two_code()
 {
 	Draw_left_button_box();
@@ -204,6 +224,10 @@ void credits_page_two_code()
 	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 
+
+/**************************************************************
+*	code for credits screen page 3
+***************************************************************/
 void credits_page_three_code()
 {
 	Draw_left_button_box();
@@ -287,6 +311,11 @@ void credits_page_three_code()
 	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 
+
+
+/**************************************************************
+*	code for credits screen page 4
+***************************************************************/
 void credits_page_four_code()
 {	
 	//Draw sketchbook logo
@@ -350,6 +379,10 @@ void credits_page_four_code()
 	AEGfxPrint(fontId, strBuffer, -0.51f, -0.96f, 1.0f, 1.f, 0.831f, 0.36f);
 }
 
+
+/**************************************************************
+*	the load function for the credits
+***************************************************************/
 void Credits_Load()
 {
 	//team logo
@@ -422,6 +455,9 @@ void Credits_Load()
 	AE_ASSERT_MESG(sketchbook_logo_art, "Failed to create sketchbook logo texture!\n");
 }
 
+/**************************************************************
+*	the init function for the credits
+***************************************************************/
 void Credits_Init()
 {
 	credits_page = 1;
@@ -429,6 +465,9 @@ void Credits_Init()
 	AEGfxSetCamPosition(0.f, 0.f);
 }
 
+/**************************************************************
+*	the update function for the credits
+***************************************************************/
 void Credits_Update()
 {
 	Audio_Update();
@@ -467,6 +506,9 @@ void Credits_Update()
 	}
 }
 
+/**************************************************************
+*	the draw function for the credits
+***************************************************************/
 void Credits_Draw()
 {
 	switch (credits_page) {
@@ -484,19 +526,20 @@ void Credits_Draw()
 	}
 }
 
+/**************************************************************
+*	the free function for the credits
+***************************************************************/
 void Credits_Free()
 {
 	AEGfxMeshFree(team_logo);
 	AEGfxMeshFree(audacity_and_sketchbook_mesh);
 	AEGfxMeshFree(fmod_mesh);
 	AEGfxMeshFree(button_box_at_credits);
-
-	//if (Mesh_maze_overview != nullptr) {
-	//	AEGfxMeshFree(Mesh_maze_overview);
-	//	Mesh_maze_overview = nullptr;
-	//}
 }
 
+/**************************************************************
+*	the unload function for the credits
+***************************************************************/
 void Credits_Unload()
 {
 	AEGfxTextureUnload(team_logo_art);

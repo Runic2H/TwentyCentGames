@@ -1,3 +1,12 @@
+/**************************************************************************
+ * 	File name	:	Tutorial.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Matthew Cheung Jun Yin	(PRIMARY AUTHOR - 90%)
+					Hu Jun Ning				(SECONDARY AUTHOR - 10%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
 
 //variables
@@ -31,13 +40,6 @@ AEGfxTexture* ducktitle;
 AEGfxTexture* fightingduck;
 AEGfxTexture* LevelUpPic;
 
-/*
-	sprintf_s(strBufferStatus, "Status: Frosted");
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.65f, 1.0f, 0.0f, 0.7f, 0.9f);
-	AEGfxSetBlendMode(AE_GFX_BM_NONE);
-*/
 
 void page_one_code()
 {
@@ -555,33 +557,9 @@ void page_eight_code()
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 }
 
-//void CreatingMazeOverview(AEGfxVertexList*& pMesh_MainCharacter, float cell_height, float cell_width)
-//{
-//	AEGfxMeshStart();
-//
-//	//pink: 0x00FF00FF
-//	//white: 0x00FFFFFF
-//	//light blue: 0x0000FFFF
-//
-//	AEGfxTriAdd( //This triangle is colorful, blends 3 colours wowza
-//		//-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink 
-//		-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 0.0f, 1.0f, //pink 
-//		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
-//		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
-//		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
-//
-//
-//	AEGfxTriAdd(
-//		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
-//		//(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink
-//		(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 0.0f, //pink
-//		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
-//		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
-//
-//	pMesh_MainCharacter = AEGfxMeshEnd();
-//	AE_ASSERT_MESG(pMesh_MainCharacter, "Failed to create MazeOverview!!");
-//}
-
+/**************************************************************
+*	creates the meshes
+***************************************************************/
 void CreatingImageMesh(AEGfxVertexList*& pMesh_MainCharacter, float cell_height, float cell_width)
 {
 	AEGfxMeshStart();
@@ -609,6 +587,9 @@ void CreatingImageMesh(AEGfxVertexList*& pMesh_MainCharacter, float cell_height,
 	AE_ASSERT_MESG(pMesh_MainCharacter, "Failed to create MazeOverview!!");
 }
 
+/**************************************************************
+*	frees the meshes
+***************************************************************/
 void meshfree() {
 	if (Mesh_maze_overview != nullptr) {
 		AEGfxMeshFree(Mesh_maze_overview);
@@ -616,15 +597,10 @@ void meshfree() {
 	}
 }
 
-//void DrawingMazeOverview(AEGfxVertexList*& pMesh_MainCharacter, float MC_positionX, float MC_positionY)
-//{
-//	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-//	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-//	AEGfxSetPosition(MC_positionX, MC_positionY);
-//	AEGfxTextureSet(maze_screenshot, 0, 0);
-//	AEGfxMeshDraw(pMesh_MainCharacter, AE_GFX_MDM_TRIANGLES);
-//}
 
+/**************************************************************
+*	draws the meshes
+***************************************************************/
 void DrawingTextureOnMesh(AEGfxVertexList*& pMesh_MainCharacter, AEGfxTexture* texture_var, float MC_positionX, float MC_positionY)
 {
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -634,6 +610,9 @@ void DrawingTextureOnMesh(AEGfxVertexList*& pMesh_MainCharacter, AEGfxTexture* t
 	AEGfxMeshDraw(pMesh_MainCharacter, AE_GFX_MDM_TRIANGLES);
 }
 
+/**************************************************************
+*	load function for the tutorial
+***************************************************************/
 void Tutorial_Load()
 {
 	//draws window outline with reference to window's width and height
@@ -728,11 +707,17 @@ void Tutorial_Load()
 	AE_ASSERT_MESG(LevelUpPic, "Failed to create LevelUp texture!\n");
 }
 
+/**************************************************************
+*	init function for the tutorial
+***************************************************************/
 void Tutorial_Init()
 {
 	page = 1;
 }
 
+/**************************************************************
+*	update function for the tutorial
+***************************************************************/
 void Tutorial_Update()
 {
 	Audio_Update();
@@ -794,6 +779,9 @@ void Tutorial_Update()
 	}
 }
 
+/**************************************************************
+*	draw function for the tutorial
+***************************************************************/
 void Tutorial_Draw()
 {
 	char strBuffer[1000];
@@ -826,6 +814,9 @@ void Tutorial_Draw()
 	AEGfxPrint(fontLarge, strBuffer, -0.32f, -0.9f, 0.25f, 1.f, 1.f, 1.f);
 }
 
+/**************************************************************
+*	free function for the tutorial
+***************************************************************/
 void Tutorial_Free()
 {
 	std::cout << "Tutorial:Free" << std::endl;
@@ -838,6 +829,9 @@ void Tutorial_Free()
 	}
 }
 
+/**************************************************************
+*	unload function for the tutorial
+***************************************************************/
 void Tutorial_Unload()
 {
 	std::cout << "Tutorial:Unload" << std::endl;

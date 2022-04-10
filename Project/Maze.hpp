@@ -1,3 +1,12 @@
+/**************************************************************************
+ * 	File name	:	Maze.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Louis Mineo				(PRIMARY AUTHOR - 80%)
+ *					Hu Jun Ning				(SECONDARY AUTHOR - 20%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
 
 #pragma once
@@ -75,6 +84,18 @@ void MazeGenAlgo_BossSpawn();
 void MazeGenAlgo();
 /*========================================================================================*/
 
+void Maze_LOAD_DisplayChestPickupItemMESH();
+
+
+
+void Maze_DisplayChestPickupItem(std::string msg);
+
+
+
+void Maze_LevelText_Draw();
+
+void Maze_Minimap_Draw(float cam_x, float cam_y, float x_offset, float y_offset);
+
 Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows, int noOfCols);
 
 void MAZE_CreateMESH_MazeWindow2(AEGfxVertexList*& MazeWindow_Var, Maze_Struct* Maze, int colour_HEXA);
@@ -89,6 +110,8 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList*& WALLCellMesh,
 	AEGfxVertexList*& CellOutlineMesh,
 	Maze_Struct* Maze);
 
+void MAZE_SetPosAsEmpty(Maze_Struct* Maze, int curr_X_GRIDposition, int curr_Y_GRIDposition);
+
 void MAZE_DrawMazeOutline2(AEGfxVertexList*& mazeOutlineMesh, Maze_Struct* Maze);
 
 void MAZE_DrawingMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float MC_positionX, float MC_positionY);
@@ -97,17 +120,28 @@ void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_
 
 int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Char_Pos_X, int& Char_Pos_Y);
 
+void MAZE_CreateMESH_Chests(AEGfxVertexList*& pMeshChest, float cell_height, float cell_width);
+
 void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition);
 
 void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition);
 
-void Maze_CameraAdjustment(int direction);
 
 void MAZE_SaveCellVisibility(Maze_Struct* maze_var);
+
+void MAZE_ResetCellVisibility(Maze_Struct* maze_var);
 
 void MAZE_ReLOADCellVisibility(Maze_Struct* maze_var);
 
 void Maze_Minimap_Draw(float cam_x, float cam_y, float x_offset, float y_offset);
+
+void Maze_Minimap_LoadMeshes(float& global_var_minimap_height);
+
+void Maze_ChestPickup_Draw(float cam_x, float cam_y, float x_offset, float y_offset);
+
+void MAZE_FogOfWar(int curr_X_GRIDposition, int curr_Y_GRIDposition);
+
+void Maze_CameraAdjustment(int direction);
 
 void Maze_Inventory_MeshUpdate(float camX, float camY);
 

@@ -1,4 +1,11 @@
-//CHARACTER CPP
+/**************************************************************************
+ * 	File name	:	Characters.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Elton Teo Zhe Wei		(PRIMARY AUTHOR - 50%)
+ *					Richmond Choo Tze Yong	(PRIMARY AUTHOR - 50%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
 
 #include "pch.hpp"
 
@@ -36,6 +43,9 @@ namespace Characters
 		AEGfxVertexList* playerstamina = 0;		//PLAYER STAMINA MESH
 
 
+		/**************************************************************
+		*	updates the meshes in runtime to update their mesh colours
+		***************************************************************/
 		void CombatMesh(int RGBcounter)
 		{
 			FreePlayerMeshOnUpdate();
@@ -162,7 +172,10 @@ namespace Characters
 		}
 
 
-		// the meshes that i only want to initialise once
+		/**************************************************************
+		*	Initialises all the meshes in the init function once in the
+		*	whole function
+		***************************************************************/
 		void MeshInit() {
 
 			rightbutton = new item;
@@ -258,6 +271,9 @@ namespace Characters
 		}
 		
 
+		/**************************************************************
+		*	The logic for the stamina updates
+		***************************************************************/
 		void StaminaLogic(int const& keypressed)
 		{
 			//std::cout << playerstats->staminacount << "\n";
@@ -285,6 +301,10 @@ namespace Characters
 			}
 		}
 
+
+		/**************************************************************
+		*	The update function for the background texture
+		***************************************************************/
 		void Backgroundupdate() {
 
 			AEMtx33 scale, rot, trans, buffer;
@@ -297,6 +317,10 @@ namespace Characters
 			AEMtx33Concat(&combat_bg->transform, &trans, &buffer);
 		}
 
+
+		/**************************************************************
+		*	The draw function to render the background texture
+		***************************************************************/
 		void Backgroundrender() {
 
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -309,6 +333,9 @@ namespace Characters
 			AEGfxMeshDraw(combat_bg->pMesh, AE_GFX_MDM_TRIANGLES);
 		}
 
+		/**************************************************************
+		*	Transform the meshes for the frozen buttons
+		***************************************************************/
 		void FROZENbuttonlogic() {
 
 			leftbutton->itemcounter = rightbutton->itemcounter = 0.5f;
@@ -332,6 +359,10 @@ namespace Characters
 			}
 		}
 
+		/**************************************************************
+		*	Rendering and drawing the frozen buttons
+		*	and print texts on the screen
+		***************************************************************/
 		void FROZENbuttonrender() {
 
 			char str[35];
@@ -371,6 +402,9 @@ namespace Characters
 		}
 
 
+		/**************************************************************
+		*	Renders and draws the stamina bar for the player
+		***************************************************************/
 		void StaminaRender(AEGfxTexture* staminapotion)
 		{
 			for (int i{ 0 }; i < playerstats->staminacount; ++i) {
@@ -386,7 +420,10 @@ namespace Characters
 			}
 		}
 
-
+		/**************************************************************
+		*	The update logic for the inventory system that consumes the
+		*	potions currently on the player
+		***************************************************************/
 		void inventorylogic() {
 
 			if (AEInputCheckTriggered(AEVK_1)) {
@@ -419,6 +456,10 @@ namespace Characters
 		}
 
 
+		/**************************************************************
+		*	Renders and draws the inventory texts and textures in the
+		*	combat
+		***************************************************************/
 		void inventoryrender() {
 
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -487,6 +528,9 @@ namespace Characters
 		}
 
 
+		/**************************************************************
+		*	Renders and draws the player grid
+		***************************************************************/
 		void RenderPlayerGrid(AEGfxVertexList* PlayerMesh)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -496,7 +540,10 @@ namespace Characters
 		}
 
 
-		// this one frees it before it draws every mesh. to prevent memoryleak
+		/**************************************************************
+		*	Frees the player meshes that updates the RGB colours
+		*	in every frame
+		***************************************************************/
 		void FreePlayerMeshOnUpdate() {
 
 			if (Player1Grid != nullptr) {
@@ -525,7 +572,9 @@ namespace Characters
 			}
 		}
 
-		// single update free player mesh
+		/**************************************************************
+		*	Frees all player meshes
+		***************************************************************/
 		void FreePlayerMesh()
 		{
 			if (PlayerMesh != nullptr) {
@@ -581,6 +630,9 @@ namespace Characters
 			
 		}
 
+		/**************************************************************
+		*	A common function to unload textures and pointers
+		***************************************************************/
 		void unloadtextures() {
 
 			AEGfxTextureUnload(rightbutton->pTexture);
@@ -592,7 +644,10 @@ namespace Characters
 			delete combat_bg;
 		}
 
-		// returns an int. any movement sets the int flag to 1
+
+		/**************************************************************
+		*	the logic for player movement
+		***************************************************************/
 		void PlayerMovement(int& x, int& keypressed) {
 
 			x = 0;
@@ -670,6 +725,9 @@ namespace Characters
 			}
 		}
 
+		/**************************************************************
+		*	The update for the player debuff states
+		***************************************************************/
 		void CheckandUpdatePlayerStatus()
 		{
 			if (playerstats->debuffcounter > 0)
@@ -716,6 +774,9 @@ namespace Characters
 			}
 		}
 
+		/**************************************************************
+		*	A check on whether the player has levelled up or not
+		***************************************************************/
 		bool PlayerLevelUp()
 		{
 			if (playerstats->PlayerXP >= playerstats->PlayerXPMax)
@@ -725,6 +786,12 @@ namespace Characters
 			return false;
 		}
 
+
+		/**************************************************************
+		*	FOR PRESENTATION PURPOSES ONLY:
+		*	gives the player a lot of potiosn to be used, when
+		*	showcasing the game
+		***************************************************************/
 		void godmode() {
 			if (AEInputCheckCurr(AEVK_G)) {
 				playerinventory->defencepotion.itemcounter += 1.0f;
@@ -733,6 +800,9 @@ namespace Characters
 			}
 		}
 
+		/**************************************************************
+		*	The logic that cycles through the desired RGB colours
+		***************************************************************/
 		void RGBloop(int& RGBcounter) {
 			if (RGBcounter <= 16777215)
 			{
@@ -741,6 +811,10 @@ namespace Characters
 			}
 		}
 
+		/**************************************************************
+		*	Renders the player mesh with its respective x and y
+		*	positions
+		***************************************************************/
 		void playerrender(AEGfxTexture* playertexture, AEGfxVertexList* playermesh) {
 
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -760,6 +834,10 @@ namespace Characters
 			AEGfxMeshDraw(playermesh, AE_GFX_MDM_TRIANGLES);
 		}
 
+
+		/**************************************************************
+		*	Chooses the cells that damages you, and renders them
+		***************************************************************/
 		void GridCheck(bool EnemyAttackState, float timer, int& x) {
 
 			if (EnemyAttackState == true && timer <= 0.60f) {
@@ -801,6 +879,12 @@ namespace Characters
 			}
 		}
 
+		/**************************************************************
+		*	Renders the player health with respect to the maxhealth
+		*	Decreases with the health
+		*	Prints essential texts on screens
+		*	Prints which status debuff is currently affecting the player
+		***************************************************************/
 		void RenderPlayerHealth()
 		{
 			char strBufferHealth[100];
@@ -839,7 +923,7 @@ namespace Characters
 
 			case BURNING:
 				sprintf_s(strBufferStatus, "Status: Burning");
-         AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 				AEGfxPrint(fontId, strBufferStatus, -0.95f, -0.65f, 1.0f, 0.7f, 0.0f, 0.2f);
 				AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -922,6 +1006,10 @@ namespace Characters
 		namespace
 		{
 
+			/**************************************************************
+			*	checks for enemy type and their respective status effects
+			*	on the player
+			***************************************************************/
 			void EnemyTypeCheckToApplyPlayerDebuff()
 			{
 
@@ -960,6 +1048,10 @@ namespace Characters
 				}
 			}
 
+			/**************************************************************
+			*	logic for player taking damage based on the different flags
+			*	and grids the player is currently on
+			***************************************************************/
 			void EnemyAttackState()
 			{
 				playerstats->SAFEGRID = enemystats->EnemyGrid;
@@ -1014,6 +1106,9 @@ namespace Characters
 				}
 			}
 
+			/**************************************************************
+			*	resetting the states for the next attack sequence
+			***************************************************************/
 			void EnemyIdleState()
 			{
 				//Idle state and reducing of enemyCD to next attack
@@ -1044,6 +1139,11 @@ namespace Characters
 			}
 		}
 
+
+		/**************************************************************
+		*	Chooses an enemytype for the player to encounter in the
+		*	maze
+		***************************************************************/
 		void ChoosingEnemyType(float RNG) {
 
 			switch ((int)RNG)
@@ -1085,6 +1185,11 @@ namespace Characters
 			}
 		}
 
+
+		/**************************************************************
+		*	Spawns the boss enemy by setting the relevant details and
+		*	flags to the enemy struct
+		***************************************************************/
 		void SpawnBossEnemy()
 		{
 			enemystats->EnemyLevel = playerstats->PlayerLevel;
@@ -1098,7 +1203,10 @@ namespace Characters
 			enemystats->EnemyXP = 65 + (20 * enemystats->EnemyLevel);
 		}
 
-		//Main Update loop for Idle and Attack States of Enemy
+		
+		/**************************************************************
+		*	Chooses the enemy states between idle and attacking
+		***************************************************************/
 		void UpdateEnemyState()
 		{
 			if (enemystats->EnemyCD <= 0.0f)
@@ -1111,9 +1219,13 @@ namespace Characters
 			}
 		}
 
+
+		/**************************************************************
+		*	Loads the enemy meshes
+		***************************************************************/
 		void EnemyCombatMesh()
 		{
-			FreeEnemyMesh();													//deletes old mesh
+			//FreeEnemyMesh();													//deletes old mesh
 
 			AEGfxMeshStart();
 
@@ -1150,12 +1262,6 @@ namespace Characters
 			EnemyGridAttack = AEGfxMeshEnd();
 			AE_ASSERT_MESG(EnemyGridAttack, "Failed to create enemygridattack!!");
 
-			//AEGfxVertexAdd(75.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
-			//AEGfxVertexAdd(125.0f, -25.0f, 0xFFFFFF, 1.0f, 1.0f);
-			//AEGfxVertexAdd(125.0f, 25.0f, 0xFFFFFF, 0.0f, 0.0f);				//ENEMY MESH
-			//AEGfxVertexAdd(75.0f, 25.0f, 0xFFFFFF, 1.0f, 0.0f);
-			//AEGfxVertexAdd(75.0f, -25.0f, 0xFFFFFF, 0.0f, 1.0f);
-
 			AEGfxMeshStart();
 
 			AEGfxTriAdd(
@@ -1184,17 +1290,21 @@ namespace Characters
 			AE_ASSERT_MESG(EnemyMesh, "Failed to create enemyMesh!!");
 		}
 
+
+		/**************************************************************
+		*	Renders and draws the enemy grids
+		***************************************************************/
 		void RenderEnemyGrid(AEGfxVertexList* EnemyMesh)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-			// Set position for object 1
 			AEGfxSetPosition(0.0f, 0.0f);
-			// No texture for object 1
 			AEGfxTextureSet(NULL, 0, 0);
-
 			AEGfxMeshDraw(EnemyMesh, AE_GFX_MDM_LINES_STRIP);
 		}
 
+		/**************************************************************
+		*	Frees the enemy meshes
+		***************************************************************/
 		void FreeEnemyMesh()
 		{
 
@@ -1219,27 +1329,24 @@ namespace Characters
 			}
 		}
 
+		/**************************************************************
+		*	Renders and draws the enemy based on their different
+		*	textures
+		***************************************************************/
 		void RenderEnemy(AEGfxTexture* enemytexture, AEGfxVertexList* EnemyMesh)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 			AEGfxSetPosition(enemystats->positionX, enemystats->positionY);
 			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-			//if (enemystats->EnemyType == ICE)
-			//{
-			//	AEGfxTextureUnload(enemytexture);
-			//	enemytexture = AEGfxTextureLoad("Images/Frost turtle.png");
-			//	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
-			//}
-			//if (enemystats->EnemyType == FIRE)
-			//{
-			//	AEGfxTextureUnload(enemytexture);
-			//	enemytexture = AEGfxTextureLoad("Images/Fire turtle.png");
-			//	AE_ASSERT_MESG(enemytexture, "cant create turtle texture\n");
-			//}
 			AEGfxTextureSet(enemytexture, 1.0f, 1.0f);
 			AEGfxMeshDraw(EnemyMesh, AE_GFX_MDM_TRIANGLES);
 		}
 
+		/**************************************************************
+		*	Renders and draws the enemy health bar with respect to its
+		*	maxhealth
+		*	also prints out texts telling which enemy type it is
+		***************************************************************/
 		void RenderEnemyHealth()
 		{
 			char strBufferHealth[100];

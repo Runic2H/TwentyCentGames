@@ -1,4 +1,13 @@
-//COMBAT.CPP
+/**************************************************************************
+ * 	File name	:	Combat.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Richmond Choo Tze Yong	(PRIMARY AUTHOR - 45%)
+ *					Elton Teo Zhe Wei		(PRIMARY AUTHOR - 45%)
+ *					Louis Mineo				(SECONDARY AUTHOR - 5%)
+ *					Hu Jun Ning				(SECONDARY AUTHOR - 5%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
 
 #include "pch.hpp"
 
@@ -78,6 +87,7 @@ void Combat_Initialize()
 {
 	stop_Audio();
 	combat_background_Audio();
+	EnemyCombatMesh();
 	//initialise_pausemenu();
 	if (enemystats->EnemyType != ENEMYBOSS)
 	{
@@ -114,7 +124,6 @@ void Combat_Update()
 	{
 		RGBloop(RGBcounter);
 		CombatMesh(RGBcounter);
-		EnemyCombatMesh();
 		inventorylogic();
 		CheckandUpdatePlayerStatus();
 		Backgroundupdate();

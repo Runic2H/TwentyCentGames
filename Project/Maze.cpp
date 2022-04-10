@@ -1,4 +1,23 @@
+/**************************************************************************
+ * 	File name	:	Maze.cpp
+ * 	Project name:	Project D.U.C.K
+ * 	Author(s)	:	Louis Mineo				(PRIMARY AUTHOR - 80%)
+ *					Hu Jun Ning				(SECONDARY AUTHOR - 15%)
+ *					Matthew Cheung Jun Yin	(SECONDARY AUTHOR - 4%)
+ *					Richmond Choo Tze Yong	(TERTIARY AUTHOR  - 0.5%)
+ *					Elton Teo Zhe Wei		(TERTIARY AUTHOR  - 0.5%)
+ *
+ * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+**************************************************************************/
+
 #include "pch.hpp"
+
+/******************************************************************************/
+/*!
+*	Start of all the vertexes used in the game
+*/
+/******************************************************************************/
+
 
 AEGfxVertexList* pMeshCellOutline = 0;
 AEGfxVertexList* pMeshMazeWindow = 0;
@@ -7,22 +26,37 @@ AEGfxVertexList* pMeshSolidSquare_WALL = 0;
 AEGfxVertexList* pMesh_MainCharacter = 0;
 AEGfxVertexList* pMeshChest = 0;
 
+// meshes for the minimap only
 AEGfxVertexList* pMesh_MiniMapWindow = 0;
 AEGfxVertexList* pMesh_MiniMapChests = 0;
 AEGfxVertexList* pMesh_MiniMapMainChar = 0;
 AEGfxVertexList* pMesh_MiniMapEndPt = 0;
-float global_var_minimap_height;
+/******************************************************************************/
+/*!
+*	End of all the vertexes used in the game
+*/
+/******************************************************************************/
 
-AEGfxVertexList* pMesh_ChestText= 0;
-float chest_pickup_display_duration;
-int chestopened_flag = 0;
-std::string openchest_msg;
 
 AEGfxTexture* path_art;
 AEGfxTexture* wall_art;
 AEGfxTexture* main_character_art;
 AEGfxTexture* chest_art;
 AEGfxTexture* exit_art;
+
+
+
+/******************************************************************************/
+/*!
+*	Global Declartions
+*/
+/******************************************************************************/
+float global_var_minimap_height;
+
+AEGfxVertexList* pMesh_ChestText= 0;
+float chest_pickup_display_duration;
+int chestopened_flag = 0;
+std::string openchest_msg;
 
 AEMtx33 defencepotiontransform, staminapotiontransform, healthpotiontransform;
 
@@ -67,12 +101,18 @@ struct wallXY
 
 std::vector<wallXY> MazeOGWalls_XY;
 
-/*
-int maze_iswall_isnotwall[noOfRows][noOfCols];
-int maze_visibility[noOfRows][noOfCols];
-*/
+
 int maze_iswall_isnotwall[maxRows][maxCols];
 int maze_visibility[maxRows][maxCols];
+
+/******************************************************************************/
+/*!
+*	
+*	This function loads the mesh for the chest texture to be set on.
+* 
+*/
+/******************************************************************************/
+
 
 void Maze_LOAD_DisplayChestPickupItemMESH()
 {
@@ -91,6 +131,14 @@ void Maze_LOAD_DisplayChestPickupItemMESH()
 	pMesh_ChestText = AEGfxMeshEnd();
 }
 
+/******************************************************************************/
+/*!
+*
+*	This function draws the mesh with the chest texture.
+*
+*/
+/******************************************************************************/
+
 void Maze_ChestPickup_Draw(float cam_x, float cam_y, float x_offset, float y_offset)
 {
 	float func_starting_x = cam_x + x_offset;
@@ -103,6 +151,14 @@ void Maze_ChestPickup_Draw(float cam_x, float cam_y, float x_offset, float y_off
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 0.8f);
 	AEGfxMeshDraw(pMesh_ChestText, AE_GFX_MDM_TRIANGLES);
 }
+
+/******************************************************************************/
+/*!
+*
+*  This function displays the text of what item the player picks from the chest.
+*
+*/
+/******************************************************************************/
 
 void Maze_DisplayChestPickupItem(std::string msg)
 {
@@ -119,7 +175,14 @@ void Maze_DisplayChestPickupItem(std::string msg)
 	chest_pickup_display_duration -= DT;
 }
 
-
+/******************************************************************************/
+/*!
+*
+*	This function loads the meshes which are used in the minimap.
+*	i.e. the chests, the large window, the exit tile
+*
+*/
+/******************************************************************************/
 
 void Maze_Minimap_LoadMeshes(float &global_var_minimap_height)
 {
@@ -179,6 +242,14 @@ void Maze_Minimap_LoadMeshes(float &global_var_minimap_height)
 	pMesh_MiniMapEndPt = AEGfxMeshEnd();
 }
 
+/******************************************************************************/
+/*!
+*
+*	This function prints the text " LEVEL X" at the tab-screen.
+*
+*/
+/******************************************************************************/
+
 void Maze_LevelText_Draw()
 {
 
@@ -190,7 +261,13 @@ void Maze_LevelText_Draw()
 	AEGfxPrint(fontLarge, strBuffer, -0.41, 0.7, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-
+/******************************************************************************/
+/*!
+*
+*	This function draws the minimap at the tab menu.
+*
+*/
+/******************************************************************************/
 void Maze_Minimap_Draw(float cam_x, float cam_y, float x_offset, float y_offset)
 {
 	float func_starting_x = cam_x + x_offset;
@@ -249,11 +326,30 @@ void Maze_Minimap_Draw(float cam_x, float cam_y, float x_offset, float y_offset)
 	}
 }
 
+
+/******************************************************************************/
+/*!
+*
+*	This function, which is part of the maze generation algorith, sets a boss
+*	tiles at the final tile before preceding to the next level.
+*
+*/
+/******************************************************************************/
 void MazeGenAlgo_BossSpawn()
 {
 	maze_iswall_isnotwall[end_x][end_y - 1] = 5;
 }
 
+
+/******************************************************************************/
+/*!
+*
+*	This function, spwawns enemy tiles in the binary map, after the maze has
+*	been generated as a binary map. It take contact rate as the perecentage of
+*	enemies to spawn out of all the non-wall tiles
+*
+*/
+/******************************************************************************/
 void Maze_EnemySpawn(float contact_rate)
 {
 	// count how many paths there are
@@ -301,6 +397,17 @@ void Maze_EnemySpawn(float contact_rate)
 	}
 }
 
+
+/******************************************************************************/
+/*!
+*
+*	This function, spwawns chests in the binary map, after the maze has
+*	been generated and the enemies has been spawned in the binary map. 
+*	It take spawn rate as the perecentage of chests to spawn out of all the 
+*	non-wall and non-enemy tiles
+*
+*/
+/******************************************************************************/
 void Maze_ChestSpawn(float spawn_rate)
 {
 	// count how many paths there are
@@ -349,6 +456,17 @@ void Maze_ChestSpawn(float spawn_rate)
 
 }
 
+/******************************************************************************/
+/*!
+*
+*	This function, which is part of the maze generation algorith, creates an
+*	outline of the maze, of size noOfRows and noOfCols, then creating a 
+*	surrounding of walls and creating the starting and ending points as value
+*	zero. It also pushes the xy of all the pre-determined walls 
+*
+*/
+/******************************************************************************/
+
 void MazeGenAlgo_MakeMaze()
 {
 	// draw the walls 
@@ -380,6 +498,15 @@ void MazeGenAlgo_MakeMaze()
 	
 }
 
+/******************************************************************************/
+/*!
+*
+*	This function, which is part of the maze generation algorith, sets the
+*	starting cell and ending cell, as well as use them as output values
+*
+*/
+/******************************************************************************/
+
 void MazeGenAlgo_ChoosingStartingPos(int& startX, int& startY, int& endX, int& endY, int height, int width)
 {
 	startX = ((width - 2) - 1) / 2 + 1;
@@ -394,6 +521,16 @@ void MazeGenAlgo_ChoosingStartingPos(int& startX, int& startY, int& endX, int& e
 	curr_X_GRIDposition = startX;
 	curr_Y_GRIDposition = startY;
 }
+
+/******************************************************************************/
+/*!
+*
+*	This function, which is part of the maze generation algorith, uses the 
+*	predetermined walls to set walls around it, at a random sequence. It will 
+*	not re-set walls that have been set around them.
+*
+*/
+/******************************************************************************/
 
 void MazeGenAlgo_Set_walls()
 {
@@ -491,6 +628,15 @@ void MazeGenAlgo_Set_walls()
 	}
 }
 
+/******************************************************************************/
+/*!
+*
+*	This function, which is part of the maze generation algorith, prints the 
+*	binary map the generated maze, as well as its row and col values.
+*
+*/
+/******************************************************************************/
+
 void  MazeGenAlgo_PrintRetrievedInformation()
 {
 	std::cout << "Width " << noOfCols << std::endl;
@@ -516,6 +662,17 @@ void  MazeGenAlgo_PrintRetrievedInformation()
 
 }
 
+
+/******************************************************************************/
+/*!
+*
+*	This function, which is part of the maze generation algorith, checks if the
+*	maze does not have a vertical empty rows from the starting pt to the ending
+*	pt.
+*
+*/
+/******************************************************************************/
+
 bool MazeGenAlgo_PostGenCheck() // checks if the center col is not ALL PATH, returns true if not all path
 {
 	for (int i = 0; i < noOfRows; i++)
@@ -531,7 +688,15 @@ bool MazeGenAlgo_PostGenCheck() // checks if the center col is not ALL PATH, ret
 }
 
 
-
+/******************************************************************************/
+/*!
+*
+*	This function, is the compilation of the functions that create the Maze
+*	Generation Algo. It will check if the maze does not have, a empty vertical 
+*	row. Else, it will regenerate the maze.
+*
+*/
+/******************************************************************************/
 void MazeGenAlgo()
 {
 	srand(time(NULL));
@@ -561,7 +726,17 @@ void MazeGenAlgo()
 	std::cout << "BOSS SPAWNED" << std::endl;
 }
 
-/*========================================================================================*/
+
+
+
+/******************************************************************************/
+/*!
+*
+*	This function, creates the large Maze struct using the window widths and
+*	height. As well as the count of rows and cols for the maze itself.
+*
+*/
+/******************************************************************************/
 Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows, int noOfCols)
 {
 	Maze_Struct* Maze = new Maze_Struct;
@@ -581,18 +756,6 @@ Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows,
 	Maze->specifications.MazeWindowStart_X = -Maze->specifications.mazeWindowWidth/2;
 	Maze->specifications.MazeWindowStart_Y = (Exe_WindowHeight / 6.0f * 5 / -2);  //(Exe_WindowHeight / 6.0f * 5 / -2);
 
-
-	/*
-	Maze->specifications.noOfRows = noOfRows;
-	Maze->specifications.noOfCols = noOfCols;
-	Maze->specifications.mazeWindowHeight = ((float)Exe_WindowHeight / 6.0f) * 5;
-	Maze->specifications.mazeWindowWidth = (float)Exe_WindowWidth / 2.0f;
-	Maze->specifications.cellHeight = Maze->specifications.mazeWindowHeight / noOfRows ;
-	Maze->specifications.cellWidth = Maze->specifications.mazeWindowWidth / noOfCols;
-	Maze->specifications.MazeWindowStart_X = Exe_WindowWidth / 2.0f / -2;
-	Maze->specifications.MazeWindowStart_Y = (Exe_WindowHeight / 6.0f * 5 / -2)
-	*/
-
 	// Init the grid cells
 	for (int r = 0; r < Maze->specifications.noOfRows; r++)
 	{
@@ -600,16 +763,19 @@ Maze_Struct* CreateMaze(int Exe_WindowHeight, int Exe_WindowWidth, int noOfRows,
 		{
 
 			Maze->grid[r][c].value = maze_iswall_isnotwall[r][c];
-			//Maze->grid[r][c].is_PlayerPos = 0;
 
 		}
 	}
-
-	//Maze->grid[0][7].is_PlayerPos = 1;
-
-
 	return Maze;
 }
+
+/******************************************************************************/
+/*!
+*
+*	This function, creates the mesh for the entire maze/window
+*
+*/
+/******************************************************************************/
 
 void MAZE_CreateMESH_MazeWindow2(AEGfxVertexList*& MazeWindow_Var, Maze_Struct* Maze, int colour_HEXA)
 {
@@ -623,6 +789,15 @@ void MAZE_CreateMESH_MazeWindow2(AEGfxVertexList*& MazeWindow_Var, Maze_Struct* 
 	MazeWindow_Var = AEGfxMeshEnd();
 }
 
+/******************************************************************************/
+/*!
+*
+*	This function, creates the mesh of lines, that surround each cell in the 
+*	maze.
+*
+*/
+/******************************************************************************/
+
 void MAZE_CreateMESH_CellOutline2(AEGfxVertexList*& CellOutlineMesh_Var, Maze_Struct* Maze, int colour_HEXA)
 {
 	AEGfxMeshStart();
@@ -634,24 +809,37 @@ void MAZE_CreateMESH_CellOutline2(AEGfxVertexList*& CellOutlineMesh_Var, Maze_St
 	CellOutlineMesh_Var = AEGfxMeshEnd();
 }
 
+/******************************************************************************/
+/*!
+*
+*	This function, creates the mesh of each cell in the maze.
+*
+*/
+/******************************************************************************/
+
 void MAZE_CreateSolidCell2(AEGfxVertexList*& SolidCellMesh_Var, Maze_Struct* Maze, int colour_HEXA)
 {
 	AEGfxMeshStart();
 	AEGfxTriAdd(
 		0, 0, colour_HEXA, 0.0f, 1.0f,
-		//0, Maze->specifications.cellHeight, colour_HEXA, 1.0f, 1.0f,
 		0, Maze->specifications.cellHeight, colour_HEXA, 0.0f, 0.0f,
-		//Maze->specifications.cellWidth, 0, colour_HEXA, 0.0f, 0.0f);
 		Maze->specifications.cellWidth, 0, colour_HEXA, 1.0f, 1.0f);
 	AEGfxTriAdd(
-		//0, Maze->specifications.cellHeight, colour_HEXA, 1.0f, 1.0f,
 		0, Maze->specifications.cellHeight, colour_HEXA, 0.0f, 0.0f,
 		Maze->specifications.cellWidth, Maze->specifications.cellHeight, colour_HEXA, 1.0f, 0.0f,
-		//Maze->specifications.cellWidth, 0, colour_HEXA, 0.0f, 0.0f);
 		Maze->specifications.cellWidth, 0, colour_HEXA, 1.0f, 1.0f);
 	SolidCellMesh_Var = AEGfxMeshEnd();
 }
 
+
+/******************************************************************************/
+/*!
+*
+*	This function, draws the meshes containing the outline of the entire maze
+*	and all the cells.
+*
+*/
+/******************************************************************************/
 
 void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 	AEGfxVertexList* &PATHCellMesh,
@@ -717,11 +905,28 @@ void MAZE_DrawMazeCellsandCellOutline2(AEGfxVertexList* &WALLCellMesh,
 	}
 }
 
+/******************************************************************************/
+/*!
+*
+*	This function, sets a certain cell in the maze as 0. which is usally called 
+*	when a combat sequence intialiates.
+*
+*/
+/******************************************************************************/
+
 void MAZE_SetPosAsEmpty(Maze_Struct* Maze, int curr_X_GRIDposition, int curr_Y_GRIDposition )
 {
 	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
 	maze_iswall_isnotwall[curr_X_GRIDposition][curr_Y_GRIDposition] = EMPTY_PATH;
 }
+
+/******************************************************************************/
+/*!
+*
+*	This function, draws the maze outline mesh.
+*
+*/
+/******************************************************************************/
 
 void MAZE_DrawMazeOutline2(AEGfxVertexList*& mazeOutlineMesh, Maze_Struct* Maze)
 {
@@ -730,6 +935,14 @@ void MAZE_DrawMazeOutline2(AEGfxVertexList*& mazeOutlineMesh, Maze_Struct* Maze)
 	AEGfxMeshDraw(mazeOutlineMesh, AE_GFX_MDM_LINES_STRIP);
 }
 
+
+/******************************************************************************/
+/*!
+*
+*	This function, creates the mesh of the main character in the maze
+*
+*/
+/******************************************************************************/
 
 void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_height, float cell_width)
 {
@@ -740,23 +953,28 @@ void MAZE_CreateMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float cell_
 	//light blue: 0x0000FFFF
 
 	AEGfxTriAdd( //This triangle is colorful, blends 3 colours wowza
-		//-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink 
 		-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 0.0f, 1.0f, //pink 
 		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 0.25f, 1.0f, //white
-		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
 		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
 
 
 	AEGfxTriAdd(
 		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 0.25f, 1.0f, //white
-		//(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink
 		(cell_width / 4), (cell_height / 4), 0x00FF00FF, 0.25f, 0.0f, //pink
-		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
 		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
 
 	pMesh_MainCharacter= AEGfxMeshEnd();
 	AE_ASSERT_MESG(pMesh_MainCharacter, "Failed to create main character!!");
 }
+
+/******************************************************************************/
+/*!
+*
+*	This function creates the mesh for the chests that will be rendered in the
+*	maze
+*
+*/
+/******************************************************************************/
 
 void MAZE_CreateMESH_Chests(AEGfxVertexList*& pMeshChest, float cell_height, float cell_width)
 {
@@ -775,6 +993,14 @@ void MAZE_CreateMESH_Chests(AEGfxVertexList*& pMeshChest, float cell_height, flo
 	AE_ASSERT_MESG(pMeshChest, "fail to create chest!!");
 }
 
+/******************************************************************************/
+/*!
+*
+*	This function draws the mesh for the main characters in the maze
+*
+*/
+/******************************************************************************/
+
 void MAZE_DrawingMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float MC_positionX, float MC_positionY)
 {
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -783,6 +1009,16 @@ void MAZE_DrawingMainCharacter(AEGfxVertexList*& pMesh_MainCharacter, float MC_p
 	AEGfxTextureSet(main_character_art, (float)(duck_dir*0.25f), 0.0f);
 	AEGfxMeshDraw(pMesh_MainCharacter, AE_GFX_MDM_TRIANGLES);
 }
+
+/******************************************************************************/
+/*!
+*
+*	This function checks if the UDLR movements of the character is obstructed 
+*	by a wall or not.
+*
+*/
+/******************************************************************************/
+
 
 int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Char_Pos_X, int& Char_Pos_Y)
 {
@@ -850,6 +1086,16 @@ int MAZE_CharMoveCHECK_NEXT_POS(int UpDownLeftRight, Maze_Struct* Maze, int& Cha
 
 }
 
+
+/******************************************************************************/
+/*!
+*
+*	This function create the maze's fog of war, by setting the surrounding 8 
+	cells as visible
+*
+*/
+/******************************************************************************/
+
 void MAZE_FogOfWar(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
 	//std::cout << "\n\nPlayer's position x: " << curr_X_GRIDposition << "\n";
@@ -876,6 +1122,16 @@ void MAZE_FogOfWar(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	}
 }
 
+/******************************************************************************/
+/*!
+*
+*	This function saves the current visibility binary map into a static
+*	array, which is used when jumping between gamestates, while preserving the
+*	specific visibility of the cells.
+*
+*/
+/******************************************************************************/
+
 void MAZE_SaveCellVisibility(Maze_Struct* maze_var)
 {
 	for (int r =0; r < maze_var->specifications.noOfRows; r++)
@@ -888,6 +1144,16 @@ void MAZE_SaveCellVisibility(Maze_Struct* maze_var)
 	}
 }
 
+
+/******************************************************************************/
+/*!
+*
+*	This function resets the current visibility binary map into a static
+*	array, which is used when jumping between gamestates. 
+*	i.e lvl1 to lvl2
+*
+*/
+/******************************************************************************/
 void MAZE_ResetCellVisibility(Maze_Struct* maze_var)
 {
 	for (int r = 0; r < maze_var->specifications.noOfRows; r++)
@@ -898,6 +1164,15 @@ void MAZE_ResetCellVisibility(Maze_Struct* maze_var)
 		}
 	}
 }
+
+/******************************************************************************/
+/*!
+*
+*	This function copies the static array of the presevered visibility binary
+*	map onto the maze's values.
+*
+*/
+/******************************************************************************/
 
 void MAZE_ReLOADCellVisibility(Maze_Struct* maze_var)
 {
@@ -910,6 +1185,16 @@ void MAZE_ReLOADCellVisibility(Maze_Struct* maze_var)
 	}
 }
 
+
+/******************************************************************************/
+/*!
+*
+*	This function checks if the current cell that the main character is standing
+*	on is a special cells. which can be combat, enemy boss combat, chests or 
+*	whirlppol to the next level
+*
+*/
+/******************************************************************************/
 void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
 
@@ -972,6 +1257,15 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 }
 
 
+/******************************************************************************/
+/*!
+*
+*	This function opens the chest and RNGs a potion for the main character. 
+*	Then it uses flags to indicate that the chest has been opened, thus 
+*	the binary map can be updated.
+*
+*/
+/******************************************************************************/
 void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
 	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
@@ -1000,6 +1294,13 @@ void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	chestopened_flag = 1;
 }
 
+/******************************************************************************/
+/*!
+*
+*	This function uses directon to move the camera up, down, left right.
+*
+*/
+/******************************************************************************/
 
 void Maze_CameraAdjustment(int direction)
 {
@@ -1050,7 +1351,13 @@ void Maze_CameraAdjustment(int direction)
 	std::cout << "cam X position is " << cam_x << "cam Y position is " << cam_y <<  std::endl;
 }
 
-
+/******************************************************************************/
+/*!
+*
+*	This function updates the meshes of inventory in the TAB menu.
+*
+*/
+/******************************************************************************/
 
 void Maze_Inventory_MeshUpdate(float camX, float camY){
 	
@@ -1070,6 +1377,14 @@ void Maze_Inventory_MeshUpdate(float camX, float camY){
 	AEMtx33Concat(&staminapotiontransform, &trans, &buffer);
 }
 
+
+/******************************************************************************/
+/*!
+*
+*	This function draws the meshes of the inventory when in TAB menu
+*
+*/
+/******************************************************************************/
 void Maze_Inventory_MeshRender() {
 
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -1119,10 +1434,15 @@ void Maze_Inventory_MeshRender() {
 }
 
 
-/*
-	Loads all assets in Level1. It should only be called once before the start of the level.
-	Opens and reads required files, and assigns values to necessary variables.
+
+/******************************************************************************/
+/*!
+*
+*	Loads all assets in Level1. It should only be called once before the start of the level.
+*	Opens and reads required files, and assigns values to necessary variables.
+*
 */
+/******************************************************************************/
 void Maze_Load()
 {
 	std::cout << "Maze:Load" << std::endl;
@@ -1147,11 +1467,15 @@ void Maze_Load()
 
 
 
-/*
-	Initializes and sets the starting values of level1.
-	Ensures the input file stream opens correctly, and the values
-	are assigned accordingly to the variables.
+/******************************************************************************/
+/*!
+*
+*	Initializes and sets the starting values of level1.
+*	Ensures the input file stream opens correctly, and the values
+*	are assigned accordingly to the variables.
+*
 */
+/******************************************************************************/
 void Maze_Initialize()
 {
 	stop_Audio();
@@ -1205,11 +1529,16 @@ void Maze_Initialize()
 }
 
 
-/*
-	In charge of checking and updating the program.
-	Updates every frame. Part of the actual game loop for level1.
-	Contols the logic to end or restart the program.
+
+/******************************************************************************/
+/*!
+*
+*	In charge of checking and updating the program.
+*	Updates every frame. Part of the actual game loop for level1.
+*	Contols the logic to end or restart the program.
+*
 */
+/******************************************************************************/
 void Maze_Update()
 {
 	//std::cout << "Maze:Update" << std::endl;
@@ -1350,10 +1679,14 @@ void Maze_Update()
 }
 
 
-/*
-	Updates every frame together with the update function.
-	Draws the updated logic from the update function.
+/******************************************************************************/
+/*!
+*
+*	Updates every frame together with the update function.
+*	Draws the updated logic from the update function.
+*
 */
+/******************************************************************************/
 void Maze_Draw()
 {
 	//std::cout << "Maze:Draw" << std::endl;
@@ -1405,10 +1738,13 @@ void Maze_Draw()
 	}
 }
 
-
-/*
-	Cleans game object instances.
+/******************************************************************************/
+/*!
+*
+*	Cleans game object instances.
+*
 */
+/******************************************************************************/
 void Maze_Free()
 {
 	std::cout << "Maze:Free" << std::endl;
@@ -1429,10 +1765,13 @@ void Maze_Free()
 	delete(Maze);
 }
 
-
-/*
-	Unload game assets. Frees and releases memory
+/******************************************************************************/
+/*!
+*
+*	Unload game assets. Frees and releases memory
+*
 */
+/******************************************************************************/
 void Maze_Unload()
 {
 	std::cout << "Maze:Unload" << std::endl;
