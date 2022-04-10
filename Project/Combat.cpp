@@ -137,7 +137,7 @@ void Combat_Update()
 			enemystats->health = 0;
 			if (enemystats->EnemyType == ENEMYBOSS)
 			{
-				enemystats->EnemyType = 0;
+				enemystats->EnemyType = NORMAL;
 			}
 			playerstats->debuffcounter = 0.0f;
 			playerstats->PlayerXP += enemystats->EnemyXP;
