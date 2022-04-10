@@ -27,6 +27,8 @@ item* slidertrianglerightbgm;
 item* slidertriangleleftsfx;
 item* slidertrianglerightsfx;
 
+extern int level_iter;
+
 /********************************************************************
 			SYSTEM LEVEL FUNCTION DEFINITIONS
 *********************************************************************/
@@ -604,6 +606,8 @@ void logicpausemenu() {
 				player_initialise();
 				enemy_initialise();
 				next = MENU;
+				level_iter = 0;
+				maze_init_flag = 0;
 			}
 		}
 	}
