@@ -42,15 +42,22 @@ namespace Characters
 
 			AEGfxMeshStart();
 
-			AEGfxVertexAdd(-240.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
-			AEGfxVertexAdd(-140.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
-			AEGfxVertexAdd(-140.0f, -60.0f, RGBcounter, 1.0f, 1.0f);			//PLAYERGRID 4 BOTTOM
-			AEGfxVertexAdd(-240.0f, -60.0f, RGBcounter, 1.0f, 1.0f);
-			AEGfxVertexAdd(-240.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
-			AEGfxVertexAdd(-240.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
-			AEGfxVertexAdd(-140.0f, -60.0f, RGBcounter, 1.0f, 1.0f);
-			AEGfxVertexAdd(-240.0f, -60.0f, RGBcounter, 1.0f, 1.0f);
-			AEGfxVertexAdd(-140.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), -(float)(AEGetWindowHeight() * 4 / 15), RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), -(float)(AEGetWindowHeight() * 4 / 15), RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), -(float)(AEGetWindowHeight() * 0.1), RGBcounter, 1.0f, 1.0f);			//PLAYERGRID 4 BOTTOM
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), -(float)(AEGetWindowHeight() * 0.1), RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), -(float)(AEGetWindowHeight() * 4 / 15), RGBcounter, 1.0f, 1.0f);
+
+
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), -(float)(AEGetWindowHeight() * 4 / 15), RGBcounter, 1.0f, 1.0f);    //1st
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), -(float)(AEGetWindowHeight() * 0.1), RGBcounter, 1.0f, 1.0f);  //2nd          //PLAYERGRID 4 BOTTOM
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), -(float)(AEGetWindowHeight() * 0.1), RGBcounter, 1.0f, 1.0f); //3rd
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), -(float)(AEGetWindowHeight() * 4 / 15), RGBcounter, 1.0f, 1.0f); //4th
+			//AEGfxVertexAdd(-240.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
+			//AEGfxVertexAdd(-140.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
+			//AEGfxVertexAdd(-140.0f, -60.0f, RGBcounter, 1.0f, 1.0f);			//PLAYERGRID 4 BOTTOM
+			//AEGfxVertexAdd(-240.0f, -60.0f, RGBcounter, 1.0f, 1.0f);
+			//AEGfxVertexAdd(-240.0f, -160.0f, RGBcounter, 1.0f, 1.0f);
 
 			Player4Grid = AEGfxMeshEnd();
 			AE_ASSERT_MESG(Player4Grid, "Failed to create playermesh4!!");
@@ -59,15 +66,22 @@ namespace Characters
 
 			AEGfxMeshStart();
 
-			AEGfxVertexAdd(-350.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(-250.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
-			AEGfxVertexAdd(-250.0f, 50.0f, RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 3 BACK
-			AEGfxVertexAdd(-350.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
-			AEGfxVertexAdd(-350.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(-350.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(-250.0f, 50.0f, RGBcounter, 0.0f, 0.0f);
-			AEGfxVertexAdd(-350.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
-			AEGfxVertexAdd(-250.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.4375), -(float)(AEGetWindowHeight()/12), RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3125), -(float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3125), (float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 3 BACK
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.4375), (float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.4375), -(float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 1.0f);
+
+
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.4375), -(float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3125), (float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 3 BACK
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.4375), (float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3125), -(float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 1.0f);
+			//AEGfxVertexAdd(-350.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
+			//AEGfxVertexAdd(-250.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
+			//AEGfxVertexAdd(-250.0f, 50.0f, RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 3 BACK
+			//AEGfxVertexAdd(-350.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
+			//AEGfxVertexAdd(-350.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
 
 			Player3Grid = AEGfxMeshEnd();
 			AE_ASSERT_MESG(Player3Grid, "Failed to create playermesh3!!");
@@ -76,15 +90,22 @@ namespace Characters
 
 			AEGfxMeshStart();
 
-			AEGfxVertexAdd(-240.0f, 160.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(-140.0f, 160.0f, RGBcounter, 1.0f, 1.0f);
-			AEGfxVertexAdd(-140.0f, 60.0f, RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 2 TOP
-			AEGfxVertexAdd(-240.0f, 60.0f, RGBcounter, 1.0f, 0.0f);
-			AEGfxVertexAdd(-240.0f, 160.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(-240.0f, 160.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(-140.0f, 60.0f, RGBcounter, 0.0f, 0.0f);
-			AEGfxVertexAdd(-240.0f, 60.0f, RGBcounter, 1.0f, 0.0f);
-			AEGfxVertexAdd(-140.0f, 160.0f, RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), (float)(AEGetWindowHeight() * 4/15), RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), (float)(AEGetWindowHeight() * 4 / 15), RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), (float)(AEGetWindowHeight() * 0.1), RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 2 TOP
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), (float)(AEGetWindowHeight() * 0.1), RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), (float)(AEGetWindowHeight() * 4 / 15), RGBcounter, 0.0f, 1.0f);
+
+
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), (float)(AEGetWindowHeight() * 4 / 15), RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), (float)(AEGetWindowHeight() * 0.1), RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 2 TOP
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), (float)(AEGetWindowHeight() * 0.1), RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), (float)(AEGetWindowHeight() * 4 / 15), RGBcounter, 1.0f, 1.0f);
+			//AEGfxVertexAdd(-240.0f, 160.0f, RGBcounter, 0.0f, 1.0f);
+			//AEGfxVertexAdd(-140.0f, 160.0f, RGBcounter, 1.0f, 1.0f);
+			//AEGfxVertexAdd(-140.0f, 60.0f, RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 2 TOP
+			//AEGfxVertexAdd(-240.0f, 60.0f, RGBcounter, 1.0f, 0.0f);
+			//AEGfxVertexAdd(-240.0f, 160.0f, RGBcounter, 0.0f, 1.0f);
 
 			Player2Grid = AEGfxMeshEnd();
 			AE_ASSERT_MESG(Player2Grid, "Failed to create playermesh2!!");
@@ -93,15 +114,23 @@ namespace Characters
 
 			AEGfxMeshStart();
 
-			AEGfxVertexAdd(-240.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(-140.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
-			AEGfxVertexAdd(-140.0f, 50.0f, RGBcounter, 0.0f, 0.0f);                //PLAYERGRID 1 MIDDLE
-			AEGfxVertexAdd(-240.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
-			AEGfxVertexAdd(-240.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(-240.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(-140.0f, 50.0f, RGBcounter, 0.0f, 0.0f);
-			AEGfxVertexAdd(-240.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
-			AEGfxVertexAdd(-140.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), -(float)(AEGetWindowHeight()/12), RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), -(float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), (float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 0.0f);                //PLAYERGRID 1 MIDDLE
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), (float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), -(float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 1.0f);
+
+
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), -(float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), (float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 0.0f);                //PLAYERGRID 1 MIDDLE
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.3), (float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.175), -(float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 1.0f);
+
+			//AEGfxVertexAdd(-240.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
+			//AEGfxVertexAdd(-140.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
+			//AEGfxVertexAdd(-140.0f, 50.0f, RGBcounter, 0.0f, 0.0f);                //PLAYERGRID 1 MIDDLE
+			//AEGfxVertexAdd(-240.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
+			//AEGfxVertexAdd(-240.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
 
 			Player1Grid = AEGfxMeshEnd();
 			AE_ASSERT_MESG(Player1Grid, "Failed to create playermesh1!!");
@@ -110,15 +139,23 @@ namespace Characters
 
 			AEGfxMeshStart();
 
-			AEGfxVertexAdd(0.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(-100.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
-			AEGfxVertexAdd(-100.0f, 50.0f, RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 5 ATTACK
-			AEGfxVertexAdd(0.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
-			AEGfxVertexAdd(0.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(0.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
-			AEGfxVertexAdd(-100.0f, 50.0f, RGBcounter, 0.0f, 0.0f);
-			AEGfxVertexAdd(0.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
-			AEGfxVertexAdd(-100.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(0.0f, -(float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth()/8), -(float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() / 8), (float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 5 ATTACK
+			AEGfxVertexAdd(0.0f, (float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(0.0f, -(float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 1.0f);
+
+
+			AEGfxVertexAdd(0.0f, -(float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() / 8), (float)(AEGetWindowHeight() / 12), RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 5 ATTACK
+			AEGfxVertexAdd(0.0f, (float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 0.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() / 8), -(float)(AEGetWindowHeight() / 12), RGBcounter, 1.0f, 1.0f);
+
+			//AEGfxVertexAdd(0.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
+			//AEGfxVertexAdd(-100.0f, -50.0f, RGBcounter, 1.0f, 1.0f);
+			//AEGfxVertexAdd(-100.0f, 50.0f, RGBcounter, 0.0f, 0.0f);				//PLAYERGRID 5 ATTACK
+			//AEGfxVertexAdd(0.0f, 50.0f, RGBcounter, 1.0f, 0.0f);
+			//AEGfxVertexAdd(0.0f, -50.0f, RGBcounter, 0.0f, 1.0f);
 
 			Player5Grid = AEGfxMeshEnd();
 			AE_ASSERT_MESG(Player2Grid, "Failed to create playermesh2!!");
@@ -134,11 +171,23 @@ namespace Characters
 
 			// THE MAX PLAYER HEALTH
 			AEGfxMeshStart();
-			AEGfxVertexAdd(-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
-			AEGfxVertexAdd(-230.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
-			AEGfxVertexAdd(-230.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
-			AEGfxVertexAdd(-390.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
-			AEGfxVertexAdd(-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.4875), -(float)(AEGetWindowHeight() * 29/60), 0xFFFFFFFF, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.2875), -(float)(AEGetWindowHeight() * 29 / 60), 0xFFFFFFFF, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.2875), -(float)(AEGetWindowHeight() * 53/120), 0xFFFFFFFF, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.4875), -(float)(AEGetWindowHeight() * 53 / 120), 0xFFFFFFFF, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.4875), -(float)(AEGetWindowHeight() * 29 / 60), 0xFFFFFFFF, 0.0f, 1.0f);
+
+
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.4875), -(float)(AEGetWindowHeight() * 29 / 60), 0xFFFFFFFF, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.2875), -(float)(AEGetWindowHeight() * 53 / 120), 0xFFFFFFFF, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.4875), -(float)(AEGetWindowHeight() * 53 / 120), 0xFFFFFFFF, 0.0f, 1.0f);
+			AEGfxVertexAdd(-(float)(AEGetWindowWidth() * 0.2875), -(float)(AEGetWindowHeight() * 29 / 60), 0xFFFFFFFF, 0.0f, 1.0f);
+
+			//AEGfxVertexAdd(-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+			//AEGfxVertexAdd(-230.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+			//AEGfxVertexAdd(-230.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+			//AEGfxVertexAdd(-390.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+			//AEGfxVertexAdd(-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
 
 			playermaxhealth = AEGfxMeshEnd();
 			AE_ASSERT_MESG(playermaxhealth, "Failed to create playerhealth!!");
@@ -171,13 +220,22 @@ namespace Characters
 			//CHARACTER OBJECT
 			AEGfxMeshStart();
 			AEGfxTriAdd(
-				-220.0f, -30.0f, 0x00FF00FF, 0.0f, 1.0f,
-				-160.0f, -30.0f, 0x00FFFF00, 1.0f, 1.0f,
-				-220.0f, 30.0f, 0x0000FFFF, 0.0f, 0.0f);
+				-(float)(AEGetWindowWidth()*0.275), -(float)(AEGetWindowHeight() * 0.05), 0x00FF00FF, 0.0f, 1.0f,
+				-(float)(AEGetWindowWidth()*0.2), -(float)(AEGetWindowHeight() * 0.05), 0x00FFFF00, 1.0f, 1.0f,
+				-(float)(AEGetWindowWidth() * 0.275), (float)(AEGetWindowHeight() * 0.05), 0x0000FFFF, 0.0f, 0.0f);
 			AEGfxTriAdd(
-				-160.0f, -30.0f, 0x00FFFFFF, 1.0f, 1.0f,
-				-160.0f, 30.0f, 0x00FFFFFF, 1.0f, 0.0f,
-				-220.0f, 30.0f, 0x00FFFFFF, 0.0f, 0.0f);
+				-(float)(AEGetWindowWidth() * 0.2), -(float)(AEGetWindowHeight() * 0.05), 0x00FFFFFF, 1.0f, 1.0f,
+				-(float)(AEGetWindowWidth() * 0.2), (float)(AEGetWindowHeight() * 0.05), 0x00FFFFFF, 1.0f, 0.0f,
+				-(float)(AEGetWindowWidth() * 0.275), (float)(AEGetWindowHeight() * 0.05), 0x00FFFFFF, 0.0f, 0.0f);
+
+			//AEGfxTriAdd(
+			//	-220.0f, -30.0f, 0x00FF00FF, 0.0f, 1.0f,
+			//	-160.0f, -30.0f, 0x00FFFF00, 1.0f, 1.0f,
+			//	-220.0f, 30.0f, 0x0000FFFF, 0.0f, 0.0f);
+			//AEGfxTriAdd(
+			//	-160.0f, -30.0f, 0x00FFFFFF, 1.0f, 1.0f,
+			//	-160.0f, 30.0f, 0x00FFFFFF, 1.0f, 0.0f,
+			//	-220.0f, 30.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
 			PlayerMesh = AEGfxMeshEnd();
 			AE_ASSERT_MESG(PlayerMesh, "Failed to create character!!");
@@ -186,14 +244,14 @@ namespace Characters
 
 			AEGfxMeshStart();
 			AEGfxTriAdd(
-				-20.0f, -20.0f, 0x00FF00FF, 0.0f, 1.0f,
-				20.0f, -20.0f, 0x00FFFF00, 1.0f, 1.0f,
-				20.0f, 20.0f, 0x0000FFFF, 1.0f, 0.0f);
+				-(float)(AEGetWindowHeight()/30), -(float)(AEGetWindowHeight() / 30), 0x00FF00FF, 0.0f, 1.0f,
+				(float)(AEGetWindowHeight() / 30), -(float)(AEGetWindowHeight() / 30), 0x00FFFF00, 1.0f, 1.0f,
+				(float)(AEGetWindowHeight() / 30), (float)(AEGetWindowHeight() / 30), 0x0000FFFF, 1.0f, 0.0f);
 
 			AEGfxTriAdd(
-				-20.0f, -20.0f, 0x00FFFFFF, 0.0f, 1.0f,
-				-20.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f,
-				20.0f, 20.0f, 0x00FFFFFF, 1.0f, 0.0f);
+				-(float)(AEGetWindowHeight() / 30), -(float)(AEGetWindowHeight() / 30), 0x00FFFFFF, 0.0f, 1.0f,
+				-(float)(AEGetWindowHeight() / 30), (float)(AEGetWindowHeight() / 30), 0x00FFFFFF, 0.0f, 0.0f,
+				(float)(AEGetWindowHeight() / 30), (float)(AEGetWindowHeight() / 30), 0x00FFFFFF, 1.0f, 0.0f);
 
 			playerstamina = AEGfxMeshEnd();
 			AE_ASSERT_MESG(playerstamina, "Failed to create stamina mesh!!");
@@ -319,7 +377,8 @@ namespace Characters
 
 				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-				AEGfxSetPosition(playerstats->staminaX + (i * 30), -270.0f);
+				AEGfxSetPosition(playerstats->staminaX + (i * 30), -(float)(AEGetWindowHeight()*0.45));
+				//AEGfxSetPosition(playerstats->staminaX + (i * 30), -270.0f);
 				AEGfxTextureSet(staminapotion, 0, 0);
 				AEGfxSetTintColor(1, 1, 1, 1);
 				AEGfxSetTransparency(1);
@@ -805,14 +864,24 @@ namespace Characters
 			AEGfxMeshStart();
 
 			AEGfxTriAdd(
-				-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-				-390.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-				-390.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+				-(float)(AEGetWindowWidth() * 0.4875), -(float)(AEGetWindowHeight()*29/60), 0xFFFFFFFF, 0.0f, 1.0f,
+				-(float)(AEGetWindowWidth() * 0.4875), -(float)(AEGetWindowHeight()*53/120), 0xFFFFFFFF, 0.0f, 1.0f,
+				-(float)(AEGetWindowWidth() * 0.4875) + 160 * healthscale, -(float)(AEGetWindowHeight() * 53 / 120), 0xFFFFFFFF, 0.0f, 1.0f);
 
 			AEGfxTriAdd(
-				-390.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-				-390.0f + 160 * healthscale, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-				-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+				-(float)(AEGetWindowWidth() * 0.4875) + 160 * healthscale, -(float)(AEGetWindowHeight() * 53 / 120), 0xFFFFFFFF, 0.0f, 1.0f,
+				-(float)(AEGetWindowWidth() * 0.4875) + 160 * healthscale, -(float)(AEGetWindowHeight() * 29 / 60), 0xFFFFFFFF, 0.0f, 1.0f,
+				-(float)(AEGetWindowWidth() * 0.4875), -(float)(AEGetWindowHeight() * 29 / 60), 0xFFFFFFFF, 0.0f, 1.0f);
+
+			//AEGfxTriAdd(
+			//	-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			//	-390.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			//	-390.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+
+			//AEGfxTriAdd(
+			//	-390.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			//	-390.0f + 160 * healthscale, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+			//	-390.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
 
 			playercurrhealth = AEGfxMeshEnd();
 			AE_ASSERT_MESG(playercurrhealth, "Failed to create playercurrhealth!!");
@@ -1048,11 +1117,17 @@ namespace Characters
 
 			AEGfxMeshStart();
 
-			AEGfxVertexAdd(50.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
-			AEGfxVertexAdd(150.0f, -50.0f, 0xFFFFFF, 1.0f, 1.0f);
-			AEGfxVertexAdd(150.0f, 50.0f, 0xFF0000, 0.0f, 0.0f);				//ENEMYGRID IDLE
-			AEGfxVertexAdd(50.0f, 50.0f, 0xFFFFFF, 1.0f, 0.0f);
-			AEGfxVertexAdd(50.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
+			AEGfxVertexAdd((float)(AEGetWindowHeight() / 12), -(float)(AEGetWindowHeight() / 12), 0xFF0000, 0.0f, 1.0f);
+			AEGfxVertexAdd((float)(AEGetWindowWidth() * 3 / 16), -(float)(AEGetWindowHeight() / 12), 0xFFFFFF, 1.0f, 1.0f);
+			AEGfxVertexAdd((float)(AEGetWindowWidth() * 3 / 16), (float)(AEGetWindowHeight() / 12), 0xFF0000, 0.0f, 0.0f);				//ENEMYGRID IDLE
+			AEGfxVertexAdd((float)(AEGetWindowHeight() / 12), (float)(AEGetWindowHeight() / 12), 0xFFFFFF, 1.0f, 0.0f);
+			AEGfxVertexAdd((float)(AEGetWindowHeight() / 12), -(float)(AEGetWindowHeight() / 12), 0xFF0000, 0.0f, 1.0f);
+
+			//AEGfxVertexAdd(50.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
+			//AEGfxVertexAdd(150.0f, -50.0f, 0xFFFFFF, 1.0f, 1.0f);
+			//AEGfxVertexAdd(150.0f, 50.0f, 0xFF0000, 0.0f, 0.0f);				//ENEMYGRID IDLE
+			//AEGfxVertexAdd(50.0f, 50.0f, 0xFFFFFF, 1.0f, 0.0f);
+			//AEGfxVertexAdd(50.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
 
 			EnemyGridIdle = AEGfxMeshEnd();
 			AE_ASSERT_MESG(EnemyGridIdle, "Failed to create enemygrididle!!");
@@ -1060,11 +1135,17 @@ namespace Characters
 
 			AEGfxMeshStart();
 
-			AEGfxVertexAdd(200.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
-			AEGfxVertexAdd(300.0f, -50.0f, 0xFFFFFF, 1.0f, 1.0f);
-			AEGfxVertexAdd(300.0f, 50.0f, 0xFF0000, 0.0f, 0.0f);				//ENEMYGRID ATTACK
-			AEGfxVertexAdd(200.0f, 50.0f, 0xFFFFFF, 1.0f, 0.0f);
-			AEGfxVertexAdd(200.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
+			AEGfxVertexAdd((float)(AEGetWindowWidth()/4), -(float)(AEGetWindowHeight() / 12), 0xFF0000, 0.0f, 1.0f);
+			AEGfxVertexAdd((float)(AEGetWindowWidth()*3/8), -(float)(AEGetWindowHeight() / 12), 0xFFFFFF, 1.0f, 1.0f);
+			AEGfxVertexAdd((float)(AEGetWindowWidth() * 3 / 8), (float)(AEGetWindowHeight() / 12), 0xFF0000, 0.0f, 0.0f);				//ENEMYGRID ATTACK
+			AEGfxVertexAdd((float)(AEGetWindowWidth() / 4), (float)(AEGetWindowHeight() / 12), 0xFFFFFF, 1.0f, 0.0f);
+			AEGfxVertexAdd((float)(AEGetWindowWidth() / 4), -(float)(AEGetWindowHeight() / 12), 0xFF0000, 0.0f, 1.0f);
+
+			//AEGfxVertexAdd(200.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
+			//AEGfxVertexAdd(300.0f, -50.0f, 0xFFFFFF, 1.0f, 1.0f);
+			//AEGfxVertexAdd(300.0f, 50.0f, 0xFF0000, 0.0f, 0.0f);				//ENEMYGRID ATTACK
+			//AEGfxVertexAdd(200.0f, 50.0f, 0xFFFFFF, 1.0f, 0.0f);
+			//AEGfxVertexAdd(200.0f, -50.0f, 0xFF0000, 0.0f, 1.0f);
 
 			EnemyGridAttack = AEGfxMeshEnd();
 			AE_ASSERT_MESG(EnemyGridAttack, "Failed to create enemygridattack!!");
@@ -1078,15 +1159,26 @@ namespace Characters
 			AEGfxMeshStart();
 
 			AEGfxTriAdd(
-				70.0f, -30.0f, 0x00FF00FF, 0.0f, 1.0f,
-				130.0f, -30.0f, 0x00FFFF00, 1.0f, 1.0f,
-				70.0f, 30.0f, 0x0000FFFF, 0.0f, 0.0f);
+				(float)(AEGetWindowWidth() * 0.0875), -(float)(AEGetWindowHeight()*0.05), 0x00FF00FF, 0.0f, 1.0f,
+				(float)(AEGetWindowWidth() * 0.1625), -(float)(AEGetWindowHeight() * 0.05), 0x00FFFF00, 1.0f, 1.0f,
+				(float)(AEGetWindowWidth() * 0.0875), (float)(AEGetWindowHeight() * 0.05), 0x0000FFFF, 0.0f, 0.0f);
 			//x,y,colour,u,v
 
 			AEGfxTriAdd(
-				130.0f, -30.0f, 0x00FFFFFF, 1.0f, 1.0f,
-				130.0f, 30.0f, 0x00FFFFFF, 1.0f, 0.0f,
-				70.0f, 30.0f, 0x00FFFFFF, 0.0f, 0.0f);
+				(float)(AEGetWindowWidth() * 0.1625), -(float)(AEGetWindowHeight() * 0.05), 0x00FFFFFF, 1.0f, 1.0f,
+				(float)(AEGetWindowWidth() * 0.1625), (float)(AEGetWindowHeight() * 0.05), 0x00FFFFFF, 1.0f, 0.0f,
+				(float)(AEGetWindowWidth() * 0.0875), (float)(AEGetWindowHeight() * 0.05), 0x00FFFFFF, 0.0f, 0.0f);
+
+			//AEGfxTriAdd(
+			//	70.0f, -30.0f, 0x00FF00FF, 0.0f, 1.0f,
+			//	130.0f, -30.0f, 0x00FFFF00, 1.0f, 1.0f,
+			//	70.0f, 30.0f, 0x0000FFFF, 0.0f, 0.0f);
+			////x,y,colour,u,v
+
+			//AEGfxTriAdd(
+			//	130.0f, -30.0f, 0x00FFFFFF, 1.0f, 1.0f,
+			//	130.0f, 30.0f, 0x00FFFFFF, 1.0f, 0.0f,
+			//	70.0f, 30.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
 			EnemyMesh = AEGfxMeshEnd();
 			AE_ASSERT_MESG(EnemyMesh, "Failed to create enemyMesh!!");
@@ -1199,14 +1291,24 @@ namespace Characters
 
 		AEGfxMeshStart();
 		AEGfxTriAdd(
-			230.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			230.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			230.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+			(float)(AEGetWindowWidth()*0.2875), -(float)(AEGetWindowHeight()*29/60), 0xFFFFFFFF, 0.0f, 1.0f,
+			(float)(AEGetWindowWidth() * 0.2875), -(float)(AEGetWindowHeight()*53/120), 0xFFFFFFFF, 0.0f, 1.0f,
+			(float)(AEGetWindowWidth() * 0.2875) + 160 * healthscale, -(float)(AEGetWindowHeight() * 53 / 120), 0xFFFFFFFF, 0.0f, 1.0f);
 
 		AEGfxTriAdd(
-			230.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			230.0f + 160 * healthscale, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-			230.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+			(float)(AEGetWindowWidth() * 0.2875) + 160 * healthscale, -(float)(AEGetWindowHeight() * 53 / 120), 0xFFFFFFFF, 0.0f, 1.0f,
+			(float)(AEGetWindowWidth() * 0.2875) + 160 * healthscale, -(float)(AEGetWindowHeight() * 29 / 60), 0xFFFFFFFF, 0.0f, 1.0f,
+			(float)(AEGetWindowWidth() * 0.2875), -(float)(AEGetWindowHeight() * 29 / 60), 0xFFFFFFFF, 0.0f, 1.0f);
+
+		//AEGfxTriAdd(
+		//	230.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+		//	230.0f, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+		//	230.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f);
+
+		//AEGfxTriAdd(
+		//	230.0f + 160 * healthscale, -265.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+		//	230.0f + 160 * healthscale, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+		//	230.0f, -290.0f, 0xFFFFFFFF, 0.0f, 1.0f);
 
 			Enemycurrhealth = AEGfxMeshEnd();
 			AE_ASSERT_MESG(Enemycurrhealth, "Failed to create Enemycurrhealth!!");

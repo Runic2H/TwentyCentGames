@@ -76,14 +76,24 @@ void Menu_Load() {
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
-		-400.0f, 250.0f, 0xFFFF0000, 0.0f, 0.0f,
-		-400.0f, -250.0f, 0xFFFF0000, 0.0f, 1.0f,
-		400.0f, 250.0f, 0xFFFFFFFF, 1.0f, 0.0f);
+		-(float)(AEGetWindowWidth()/2), (float)(AEGetWindowHeight()*5/12), 0xFFFF0000, 0.0f, 0.0f,
+		-(float)(AEGetWindowWidth() / 2), -(float)(AEGetWindowHeight() * 5 / 12), 0xFFFF0000, 0.0f, 1.0f,
+		(float)(AEGetWindowWidth() / 2), (float)(AEGetWindowHeight() * 5 / 12), 0xFFFFFFFF, 1.0f, 0.0f);
 
 	AEGfxTriAdd(
-		400.0f, 250.0f, 0xFFFF0000, 1.0f, 0.0f,
-		-400.0f, -250.0f, 0xFFFF0000, 0.0f, 1.0f,
-		400.0f, -250.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		(float)(AEGetWindowWidth() / 2), (float)(AEGetWindowHeight() * 5 / 12), 0xFFFF0000, 1.0f, 0.0f,
+		-(float)(AEGetWindowWidth() / 2), -(float)(AEGetWindowHeight() * 5 / 12), 0xFFFF0000, 0.0f, 1.0f,
+		(float)(AEGetWindowWidth() / 2), -(float)(AEGetWindowHeight() * 5 / 12), 0xFFFFFFFF, 1.0f, 1.0f);
+
+	//AEGfxTriAdd(
+	//	-400.0f, 250.0f, 0xFFFF0000, 0.0f, 0.0f,
+	//	-400.0f, -250.0f, 0xFFFF0000, 0.0f, 1.0f,
+	//	400.0f, 250.0f, 0xFFFFFFFF, 1.0f, 0.0f);
+
+	//AEGfxTriAdd(
+	//	400.0f, 250.0f, 0xFFFF0000, 1.0f, 0.0f,
+	//	-400.0f, -250.0f, 0xFFFF0000, 0.0f, 1.0f,
+	//	400.0f, -250.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 
 	digipenLogostruct.pObject->pMesh
 	= TwentyCentGamesLogostruct.pObject->pMesh
@@ -94,13 +104,22 @@ void Menu_Load() {
 	AEGfxMeshStart();
 	
 	AEGfxTriAdd(
-		-150.0f, 50.0f, 0xFFFF0000, 0.0f, 0.0f,
-		-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
-		150.0f, 50.0f, 0xFFFFFFFF, 1.0f, 0.0f);
+		-(float)(AEGetWindowWidth()*3/16), (float)(AEGetWindowHeight()/12), 0xFFFF0000, 0.0f, 0.0f,
+		-(float)(AEGetWindowWidth() * 3 / 16), -(float)(AEGetWindowHeight() / 12), 0xFFFF0000, 0.0f, 1.0f,
+		(float)(AEGetWindowWidth() * 3 / 16), (float)(AEGetWindowHeight() / 12), 0xFFFFFFFF, 1.0f, 0.0f);
 	AEGfxTriAdd(
-		150.0f, 50.0f, 0xFFFF0000, 1.0f, 0.0f,
-		-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
-		150.0f, -50.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		(float)(AEGetWindowWidth() * 3 / 16), (float)(AEGetWindowHeight() / 12), 0xFFFF0000, 1.0f, 0.0f,
+		-(float)(AEGetWindowWidth() * 3 / 16), -(float)(AEGetWindowHeight() / 12), 0xFFFF0000, 0.0f, 1.0f,
+		(float)(AEGetWindowWidth() * 3 / 16), -(float)(AEGetWindowHeight() / 12), 0xFFFFFFFF, 1.0f, 1.0f);
+
+	//AEGfxTriAdd(
+	//	-150.0f, 50.0f, 0xFFFF0000, 0.0f, 0.0f,
+	//	-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
+	//	150.0f, 50.0f, 0xFFFFFFFF, 1.0f, 0.0f);
+	//AEGfxTriAdd(
+	//	150.0f, 50.0f, 0xFFFF0000, 1.0f, 0.0f,
+	//	-150.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
+	//	150.0f, -50.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 
 	gamelogostruct.pObject->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(gamelogostruct.pObject->pMesh, "Failed to create gamelogo!\n");
@@ -109,13 +128,22 @@ void Menu_Load() {
 	// duck mesh
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-		-50.0f, 50.0f, 0xFFFF0000, 0.0f, 0.0f,
-		-50.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
-		50.0f, 50.0f, 0xFFFFFFFF, 1.0f, 0.0f);
+		-(float)(AEGetWindowHeight() / 12), (float)(AEGetWindowHeight() / 12), 0xFFFF0000, 0.0f, 0.0f,
+		-(float)(AEGetWindowHeight() / 12), -(float)(AEGetWindowHeight() / 12), 0xFFFF0000, 0.0f, 1.0f,
+		(float)(AEGetWindowHeight() / 12), (float)(AEGetWindowHeight() / 12), 0xFFFFFFFF, 1.0f, 0.0f);
 	AEGfxTriAdd(
-		50.0f, 50.0f, 0xFFFF0000, 1.0f, 0.0f,
-		-50.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
-		50.0f, -50.0f, 0xFFFFFFFF, 1.0f, 1.0f);
+		(float)(AEGetWindowHeight() / 12), (float)(AEGetWindowHeight() / 12), 0xFFFF0000, 1.0f, 0.0f,
+		-(float)(AEGetWindowHeight() / 12), -(float)(AEGetWindowHeight() / 12), 0xFFFF0000, 0.0f, 1.0f,
+		(float)(AEGetWindowHeight() / 12), -(float)(AEGetWindowHeight() / 12), 0xFFFFFFFF, 1.0f, 1.0f);
+
+	//AEGfxTriAdd(
+	//	-50.0f, 50.0f, 0xFFFF0000, 0.0f, 0.0f,
+	//	-50.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
+	//	50.0f, 50.0f, 0xFFFFFFFF, 1.0f, 0.0f);
+	//AEGfxTriAdd(
+	//	50.0f, 50.0f, 0xFFFF0000, 1.0f, 0.0f,
+	//	-50.0f, -50.0f, 0xFFFF0000, 0.0f, 1.0f,
+	//	50.0f, -50.0f, 0xFFFFFFFF, 1.0f, 1.0f);
 
 	ducklogostruct.pObject->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(ducklogostruct.pObject->pMesh, "Failed to create gamelogo!\n");
@@ -124,13 +152,22 @@ void Menu_Load() {
 	// fmod logo mesh
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-		-364.f, 96.f, 0xFFFF0000, 0.0f, 0.0f,
-		-364.f, -96.f, 0xFFFF0000, 0.0f, 1.0f,
-		364.f, 96.f, 0xFFFFFFFF, 1.0f, 0.0f);
+		-(float)(AEGetWindowWidth()*0.455), (float)(AEGetWindowHeight()*0.16), 0xFFFF0000, 0.0f, 0.0f,
+		-(float)(AEGetWindowWidth() * 0.455), -(float)(AEGetWindowHeight() * 0.16), 0xFFFF0000, 0.0f, 1.0f,
+		(float)(AEGetWindowWidth() * 0.455), (float)(AEGetWindowHeight() * 0.16), 0xFFFFFFFF, 1.0f, 0.0f);
 	AEGfxTriAdd(
-		364.f, 96.f, 0xFFFF0000, 1.0f, 0.0f,
-		-364.f, -96.f, 0xFFFF0000, 0.0f, 1.0f,
-		364.f, -96.f, 0xFFFFFFFF, 1.0f, 1.0f);
+		(float)(AEGetWindowWidth() * 0.455), (float)(AEGetWindowHeight() * 0.16), 0xFFFF0000, 1.0f, 0.0f,
+		-(float)(AEGetWindowWidth() * 0.455), -(float)(AEGetWindowHeight() * 0.16), 0xFFFF0000, 0.0f, 1.0f,
+		(float)(AEGetWindowWidth() * 0.455), -(float)(AEGetWindowHeight() * 0.16), 0xFFFFFFFF, 1.0f, 1.0f);
+
+	//AEGfxTriAdd(
+	//	-364.f, 96.f, 0xFFFF0000, 0.0f, 0.0f,
+	//	-364.f, -96.f, 0xFFFF0000, 0.0f, 1.0f,
+	//	364.f, 96.f, 0xFFFFFFFF, 1.0f, 0.0f);
+	//AEGfxTriAdd(
+	//	364.f, 96.f, 0xFFFF0000, 1.0f, 0.0f,
+	//	-364.f, -96.f, 0xFFFF0000, 0.0f, 1.0f,
+	//	364.f, -96.f, 0xFFFFFFFF, 1.0f, 1.0f);
 
 	fmodlogostruct.pObject->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(fmodlogostruct.pObject->pMesh, "Failed to create fmod gamelogo!\n");
@@ -201,11 +238,17 @@ void Menu_Update() {
 	//}
 
 	AEGfxMeshStart();
-	AEGfxVertexAdd(50.0f, -25.0f, RGBcounter, 0.0f, 1.0f);
-	AEGfxVertexAdd(150.0f, -25.0f, RGBcounter, 1.0f, 1.0f);
-	AEGfxVertexAdd(150.0f, 25.0f, RGBcounter, 0.0f, 0.0f);				// for RGB
-	AEGfxVertexAdd(50.0f, 25.0f, RGBcounter, 1.0f, 0.0f);
-	AEGfxVertexAdd(50.0f, -25.0f, RGBcounter, 0.0f, 1.0f);
+	AEGfxVertexAdd((float)(AEGetWindowWidth() / 16), -(float)(AEGetWindowHeight()/24), RGBcounter, 0.0f, 1.0f);
+	AEGfxVertexAdd((float)(AEGetWindowWidth() * 3 / 16), -(float)(AEGetWindowHeight() / 24), RGBcounter, 1.0f, 1.0f);
+	AEGfxVertexAdd((float)(AEGetWindowWidth() * 3 / 16), (float)(AEGetWindowHeight() / 24), RGBcounter, 0.0f, 0.0f);				// for RGB
+	AEGfxVertexAdd((float)(AEGetWindowWidth() / 16), (float)(AEGetWindowHeight() / 24), RGBcounter, 1.0f, 0.0f);
+	AEGfxVertexAdd((float)(AEGetWindowWidth() / 16), -(float)(AEGetWindowHeight() / 24), RGBcounter, 0.0f, 1.0f);
+
+	//AEGfxVertexAdd(50.0f, -25.0f, RGBcounter, 0.0f, 1.0f);
+	//AEGfxVertexAdd(150.0f, -25.0f, RGBcounter, 1.0f, 1.0f);
+	//AEGfxVertexAdd(150.0f, 25.0f, RGBcounter, 0.0f, 0.0f);				// for RGB
+	//AEGfxVertexAdd(50.0f, 25.0f, RGBcounter, 1.0f, 0.0f);
+	//AEGfxVertexAdd(50.0f, -25.0f, RGBcounter, 0.0f, 1.0f);
 	selectionstruct.pObject->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(selectionstruct.pObject->pMesh, "failed to create Selection object");
 
@@ -449,7 +492,8 @@ void Menu_Draw() {
 			// texture
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-			AEGfxSetPosition(0.0f, 150.0f);
+			AEGfxSetPosition(0.0f, (float)(AEGetWindowHeight() / 4));
+			//AEGfxSetPosition(0.0f, 150.0f);
 			AEGfxTextureSet(gamelogostruct.pObject->pTexture, 0.0f, 0.0f);
 			AEGfxSetTintColor(1, 1, 1, 1);
 			AEGfxSetTransparency(1);
@@ -467,12 +511,14 @@ void Menu_Draw() {
 				texcounter = 0;
 			}
 
-			AEGfxSetPosition(250.0f, 150.0f);
+			AEGfxSetPosition((float)(AEGetWindowWidth()*0.3125), (float)(AEGetWindowHeight()/4));
+			//AEGfxSetPosition(250.0f, 150.0f);
 			AEGfxSetTintColor(1, 1, 1, 1);
 			AEGfxSetTransparency(1);
 			AEGfxMeshDraw(ducklogostruct.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 
-			AEGfxSetPosition(-250.0f, 150.0f);
+			AEGfxSetPosition(-(float)(AEGetWindowWidth() * 0.3125), (float)(AEGetWindowHeight() / 4));
+			//AEGfxSetPosition(-250.0f, 150.0f);
 			AEGfxSetTintColor(1, 1, 1, 1);
 			AEGfxSetTransparency(1);
 			AEGfxMeshDraw(ducklogostruct.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
@@ -495,7 +541,8 @@ void Menu_Draw() {
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxSetPosition(-20.0f, 0.0f);
+		AEGfxSetPosition(-(float)(AEGetWindowWidth()/40), 0.0f);
+		//AEGfxSetPosition(-20.0f, 0.0f);
 		AEGfxTextureSet(digipenLogostruct.pObject->pTexture, 0.0f, 0.0f);
 		AEGfxSetTintColor(1, 1, 1, 1);
 		AEGfxSetTransparency(systemsettings.digipenTimer);
@@ -507,7 +554,8 @@ void Menu_Draw() {
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxSetPosition(-20.0f, 0.0f);
+		AEGfxSetPosition(-(float)(AEGetWindowWidth() / 40), 0.0f);
+		//AEGfxSetPosition(-20.0f, 0.0f);
 		AEGfxTextureSet(TwentyCentGamesLogostruct.pObject->pTexture, 0.0f, 0.0f);
 		AEGfxSetTintColor(1, 1, 1, 1);
 		AEGfxSetTransparency(systemsettings.twentycentTimer);
@@ -519,7 +567,8 @@ void Menu_Draw() {
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxSetPosition(-10.0f, 0.0f);
+		AEGfxSetPosition(-(float)(AEGetWindowWidth() / 80), 0.0f);
+		//AEGfxSetPosition(-10.0f, 0.0f);
 		AEGfxTextureSet(fmodlogostruct.pObject->pTexture, 0.0f, 0.0f);
 		AEGfxSetTintColor(1, 1, 1, 1);
 		AEGfxSetTransparency(systemsettings.fmodTimer);

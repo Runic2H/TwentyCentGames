@@ -59,40 +59,40 @@ void GSM_Update()	//only runs once when switched
 			break;
       
 	case COMBAT:
-		fpLoad = Combat_Load;
-		fpInitialize = Combat_Initialize;
-		fpUpdate = Combat_Update;
-		fpDraw = Combat_Draw;
-		fpFree = Combat_Free;
-		fpUnload = Combat_Unload;
-		break;
+			fpLoad = Combat_Load;
+			fpInitialize = Combat_Initialize;
+			fpUpdate = Combat_Update;
+			fpDraw = Combat_Draw;
+			fpFree = Combat_Free;
+			fpUnload = Combat_Unload;
+			break;
 
 	case GAMEOVER:
-		fpLoad = GameOver_Load;
-		fpInitialize = GameOver_Init;
-		fpUpdate = GameOver_Update;
-		fpDraw = GameOver_Draw;
-		fpFree = GameOver_Free;
-		fpUnload = GameOver_Unload;
-		break;
+			fpLoad = GameOver_Load;
+			fpInitialize = GameOver_Init;
+			fpUpdate = GameOver_Update;
+			fpDraw = GameOver_Draw;
+			fpFree = GameOver_Free;
+			fpUnload = GameOver_Unload;
+			break;
 
 	case LEVELUP:
-		fpLoad = LevelUp_Load;
-		fpInitialize = LevelUp_Init;
-		fpUpdate = LevelUp_Update;
-		fpDraw = LevelUp_Draw;
-		fpFree = LevelUp_Free;
-		fpUnload = LevelUp_Unload;
-		break;
+			fpLoad = LevelUp_Load;
+			fpInitialize = LevelUp_Init;
+			fpUpdate = LevelUp_Update;
+			fpDraw = LevelUp_Draw;
+			fpFree = LevelUp_Free;
+			fpUnload = LevelUp_Unload;
+			break;
 
 	case VICTORY:
-		fpLoad = victory_load;
-		fpInitialize = victory_init;
-		fpUpdate = victory_update;
-		fpDraw = victory_draw;
-		fpFree = victory_free;
-		fpUnload = victory_unload;
-		break;
+			fpLoad = victory_load;
+			fpInitialize = victory_init;
+			fpUpdate = victory_update;
+			fpDraw = victory_draw;
+			fpFree = victory_free;
+			fpUnload = victory_unload;
+			break;
 
 	case GS_RESTART:
 		break;
