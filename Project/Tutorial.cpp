@@ -4,7 +4,7 @@
  * 	Author(s)	:	Matthew Cheung Jun Yin	(PRIMARY AUTHOR - 90%)
 					Hu Jun Ning				(SECONDARY AUTHOR - 10%)
  *
- * All content © 2022 DigiPen Institute of Technology Singapore. All rights reserved.
+ * All content Â© 2022 DigiPen Institute of Technology Singapore. All rights reserved.
 **************************************************************************/
 
 #include "pch.hpp"
@@ -47,15 +47,18 @@ void page_one_code()
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth()*2 / 4, (float)AEGetWindowHeight()); //drawing ducktitle
-	DrawingTextureOnMesh(Mesh_maze_overview, ducktitle, 0.0f, 30.0f); 
+	DrawingTextureOnMesh(Mesh_maze_overview, ducktitle, 0.0f, (float)(AEGetWindowHeight() / 20));
+	//DrawingTextureOnMesh(Mesh_maze_overview, ducktitle, 0.0f, 30.0f);
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth() / 3, (float)AEGetWindowHeight() / 3); //drawing fighting duck
-	DrawingTextureOnMesh(Mesh_maze_overview, fightingduck, -220.0f, 20.0f);
+	DrawingTextureOnMesh(Mesh_maze_overview, fightingduck, -(float)(AEGetWindowWidth()*11/40), (float)(AEGetWindowHeight()/30));
+	//DrawingTextureOnMesh(Mesh_maze_overview, fightingduck, -220.0f, 20.0f);
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth() / 3, (float)AEGetWindowHeight() / 3); //drawing angry turtle
-	DrawingTextureOnMesh(Mesh_maze_overview, normal_turtle, 220.0f, 20.0f);
+	DrawingTextureOnMesh(Mesh_maze_overview, normal_turtle, (float)(AEGetWindowWidth() * 11 / 40), (float)(AEGetWindowHeight() / 30));
+	//DrawingTextureOnMesh(Mesh_maze_overview, normal_turtle, 220.0f, 20.0f);
 
 	//drawing next page button boxes (right)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -121,7 +124,8 @@ void page_two_code()
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth() * 5 / 9, (float)AEGetWindowHeight() * 5 / 9);
-	DrawingTextureOnMesh(Mesh_maze_overview, maze_screenshot, -160.0f, -60.0f); //drawing maze screenshot
+	DrawingTextureOnMesh(Mesh_maze_overview, maze_screenshot, -(float)(AEGetWindowWidth()/5), -(float)(AEGetWindowHeight()/10)); //drawing maze screenshot
+	//DrawingTextureOnMesh(Mesh_maze_overview, maze_screenshot, -160.0f, -60.0f); //drawing maze screenshot
 
 	//drawing previous page box (left)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -182,23 +186,28 @@ void page_three_code()
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 9, (float)AEGetWindowHeight() * 5 / 9);
-	DrawingTextureOnMesh(Mesh_maze_overview, Whirlpool, -160.0f, -45.0f); //Drawing whirlpool Image
+	DrawingTextureOnMesh(Mesh_maze_overview, Whirlpool, -(float)(AEGetWindowWidth()/5), -(float)(AEGetWindowHeight() *0.075)); //Drawing whirlpool Image
+	//DrawingTextureOnMesh(Mesh_maze_overview, Whirlpool, -160.0f, -45.0f); //Drawing whirlpool Image
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth() * 5 / 14, (float)AEGetWindowHeight() * 5 / 14);
-	DrawingTextureOnMesh(Mesh_maze_overview, Chest, 130.0f, 30.0f); //Drawing Chest Image
+	DrawingTextureOnMesh(Mesh_maze_overview, Chest, (float)(AEGetWindowWidth()* 0.1625), (float)(AEGetWindowHeight()/20)); //Drawing Chest Image
+	//DrawingTextureOnMesh(Mesh_maze_overview, Chest, 130.0f, 30.0f); //Drawing Chest Image
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18);
-	DrawingTextureOnMesh(Mesh_maze_overview, defence_potion, 40.0f, -90.0f); //Drawing defence potion Image
+	DrawingTextureOnMesh(Mesh_maze_overview, defence_potion, (float)(AEGetWindowWidth()/20), -(float)(AEGetWindowHeight() * 0.15)); //Drawing defence potion Image
+	//DrawingTextureOnMesh(Mesh_maze_overview, defence_potion, 40.0f, -90.0f); //Drawing defence potion Image
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18);
-	DrawingTextureOnMesh(Mesh_maze_overview, health_potion, 130.0f, -90.0f); //Drawing health potion Image
+	DrawingTextureOnMesh(Mesh_maze_overview, health_potion, (float)(AEGetWindowWidth() * 0.1625), -(float)(AEGetWindowHeight() * 0.15)); //Drawing health potion Image
+	//DrawingTextureOnMesh(Mesh_maze_overview, health_potion, 130.0f, -90.0f); //Drawing health potion Image
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18);
-	DrawingTextureOnMesh(Mesh_maze_overview, stamina_potion, 220.0f, -90.0f); //Drawing stamina potion Image
+	DrawingTextureOnMesh(Mesh_maze_overview, stamina_potion, (float)(AEGetWindowWidth()* 0.275), -(float)(AEGetWindowHeight() * 0.15)); //Drawing stamina potion Image
+	//DrawingTextureOnMesh(Mesh_maze_overview, stamina_potion, 220.0f, -90.0f); //Drawing stamina potion Image
 	meshfree();
 
 	//drawing button boxes (right)
@@ -283,11 +292,13 @@ void page_four_code()
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 0.9f, (float)AEGetWindowWidth() * 0.9f); //drawing tutorial tab map
-	DrawingTextureOnMesh(Mesh_maze_overview, tutorial_tab_map, 80.0f, -40.0f);
+	DrawingTextureOnMesh(Mesh_maze_overview, tutorial_tab_map, (float)(AEGetWindowWidth()/10), -(float)(AEGetWindowHeight()/15));
+	//DrawingTextureOnMesh(Mesh_maze_overview, tutorial_tab_map, 80.0f, -40.0f);
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowWidth() * 0.7f, (float)AEGetWindowHeight() * 0.7f); //drawing tutorial potions
-	DrawingTextureOnMesh(Mesh_maze_overview, tutorial_potions, -200.0f, -40.0f);
+	DrawingTextureOnMesh(Mesh_maze_overview, tutorial_potions, -(float)(AEGetWindowWidth()/4), -(float)(AEGetWindowHeight() / 15));
+	//DrawingTextureOnMesh(Mesh_maze_overview, tutorial_potions, -200.0f, -40.0f);
 
 	//drawing next page button boxes (right)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -329,7 +340,8 @@ void page_five_code()
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight(), (float)AEGetWindowWidth() * 1.35f);
-	DrawingTextureOnMesh(Mesh_maze_overview, tutorialcombat1, 18.0f, -20.0f); //Drawing tutorial combat Image
+	DrawingTextureOnMesh(Mesh_maze_overview, tutorialcombat1, (float)(AEGetWindowWidth()* 0.0225), -(float)(AEGetWindowHeight()/30)); //Drawing tutorial combat Image
+	//DrawingTextureOnMesh(Mesh_maze_overview, tutorialcombat1, 18.0f, -20.0f); //Drawing tutorial combat Image
 
 	//drawing button boxes (right)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -386,7 +398,8 @@ void page_six_code()
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight(), (float)AEGetWindowWidth());
-	DrawingTextureOnMesh(Mesh_maze_overview, dodging_attack, 0.0f, -20.0f); //drawing dodging attacks image
+	DrawingTextureOnMesh(Mesh_maze_overview, dodging_attack, 0.0f, -(float)(AEGetWindowHeight() / 30)); //drawing dodging attacks image
+	//DrawingTextureOnMesh(Mesh_maze_overview, dodging_attack, 0.0f, -20.0f); //drawing dodging attacks image
 
 	//drawing button boxes (right)
 	AEGfxSetBlendMode(AE_GFX_BM_NONE);
@@ -426,20 +439,24 @@ void page_seven_code()
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18); //drawing stamina potion
-	DrawingTextureOnMesh(Mesh_maze_overview, stamina_potion, 180.0f, 80.0f); 
+	DrawingTextureOnMesh(Mesh_maze_overview, stamina_potion, (float)(AEGetWindowWidth()*0.225), (float)(AEGetWindowHeight() * 2/15));
+	//DrawingTextureOnMesh(Mesh_maze_overview, stamina_potion, 180.0f, 80.0f);
 
 	meshfree();
 	//create mesh using height * height to get square shape
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18); //drawing angry turtle
-	DrawingTextureOnMesh(Mesh_maze_overview, normal_turtle, -210.0f, 80.0f);
+	DrawingTextureOnMesh(Mesh_maze_overview, normal_turtle, -(float)(AEGetWindowWidth()*0.2625), (float)(AEGetWindowHeight() * 2 / 15));
+	//DrawingTextureOnMesh(Mesh_maze_overview, normal_turtle, -210.0f, 80.0f);
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18); // drawing fire turtle
-	DrawingTextureOnMesh(Mesh_maze_overview, fire_turtle, -210.0f, -10.0f);
+	DrawingTextureOnMesh(Mesh_maze_overview, fire_turtle, -(float)(AEGetWindowWidth() * 0.2625), -(float)(AEGetWindowHeight()/60));
+	//DrawingTextureOnMesh(Mesh_maze_overview, fire_turtle, -210.0f, -10.0f);
 
 	meshfree();
 	CreatingImageMesh(Mesh_maze_overview, (float)AEGetWindowHeight() * 5 / 18, (float)AEGetWindowHeight() * 5 / 18); // drawing from turtle
-	DrawingTextureOnMesh(Mesh_maze_overview, frost_turtle, -210.0f, -100.0f);
+	DrawingTextureOnMesh(Mesh_maze_overview, frost_turtle, -(float)(AEGetWindowWidth() * 0.2625), -(float)(AEGetWindowHeight()/6));
+	//DrawingTextureOnMesh(Mesh_maze_overview, frost_turtle, -210.0f, -100.0f);
 	meshfree();
 
 	//drawing button boxes (right)
@@ -541,36 +558,6 @@ void page_eight_code()
 }
 
 /**************************************************************
-*	creates meshes
-***************************************************************/
-void CreatingMazeOverview(AEGfxVertexList*& pMesh_MainCharacter, float cell_height, float cell_width)
-{
-	AEGfxMeshStart();
-
-	//pink: 0x00FF00FF
-	//white: 0x00FFFFFF
-	//light blue: 0x0000FFFF
-
-	AEGfxTriAdd( //This triangle is colorful, blends 3 colours wowza
-		//-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink 
-		-(cell_width / 4), -(cell_height / 4), 0x00FF00FF, 0.0f, 1.0f, //pink 
-		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
-		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
-		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
-
-
-	AEGfxTriAdd(
-		(cell_width / 4), -(cell_height / 4), 0x00FFFFFF, 1.0f, 1.0f, //white
-		//(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 1.0f, //pink
-		(cell_width / 4), (cell_height / 4), 0x00FF00FF, 1.0f, 0.0f, //pink
-		//-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 1.0f, 1.0f); //light blue
-		-(cell_width / 4), (cell_height / 4), 0x0000FFFF, 0.0f, 0.0f); //light blue
-
-	pMesh_MainCharacter = AEGfxMeshEnd();
-	AE_ASSERT_MESG(pMesh_MainCharacter, "Failed to create MazeOverview!!");
-}
-
-/**************************************************************
 *	creates the meshes
 ***************************************************************/
 void CreatingImageMesh(AEGfxVertexList*& pMesh_MainCharacter, float cell_height, float cell_width)
@@ -610,17 +597,6 @@ void meshfree() {
 	}
 }
 
-/**************************************************************
-*	draws the meshes
-***************************************************************/
-void DrawingMazeOverview(AEGfxVertexList*& pMesh_MainCharacter, float MC_positionX, float MC_positionY)
-{
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxSetPosition(MC_positionX, MC_positionY);
-	AEGfxTextureSet(maze_screenshot, 0, 0);
-	AEGfxMeshDraw(pMesh_MainCharacter, AE_GFX_MDM_TRIANGLES);
-}
 
 /**************************************************************
 *	draws the meshes
