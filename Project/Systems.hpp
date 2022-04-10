@@ -14,6 +14,7 @@ typedef struct sys
 	int options;
 	float digipenTimer;
 	float twentycentTimer;
+	float fmodTimer;
 	int exit_confirmation;
 } sys;
 
