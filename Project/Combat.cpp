@@ -55,7 +55,7 @@ using namespace Characters::Character;
 */
 void Combat_Load()
 {
-	std::cout << "Combat:Load" << std::endl;
+	//std::cout << "Combat:Load" << std::endl;
 
 	playertexture = AEGfxTextureLoad("Images/Fighting duck.png");
 	AE_ASSERT_MESG(playertexture, "cant create duck texture\n");
@@ -133,7 +133,7 @@ void Combat_Update()
 
 		if (enemystats->health <= 0)
 		{
-			std::cout << "You Won!\n";
+			//std::cout << "You Won!\n";
 			enemystats->health = 0;
 			if (enemystats->EnemyType == ENEMYBOSS)
 			{
@@ -151,12 +151,12 @@ void Combat_Update()
 			{
 				next = MAZE;
 				maze_init_flag = 1;
-				std::cout << "return to maze\n";
+				//std::cout << "return to maze\n";
 			}
 		}
 
 		else if (playerstats->health <= 0) {
-		  std::cout << "You Died!\n";
+		  //std::cout << "You Died!\n";
 		  playerstats->health = 0;
 		  next = GAMEOVER;
 		  maze_init_flag = 0;
@@ -303,7 +303,7 @@ void Combat_Draw()
 */
 void Combat_Free()
 {
-	std::cout << "Combat:Free" << std::endl;
+	//std::cout << "Combat:Free" << std::endl;
 	FreePlayerMesh();
 	FreeEnemyMesh();
 	//unloadpausemenu();

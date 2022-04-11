@@ -49,7 +49,7 @@
 
 
 		// Using custom window procedure
-		AESysInit(hInstance, SW_HIDE, 800, 600, 1, 60, true, NULL);
+		AESysInit(hInstance, SW_HIDE, 800, 600, 0, 60, true, NULL);
 	
 		AESysSetWindowTitle("TwentyCentGames!");
 

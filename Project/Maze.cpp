@@ -380,7 +380,7 @@ void Maze_EnemySpawn(float contact_rate)
 	}
 
 	int no_of_battles = (int)(path_x.size() * contact_rate);
-	std::cout << no_of_battles << "out of " << path_x.size() << std::endl;
+	//std::cout << no_of_battles << "out of " << path_x.size() << std::endl;
 
 	int rand_index;
 
@@ -438,7 +438,7 @@ void Maze_ChestSpawn(float spawn_rate)
 	}
 
 	int no_of_chests = (int)(path_x.size() * spawn_rate);					
-	std::cout << no_of_chests << "out of " << path_x.size() << std::endl;
+	//std::cout << no_of_chests << "out of " << path_x.size() << std::endl;
 
 	int rand_index = 0;
 
@@ -639,22 +639,22 @@ void MazeGenAlgo_Set_walls()
 
 void  MazeGenAlgo_PrintRetrievedInformation()
 {
-	std::cout << "Width " << noOfCols << std::endl;
-	std::cout << "Height " << noOfRows << std::endl;
+	//std::cout << "Width " << noOfCols << std::endl;
+	//std::cout << "Height " << noOfRows << std::endl;
 	for (int rows = noOfRows - 1; rows >= 0; rows--)
 	{
 		for (int cols = 0; cols < noOfCols; cols++)
 		{
 			if (cols < noOfCols - 1)
 			{
-				std::cout << maze_iswall_isnotwall[cols][rows] << " ";
+				//std::cout << maze_iswall_isnotwall[cols][rows] << " ";
 				//std::cout << cols << ","<<  rows<< " ";
 				//printf("%i ", Maze[cols][rows]);
 			}
 			else
 			{
 				//std::cout<< cols << ","<< rows << std::endl;
-				std::cout << maze_iswall_isnotwall[cols][rows] << std::endl;
+				//std::cout << maze_iswall_isnotwall[cols][rows] << std::endl;
 				//printf("%i\n", Maze[cols][rows]);
 			}
 		}
@@ -677,14 +677,14 @@ bool MazeGenAlgo_PostGenCheck() // checks if the center col is not ALL PATH, ret
 {
 	for (int i = 0; i < noOfRows; i++)
 	{
-		std::cout << maze_iswall_isnotwall[curr_X_GRIDposition][i];
+		//std::cout << maze_iswall_isnotwall[curr_X_GRIDposition][i];
 		if (maze_iswall_isnotwall[curr_X_GRIDposition][i] == 1)
 		{
 			return true;
 		}
 	}
 	return false;
-	std::cout<<std::endl;
+	//std::cout<<std::endl;
 }
 
 
@@ -710,7 +710,7 @@ void MazeGenAlgo()
 	
 	while (!flag)
 	{
-		std::cout << "LOOP ENTERED" << std::endl;
+		//std::cout << "LOOP ENTERED" << std::endl;
 
 		MazeGenAlgo_MakeMaze();
 		MazeGenAlgo_ChoosingStartingPos(start_x, start_y, end_x, end_y, noOfRows, noOfCols);
@@ -721,9 +721,9 @@ void MazeGenAlgo()
 	}
 	
 	
-	(flag) ? std::cout << "ALL OK" << std::endl : std::cout << "ONE COL STRAIGHT UP" << std::endl;
+	// (flag) ? //std::cout << "ALL OK" << std::endl : //std::cout << "ONE COL STRAIGHT UP" << std::endl;
+	//std::cout << "BOSS SPAWNED" << std::endl;
 	MazeGenAlgo_BossSpawn();
-	std::cout << "BOSS SPAWNED" << std::endl;
 }
 
 
@@ -1249,7 +1249,7 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 	if (Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value == CHEST)
 	{
 		chest_open_Audio();
-		std::cout << "player is on chest" << std::endl;
+		//std::cout << "player is on chest" << std::endl;
 		MAZE_ChestOpened(curr_X_GRIDposition, curr_Y_GRIDposition);				
 	}
 }
@@ -1267,7 +1267,7 @@ void MAZE_StepOntoSpecialCell(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 void MAZE_ChestOpened(int curr_X_GRIDposition, int curr_Y_GRIDposition)
 {
 	Maze->grid[curr_X_GRIDposition][curr_Y_GRIDposition].value = EMPTY_PATH;
-	std::cout << "Player has opened chest" << std::endl;
+	//std::cout << "Player has opened chest" << std::endl;
 
 	int randindex;
 	srand((unsigned)time(NULL));
@@ -1312,7 +1312,7 @@ void Maze_CameraAdjustment(int direction)
 		//if (MC_positionY + Maze->specifications.cellHeight > max_Cam_BB_y)
 		if (MC_positionY + Maze->specifications.cellHeight /2 > max_Cam_BB_y)
 		{
-			std::cout << " camera move" << std::endl;
+			//std::cout << " camera move" << std::endl;
 			AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
 		}
 	}
@@ -1321,7 +1321,7 @@ void Maze_CameraAdjustment(int direction)
 		//if (MC_positionX - Maze->specifications.cellWidth < min_Cam_AA_x)
 		if (MC_positionX - Maze->specifications.cellWidth/2 < min_Cam_AA_x)
 		{
-			std::cout << " camera move" << std::endl;
+			//std::cout << " camera move" << std::endl;
 			AEGfxSetCamPosition(cam_x - Maze->specifications.cellWidth, cam_y );
 		}
 	}
@@ -1330,7 +1330,7 @@ void Maze_CameraAdjustment(int direction)
 		//if (MC_positionY - Maze->specifications.cellHeight < min_Cam_AA_y)
 		if (MC_positionY - Maze->specifications.cellHeight / 2 < min_Cam_AA_y)
 		{
-			std::cout << " camera move" << std::endl;
+			//std::cout << " camera move" << std::endl;
 			AEGfxSetCamPosition(cam_x, cam_y - Maze->specifications.cellHeight);
 		}
 	}
@@ -1339,14 +1339,14 @@ void Maze_CameraAdjustment(int direction)
 		//if (MC_positionX + Maze->specifications.cellWidth > max_Cam_BB_x)
 		if (MC_positionX + Maze->specifications.cellWidth / 2 > max_Cam_BB_x)
 		{
-			std::cout << " camera move" << std::endl;
+			//std::cout << " camera move" << std::endl;
 			AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
 		}
 	}
 
 
 	AEGfxGetCamPosition(&cam_x, &cam_y);
-	std::cout << "cam X position is " << cam_x << "cam Y position is " << cam_y <<  std::endl;
+	//std::cout << "cam X position is " << cam_x << "cam Y position is " << cam_y <<  std::endl;
 }
 
 /******************************************************************************/
@@ -1443,7 +1443,7 @@ void Maze_Inventory_MeshRender() {
 /******************************************************************************/
 void Maze_Load()
 {
-	std::cout << "Maze:Load" << std::endl;
+	//std::cout << "Maze:Load" << std::endl;
 
 	wall_art = AEGfxTextureLoad("Images/Wall.png");
 	AE_ASSERT_MESG(wall_art, "Failed to create wall texture!\n");
@@ -1487,7 +1487,7 @@ void Maze_Initialize()
 
 	if (maze_init_flag == 0)
 	{
-		std::cout << "Maze:Initialize" << std::endl;
+		//std::cout << "Maze:Initialize" << std::endl;
 		MazeGenAlgo();
 		Maze_EnemySpawn(contact_rate);
 		//MazeGenAlgo_BossSpawn();
@@ -1517,7 +1517,8 @@ void Maze_Initialize()
 	MC_positionX = Maze->specifications.MazeWindowStart_X + (Maze->specifications.cellWidth / 2) + (curr_X_GRIDposition * Maze->specifications.cellWidth);
 
 	MC_positionY = Maze->specifications.MazeWindowStart_Y + (Maze->specifications.cellHeight / 2) + (curr_Y_GRIDposition * Maze->specifications.cellHeight);
-	std::cout << "X : " << MC_positionX << " --- Y : " << MC_positionY << std::endl;
+	
+	//std::cout << "X : " << MC_positionX << " --- Y : " << MC_positionY << std::endl;
 
 	MAZE_SetPosAsEmpty(Maze, curr_X_GRIDposition, curr_Y_GRIDposition);
 	
@@ -1539,7 +1540,7 @@ void Maze_Initialize()
 /******************************************************************************/
 void Maze_Update()
 {
-	//std::cout << "Maze:Update" << std::endl;
+	////std::cout << "Maze:Update" << std::endl;
 	Audio_Update();
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE) && systemsettings.paused == 0) {
@@ -1568,8 +1569,8 @@ void Maze_Update()
 			if (MAZE_CharMoveCHECK_NEXT_POS(1, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 			{
 				MC_positionY += Maze->specifications.cellHeight;
-				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+				//std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+				//	"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
 				Maze_CameraAdjustment(1);
 				//AEGfxSetCamPosition(cam_x, cam_y + Maze->specifications.cellHeight);
@@ -1589,8 +1590,8 @@ void Maze_Update()
 			if (MAZE_CharMoveCHECK_NEXT_POS(3, Maze, curr_X_GRIDposition, curr_Y_GRIDposition) == 1)
 			{
 				MC_positionY -= Maze->specifications.cellHeight;
-				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+				//std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+				//	"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
 
 				Maze_CameraAdjustment(3);
@@ -1613,8 +1614,8 @@ void Maze_Update()
 			{
 
 				MC_positionX -= Maze->specifications.cellWidth;
-				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+				//std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+				//	"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
 
 				Maze_CameraAdjustment(2);
@@ -1636,8 +1637,8 @@ void Maze_Update()
 			{
 
 				MC_positionX += Maze->specifications.cellWidth;
-				std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
-					"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
+				//std::cout << "Current mc XY position " << MC_positionX << "\t\t" << MC_positionY <<
+				//	"\t\t" << curr_X_GRIDposition << "\t\t" << curr_Y_GRIDposition << "\n";
 
 				Maze_CameraAdjustment(4);
 				//AEGfxSetCamPosition(cam_x + Maze->specifications.cellWidth, cam_y);
@@ -1745,7 +1746,7 @@ void Maze_Draw()
 /******************************************************************************/
 void Maze_Free()
 {
-	std::cout << "Maze:Free" << std::endl;
+	//std::cout << "Maze:Free" << std::endl;
 	AEGfxMeshFree(pMeshCellOutline);
 	AEGfxMeshFree(pMeshMazeWindow);
 	AEGfxMeshFree(pMeshSolidSquare_PATH);
@@ -1772,7 +1773,7 @@ void Maze_Free()
 /******************************************************************************/
 void Maze_Unload()
 {
-	std::cout << "Maze:Unload" << std::endl;
+	//std::cout << "Maze:Unload" << std::endl;
 	AEGfxTextureUnload(wall_art);
 	AEGfxTextureUnload(path_art);
 	AEGfxTextureUnload(main_character_art);

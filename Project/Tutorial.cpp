@@ -819,7 +819,7 @@ void Tutorial_Draw()
 ***************************************************************/
 void Tutorial_Free()
 {
-	std::cout << "Tutorial:Free" << std::endl;
+	//std::cout << "Tutorial:Free" << std::endl;
 	AEGfxMeshFree(fake_window_box);
 	AEGfxMeshFree(button_box);
 	AEGfxMeshFree(large_button_box);
@@ -834,7 +834,7 @@ void Tutorial_Free()
 ***************************************************************/
 void Tutorial_Unload()
 {
-	std::cout << "Tutorial:Unload" << std::endl;
+	//std::cout << "Tutorial:Unload" << std::endl;
 	AEGfxTextureUnload(ducktitle);
 	AEGfxTextureUnload(maze_screenshot);
 	AEGfxTextureUnload(Whirlpool);

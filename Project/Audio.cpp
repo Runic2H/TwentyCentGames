@@ -138,7 +138,6 @@ void maze_background_Audio()
 	// Play the sound.
 	result = audio_system->playSound(maze_bgm, nullptr, false, &bgm_channel);
 	bgm_channel->setChannelGroup(bgm_group);
-	std::cout << "maze background sound audio\n\n";
 
 	//adjusting_master_fader();
 	//bool isPlaying = false;
@@ -153,7 +152,7 @@ void win_screen_background_Audio()
 {
 	result = audio_system->playSound(win_screen_bgm, nullptr, false, &bgm_channel);
 	bgm_channel->setChannelGroup(bgm_group);
-	std::cout << "Win screen audio\n\n";
+	//////std::cout << "Win screen audio\n\n";
 }
 
 // background audio for the lose screen
@@ -161,7 +160,7 @@ void lose_screen_background_Audio()
 {
 	result = audio_system->playSound(lose_screen_bgm, nullptr, false, &bgm_channel);
 	bgm_channel->setChannelGroup(bgm_group);
-	std::cout << "Lose screen audio\n\n";
+	//////std::cout << "Lose screen audio\n\n";
 }
 
 // background audio for the menu
@@ -169,7 +168,7 @@ void menu_background_Audio()
 {
 	result = audio_system->playSound(menu_bgm, nullptr, false, &bgm_channel);
 	bgm_channel->setChannelGroup(bgm_group);
-	std::cout << "menu background sound audio\n\n";
+	////std::cout << "menu background sound audio\n\n";
 }
 
 // background audio for the combat
@@ -177,7 +176,7 @@ void combat_background_Audio()
 {
 	result = audio_system->playSound(combat_bgm, nullptr, false, &bgm_channel);
 	bgm_channel->setChannelGroup(bgm_group);
-	std::cout << "menu background sound audio\n\n";
+	////std::cout << "menu background sound audio\n\n";
 }
 
 
@@ -188,7 +187,7 @@ void wall_hit_Audio()
 {
 	result = audio_system->playSound(wall_sound, nullptr, false, &sfx_channel);
 	sfx_channel->setChannelGroup(sfx_group);
-	std::cout << "Hit wall audio\n\n";
+	////std::cout << "Hit wall audio\n\n";
 }
 
 // SFX audio #1 for flipping the pages
@@ -196,7 +195,7 @@ void page_flip1_Audio()
 {
 	result = audio_system->playSound(page_flip_sound1, nullptr, false, &sfx_channel);
 	sfx_channel->setChannelGroup(sfx_group);
-	std::cout << "Page flip 1 audio\n\n";
+	////std::cout << "Page flip 1 audio\n\n";
 }
 
 // SFX audio #2 for flipping the pages
@@ -204,7 +203,7 @@ void page_flip2_Audio()
 {
 	result = audio_system->playSound(page_flip_sound2, nullptr, false, &sfx_channel);
 	sfx_channel->setChannelGroup(sfx_group);
-	std::cout << "Page flip 2 audio\n\n";
+	////std::cout << "Page flip 2 audio\n\n";
 }
 
 // SFX audio #1 for slashing audio
@@ -212,7 +211,7 @@ void slashing1_Audio()
 {
 	result = audio_system->playSound(slashing_sound1, nullptr, false, &sfx_channel);
 	sfx_channel->setChannelGroup(sfx_group);
-	std::cout << "Slashing 1 audio\n\n";
+	//std::cout << "Slashing 1 audio\n\n";
 }
 
 // SFX audio #2 slashing audio
@@ -220,7 +219,7 @@ void slashing2_Audio()
 {
 	result = audio_system->playSound(slashing_sound2, nullptr, false, &sfx_channel);
 	sfx_channel->setChannelGroup(sfx_group);
-	std::cout << "Slashing 2 audio\n\n";
+	////std::cout << "Slashing 2 audio\n\n";
 }
 
 // SFX audio for swimming movement in the maze
@@ -228,7 +227,7 @@ void swimming_Audio()
 {
 	result = audio_system->playSound(swimming_sound, nullptr, false, &sfx_channel);
 	sfx_channel->setChannelGroup(sfx_group);
-	std::cout << "swim audio\n\n";
+	////std::cout << "swim audio\n\n";
 }
 
 // SFX audio for drinking potions in combat
@@ -236,7 +235,7 @@ void portion_Audio()
 {
 	result = audio_system->playSound(portion_sound, nullptr, false, &sfx_channel);
 	sfx_channel->setChannelGroup(sfx_group);
-	std::cout << "drinking portion audio\n\n";
+	////std::cout << "drinking portion audio\n\n";
 }
 
 // SFX audio for opening chests in the maze
@@ -244,7 +243,7 @@ void chest_open_Audio()
 {
 	result = audio_system->playSound(chest_open_sound, nullptr, false, &sfx_channel);
 	sfx_channel->setChannelGroup(sfx_group);
-	std::cout << "chest open audio\n\n";
+	////std::cout << "chest open audio\n\n";
 }
 
 // SFX audio for clicking any buttons
@@ -252,7 +251,7 @@ void click_Audio()
 {
 	result = audio_system->playSound(click_sound, nullptr, false, &sfx_channel);
 	sfx_channel->setChannelGroup(sfx_group);
-	std::cout << "click audio\n\n";
+	////std::cout << "click audio\n\n";
 }
 
 // SFX audio for our game name logo intro page
@@ -260,7 +259,7 @@ void coin_drop_Audio()
 {
 	result = audio_system->playSound(coin_drop_sound, nullptr, false, &sfx_channel);
 	sfx_channel->setChannelGroup(sfx_group);
-	std::cout << "coin audio\n\n";
+	////std::cout << "coin audio\n\n";
 }
 
 // stops the audio for both BGM and SFX
