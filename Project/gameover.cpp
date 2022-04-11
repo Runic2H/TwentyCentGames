@@ -44,9 +44,9 @@ void GameOver_Load() {
 *	init function for gameover state
 ***************************************************************/
 void GameOver_Init() {
-	Audio_Init();
 	stop_Audio();
 	lose_screen_background_Audio();
+	Audio_Init();
 	player_initialise();			// reinitialises the player stats
 	enemy_initialise();				// reinitialises the enemy stats
 }

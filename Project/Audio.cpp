@@ -38,11 +38,6 @@ extern FMOD::ChannelGroup* sfx_group;		//group for effects
 extern FMOD::ChannelGroup* master_fader;	//controls all volume
 
 
-float bgm_volume{ 0.5f };					//JN: new code
-float sfx_volume{ 0.5f };					//JN: new code
-float bgm_volume_max{ 0.5 };
-float sfx_volume_max{ 0.5 };
-
 //Initialise audio
 void Audio_Init()
 {
@@ -92,6 +87,19 @@ void Audio_Init()
 	audio_system->createSound("Music/THERMOSTAT_GEN-HDF-23295.wav", FMOD_LOOP_OFF, nullptr, &click_sound);
 	//coin drop
 	audio_system->createSound("Music/CoinDrop_CTE01_46.1.ogg", FMOD_LOOP_OFF, nullptr, &coin_drop_sound);
+
+	if (systemsettings.mute == 1)
+	{
+		mute_master_fader();
+	}
+	else
+	{
+		unmute_master_fader();
+	}
+
+	bgm_group->setVolume(bgm_volume);
+	sfx_group->setVolume(sfx_volume);
+
 }
 
 //Update audio

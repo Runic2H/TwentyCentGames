@@ -32,5 +32,8 @@ FMOD::ChannelGroup* bgm_group;
 FMOD::ChannelGroup* sfx_group;
 FMOD::ChannelGroup* master_fader;
 
+float bgm_volume{ 0.5f };					//JN: new code
+float sfx_volume{ 0.5f };					//JN: new code
+
 // test bench
 int level_iter;

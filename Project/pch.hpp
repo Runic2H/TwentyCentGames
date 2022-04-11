@@ -60,8 +60,6 @@ extern GameObjInst* ParticleInstList;
 
 extern float bgm_volume;					//JN: new code
 extern float sfx_volume;					//JN: new code
-extern float sfx_volume_max;
-extern float bgm_volume_max;
 
 
 /**************************************************************
