@@ -1,0 +1,7 @@
+enemytype	0
+enemystate	0
+positionx	0.0
+positiony	0.0
+isattacking	0
+attackcd	0.60
+damagecd	0.0

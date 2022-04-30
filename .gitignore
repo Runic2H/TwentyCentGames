@@ -32,3 +32,7 @@
 *.app
 /.vs
 /Project/.vs/Project/v16
+/Project/.tmp/Debug-x64/Project.tlog
+/Project/.tmp/Debug-x64
+/Project/.tmp/Release-x64/Project.tlog
+/Project/.tmp/Release-x64

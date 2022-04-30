@@ -46,7 +46,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)Extern\AlphaEngine_V3.08\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Extern\AlphaEngine_V3.08\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Extern\FMOD\lib;$(SolutionDir)Extern\AlphaEngine_V3.08\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(Configuration)-$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)\.tmp\$(Configuration)-$(Platform)\</IntDir>
   </PropertyGroup>
@@ -54,6 +54,8 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\bin\$(Configuration)-$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)\.tmp\$(Configuration)-$(Platform)\</IntDir>
+    <LibraryPath>$(SolutionDir)Extern\FMOD\lib;$(SolutionDir)Extern\AlphaEngine_V3.08\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Extern\AlphaEngine_V3.08\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -61,6 +63,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Extern\FMOD\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -76,6 +79,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Extern\FMOD\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -86,7 +90,54 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Characters.cpp" />
+    <ClCompile Include="Combat.cpp" />
+    <ClCompile Include="Credits.cpp" />
+    <ClCompile Include="gameover.cpp" />
+    <ClCompile Include="GameStateManager.cpp" />
+    <ClCompile Include="input.cpp" />
+    <ClCompile Include="LevelUp.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Systems.cpp" />
+    <ClCompile Include="Tutorial.cpp" />
+    <ClCompile Include="victoryscreen.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AudioManager.hpp" />
+    <ClInclude Include="Characters.hpp" />
+    <ClInclude Include="Combat.hpp" />
+    <ClInclude Include="Credits.hpp" />
+    <ClInclude Include="Extern\FMOD\inc\fmod.h" />
+    <ClInclude Include="Extern\FMOD\inc\fmod.hpp" />
+    <ClInclude Include="Extern\FMOD\inc\fmod_codec.h" />
+    <ClInclude Include="Extern\FMOD\inc\fmod_common.h" />
+    <ClInclude Include="Extern\FMOD\inc\fmod_dsp.h" />
+    <ClInclude Include="Extern\FMOD\inc\fmod_dsp_effects.h" />
+    <ClInclude Include="Extern\FMOD\inc\fmod_errors.h" />
+    <ClInclude Include="Extern\FMOD\inc\fmod_output.h" />
+    <ClInclude Include="gameover.hpp" />
+    <ClInclude Include="GameStateList.hpp" />
+    <ClInclude Include="GameStateManager.hpp" />
+    <ClInclude Include="input.hpp" />
+    <ClInclude Include="LevelUp.hpp" />
+    <ClInclude Include="Maze.hpp" />
+    <ClInclude Include="Menu.hpp" />
+    <ClInclude Include="pch.hpp" />
+    <ClInclude Include="Systems.hpp" />
+    <ClInclude Include="Tutorial.hpp" />
+    <ClInclude Include="victoryscreen.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\fmod.dll" />
+    <None Include="bin\fmodL.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="bin\fmodL_vc.lib" />
+    <Library Include="bin\fmod_vc.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
